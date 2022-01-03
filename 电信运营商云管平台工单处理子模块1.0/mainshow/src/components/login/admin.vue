@@ -32,8 +32,8 @@
           </el-form-item>
           <el-form-item>
             <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
-            <!-- 验证码 显示 -->
-<!--            <img @click="getVertifyCode" id="verifyCode" style="margin-left: 20px;" />-->
+             验证码 显示
+            <img @click="getVertifyCode" id="verifyCode" style="margin-left: 20px;" />
           </el-form-item>
 
         </el-form>
@@ -48,7 +48,7 @@ export default {
   name: "admin",
   mounted(){
     this.getIP();
-    // this.getVertifyCode();
+    this.getVertifyCode();
   },
   data(){
 
@@ -66,7 +66,6 @@ export default {
       if (value === '') {
         callback(new Error('请输入账号'));
       } else {
-
         callback();
       }
     };
@@ -138,15 +137,15 @@ export default {
       return url;
     },
     //验证码
-    // getVertifyCode() {
-      // document.getElementById("verifyCode").src = this.timestamp("http://localhost:8084/verifycode/getVertifyCodebyId");
-      // setTimeout(()=>{
-      //   this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
-      //     sessionStorage.setItem("vertifyCode", res.data);
-      //   })
-      // },500);
-    //
-    // },
+    getVertifyCode() {
+      document.getElementById("verifyCode").src = this.timestamp("http://localhost:8084/verifycode/getVertifyCodebyId");
+      setTimeout(()=>{
+        this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
+          sessionStorage.setItem("vertifyCode", res.data);
+        })
+      },500);
+
+    },
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面
     logging() {
