@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SHA_256 {
-
+//SHA_256加密
     private static String byte2Hexa(byte[] bytes){
         StringBuffer stringbuffer = new StringBuffer();
         String temp = null;
