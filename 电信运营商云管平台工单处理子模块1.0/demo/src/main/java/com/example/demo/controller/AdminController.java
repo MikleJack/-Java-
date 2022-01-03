@@ -86,10 +86,10 @@ public class AdminController {
      *
      */
     @GetMapping("login")
-    public ResponseEntity<Boolean> login(String username, String password){
-        if(username!=""&&password!="") {
-            if (adminService.queryById(username) != null)
-                return ResponseEntity.ok(password.equals(this.adminService.queryById(username).getPassword()));
+    public ResponseEntity<Boolean> login(String work_num, String password){
+        if(work_num!=""&&password!="") {
+            if (adminService.queryById(work_num) != null)
+                return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
             else
                 return ResponseEntity.ok(false);
         }

@@ -51,7 +51,7 @@ public class VertifyCodeController {
             //在代理服务器端防止缓冲
             response.setDateHeader("Expires", 0);
             //设置响应内容类型
-            response.setContentType("image/jpeg");
+            response.setContentType("image/png;base64");
             response.getOutputStream().write(verifyCode.getImgBytes());
             response.getOutputStream().flush();
         } catch (IOException e) {

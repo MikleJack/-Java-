@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * (OperationLog)表服务实现类
  *
  * @author makejava
- * @since 2022-01-02 20:19:26
+ * @since 2022-01-03 10:27:45
  */
 @Service("operationLogService")
 public class OperationLogServiceImpl implements OperationLogService {
@@ -66,7 +66,7 @@ public class OperationLogServiceImpl implements OperationLogService {
     @Override
     public OperationLog update(OperationLog operationLog) {
         this.operationLogDao.update(operationLog);
-        return this.queryById(operationLog.getWorkNum());
+        return this.queryById(operationLog.getWork_num());
     }
 
     /**

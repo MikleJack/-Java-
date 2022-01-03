@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
  * (OperationLog)表服务接口
  *
  * @author makejava
- * @since 2022-01-02 20:19:26
+ * @since 2022-01-03 10:27:45
  */
 public interface OperationLogService {
 

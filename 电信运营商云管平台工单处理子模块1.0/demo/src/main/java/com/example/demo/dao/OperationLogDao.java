@@ -10,7 +10,7 @@ import java.util.List;
  * (OperationLog)表数据库访问层
  *
  * @author makejava
- * @since 2022-01-02 20:19:26
+ * @since 2022-01-03 10:27:45
  */
 @Mapper
 public interface OperationLogDao {

@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * (OperationLog)表控制层
  *
  * @author makejava
- * @since 2022-01-02 20:19:26
+ * @since 2022-01-03 10:27:45
  */
 @RestController
 @RequestMapping("operationLog")
@@ -42,8 +42,8 @@ public class OperationLogController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("id")
-    public ResponseEntity<OperationLog> queryById( String id) {
+    @GetMapping("{id}")
+    public ResponseEntity<OperationLog> queryById(@PathVariable("id") String id) {
         return ResponseEntity.ok(this.operationLogService.queryById(id));
     }
 
@@ -53,11 +53,11 @@ public class OperationLogController {
      * @param operationLog 实体
      * @return 新增结果
      */
-    @PostMapping()
+    @PostMapping("add")
     public ResponseEntity<OperationLog> add(OperationLog operationLog) {
+        System.out.println(operationLog.getOperate_time());
         return ResponseEntity.ok(this.operationLogService.insert(operationLog));
     }
-
     /**
      * 编辑数据
      *

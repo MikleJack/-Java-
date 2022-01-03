@@ -14,13 +14,13 @@
     <div class="warp">
       <div class="warp-line">
         <img src="../../assets/man.png" width="50px">
-        <img @click="getVertifyCode" id="verifyCode" style="margin-left: 20px;"/>
+
       </div>
       <div class="warp-form">
         <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
-          <el-form-item  prop="admin">
-            <el-input type="text" v-model="ruleForm.admin" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
+          <el-form-item  prop="work_num">
+            <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item  prop="password">
             <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
@@ -33,7 +33,7 @@
           <el-form-item>
             <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
             <!-- 验证码 显示 -->
-
+<!--            <img @click="getVertifyCode" id="verifyCode" style="margin-left: 20px;" />-->
           </el-form-item>
 
         </el-form>
@@ -48,20 +48,21 @@ export default {
   name: "admin",
   mounted(){
     this.getIP();
-    this.getVertifyCode();
+    // this.getVertifyCode();
   },
   data(){
+
     //表单验证规则  当用户输入密码为空，密码表单项验证错误信息，使表单状态为error，并提示“请输入密码”
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
       } else {
-
         callback();
       }
     };
+
     //表单验证规则  当用户输入密码为空，账号表单项验证错误信息，使表单状态为error，并提示“请输入密码”
-    var validateadmin = (rule, value, callback) => {
+    var validatework_num = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入账号'));
       } else {
@@ -69,11 +70,15 @@ export default {
         callback();
       }
     };
-    return {
 
+    return {
       ruleForm: {
-        admin:'',
+        work_num:'',
         password:'',
+        operate:'登录',
+        operate_time:'',
+        ip:'',
+        address:'',
       },
 
       //表单验证规则
@@ -81,27 +86,45 @@ export default {
         password: [
           { validator: validatePass, trigger: 'blur' }
         ],
-        admin: [
-          { validator: validateadmin,trigger: 'blur'}
+        work_num: [
+          { validator: validatework_num,trigger: 'blur'}
         ]
       },
-      admin:'',
+      work_num:'',
       password:'',
-      ip:'',
-      address:'',
       code:'',
     }
   },
-  methods:{
+  methods: {
+    // 获取当前时间
+    getdate() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let strDate = date.getDate();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      this.ruleForm.operate_time = year + "-" + month + "-" + strDate  + " " +hour+':'+minute+':'+second;
+    },
+
     //获取IP地址
-    getIP(){
-      this.ip = returnCitySN['cip'] // ip
-      this.address = returnCitySN["cname"] // 地址
+    getIP() {
+      this.ruleForm.ip = returnCitySN['cip'] // ip
+      this.ruleForm.address = returnCitySN["cname"] // 地址
+
     },
 
     //跳转到注册界面
-    register(){
-      this.$router.push({path:'/register'});
+    register() {
+      this.$router.push({path: '/register'});
     },
 
     //为url添加时间戳
@@ -115,21 +138,22 @@ export default {
       return url;
     },
     //验证码
-    getVertifyCode() {
-      document.getElementById("verifyCode").src = this.timestamp("http://localhost:8084/verifycode/getVertifyCodebyId");
-      setTimeout(()=>{
-        this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
-          sessionStorage.setItem("vertifyCode", res.data);
-        })
-      },500);
-    },
+    // getVertifyCode() {
+      // document.getElementById("verifyCode").src = this.timestamp("http://localhost:8084/verifycode/getVertifyCodebyId");
+      // setTimeout(()=>{
+      //   this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
+      //     sessionStorage.setItem("vertifyCode", res.data);
+      //   })
+      // },500);
+    //
+    // },
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面
-    logging(){
-      console.log('begin')
-      this.$axios.get("http://localhost:8084/admin/login?username=" + this.ruleForm.admin + "&password=" + this.ruleForm.password).then((res)=>{
-        if(res.data){
-          console.log('yes')
+    logging() {
+      this.getdate();
+      this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
+      this.$axios.get("http://localhost:8084/admin/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+        if (res.data) {
           //   $message消息提示框
           this.$message({
             message: '登录成功',
@@ -144,7 +168,7 @@ export default {
           //     this.$router.push('/main');
           //   }
           // })
-        }else{
+        } else {
           this.$message({
             message: '用户名或密码错误',
             type: 'error',
