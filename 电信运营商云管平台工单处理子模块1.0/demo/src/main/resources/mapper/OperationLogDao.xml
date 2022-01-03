@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.OperationLogDao">
+
+    <resultMap type="com.example.demo.entity.OperationLog" id="OperationLogMap">
+        <result property="workNum" column="work_num" jdbcType="VARCHAR"/>
+        <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+        <result property="operate" column="operate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="OperationLogMap">
+        select
+          work_num, operate_time, operate
+        from operation_log
+        where work_num = #{workNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="OperationLogMap">
+        select
+          work_num, operate_time, operate
+        from operation_log
+        <where>
+            <if test="workNum != null and workNum != ''">
+                and work_num = #{workNum}
+            </if>
+            <if test="operateTime != null">
+                and operate_time = #{operateTime}
+            </if>
+            <if test="operate != null and operate != ''">
+                and operate = #{operate}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from operation_log
+        <where>
+            <if test="workNum != null and workNum != ''">
+                and work_num = #{workNum}
+            </if>
+            <if test="operateTime != null">
+                and operate_time = #{operateTime}
+            </if>
+            <if test="operate != null and operate != ''">
+                and operate = #{operate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="workNum" useGeneratedKeys="true">
+        insert into operation_log(operate)
+        values (#{operate})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="workNum" useGeneratedKeys="true">
+        insert into operation_log(operate)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.operate})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="workNum" useGeneratedKeys="true">
+        insert into operation_log(operate)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.operate})
+        </foreach>
+        on duplicate key update
+        operate = values(operate)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update operation_log
+        <set>
+            <if test="operate != null and operate != ''">
+                operate = #{operate},
+            </if>
+        </set>
+        where work_num = #{workNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from operation_log where work_num = #{workNum}
+    </delete>
+
+</mapper>
+
