@@ -19,9 +19,9 @@
           <el-button type="info" plain @click="go_user">用户</el-button>
         </el-row>
       </div>
-<!--      <div class="warp-line">-->
-<!--        <img src="../../assets/man.png" width="50px">-->
-<!--      </div>-->
+      <!--      <div class="warp-line">-->
+      <!--        <img src="../../assets/man.png" width="50px">-->
+      <!--      </div>-->
       <div class="warp-form">
         <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >

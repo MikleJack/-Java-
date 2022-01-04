@@ -36,7 +36,6 @@ public class VertifyCodeController {
     @ApiOperation(value = "验证码")
     @GetMapping("/verifyCode")
     public void verifyCode(HttpServletRequest request, HttpServletResponse response) {
-//        this.iVerifyCodeGen = new SimpleCharVerifyCodeGenImpl();
         try {
             //设置长宽
             VerifyCode verifyCode = iVerifyCodeGen.generate(80, 28);

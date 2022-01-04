@@ -87,7 +87,8 @@ public class AdminController {
      */
     @GetMapping("login")
     public ResponseEntity<Boolean> login(String work_num, String password){
-        if(work_num!=""&&password!="") {
+        if(!work_num.equals("") && !password.equals("") ) {
+            VertifyCodeController vertifyCodeController = new VertifyCodeController();
             if (adminService.queryById(work_num) != null)
                 return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
             else
