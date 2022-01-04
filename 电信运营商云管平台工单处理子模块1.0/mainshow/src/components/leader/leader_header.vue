@@ -6,7 +6,7 @@
         <img src="../../assets/logo.png" height="40" width="40"/>
       </div>
       <div style="position:relative;float: left;top: 13px; width:400px;font-size:20px;">
-        电信运营商云管平台工单处理子模块
+        电信运营商云管平台工单处理子模块_领导版
       </div>
 
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" text-color="black">
@@ -24,7 +24,7 @@
     <el-container>
       <el-aside class="aside" width=150px>
         <el-menu
-          default-active="1"
+          default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -32,26 +32,54 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
-            <span slot="title">主页</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">工单查询</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-menu"></i>
-            <span slot="title">账号管理</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-menu"></i>
-            <span slot="title">组织机构管理</span>
-          </el-menu-item>
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i>
-            <span slot="title">日志管理</span>
-          </el-menu-item>
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>首页</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>待审批工单</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="2-1">选项1</el-menu-item>
+              <el-menu-item index="2-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>工单审批日志</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="3-1">选项1</el-menu-item>
+              <el-menu-item index="3-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>全部工单</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="4-1">选项1</el-menu-item>
+              <el-menu-item index="4-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
         </el-menu>
       </el-aside>
       <!-- main区域 -->
@@ -62,8 +90,8 @@
 
 <script>
 export default {
-  name: "header",
-  methods: {
+  name: "leader_header",
+  methods:{
     //退出
     logoutFn() {
       this.$confirm("退出登录, 是否继续?", "提示", {
@@ -74,9 +102,10 @@ export default {
         this.$router.push({ path: "/" });
       });
     },
-  },
-};
+  }
+}
 </script>
+
 <style scoped>
 .container {
   height: 100vh;
