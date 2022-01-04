@@ -3,15 +3,21 @@ import Router from 'vue-router'
 import HelloWorld from '../components/HelloWorld'
 import admin from "../components/login/admin";
 import header from "../components/header";
+import user from "../components/login/user";
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/admin',
       name: 'admin',
       component: admin
+    },
+    {
+      path:'/user',
+      name:'user',
+      component:user
     },
     {
       path:'/head',

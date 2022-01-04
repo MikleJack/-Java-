@@ -12,9 +12,7 @@
 
     <!--    登录界面-->
     <div class="warp">
-<!--      <div class="warp-line">-->
-<!--        <img src="../../assets/man.png" width="50px">-->
-<!--      </div>-->
+      <!-- 管理员与用户切换按钮     -->
       <div class="warp-form">
         <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
@@ -150,7 +148,7 @@ export default {
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
-          this.$axios.get("http://localhost:8084/admin/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+          this.$axios.get("http://localhost:8084/staff/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data) {
               //   $message消息提示框
               this.$message({
@@ -172,6 +170,7 @@ export default {
                 type: 'error',
                 center: true
               });
+              this.getVertifyCode();
             }
           })
         }
@@ -186,7 +185,9 @@ export default {
           })
         }
       })
-      // this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
+
+      //增加登录日志
+      this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
 
     }
   }
@@ -194,7 +195,6 @@ export default {
 </script>
 
 <style scoped>
-
 .max{
   position: absolute;
   height: 100%;
