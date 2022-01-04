@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Admin;
 import com.example.demo.service.AdminService;
+import com.example.demo.utils.SHA_256;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -88,9 +89,11 @@ public class AdminController {
     @GetMapping("login")
     public ResponseEntity<Boolean> login(String work_num, String password){
         if(!work_num.equals("") && !password.equals("") ) {
-            VertifyCodeController vertifyCodeController = new VertifyCodeController();
             if (adminService.queryById(work_num) != null)
+            {
+                password = SHA_256.getSHA256(password);
                 return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
+            }
             else
                 return ResponseEntity.ok(false);
         }

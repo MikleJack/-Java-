@@ -12,13 +12,6 @@
 
     <!--    登录界面-->
     <div class="warp">
-      <!-- 管理员与用户切换按钮     -->
-      <div class="change">
-        <el-row>
-          <el-button type="info" plain @click="go_admin">管理员</el-button>
-          <el-button type="info" plain @click="go_user">用户</el-button>
-        </el-row>
-      </div>
 <!--      <div class="warp-line">-->
 <!--        <img src="../../assets/man.png" width="50px">-->
 <!--      </div>-->
@@ -201,11 +194,7 @@ export default {
 </script>
 
 <style scoped>
-.change{
-  position: relative;
-  top:50px;
-  left: 100px;
-}
+
 .max{
   position: absolute;
   height: 100%;
