@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import java.util.Boolean;
 import java.io.Serializable;
 
 /**

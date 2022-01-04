@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Staff;
 import com.example.demo.service.StaffService;
+import com.example.demo.utils.SHA_256;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +80,24 @@ public class StaffController {
     public ResponseEntity<Boolean> deleteById(String id) {
         return ResponseEntity.ok(this.staffService.deleteById(id));
     }
-
+    /**
+     * 登录
+     *
+     *
+     */
+    @GetMapping("login")
+    public ResponseEntity<Boolean> login(String work_num, String password){
+        if(!work_num.equals("") && !password.equals("") ) {
+            if (staffService.queryById(work_num) != null)
+            {
+                password = SHA_256.getSHA256(password);
+                return ResponseEntity.ok(password.equals(staffService.queryById(work_num).getPassword()));
+            }
+            else
+                return ResponseEntity.ok(false);
+        }
+        else
+            return ResponseEntity.ok(false);
+    }
 }
 

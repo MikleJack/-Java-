@@ -8,7 +8,7 @@
 export default {
   name: 'App',
   mounted() {
-    this.$router.push({path:'/admin'});
+    // this.$router.push({path:'/admin'});
   }
 }
 </script>
