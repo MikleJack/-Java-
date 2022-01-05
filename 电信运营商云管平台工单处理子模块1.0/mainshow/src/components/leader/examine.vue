@@ -5,10 +5,12 @@
       <!--界面头部分-->
       <div style="width:100%;text-align:center">
         <!--设置居中-->
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" :model="formInline.work_order_num" class="demo-form-inline">
+
           <el-form-item label="输入工单号查询">
             <el-input v-model="formInline.work_order_num" placeholder="工单号"></el-input>
           </el-form-item>
+
           <!--输入查询框-->
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -18,8 +20,11 @@
       </div>
       <div page class="page-body">
         <!--界面体部分-->
+
+<!--        :data="tableData"-->
         <el-table
-          :data="tableData"
+
+          :data="tableData.filter(data => !formInline.work_order_num || data.work_order_num.toLowerCase().includes(formInline.work_order_num.toLowerCase()))"
           border
           style="width: 100%">
           <el-table-column
@@ -71,7 +76,9 @@
         name: "examine",
       data() {
         return {
-          formInline: {
+
+          formInline:
+            {
             work_order_num: '',
           },
           //给后端一个工单号
@@ -100,6 +107,7 @@
           console.log('submit!');
         },
         //进行查询，后端给前端工单号对应的工单审批日志,包括工单号、工单名、审批人号、审批人名、处理时间、处理批注这些信息
+
 
       }
 
