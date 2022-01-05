@@ -1,53 +1,60 @@
 <template>
   <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="formInline.user" placeholder="请输入工号"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
-      </el-form-item>
-    </el-form>
+<!--    <el-form :inline="true" :model="formInline" class="demo-form-inline">-->
+<!--      <el-form-item>-->
+<!--        <el-input v-model="formInline.user" placeholder="请输入工号"></el-input>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button type="primary" @click="onSubmit">查询</el-button>-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
     <el-button @click="add_AccountNumber()" type="primary" icon="el-icon-plus">新增账号</el-button>
     <div>
+
       <el-table
-        :data="tableData"
+        :data="tableData.filter(data => !search || data.worker_num.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
         border
         style="width: 100%">
+
+
         <el-table-column
           prop="worker_num"
           label="工号"
-          width="150">
+          width="200">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="100">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="150">
+          width="200">
         </el-table-column>
         <el-table-column
           prop="dep_name"
           label="部门名称"
-          width="180">
+          width="200">
         </el-table-column>
         <el-table-column
           prop="dep_level"
           label="部门级别"
-          width="100">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="state"
           label="账户状态"
-          width="180">
+          width="200">
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作"
           width="300">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              placeholder="输入关键字搜索"/>
+          </template>
           <templte slot-scope="scope">
             <el-button @click="handleClick_reset(scope.row)" type="text" size="small">重置密码</el-button>
             <el-button @click="handleClick_lock(scope.row)" type="text" size="small">锁定</el-button>
@@ -56,6 +63,8 @@
           </templte>
 
         </el-table-column>
+
+
       </el-table>
 
 <!--增加账号的dialog-->
@@ -124,7 +133,15 @@
                 <el-button type="primary" @click="dialogVisible_delete = false">确 定</el-button>
               </span>
       </el-dialog>
-
+      <div>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout="total, prev, pager, next, jumper ,sizes"
+          :total="this.tableData.length">
+        </el-pagination>
+      </div>
     </div>
   </div>
 
@@ -136,6 +153,8 @@ export default {
   name: "admin_employee",
   data() {
     return {
+      currentPage:1,
+      pageSize:8,
       dialogVisible_add:false,
       dialogVisible_reset:false,
       dialogVisible_lock:false,
@@ -147,13 +166,14 @@ export default {
       input_lock: '',
       input_unlock: '',
       input: '',
+      search: '',
       formInline: {
         user: '',
         region: ''
       },
       tableData: [{
         worker_num: '00000001',
-        name: '王小虎',
+        name: '王二虎',
         phone: '15155185464',
         dep_name: '软件学院',
         dep_level: '3',

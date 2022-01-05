@@ -31,7 +31,7 @@
     <el-table
       border
       style="width: 100%"
-      :data="tableData.filter(data => !search || data.workOrderType.equals(workOrderTypeSelector) ||
+      :data="tableData.filter(data => !search ||
       data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
       element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
