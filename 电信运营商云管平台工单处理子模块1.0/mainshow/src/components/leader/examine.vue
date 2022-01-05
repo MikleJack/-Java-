@@ -23,6 +23,7 @@
 
 <!--        :data="tableData"-->
         <el-table
+
           :data="tableData.filter(data => !formInline.work_order_num || data.work_order_num.toLowerCase().includes(formInline.work_order_num.toLowerCase()))"
           border
           style="width: 100%">
