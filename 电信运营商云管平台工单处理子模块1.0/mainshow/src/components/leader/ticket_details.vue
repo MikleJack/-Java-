@@ -25,6 +25,47 @@
       <el-descriptions class="margin-top" :title="reason" :column="3" :size="size" border></el-descriptions>
       <div class="reason_contect">{{reasonContect}}</div>
 
+      <el-descriptions class="margin-top" title="资源" :column="3" :size="size" border></el-descriptions>
+      <el-table
+        :data="allocatedCom"
+        border
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          width="50">
+        </el-table-column>
+
+        <el-table-column
+          prop="comType"
+          label="计算机类型"
+          width="auto">
+        </el-table-column>
+        <el-table-column
+          prop="cpuCore"
+          label="CPU核数"
+          width="auto">
+        </el-table-column>
+        <el-table-column
+          prop="ram"
+          label="内存">
+        </el-table-column>
+        <el-table-column
+          prop="strange"
+          label="存储大小">
+        </el-table-column>
+        <el-table-column
+          prop="ip"
+          label="ip地址">
+        </el-table-column>
+        <el-table-column
+          prop="os"
+          label="操作系统">
+        </el-table-column>
+      </el-table>
+
+<!--      <el-descriptions class="margin-top" title="虚拟机资源" :column="3" :size="size" border></el-descriptions>-->
+
+<!--显示流转过程-->
       <el-descriptions class="margin-top" title="流转过程" :column="3" :size="size" border></el-descriptions>
 
       <div class="resoure_usage">
@@ -63,7 +104,7 @@
       <div class="resoure_usage">
         <el-input
           type="textarea"
-          :rows="1"
+          :rows="3"
           placeholder="请输入内容"
           v-model="textarea">
         </el-input>
@@ -117,6 +158,20 @@ export default {
         dealDate:'2021-12-28 15:30:00',
         //批注
         dealComment:'申请合理，建议通过',
+      }],
+      allocatedCom:[{
+      //  计算机类型
+        comType:'物理机',
+        //cpu核数
+        cpuCore:'8',
+      //  内存
+        ram:'16',
+      //  存储
+        strange:'256',
+      //  ip
+        ip:'194.15.1.1',
+      //  操作系统
+        os:'Window'
       }],
     //  输入的批注内容
       textarea: ''

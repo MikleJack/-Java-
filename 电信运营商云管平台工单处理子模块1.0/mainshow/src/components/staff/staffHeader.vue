@@ -2,7 +2,7 @@
   <el-container class="container">
     <!-- 上方导航栏 -->
     <el-header class="header">
-      <div style="position:relative;float: left;top: 5px;">
+      <div style="position:relative;float: left;top: 5%;">
         <img src="../../assets/logo.png" height="40" width="40"/>
       </div>
       <div style="position:relative;float: left;top: 13px; width:400px;font-size:20px;">
@@ -22,9 +22,9 @@
     </el-header>
     <!-- 侧边导航栏 -->
     <el-container>
-      <el-aside class="aside" width=150px>
+      <el-aside class="aside" width=15%>
         <el-menu
-          default-active="1"
+          default-active="2"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -32,39 +32,69 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
-            <span slot="title">主页</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">工单查询</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-menu"></i>
-            <span slot="title">账号管理</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-menu"></i>
-            <span slot="title">组织机构管理</span>
-          </el-menu-item>
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i>
-            <span slot="title">日志管理</span>
-          </el-menu-item>
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="1-1">选项1</el-menu-item>
+              <el-menu-item index="1-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航二</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="2-1">选项1</el-menu-item>
+              <el-menu-item index="2-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航三</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="3-1">选项1</el-menu-item>
+              <el-menu-item index="3-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航四</span>
+            </template>
+            <el-menu-item-group>
+              <template slot="title"></template>
+              <el-menu-item index="4-1">选项1</el-menu-item>
+              <el-menu-item index="4-2">选项2</el-menu-item>
+            </el-menu-item-group>
+
+          </el-submenu>
         </el-menu>
       </el-aside>
       <!-- main区域 -->
-      <el-main class="main"><dep_manage></dep_manage></el-main>
+      <el-main class="main">
+        <employee-portal></employee-portal>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import Dep_manage from "./dep_manage";
+import EmployeePortal from "./employeePortal";
 export default {
   name: "header",
-  components: {Dep_manage},
+  components: {EmployeePortal},
   methods: {
     //退出
     logoutFn() {

@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @since 2022-01-02 16:31:37
  */
 @RestController
-@RequestMapping("admin")
+@RequestMapping("c")
 public class AdminController {
     /**
      * 服务对象

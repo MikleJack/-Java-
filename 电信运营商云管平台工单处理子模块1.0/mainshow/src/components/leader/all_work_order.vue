@@ -23,13 +23,58 @@
       </el-form>
       </div>
 
+    </div>
 
       <div class="page-body">
         <!--界面体-->
-
-
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%">
+          <el-table-column
+            fixed
+            prop="ticket_num"
+            label="工单编号"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="ticket_name"
+            label="工单标题"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="apply_time"
+            label="时间"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="work_num"
+            label="申请人工号"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="申请人姓名"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
       </div>
+    <div class="page-tail" style="text-align:center">
+      <!--放置分页部分-->
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="1000">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -41,7 +86,27 @@
         return {
           formInline: {
             work_order_type: ''
-          }
+          },
+          tableData: [{
+            ticket_num:'000000000000000002',
+            ticket_name: '二班资源申请工单',
+            apply_time: '2023-02-03 00:00:00',
+            work_num:'00000002',
+            name:'陈大炮'
+          },{
+            ticket_num:'000000000000000002',
+            ticket_name: '二班资源申请工单',
+            apply_time: '2023-02-03 00:00:00',
+            work_num:'00000002',
+            name:'陈大炮'
+          },{
+            ticket_num:'000000000000000002',
+            ticket_name: '二班资源申请工单',
+            apply_time: '2023-02-03 00:00:00',
+            work_num:'00000002',
+            name:'陈大炮'
+          },
+          ]
         }
       },
       methods: {
@@ -82,6 +147,14 @@
     left:200px;
     right:200px;
     /*background-color: rgb(81, 227, 150);*/
+  }
+
+  .page-tail{
+    width:100%;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    /*background-color: rgb(243, 119, 158);*/
   }
 
 </style>
