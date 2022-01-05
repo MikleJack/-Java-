@@ -55,14 +55,16 @@
         </el-menu>
       </el-aside>
       <!-- main区域 -->
-      <el-main class="main">Main</el-main>
+      <el-main class="main"><dep_manage></dep_manage></el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
+import Dep_manage from "./dep_manage";
 export default {
   name: "header",
+  components: {Dep_manage},
   methods: {
     //退出
     logoutFn() {
