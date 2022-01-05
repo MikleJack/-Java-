@@ -27,8 +27,6 @@
     </el-form>
 
     <!--    管理员表单查询-->
-
-
     <el-table
       border
       style="width: 100%"
