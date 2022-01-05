@@ -31,66 +31,99 @@
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
+          @click="jump1"
         >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>首页</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title"></template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
+          <div @click="jump1">
+            <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>首页</span>
+              </template>
+            </el-submenu>
+          </div>
 
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>待审批工单</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title"></template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-            </el-menu-item-group>
 
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>工单审批日志</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title"></template>
-              <el-menu-item index="3-1">选项1</el-menu-item>
-              <el-menu-item index="3-2">选项2</el-menu-item>
-            </el-menu-item-group>
+<!--            <el-menu-item-group>-->
+<!--              <template slot="title"></template>-->
+<!--              <el-menu-item index="1-1">选项1</el-menu-item>-->
+<!--              <el-menu-item index="1-2">选项2</el-menu-item>-->
+<!--            </el-menu-item-group>-->
 
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>全部工单</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title"></template>
-              <el-menu-item index="4-1">选项1</el-menu-item>
-              <el-menu-item index="4-2">选项2</el-menu-item>
-            </el-menu-item-group>
+          <div @click="jump1">
+            <el-submenu index="2">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>待审批工单</span>
+              </template>
+            </el-submenu>
+          </div>
 
-          </el-submenu>
+<!--            <el-menu-item-group>-->
+<!--              <template slot="title"></template>-->
+<!--              <el-menu-item index="2-1">选项1</el-menu-item>-->
+<!--              <el-menu-item index="2-2">选项2</el-menu-item>-->
+<!--            </el-menu-item-group>-->
+
+          <div @click="jump1">
+            <el-submenu index="3">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>工单审批日志</span>
+              </template>
+              <!--            <el-menu-item-group>-->
+              <!--              <template slot="title"></template>-->
+              <!--              <el-menu-item index="3-1">选项1</el-menu-item>-->
+              <!--              <el-menu-item index="3-2">选项2</el-menu-item>-->
+              <!--            </el-menu-item-group>-->
+
+            </el-submenu>
+          </div>
+
+          <div @click="jump1">
+            <el-submenu index="4">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>全部工单</span>
+              </template>
+              <!--            <el-menu-item-group>-->
+              <!--              <template slot="title"></template>-->
+              <!--              <el-menu-item index="4-1">选项1</el-menu-item>-->
+              <!--              <el-menu-item index="4-2">选项2</el-menu-item>-->
+              <!--            </el-menu-item-group>-->
+            </el-submenu>
+          </div>
+
         </el-menu>
       </el-aside>
       <!-- main区域 -->
-      <el-main class="main">Main</el-main>
+      <el-main class="main" index="/">
+        <router-view>
+        </router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-export default {
+import All_work_order from "./all_work_order";
+import Examine from "./examine";
+import Pending_ticket from "./pending_ticket";
+import Router from "vue-router";
+import all_work_order from "./all_work_order";
+
+const router1 = new Router({
+  routes:[
+    {
+      path:'all_work_order',
+      name:'all_work_order',
+      component:all_work_order
+    }
+  ]
+});
+
+export default{
   name: "leader_header",
+  components: {Pending_ticket, Examine, All_work_order},
   methods:{
     //退出
     logoutFn() {
@@ -102,6 +135,10 @@ export default {
         this.$router.push({ path: "/" });
       });
     },
+    jump1(){
+      // console.log("jump!");
+      router1.push({path:'/all_work_order'})
+    }
   }
 }
 </script>
@@ -139,6 +176,7 @@ export default {
 .main {
   /* height: 100%; */
   color: #52b69a;
+  /*background-color: #409EFF;*/
 }
 .headerlogo {
   /* line-height: 60px; */
