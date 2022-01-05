@@ -2,12 +2,13 @@
   <div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="formInline.user" placeholder="工单标题"></el-input>
+        <el-input v-model="formInline.user" placeholder="请输入工号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
+    <el-button @click="add_AccountNumber()" type="primary" icon="el-icon-plus">新增账号</el-button>
     <div>
       <el-table
         :data="tableData"
@@ -57,6 +58,18 @@
         </el-table-column>
       </el-table>
 
+<!--增加账号的dialog-->
+      <el-dialog
+        title="添加账号"
+        :visible.sync="dialogVisible_add"
+        width="30%"
+        :before-close="handleClose">
+        <span>是否确定重置该用户账号？</span>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible_add = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible_add = false">确 定</el-button>
+              </span>
+      </el-dialog>
 
       <el-dialog
         title="提示"
@@ -117,6 +130,7 @@ export default {
   name: "admin_employee",
   data() {
     return {
+      dialogVisible_add:false,
       dialogVisible_reset:false,
       dialogVisible_lock:false,
       dialogVisible_unlock:false,
@@ -184,7 +198,9 @@ export default {
     onSubmit() {
       console.log('submit!');
     },
-
+    add_AccountNumber() {
+      this.dialogVisible_add = true;
+    },
     //重置密码的函数
     handleClick_reset(row) {
       this.dialogVisible_reset = true;

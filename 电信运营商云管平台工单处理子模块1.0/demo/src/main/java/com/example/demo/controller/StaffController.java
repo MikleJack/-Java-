@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.service.AdminService;
 import com.example.demo.service.StaffService;
 import com.example.demo.utils.SHA_256;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public class StaffController {
      */
     @Resource
     private StaffService staffService;
+    private AdminService adminService;
+    private String initPassword;
 
     /**
      * 分页查询
@@ -97,6 +100,24 @@ public class StaffController {
                 return ResponseEntity.ok(false);
         }
         else
+            return ResponseEntity.ok(false);
+    }
+
+    /**
+     * 重置密码
+     *
+     */
+    @GetMapping("reset")
+    public ResponseEntity<Boolean> ResetStaffPassword(String work_num,String root_num, String password){
+        if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
+            password = SHA_256.getSHA256(password);
+            if (password.equals(adminService.queryById(root_num).getPassword())){
+                staffService.queryById(work_num).setPassword(SHA_256.getSHA256(initPassword));
+                return ResponseEntity.ok(true);
+            }
+            else
+                return ResponseEntity.ok(false);
+        }else
             return ResponseEntity.ok(false);
     }
 }

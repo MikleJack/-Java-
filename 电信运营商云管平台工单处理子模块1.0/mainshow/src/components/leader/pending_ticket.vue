@@ -119,17 +119,17 @@ export default {
 <style scoped>
 /*页面样式*/
 .page {
-  position: absolute;
+  /*position: absolute;*/
   width: 100%;
   height: 100%;
-  left: 0;
-  top: 0;
+  /*left: 0;*/
+  /*top: 0;*/
   /*background: #409EFF;*/
   /*text-align: center;*/
 }
 /*页面头部*/
 .page_top{
-  position:absolute;
+  /*position:absolute;*/
   width: 100%;
   height: 60px;
   /*background: #0c805f;*/
