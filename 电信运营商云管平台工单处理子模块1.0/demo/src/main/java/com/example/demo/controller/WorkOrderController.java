@@ -90,5 +90,20 @@ public class WorkOrderController {
     public List<WorkOrder> queryAll(){
         return this.workOrderService.queryAll();
     }
+
+    @GetMapping("selectByWorkNum")
+    public List<WorkOrder> selectByWorkNum(String WorkNum){
+        return this.workOrderService.selectByWorkNum(WorkNum);
+    }
+
+    @GetMapping("selectByWorkOrderType")
+    public List<WorkOrder> selectByWorkOrderType(String WorkOrderType){
+        return this.workOrderService.selectByWorkOrderType(WorkOrderType);
+    }
+
+    @GetMapping("selectByWorkOrderReason")
+    public List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason){
+        return this.workOrderService.selectByWorkOrderReason(WorkOrderReason);
+    }
 }
 
