@@ -1,7 +1,8 @@
 <template>
   <div class="employeePortal">
+    <!--    利用率饼图-->
     <div class="left-top1">
-      <el-progress class="phyPie" type="circle" :percentage="76.29" stroke-width="12" width="120" status="success"></el-progress>
+      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="12" width="120" :color="customColor"></el-progress>
     </div>
     <!--        表格-->
     <div class="left-top2">
@@ -21,7 +22,7 @@
       </el-table>
     </div>
     <div class="right-top1">
-            <el-progress type="circle" :percentage="35.83" :stroke-width="12" :width="120" status="warning"></el-progress>
+            <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
     </div>
     <div class="right-top2">
       <el-table class="virTable" :data="Vir_Data">
@@ -90,17 +91,26 @@
         </el-table-column>
       </el-table>
     </div>
+<!--    快捷入口栏-->
     <div class="right-bottom">
+<!--      快捷入口上方预留空位-->
       <div class="right-top-bottom"></div>
+<!--      快捷入口图标-->
       <div class="right-bottom-middle">
-        <p>快捷</p>
-        <p>入口</p>
+        <p align="center">快捷</p>
+        <p align="center">入口</p>
       </div>
-      <div class="right-bottom-bottom"></div>
+<!--      快捷入口具体按钮-->
+      <div class="right-bottom-bottom" >
+          <el-row>
+            <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin:0 auto" circle ></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
+          </el-row>
+      </div>
     </div>
 
   </div>
-
 
 </template>
 
@@ -109,16 +119,14 @@ export default {
   name: "employeePortal",
   // components: {},
   methods: {
-    //退出
-    signout() {
-      this.$confirm("退出登录, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        this.$router.push({ path: "/" });
-      });
+    customColor(total_Phyutilization) {
+      if (total_Phyutilization < 50 ) {
+        return '#f56c6c';
+      } else if (total_Phyutilization > 80) {
+        return '#f56c6c';
+      } else return '#41c6a2'
     },
+
     tableRowClassName({row, rowIndex}) {
       if (rowIndex === 1) {
         return 'warning-row';
@@ -132,6 +140,8 @@ export default {
 // 表格数据
   data() {
     return {
+      total_Phyutilization:'76.29',
+      total_Virutilization:'35.83',
       // 物理机总利用率
       Phy_Data: [{
         All_phy_machine: '7台',
@@ -301,18 +311,18 @@ export default {
   width:100%;
   height:40%;
   float:left;
-  background-color: #63bba8;
+  /*background-color: #63bba8;*/
 }
 .right-bottom-middle{
   width:100%;
   height:20%;
   float:left;
-  background-color: #51a08f;
+  /*background-color: #51a08f;*/
 }
 .right-bottom-bottom{
   width:100%;
   height:40%;
   float:left;
-  background-color: #82eed7;
+  /*background-color: #82eed7;*/
 }
 </style>
