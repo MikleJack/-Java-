@@ -90,4 +90,19 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public List<WorkOrder> queryAll(){
         return this.workOrderDao.queryAll();
     }
+
+    @Override
+    public List<WorkOrder> selectByWorkNum(String WorkNum){
+        return this.workOrderDao.selectByWorkNum(WorkNum);
+    }
+
+    @Override
+    public List<WorkOrder> selectByWorkOrderType(String WorkOrderType){
+        return this.workOrderDao.selectByWorkOrderType(WorkOrderType);
+    }
+
+    @Override
+    public List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason){
+        return this.workOrderDao.selectByWorkOrderReason(WorkOrderReason);
+    }
 }

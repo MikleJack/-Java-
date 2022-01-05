@@ -21,6 +21,28 @@
         where work_order_num = #{workOrderNum}
     </select>
 
+<!--    查询员工的工单-->
+    <select id="selectByWorkNum" resultMap="WorkOrderMap">
+        select
+            work_order_num, work_order_type, work_order_name, apply_time, worker_num, file, work_order_state, reason
+        from work_order
+        where worker_num = #{WorkNum}
+    </select>
+<!--查询某种类型的所有工单-->
+    <select id="selectByWorkOrderType" resultMap="WorkOrderMap">
+        select
+            work_order_num, work_order_type, work_order_name, apply_time, worker_num, file, work_order_state, reason
+        from work_order
+        where work_order_type = #{WorkOrderType}
+    </select>
+
+<!--    根据状态查询工单-->
+    <select id="selectByWorkOrderReason" resultMap="WorkOrderMap">
+        select
+            work_order_num, work_order_type, work_order_name, apply_time, worker_num, file, work_order_state, reason
+        from work_order
+        where reason = #{WorkOrderReason}
+    </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="WorkOrderMap">
         select

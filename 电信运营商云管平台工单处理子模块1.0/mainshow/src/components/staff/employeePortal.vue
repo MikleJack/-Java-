@@ -11,7 +11,7 @@
         <el-table-column
           prop="All_phy_machine"
           label="全部物理机资源"
-          width="150">
+          width="130">
         </el-table-column>
         <!--            总利用率-->
         <el-table-column
@@ -30,7 +30,7 @@
         <el-table-column
           prop="All_vir_machine"
           label="全部虚拟机资源"
-          width="150">
+          width="130">
         </el-table-column>
         <!--            总利用率-->
         <el-table-column
@@ -46,6 +46,7 @@
     <div class="right-middle">
       <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
     </div>
+    <div class="left-bottom0"></div>
 <!--    用户申请的每台物理机详情信息-->
     <div class="left-bottom">
       <el-table :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small" >
@@ -97,8 +98,8 @@
       <div class="right-top-bottom"></div>
 <!--      快捷入口图标-->
       <div class="right-bottom-middle">
-        <p align="center">快捷</p>
-        <p align="center">入口</p>
+<!--        <p align="center">快捷</p>-->
+<!--        <p align="center">入口</p>-->
       </div>
 <!--      快捷入口具体按钮-->
       <div class="right-bottom-bottom" >
@@ -233,36 +234,36 @@ export default {
 .employeePortal{
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: relative;
 }
 .left-top1{
-  width:18%;
-  height:21.25%;
+  width:20%;
+  height:25%;
   float:left;
   /*background-color: #73c8b3;*/
 }
 .left-top2{
-  width:22%;
-  height:21.25%;
+  width:30%;
+  height:25%;
   float:left;
   /*background-color: #38836e;*/
 }
 .right-top1{
-  width:18%;
-  height:21.25%;
+  width:20%;
+  height:25%;
   float:left;
   position: relative;
   /*background-color: #49937b;*/
 }
 .right-top2{
-  width:22%;
-  height:21.25%;
+  width:30%;
+  height:25%;
   float:left;
   /*background-color: #6cbaa4;*/
 }
 .phyTable{
   margin-top: 15px;
-  width: 100%;
+  width: 1000%;
   height: 77%;
   /*background-color: #76fbb6;*/
 }
@@ -273,49 +274,56 @@ export default {
   /*background-color: #5be6b7;*/
 }
 .left-middle{
-  width:40%;
+  width:50%;
   height:5%;
   float:left;
   /*background-color: #83e1c8;*/
 }
 .right-middle{
-  width:40%;
+  width:50%;
   height:5%;
   float:left;
   /*background-color: #65dac3;*/
 }
+/*占位，美观*/
+.left-bottom0{
+  width:5%;
+  height:68%;
+  float:left;
+  /*background-color: #73d3ba;*/
+}
 .left-bottom{
-  width:35.5%;
-  height:60%;
+  width:40%;
+  height:68%;
   float:left;
   /*background-color: #73d3ba;*/
 }
 .left-middle-bottom{
-  width:35.5%;
-  height:60%;
+  width:40%;
+  height:68%;
   float:left;
   /*background-color: #538e81;*/
 }
 .right-middle-bottom{
-  width:4%;
-  height:60%;
+  width:10%;
+  height:68%;
   float:left;
   /*background-color: #538e81;*/
 }
 .right-bottom{
   width: 5%;
-  height: 60%;
+  height: 68%;
   float:left;
 }
 .right-top-bottom{
   width:100%;
-  height:40%;
+  height:35%;
   float:left;
   /*background-color: #63bba8;*/
 }
 .right-bottom-middle{
   width:100%;
-  height:20%;
+  height:25%;
   float:left;
   /*background-color: #51a08f;*/
 }
