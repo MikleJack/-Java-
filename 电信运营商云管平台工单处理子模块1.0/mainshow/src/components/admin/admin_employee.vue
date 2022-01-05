@@ -16,17 +16,17 @@
         <el-table-column
           prop="worker_num"
           label="工号"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="180">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="dep_name"
@@ -36,7 +36,7 @@
         <el-table-column
           prop="dep_level"
           label="部门级别"
-          width="180">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="state"
@@ -127,38 +127,60 @@ export default {
         region: ''
       },
       tableData: [{
-        date: '2016-05-03',
+        worker_num: '00000001',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-02',
+        worker_num: '00000002',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-04',
+        worker_num: '00000003',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-01',
+        worker_num: '00000004',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-08',
+        worker_num: '00000005',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-06',
+        worker_num: '00000006',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }, {
-        date: '2016-05-07',
+        worker_num: '00000007',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        phone: '15155185464',
+        dep_name: '软件学院',
+        dep_level: '3',
+        state: '正常'
       }]
     }
 
   },
   methods: {
+    //查询函数
     onSubmit() {
       console.log('submit!');
     },
