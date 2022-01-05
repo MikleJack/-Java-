@@ -1,6 +1,5 @@
 <template>
     <div class="manage">
-
 <!--      树形列表-->
       <div class="tree">
         <!--      显示当前选取的部门-->
@@ -94,20 +93,20 @@ export default {
     }
   },
   data() {
-      const data = [{
-        id: 1,
-        label: '软件学院',
-        children: [{
-          id: 2,
-          label: '软件19-2班',
-          children: [{
-            id: 3,
-            label: '小组1'
-          }]
-        }]
-      }];
+
       return {
-        data: JSON.parse(JSON.stringify(data)),
+        data : [{
+          id: 1,
+          label: '软件学院',
+          children: [{
+            id: 2,
+            label: '软件19-2班',
+            children: [{
+              id: 3,
+              label: '小组1'
+            }]
+          }]
+        }],
         form:{
           name:''
         },
@@ -117,7 +116,10 @@ export default {
         filterText:''
       }
     },
-
+    mounted() {
+      this.axios.get('http://localhost:8084/depTree/cateList').then((res)=>{
+      })
+    },
     methods: {
       //过滤函数
       filterNode(value, data) {
@@ -140,6 +142,7 @@ export default {
       append(data) {
         this.dialogFormVisible=true;
         this.temp=data;
+        alert(this.data);
       },
 
       //移除部门
