@@ -88,5 +88,11 @@ public interface WorkOrderDao {
      */
     List<WorkOrder> queryAll();
 
+
+    List<WorkOrder> selectByWorkNum(String WorkNum);
+
+    List<WorkOrder> selectByWorkOrderType(String WorkOrderType);
+
+    List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason);
 }
 

@@ -31,7 +31,6 @@
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
-          @click="jump1"
         >
           <div @click="jump1">
             <el-submenu index="1">
@@ -49,7 +48,7 @@
 <!--              <el-menu-item index="1-2">选项2</el-menu-item>-->
 <!--            </el-menu-item-group>-->
 
-          <div @click="jump1">
+          <div @click="jumpToPendingTicket">
             <el-submenu index="2">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -64,22 +63,21 @@
 <!--              <el-menu-item index="2-2">选项2</el-menu-item>-->
 <!--            </el-menu-item-group>-->
 
-          <div @click="jump1">
+          <div @click="jumpToExamine">
             <el-submenu index="3">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>工单审批日志</span>
               </template>
-              <!--            <el-menu-item-group>-->
-              <!--              <template slot="title"></template>-->
-              <!--              <el-menu-item index="3-1">选项1</el-menu-item>-->
-              <!--              <el-menu-item index="3-2">选项2</el-menu-item>-->
-              <!--            </el-menu-item-group>-->
-
             </el-submenu>
+                <!--            <el-menu-item-group>-->
+                <!--              <template slot="title"></template>-->
+                <!--              <el-menu-item index="3-1">选项1</el-menu-item>-->
+                <!--              <el-menu-item index="3-2">选项2</el-menu-item>-->
+                <!--            </el-menu-item-group>-->
           </div>
 
-          <div @click="jump1">
+          <div @click="jumpToAllWorkOrder">
             <el-submenu index="4">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -97,6 +95,7 @@
       </el-aside>
       <!-- main区域 -->
       <el-main class="main" index="/">
+<!--        嵌套路由-->
         <router-view>
         </router-view>
       </el-main>
@@ -105,26 +104,18 @@
 </template>
 
 <script>
-import All_work_order from "./all_work_order";
-import Examine from "./examine";
-import Pending_ticket from "./pending_ticket";
-import Router from "vue-router";
-import all_work_order from "./all_work_order";
 
-const router1 = new Router({
-  routes:[
-    {
-      path:'all_work_order',
-      name:'all_work_order',
-      component:all_work_order
-    }
-  ]
-});
+import examine from "./examine";
+import all_work_order from "./all_work_order";
+import pending_ticket from "./pending_ticket";
 
 export default{
   name: "leader_header",
-  components: {Pending_ticket, Examine, All_work_order},
+  components:{examine,all_work_order,pending_ticket},
+  mounted() {
+  },
   methods:{
+
     //退出
     logoutFn() {
       this.$confirm("退出登录, 是否继续?", "提示", {
@@ -135,9 +126,15 @@ export default{
         this.$router.push({ path: "/" });
       });
     },
-    jump1(){
-      // console.log("jump!");
-      router1.push({path:'/all_work_order'})
+    jumpToExamine(){
+      console.log("jump");
+      this.$router.push({path:'/leader_header'+'/examine'});
+    },
+    jumpToAllWorkOrder(){
+      this.$router.push({path:'/leader_header'+'/all_work_order'});
+    },
+    jumpToPendingTicket(){
+      this.$router.push({path:'/leader_header'+'/pending_ticket'});
     }
   }
 }
