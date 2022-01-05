@@ -40,13 +40,10 @@
             <i class="el-icon-menu"></i>
             <span slot="title">工单查询</span>
           </el-menu-item>
-
           <el-menu-item index="3">
             <i class="el-icon-menu"></i>
             <span slot="title">账号管理</span>
-
           </el-menu-item>
-
           <el-menu-item index="4">
             <i class="el-icon-menu"></i>
             <span slot="title">组织机构管理</span>
@@ -58,16 +55,16 @@
         </el-menu>
       </el-aside>
       <!-- main区域 -->
-      <el-main class="main"><admin_employee></admin_employee></el-main>
+      <el-main class="main"><dep_manage></dep_manage></el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import Admin_employee from "./admin_employee";
+import Dep_manage from "./dep_manage";
 export default {
   name: "header",
-  components: {Admin_employee},
+  components: {Dep_manage},
   methods: {
     //退出
     logoutFn() {
