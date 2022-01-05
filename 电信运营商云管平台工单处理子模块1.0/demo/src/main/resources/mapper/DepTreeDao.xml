@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.DepTreeDao">
+
+    <resultMap type="com.example.demo.entity.DepTree" id="DepTreeMap">
+        <result property="depNum" column="dep_num" jdbcType="VARCHAR"/>
+        <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
+        <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+        <result property="depNumSuperior" column="dep_num_superior" jdbcType="VARCHAR"/>
+        <result property="depNumJunior" column="dep_num_junior" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DepTreeMap">
+        select
+          dep_num, dep_name, dep_level, dep_num_superior, dep_num_junior
+        from dep_tree
+        <where>
+            <if test="depNum != null and depNum != ''">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depName != null and depName != ''">
+                and dep_name = #{depName}
+            </if>
+            <if test="depLevel != null">
+                and dep_level = #{depLevel}
+            </if>
+            <if test="depNumSuperior != null and depNumSuperior != ''">
+                and dep_num_superior = #{depNumSuperior}
+            </if>
+            <if test="depNumJunior != null and depNumJunior != ''">
+                and dep_num_junior = #{depNumJunior}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from dep_tree
+        <where>
+            <if test="depNum != null and depNum != ''">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depName != null and depName != ''">
+                and dep_name = #{depName}
+            </if>
+            <if test="depLevel != null">
+                and dep_level = #{depLevel}
+            </if>
+            <if test="depNumSuperior != null and depNumSuperior != ''">
+                and dep_num_superior = #{depNumSuperior}
+            </if>
+            <if test="depNumJunior != null and depNumJunior != ''">
+                and dep_num_junior = #{depNumJunior}
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有-->
+    <select id="queryAll" resultMap="DepTreeMap">
+        select
+            *
+        from dep_tree
+    </select>
+
+</mapper>
+
