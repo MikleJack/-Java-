@@ -64,7 +64,9 @@
         :visible.sync="dialogVisible_add"
         width="30%"
         :before-close="handleClose">
-        <span>是否确定重置该用户账号？</span>
+        <span>确定添加一个账户？</span>
+        <el-input placeholder="请输入密码" v-model="input_password" show-password></el-input>
+
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_add = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisible_add = false">确 定</el-button>
@@ -72,11 +74,12 @@
       </el-dialog>
 
       <el-dialog
-        title="提示"
+        title="重置"
         :visible.sync="dialogVisible_reset"
         width="30%"
         :before-close="handleClose">
-        <span>是否确定重置该用户账号？</span>
+        <span>确定重置该用户账号？</span>
+        <el-input placeholder="请输入密码" v-model="input_reset" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_reset = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisible_reset = false">确 定</el-button>
@@ -84,11 +87,12 @@
       </el-dialog>
 
       <el-dialog
-        title="提示"
+        title="锁定"
         :visible.sync="dialogVisible_lock"
         width="30%"
         :before-close="handleClose">
-        <span>是否锁定该用户账号？</span>
+        <span>确定锁定该用户账号？</span>
+        <el-input placeholder="请输入密码" v-model="input_lock" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_lock = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisible_lock = false">确 定</el-button>
@@ -100,7 +104,8 @@
         :visible.sync="dialogVisible_unlock"
         width="30%"
         :before-close="handleClose">
-        <span>是否解锁该用户账号？</span>
+        <span>确定解锁该用户账号？</span>
+        <el-input placeholder="请输入密码" v-model="input_unlock" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_unlock = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisible_unlock = false">确 定</el-button>
@@ -108,14 +113,15 @@
       </el-dialog>
 
       <el-dialog
-        title="提示"
-        :visible.sync="dialogVisible_delect"
+        title="删除"
+        :visible.sync="dialogVisible_delete"
         width="30%"
         :before-close="handleClose">
-        <span>是否解锁该用户账号？</span>
+        <span>确定删除该用户账号？</span>
+        <el-input placeholder="请输入密码" v-model="input_delete" show-password></el-input>
         <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_delect = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_delect = false">确 定</el-button>
+                <el-button @click="dialogVisible_delete = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible_delete = false">确 定</el-button>
               </span>
       </el-dialog>
 
@@ -134,7 +140,12 @@ export default {
       dialogVisible_reset:false,
       dialogVisible_lock:false,
       dialogVisible_unlock:false,
-      dialogVisible_delect:false,
+      dialogVisible_delete:false,
+      input_password: '',
+      input_delete: '',
+      input_reset: '',
+      input_lock: '',
+      input_unlock: '',
       input: '',
       formInline: {
         user: '',

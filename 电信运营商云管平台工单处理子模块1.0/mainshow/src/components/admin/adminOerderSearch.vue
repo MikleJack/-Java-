@@ -31,12 +31,9 @@
     <el-table
       border
       style="width: 100%"
-      :data = "tableData">
-
-<!--      接口调用数据-->
-<!--      :data="tableData.filter(data => !search || data.workOrderType.equals(workOrderTypeSelector) ||-->
-<!--      data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
-<!--      element-loading-background="rgba(245, 247, 250, 1)">-->
+      :data="tableData.filter(data => !search || data.workOrderType.equals(workOrderTypeSelector) ||
+      data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
         prop="worker_num"
         label="工号"
