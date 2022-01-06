@@ -21,12 +21,12 @@
         <el-table-column
           prop="worker_num"
           label="工号"
-          width="200">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="phone"
@@ -41,7 +41,7 @@
         <el-table-column
           prop="dep_level"
           label="部门级别"
-          width="150">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="state"
@@ -265,7 +265,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { required: true, message: '请输入用户姓名', trigger: 'blur' },
           { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
         ],
         department: [
