@@ -1,7 +1,7 @@
 <template>
   <div class="page">
 <!-- -->
-    <div class="page_top">工单详情</div>
+<!--    <div class="page_top">工单详情</div>-->
 
     <div class="page_body">
 <!--      审批工单时显示申请人信息的无框表格-->
@@ -182,12 +182,12 @@ export default {
 
 <style scoped>
 .page{
-  position: absolute;
+  position: relative;
   width: 100%;
   height: auto;
   left: 0;
   top: 0;
-  /*background: #409EFF;*/
+  background: #ffffff;
 }
 .page_top{
   width: 100%;

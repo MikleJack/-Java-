@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.AdminDao;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.Staff;
 import com.example.demo.service.AdminService;
 import com.example.demo.service.StaffService;
 import com.example.demo.service.impl.AdminServiceImpl;
 import com.example.demo.utils.SHA_256;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,10 @@ public class StaffController {
     private StaffService staffService;
 //    private AdminService a;
     private String initPassword="brccq123456";
+
+    //必须通过Autowired注解来生成其他服务类
+    @Autowired
+    AdminService temp =new AdminServiceImpl();
 
     /**
      * 分页查询
@@ -115,12 +119,47 @@ public class StaffController {
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
-            AdminService temp = new AdminServiceImpl();
-            Admin admin = temp.queryById("root");
+            Admin admin = this.temp.queryById("root");
 
             if (password.equals(admin.getPassword())){
-                Staff staff = staffService.queryById(work_num);
-                staff.setPassword(SHA_256.getSHA256(initPassword));
+                staffService.updatePassword(work_num,SHA_256.getSHA256(initPassword));
+//                temp_staff = staffService.queryById(work_num);
+//                temp_staff.setPassword(SHA_256.getSHA256(initPassword));
+
+                return ResponseEntity.ok(true);
+            }
+            else
+                return ResponseEntity.ok(false);
+        }else
+            return ResponseEntity.ok(false);
+    }
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    @GetMapping("lockAccount")
+    public ResponseEntity<Boolean> lockAccount(String work_num){
+        if(staffService.lockAccount(work_num)) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    @GetMapping("unlockAccount")
+    public ResponseEntity<Boolean> unlockAccount(String work_num,String root_num, String password){
+        if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
+            password = SHA_256.getSHA256(password);
+
+            Admin admin = this.temp.queryById("root");
+
+            if (password.equals(admin.getPassword())){
+                staffService.unlockAccount(work_num);
                 return ResponseEntity.ok(true);
             }
             else
