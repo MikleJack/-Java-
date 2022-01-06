@@ -64,19 +64,19 @@
         label="工单状态"
         width="180">
       </el-table-column>
-      <el-table-column
-        prop="workOrderState"
-        label="项目状态"
-        width="180">
-        <template slot-scope="scope" >
-          <div v-if="scope.row.projectStatus===1">
-            已结项
-          </div>
-          <div v-else-if="scope.row.projectStatus===0">
-            未结项
-          </div>
-        </template>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="workOrderState"-->
+<!--        label="项目状态"-->
+<!--        width="180">-->
+<!--        <template slot-scope="scope" >-->
+<!--          <div v-if="scope.row.projectStatus===1">-->
+<!--            已结项-->
+<!--          </div>-->
+<!--          <div v-else-if="scope.row.projectStatus===0">-->
+<!--            未结项-->
+<!--          </div>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
 
       <el-table-column
         fixed="right"
@@ -91,12 +91,15 @@
 
 <!--    点击详情后的dialog界面-->
     <el-dialog
+      title="工单详情"
       :visible.sync="dialogVisible_detail"
       width="80%"
-      :before-close="handleClose">
+      :before-close="handleClose"
+      center>
+
       <div class="page">
         <!-- -->
-        <div class="page_top">工单详情</div>
+<!--        <div class="page_top">工单详情</div>-->
         <div class="page_body">
           <!--      审批工单时显示申请人信息的无框表格-->
           <el-descriptions class="margin-top" title="申请人信息" :column="3" :size="size" border></el-descriptions>
@@ -216,7 +219,7 @@
     </el-dialog>
 
 <!--    分页-->
-    <div>
+    <div class="paging">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page="currentPage"
@@ -337,7 +340,7 @@ export default {
 
 <style scoped>
 .page{
-  position: absolute;
+  position: relative;
   width: 100%;
   height: auto;
   left: 0;
@@ -378,5 +381,10 @@ export default {
   text-align: center;
   line-height: 100px;
 }
-
+.paging{
+  width:100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+}
 </style>
