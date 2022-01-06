@@ -166,7 +166,7 @@
       </el-dialog>
 
 <!--      分页-->
-      <div>
+      <div class="paging">
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="currentPage"
@@ -326,5 +326,10 @@ export default {
 </script>
 
 <style scoped>
-
+.paging {
+  width:100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+}
 </style>

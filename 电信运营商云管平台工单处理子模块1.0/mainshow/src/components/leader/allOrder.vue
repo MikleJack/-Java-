@@ -68,7 +68,7 @@
         </el-table>
 
       </div>
-    <div class="page-tail" style="text-align:center">
+    <div class="page-tail">
       <!--放置分页部分-->
       <el-pagination
         background

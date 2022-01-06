@@ -382,6 +382,9 @@ export default {
   line-height: 100px;
 }
 .paging{
+  width:100%;
+  height: 60px;
+  position: absolute;
   bottom: 0;
 }
 </style>
