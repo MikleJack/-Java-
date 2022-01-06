@@ -81,5 +81,32 @@ public interface StaffDao {
      */
     int deleteById(String workNum);
 
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password   密码
+     * @return 影响行数
+     */
+    boolean updatePassword(String work_num,String password);
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+    * @param workNum 用户编号
+     */
+    boolean lockAccount(String workNum);
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     * @param workNum 用户编号
+     */
+    boolean unlockAccount(String workNum);
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    boolean deleteAccount(String workNum);
 }
 

@@ -10,19 +10,28 @@ import java.io.Serializable;
  */
 public class Staff implements Serializable {
     private static final long serialVersionUID = -61898315031253318L;
-    
+
     private String workNum;
-    
+
     private String name;
-    
+
     private String depNum;
-    
+
     private String phone;
-    
+
     private String password;
-    
+
     private Boolean state;
 
+    private Boolean inService;
+
+    public Boolean getInService() {
+        return inService;
+    }
+
+    public void setInService(boolean inService) {
+        this.inService = inService;
+    }
 
     public String getWorkNum() {
         return workNum;

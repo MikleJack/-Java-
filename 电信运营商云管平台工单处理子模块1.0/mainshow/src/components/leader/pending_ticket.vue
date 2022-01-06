@@ -39,53 +39,27 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+
+            <el-button type="text" @click="dialogTableVisible = true">查看详情</el-button>
+
           </template>
         </el-table-column>
       </el-table>
 
+      <el-dialog title="工单详情" :visible.sync="dialogTableVisible">
+        <ticket_details></ticket_details>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import Ticket_details from "./ticket_details";
 export default {
   name: "pending_ticket",
+  components: {Ticket_details},
   methods: {
-    handleClick(row) {
-      // console.log(row);
-      const h = this.$createElement;
-      this.$msgbox({
-        title: '消息',
-        message: h('p', null, [
-          h('span', null, '内容可以是 '),
-          h('i', { style: 'color: teal' }, 'VNode')
-        ]),
-        showCancelButton: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
 
-        beforeClose: (action, instance, done) => {
-          if (action === 'confirm') {
-            instance.confirmButtonLoading = true;
-            instance.confirmButtonText = '执行中...';
-            setTimeout(() => {
-              done();
-              setTimeout(() => {
-                instance.confirmButtonLoading = false;
-              }, 300);
-            }, 3000);
-          } else {
-            done();
-          }
-        }
-      }).then(action => {
-        this.$message({
-          type: 'info',
-          message: 'action: ' + action
-        });
-      });
-    }
   },
 
   data() {
@@ -110,7 +84,8 @@ export default {
         work_num:'00000002',
         name:'陈大炮'
       },
-      ]
+      ],
+      dialogTableVisible:false
     }
   }
 }

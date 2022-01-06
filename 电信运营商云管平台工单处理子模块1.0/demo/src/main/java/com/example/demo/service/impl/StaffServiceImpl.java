@@ -79,4 +79,43 @@ public class StaffServiceImpl implements StaffService {
     public boolean deleteById(String workNum) {
         return this.staffDao.deleteById(workNum) > 0;
     }
+
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password    密码
+     * @return 影响行数
+     */
+    @Override
+    public boolean updatePassword(String work_num,String password){
+        return this.staffDao.updatePassword(work_num,password);
+    }
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    @Override
+    public boolean lockAccount(String workNum){
+        return this.staffDao.lockAccount(workNum);
+    }
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    @Override
+    public boolean unlockAccount(String workNum){
+        return this.staffDao.unlockAccount(workNum);
+    }
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    @Override
+    public boolean deleteAccount(String workNum){
+        return this.staffDao.deleteAccount(workNum);
+    }
 }
