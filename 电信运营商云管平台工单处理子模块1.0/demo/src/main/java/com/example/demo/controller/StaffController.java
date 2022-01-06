@@ -167,5 +167,28 @@ public class StaffController {
         }else
             return ResponseEntity.ok(false);
     }
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     *
+     */
+    @GetMapping("deleteAccount")
+    public ResponseEntity<Boolean> deleteAccount(String work_num, String root_num, String password){
+        if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
+            password = SHA_256.getSHA256(password);
+
+            Admin admin = this.temp.queryById("root");
+
+            if (password.equals(admin.getPassword())){
+                staffService.deleteAccount(work_num);
+                return ResponseEntity.ok(true);
+            }
+            else
+                return ResponseEntity.ok(false);
+        }else
+            return ResponseEntity.ok(false);
+    }
+
+
 }
 
