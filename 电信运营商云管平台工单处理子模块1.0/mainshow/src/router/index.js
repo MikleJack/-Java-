@@ -14,6 +14,11 @@ import adminOerderSearch from "../components/admin/adminOerderSearch";
 import dep_manage from "../components/admin/dep_manage";
 import admin_operation_log from "../components/admin/admin_operation_log";
 import admin_employee from "../components/admin/admin_employee";
+import staffHeader from "../components/staff/staffHeader";
+import applytable from "../components/staff/applytable";
+import changetable from "../components/staff/changetable";
+import staffAllOrder from "../components/staff/staffAllOrder";
+import employeePortal from "../components/staff/employeePortal";
 
 Vue.use(Router)
 
@@ -102,6 +107,33 @@ const router = new Router({
           meta:{
             requireAuth: true
           },
+        }
+      ]
+    },
+    {
+      path:'/staff',
+      name:'staff',
+      component:staffHeader,
+      children:[
+        {
+          path: 'home',
+          name:'home',
+          component: employeePortal
+        },
+        {
+          path: 'apply',
+          name: 'applyTable',
+          component: applytable
+        },
+        {
+          path: 'change',
+          name:'changeTable',
+          component: changetable
+        },
+        {
+          path: 'allOrder',
+          name:'allOrder',
+          component: staffAllOrder
         }
       ]
     }
