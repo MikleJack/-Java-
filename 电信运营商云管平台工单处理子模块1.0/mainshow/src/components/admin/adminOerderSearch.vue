@@ -206,13 +206,18 @@
               placeholder="请输入内容"
               v-model="textarea">
             </el-input>
+            <span slot="footer" class="dialog-footer">
+              <div>
+                <el-button @click="dialogVisible_detail = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible_detail = false">确 定</el-button>
+              </div>
+          </span>
           </div>
+<!--          <div >-->
+
+<!--          </div>-->
         </div>
 
-        <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible_detail = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible_detail = false">确 定</el-button>
-        </span>
       </div>
 
 
@@ -370,13 +375,12 @@ export default {
 .resoure_usage{
   width: 100%;
   height: auto;
-  background: #42b983;
+  background: #ffffff;
 }
 .dialog-footer{
   width: 100%;
   height: 100px;
   bottom: 0;
-  float: right;
   /*background: #888888;*/
   text-align: center;
   line-height: 100px;
