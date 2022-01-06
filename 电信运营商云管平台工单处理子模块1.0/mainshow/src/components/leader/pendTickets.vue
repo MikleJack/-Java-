@@ -94,7 +94,7 @@ export default {
 <style scoped>
 /*页面样式*/
 .page {
-  /*position: absolute;*/
+  position: relative;
   width: 100%;
   height: 100%;
   /*left: 0;*/
@@ -104,7 +104,7 @@ export default {
 }
 /*页面头部*/
 .page_top{
-  /*position:absolute;*/
+  position:relative;
   width: 100%;
   height: 60px;
   /*background: #0c805f;*/
@@ -117,7 +117,7 @@ export default {
 .page_central{
   position: relative;
   width: 80%;
-  height: 90%;
+  /*height: 90%;*/
   /*background: aqua;*/
   top: 60px;
   margin: auto;

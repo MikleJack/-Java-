@@ -18,15 +18,12 @@
           <!--查询按钮-->
         </el-form>
       </div>
-      <div page class="page-body">
+      <div class="page-body">
         <!--界面体部分-->
-
-<!--        :data="tableData"-->
         <el-table
-
           :data="tableData.filter(data => !formInline.work_order_num || data.work_order_num.toLowerCase().includes(formInline.work_order_num.toLowerCase()))"
           border
-          style="width: 100%">
+         >
           <el-table-column
             prop="work_order_num"
             label="工单号"
@@ -54,19 +51,21 @@
             label="处理批注">
           </el-table-column>
         </el-table>
-      <div class="page-tail" style="width:70%;text-align:center">
-        <!--放置分页部分-->
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="1000">
-        </el-pagination>
-      </div>
+
         <!--放置表格-->
 
 
     </div>
+
   </div>
+    <div class="page-tail">
+      <!--放置分页部分-->
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="1000">
+      </el-pagination>
+    </div>
   </div>
 
 </template>
@@ -118,23 +117,15 @@
 <!--页面分区显示的设置-->
 <style scoped>
 .page-main{
-  /*padding: 0 50px 15px;*/
-  /*margin-left: 15%;*/
-  position: absolute;
-
+  position: relative;
   width:100%;
-  bottom:60px;
-  top:48px;
-  /*background-color: rgb(255, 227, 89);*/
+  height: 100%;
 }
 
 .page-body{
-  position: fixed;
+  position: relative;
   bottom:60px;
-  top:164px;
-  left:200px;
-  right:200px;
-  /*background-color: rgb(81, 227, 150);*/
+  top:64px;
 }
 .page-head{
   height: 100px;
@@ -147,7 +138,7 @@
 .page-tail{
   width:100%;
   height: 60px;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   /*background-color: rgb(243, 119, 158);*/
 }
