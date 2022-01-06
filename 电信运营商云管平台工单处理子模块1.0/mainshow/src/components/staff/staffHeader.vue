@@ -75,7 +75,8 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/user" });
+        sessionStorage.removeItem("staff")
       });
     },
     //改变页面

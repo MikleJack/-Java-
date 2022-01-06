@@ -48,32 +48,6 @@
         select
           work_order_num, work_order_type, work_order_name, apply_time, worker_num, file, work_order_state, reason
         from work_order
-        <where>
-            <if test="workOrderNum != null and workOrderNum != ''">
-                and work_order_num = #{workOrderNum}
-            </if>
-            <if test="workOrderType != null and workOrderType != ''">
-                and work_order_type = #{workOrderType}
-            </if>
-            <if test="workOrderName != null and workOrderName != ''">
-                and work_order_name = #{workOrderName}
-            </if>
-            <if test="applyTime != null">
-                and apply_time = #{applyTime}
-            </if>
-            <if test="workerNum != null and workerNum != ''">
-                and worker_num = #{workerNum}
-            </if>
-            <if test="file != null and file != ''">
-                and file = #{file}
-            </if>
-            <if test="workOrderState != null and workOrderState != ''">
-                and work_order_state = #{workOrderState}
-            </if>
-            <if test="reason != null and reason != ''">
-                and reason = #{reason}
-            </if>
-        </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -81,32 +55,6 @@
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from work_order
-        <where>
-            <if test="workOrderNum != null and workOrderNum != ''">
-                and work_order_num = #{workOrderNum}
-            </if>
-            <if test="workOrderType != null and workOrderType != ''">
-                and work_order_type = #{workOrderType}
-            </if>
-            <if test="workOrderName != null and workOrderName != ''">
-                and work_order_name = #{workOrderName}
-            </if>
-            <if test="applyTime != null">
-                and apply_time = #{applyTime}
-            </if>
-            <if test="workerNum != null and workerNum != ''">
-                and worker_num = #{workerNum}
-            </if>
-            <if test="file != null and file != ''">
-                and file = #{file}
-            </if>
-            <if test="workOrderState != null and workOrderState != ''">
-                and work_order_state = #{workOrderState}
-            </if>
-            <if test="reason != null and reason != ''">
-                and reason = #{reason}
-            </if>
-        </where>
     </select>
 
     <!--新增所有列-->

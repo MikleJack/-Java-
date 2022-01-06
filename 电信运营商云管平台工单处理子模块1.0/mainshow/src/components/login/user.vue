@@ -157,9 +157,16 @@ export default {
                 center: true
               });
               //设置登录类型为员工
-              sessionStorage.setItem("type", "staff");
-              sessionStorage.setItem("staff", 'true');
-              this.$router.push('/leader');
+              if(res.data===1){
+                sessionStorage.setItem("type", "staff");
+                sessionStorage.setItem("staff", 'true');
+                this.$router.push('/staff');
+              }
+              else if(res.data===2){
+                sessionStorage.setItem("type", "leader");
+                sessionStorage.setItem("leader", 'true');
+                this.$router.push('/leader');
+              }
 
             } else {
               this.$message({

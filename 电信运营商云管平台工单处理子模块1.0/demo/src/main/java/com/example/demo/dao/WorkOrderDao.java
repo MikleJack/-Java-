@@ -26,19 +26,16 @@ public interface WorkOrderDao {
     /**
      * 查询指定行数据
      *
-     * @param workOrder 查询条件
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<WorkOrder> queryAllByLimit(WorkOrder workOrder, @Param("pageable") Pageable pageable);
+    List<WorkOrder> queryAllByLimit(@Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
-     *
-     * @param workOrder 查询条件
      * @return 总行数
      */
-    long count(WorkOrder workOrder);
+    long count();
 
     /**
      * 新增数据

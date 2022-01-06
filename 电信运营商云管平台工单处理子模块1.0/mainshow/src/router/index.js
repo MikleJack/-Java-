@@ -39,7 +39,8 @@ const router = new Router({
       name:'adminMain',
       component:admin_header,
       meta:{
-        requireAuth:true
+        requireAuth:true,
+        role:'admin'
       },
       children:[
         {
@@ -47,7 +48,8 @@ const router = new Router({
           name:'search',
           component:adminOerderSearch,
           meta:{
-            requireAuth:true
+            requireAuth:true,
+            role:'admin'
           },
         },
         {
@@ -55,7 +57,8 @@ const router = new Router({
           name:'accountManage',
           component:admin_employee,
           meta:{
-            requireAuth:true
+            requireAuth:true,
+            role:'admin'
           },
         },
         {
@@ -63,7 +66,8 @@ const router = new Router({
           name:'OrganManage',
           component:dep_manage,
           meta:{
-            requireAuth:true
+            requireAuth:true,
+            role:'admin'
           },
         },
         {
@@ -71,7 +75,8 @@ const router = new Router({
           name:'logManage',
           component:admin_operation_log,
           meta:{
-            requireAuth:true
+            requireAuth:true,
+            role:'admin'
           },
         }
       ]
@@ -81,7 +86,8 @@ const router = new Router({
       name:'leader',
       component:leader_header,
       meta:{
-        requireAuth: true
+        requireAuth: true,
+        role:'leader'
       },
       children:[
         {
@@ -89,7 +95,8 @@ const router = new Router({
           name:'pendTickets',
           component: pending_ticket,
           meta:{
-            requireAuth: true
+            requireAuth: true,
+            role:'leader'
           },
         },
         {
@@ -97,7 +104,8 @@ const router = new Router({
           name: 'examineLog',
           component: examine,
           meta:{
-            requireAuth: true
+            requireAuth: true,
+            role:'leader'
           },
         },
         {
@@ -105,7 +113,8 @@ const router = new Router({
           name: 'allOrder',
           component: all_work_order,
           meta:{
-            requireAuth: true
+            requireAuth: true,
+            role:'leader'
           },
         }
       ]
@@ -114,26 +123,46 @@ const router = new Router({
       path:'/staff',
       name:'staff',
       component:staffHeader,
+      meta:{
+        requireAuth: true,
+        role:'staff'
+      },
       children:[
         {
           path: 'home',
           name:'home',
-          component: employeePortal
+          component: employeePortal,
+          meta:{
+            requireAuth: true,
+            role:'staff'
+          },
         },
         {
           path: 'apply',
           name: 'applyTable',
-          component: applytable
+          component: applytable,
+          meta:{
+            requireAuth: true,
+            role:'staff'
+          },
         },
         {
           path: 'change',
           name:'changeTable',
-          component: changetable
+          component: changetable,
+          meta:{
+            requireAuth: true,
+            role:'staff'
+          },
         },
         {
           path: 'allOrder',
           name:'allOrder',
-          component: staffAllOrder
+          component: staffAllOrder,
+          meta:{
+            requireAuth: true,
+            role:'staff'
+          },
         }
       ]
     }
@@ -147,31 +176,17 @@ export default router
 // 配置路由权限
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-    let type = sessionStorage.getItem("type");
-    if(type === "staff"){
-      if(sessionStorage.getItem("staff") === 'true'){
-        next();
-      }
-      else{
-        next({path:'/user'})
-      }
+    let type = to.meta.role;
+    if(sessionStorage.getItem(type)==='true'){
+      next()
     }
-    else if(type === "leader"){
-      if(sessionStorage.getItem("leader") === 'true'){
-        next();
-      }
-      else{
-        next({path:'/user'})
-      }
+    else{
+      if(type==="root")
+        next({path:"/root"})
+      else
+        next({path:"/user"})
     }
-    else if(type === "root"){
-      if(sessionStorage.getItem("root") === 'true'){
-        next();
-      }
-      else{
-        next({path:'/root'})
-      }
-    }
+
   } else {
       next();
   }
