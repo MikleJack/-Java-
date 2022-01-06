@@ -15,7 +15,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="StaffMap">
         select
-          work_num, name, dep_num, phone, password, state
+          work_num, name, dep_num, phone, password, state, in_service
         from staff
         where work_num = #{workNum}
     </select>
