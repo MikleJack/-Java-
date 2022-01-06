@@ -24,48 +24,32 @@
     <el-container>
       <el-aside class="aside" width=150px>
         <el-menu
-          default-active="2"
+          default-active="1"
           class="el-menu-vertical-demo"
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <div @click="changePage(1)">
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="1" @click="changePage(1)">
+
+                <i class="el-icon-s-home"></i>
                 <span>首页</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
-
-          <div @click="changePage(2)">
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="2" @click="changePage(2)">
+                <i class="el-icon-edit-outline"></i>
                 <span>待审批工单</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
-          <div @click="changePage(3)">
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="3" @click="changePage(3)">
+                <i class="el-icon-notebook-2"></i>
                 <span>工单审批日志</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
-          <div @click="changePage(4)">
-            <el-submenu index="4">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="4" @click="changePage(4)">
+                <i class="el-icon-tickets"></i>
                 <span>全部工单</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
         </el-menu>
       </el-aside>
