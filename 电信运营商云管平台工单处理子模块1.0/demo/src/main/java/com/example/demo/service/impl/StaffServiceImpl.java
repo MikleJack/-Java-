@@ -79,4 +79,16 @@ public class StaffServiceImpl implements StaffService {
     public boolean deleteById(String workNum) {
         return this.staffDao.deleteById(workNum) > 0;
     }
+
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password    密码
+     * @return 影响行数
+     */
+    @Override
+    public boolean updatePassword(String work_num,String password){
+        return this.staffDao.updatePassword(work_num,password);
+    }
 }

@@ -81,5 +81,14 @@ public interface StaffDao {
      */
     int deleteById(String workNum);
 
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password   密码
+     * @return 影响行数
+     */
+    boolean updatePassword(String work_num,String password);
+
 }
 

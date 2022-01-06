@@ -129,5 +129,16 @@
         delete from staff where work_num = #{workNum}
     </delete>
 
+    <!--通过主键修改数据-->
+    <update id="updatePassword">
+        update staff
+        <set>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+        </set>
+        where work_num = #{work_num}
+    </update>
+
 </mapper>
 
