@@ -25,11 +25,10 @@ public interface WorkOrderService {
     /**
      * 分页查询
      *
-     * @param workOrder 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<WorkOrder> queryByPage(WorkOrder workOrder, PageRequest pageRequest);
+    Page<WorkOrder> queryByPage(PageRequest pageRequest);
 
     /**
      * 新增数据
