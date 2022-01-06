@@ -14,6 +14,9 @@ import adminOerderSearch from "../components/admin/adminOerderSearch";
 import dep_manage from "../components/admin/dep_manage";
 import admin_operation_log from "../components/admin/admin_operation_log";
 import admin_employee from "../components/admin/admin_employee";
+import staffHeader from "../components/staff/staffHeader";
+import employeePortal from "../components/staff/employeePortal";
+import el from "element-ui/src/locale/lang/el";
 
 Vue.use(Router)
 
@@ -70,6 +73,40 @@ const router = new Router({
           },
         }
       ]
+    },
+    {
+      path:'/leader',
+      name:'leader',
+      component:leader_header,
+      meta:{
+        requireAuth: true
+      },
+      children:[
+        {
+          path: 'pendTickets',
+          name:'pendTickets',
+          component: pending_ticket,
+          meta:{
+            requireAuth: true
+          },
+        },
+        {
+          path: 'examineLog',
+          name: 'examineLog',
+          component: examine,
+          meta:{
+            requireAuth: true
+          },
+        },
+        {
+          path: 'allOrder',
+          name: 'allOrder',
+          component: all_work_order,
+          meta:{
+            requireAuth: true
+          },
+        }
+      ]
     }
   ],
   mode: "history"
@@ -81,13 +118,30 @@ export default router
 // 配置路由权限
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-    if (sessionStorage.getItem("token") === 'true') { // 判断本地是否存在token
-      next()
-    } else {
-      // 未登录,跳转到登陆页面
-      next({
-        path: '/admin'
-      })
+    let type = sessionStorage.getItem("type");
+    if(type === "staff"){
+      if(sessionStorage.getItem("staff") === 'true'){
+        next();
+      }
+      else{
+        next({path:'/user'})
+      }
+    }
+    else if(type === "leader"){
+      if(sessionStorage.getItem("leader") === 'true'){
+        next();
+      }
+      else{
+        next({path:'/user'})
+      }
+    }
+    else if(type === "root"){
+      if(sessionStorage.getItem("root") === 'true'){
+        next();
+      }
+      else{
+        next({path:'/root'})
+      }
     }
   } else {
       next();

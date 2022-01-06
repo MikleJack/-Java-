@@ -26,13 +26,11 @@
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <div @click="jump1">
+          <div @click="changePage(1)">
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -42,13 +40,7 @@
           </div>
 
 
-<!--            <el-menu-item-group>-->
-<!--              <template slot="title"></template>-->
-<!--              <el-menu-item index="1-1">选项1</el-menu-item>-->
-<!--              <el-menu-item index="1-2">选项2</el-menu-item>-->
-<!--            </el-menu-item-group>-->
-
-          <div @click="jumpToPendingTicket">
+          <div @click="changePage(2)">
             <el-submenu index="2">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -57,37 +49,21 @@
             </el-submenu>
           </div>
 
-<!--            <el-menu-item-group>-->
-<!--              <template slot="title"></template>-->
-<!--              <el-menu-item index="2-1">选项1</el-menu-item>-->
-<!--              <el-menu-item index="2-2">选项2</el-menu-item>-->
-<!--            </el-menu-item-group>-->
-
-          <div @click="jumpToExamine">
+          <div @click="changePage(3)">
             <el-submenu index="3">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>工单审批日志</span>
               </template>
             </el-submenu>
-                <!--            <el-menu-item-group>-->
-                <!--              <template slot="title"></template>-->
-                <!--              <el-menu-item index="3-1">选项1</el-menu-item>-->
-                <!--              <el-menu-item index="3-2">选项2</el-menu-item>-->
-                <!--            </el-menu-item-group>-->
           </div>
 
-          <div @click="jumpToAllWorkOrder">
+          <div @click="changePage(4)">
             <el-submenu index="4">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>全部工单</span>
               </template>
-              <!--            <el-menu-item-group>-->
-              <!--              <template slot="title"></template>-->
-              <!--              <el-menu-item index="4-1">选项1</el-menu-item>-->
-              <!--              <el-menu-item index="4-2">选项2</el-menu-item>-->
-              <!--            </el-menu-item-group>-->
             </el-submenu>
           </div>
 
@@ -126,16 +102,22 @@ export default{
         this.$router.push({ path: "/" });
       });
     },
-    jumpToExamine(){
-      console.log("jump");
-      this.$router.push({path:'/leader_header'+'/examine'});
+    //改变页面
+    changePage(page){
+      if(page===1){
+        this.$router.push({path:"/leader/home"});
+      }
+      else if(page===2){
+        this.$router.push({path:"/leader/pendTickets"});
+      }
+      else if(page===3){
+        this.$router.push({path:"/leader/examineLog"});
+      }
+      else if(page===4){
+        this.$router.push({path:"/leader/allOrder"});
+      }
     },
-    jumpToAllWorkOrder(){
-      this.$router.push({path:'/leader_header'+'/all_work_order'});
-    },
-    jumpToPendingTicket(){
-      this.$router.push({path:'/leader_header'+'/pending_ticket'});
-    }
+
   }
 }
 </script>

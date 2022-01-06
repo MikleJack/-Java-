@@ -49,6 +49,7 @@
 export default {
   name: "admin",
   mounted(){
+
     this.getIP();
     this.getVertifyCode();
   },
@@ -97,12 +98,6 @@ export default {
     }
   },
   methods: {
-    go_admin(){
-      this.$router.push({path:'/admin'});
-    },
-    go_user(){
-      this.$router.push({path:'/user'});
-    },
     // 获取当前时间
     getdate() {
       let date = new Date();
@@ -159,7 +154,8 @@ export default {
                 center: true
               });
               //设置token以及路由
-              sessionStorage.setItem("token", 'true');
+              sessionStorage.setItem("type", "root");
+              sessionStorage.setItem("root", 'true');
               this.$router.push('/adminMain');
             } else {
               this.$message({
