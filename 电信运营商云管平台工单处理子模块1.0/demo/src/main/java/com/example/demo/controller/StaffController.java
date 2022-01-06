@@ -93,21 +93,31 @@ public class StaffController {
     /**
      * 登录
      *
-     *
+     *0 登录失败
+     * 1 普通员工
+     * 2 领导
      */
     @GetMapping("login")
-    public ResponseEntity<Boolean> login(String work_num, String password){
+    public int login(String work_num, String password){
         if(!work_num.equals("") && !password.equals("") ) {
             if (staffService.queryById(work_num) != null)
             {
                 password = SHA_256.getSHA256(password);
-                return ResponseEntity.ok(password.equals(staffService.queryById(work_num).getPassword()));
+                if(password.equals(staffService.queryById(work_num).getPassword())){
+                    Staff staff = staffService.queryById(work_num);
+                    if(staff.getDepNum().equals("0001"))
+                        return 1;
+                    else
+                        return 2;
+                }
+                else
+                    return 0;
             }
             else
-                return ResponseEntity.ok(false);
+                return 0;
         }
         else
-            return ResponseEntity.ok(false);
+            return 0;
     }
 
     /**
