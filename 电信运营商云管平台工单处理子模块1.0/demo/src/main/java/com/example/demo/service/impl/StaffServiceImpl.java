@@ -91,4 +91,13 @@ public class StaffServiceImpl implements StaffService {
     public boolean updatePassword(String work_num,String password){
         return this.staffDao.updatePassword(work_num,password);
     }
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    @Override
+    public boolean lockAccount(String workNum){
+        return this.staffDao.lockAccount(workNum);
+    }
 }

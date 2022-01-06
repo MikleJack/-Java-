@@ -62,4 +62,9 @@ public interface StaffService {
      */
     boolean updatePassword(String work_num,String password);
 
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    boolean lockAccount(String workNum);
 }

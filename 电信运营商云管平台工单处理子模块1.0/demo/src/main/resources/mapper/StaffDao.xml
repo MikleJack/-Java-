@@ -129,12 +129,23 @@
         delete from staff where work_num = #{workNum}
     </delete>
 
-    <!--通过主键修改数据-->
+    <!--重置密码-->
     <update id="updatePassword">
         update staff
         <set>
             <if test="password != null and password != ''">
                 password = #{password},
+            </if>
+        </set>
+        where work_num = #{work_num}
+    </update>
+
+    <!--锁定账户-->
+    <update id="lockAccount">
+        update staff
+        <set>
+            <if test="state != null">
+                state = false,
             </if>
         </set>
         where work_num = #{work_num}

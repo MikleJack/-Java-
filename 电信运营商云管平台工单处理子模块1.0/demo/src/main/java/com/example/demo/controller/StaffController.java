@@ -133,5 +133,18 @@ public class StaffController {
         }else
             return ResponseEntity.ok(false);
     }
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    @GetMapping("lockAccount")
+    public ResponseEntity<Boolean> lockAccount(String work_num){
+        if(staffService.lockAccount(work_num)) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
 }
 
