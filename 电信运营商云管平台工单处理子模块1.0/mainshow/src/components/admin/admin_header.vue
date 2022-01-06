@@ -97,7 +97,7 @@ export default {
       }).then(() => {
         //先修改路由，然后删除token
         this.$router.push({ path: "/admin" });
-        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("root");
       });
     },
   },
