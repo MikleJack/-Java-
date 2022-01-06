@@ -158,14 +158,9 @@ export default {
                 type: 'success',
                 center: true
               });
-              // this.$axios.get("http://localhost:8081/admin/selectByname?name="+this.ruleForm.admin).then((res)=>{
-              //   if(res.data){
-              //     //配置路由权限，防止用户通过更改网址路径绕过身份验证进入主页面
-              //     sessionStorage.setItem("token", 'true');
-              //     sessionStorage.setItem("id",res.data.id);
-              //     this.$router.push('/main');
-              //   }
-              // })
+              //设置token以及路由
+              sessionStorage.setItem("token", 'true');
+              this.$router.push('/adminMain');
             } else {
               this.$message({
                 message: '用户名或密码错误',

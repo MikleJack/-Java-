@@ -26,36 +26,39 @@
         <el-menu
           default-active="1"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
+          <el-menu-item index="1" @click="changePage(1)">
+            <i class="el-icon-s-home"></i>
             <span slot="title">主页</span>
           </el-menu-item>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
+          <el-menu-item index="2" @click="changePage(2)">
+            <i class="el-icon-search"></i>
             <span slot="title">工单查询</span>
           </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-menu"></i>
+          <el-menu-item index="3" @click="changePage(3)">
+            <i class="el-icon-setting"></i>
             <span slot="title">账号管理</span>
           </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-menu"></i>
+          <el-menu-item index="4" @click="changePage(4)">
+            <i class="el-icon-set-up"></i>
             <span slot="title">组织机构管理</span>
           </el-menu-item>
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i>
+          <el-menu-item index="5" @click="changePage(5)">
+            <i class="el-icon-document"></i>
             <span slot="title">日志管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
       <!-- main区域 -->
-      <el-main class="main"><dep_manage></dep_manage></el-main>
+      <el-main class="main">
+        <keep-alive>
+          <router-view>
+          </router-view>
+        </keep-alive>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -66,6 +69,25 @@ export default {
   name: "header",
   components: {Dep_manage},
   methods: {
+    //改变页面
+    changePage(page){
+      if(page===1){
+        this.$router.push({path:"/adminMain/home"});
+      }
+      else if(page===2){
+        console.log(2)
+        this.$router.push({path:"/adminMain/search"});
+      }
+      else if(page===3){
+        this.$router.push({path:"/adminMain/accountManage"});
+      }
+      else if(page===4){
+        this.$router.push({path:"/adminMain/OrganManage"});
+      }
+      else if(page===5){
+        this.$router.push({path:"/adminMain/logManage"});
+      }
+    },
     //退出
     logoutFn() {
       this.$confirm("退出登录, 是否继续?", "提示", {
@@ -73,7 +95,9 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        this.$router.push({ path: "/" });
+        //先修改路由，然后删除token
+        this.$router.push({ path: "/admin" });
+        sessionStorage.removeItem("token");
       });
     },
   },
@@ -89,13 +113,6 @@ export default {
   color: #fff;
 }
 
-.page-title{
-  width:200px;
-}
-
-.logo{
-  width: 40px;
-}
 .el-menu-demo{
   background-color: transparent;
   float: right;
@@ -106,19 +123,10 @@ export default {
 .aside {
   background: #52b69a;
   color: #fff;
-  /* height: 100%; */
 
 }
 .main {
-  /* height: 100%; */
   color: #52b69a;
 }
-.headerlogo {
-  /* line-height: 60px; */
-  margin-top: 10px;
-}
-.rightsection {
-  line-height: 60px;
-  text-align: center;
-}
+
 </style>
