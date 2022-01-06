@@ -102,5 +102,11 @@ public interface StaffDao {
      * @param workNum 用户编号
      */
     boolean unlockAccount(String workNum);
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    boolean deleteAccount(String workNum);
 }
 

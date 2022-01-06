@@ -24,72 +24,32 @@
     <el-container>
       <el-aside class="aside" width=150px>
         <el-menu
-          default-active="2"
+          default-active="1"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#52b69a"
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <div @click="jump1">
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="1" @click="changePage(1)">
+
+                <i class="el-icon-s-home"></i>
                 <span>首页</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
-
-<!--            <el-menu-item-group>-->
-<!--              <template slot="title"></template>-->
-<!--              <el-menu-item index="1-1">选项1</el-menu-item>-->
-<!--              <el-menu-item index="1-2">选项2</el-menu-item>-->
-<!--            </el-menu-item-group>-->
-
-          <div @click="jumpToPendingTicket">
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="2" @click="changePage(2)">
+                <i class="el-icon-edit-outline"></i>
                 <span>待审批工单</span>
-              </template>
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
-<!--            <el-menu-item-group>-->
-<!--              <template slot="title"></template>-->
-<!--              <el-menu-item index="2-1">选项1</el-menu-item>-->
-<!--              <el-menu-item index="2-2">选项2</el-menu-item>-->
-<!--            </el-menu-item-group>-->
-
-          <div @click="jumpToExamine">
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="3" @click="changePage(3)">
+                <i class="el-icon-notebook-2"></i>
                 <span>工单审批日志</span>
-              </template>
-            </el-submenu>
-                <!--            <el-menu-item-group>-->
-                <!--              <template slot="title"></template>-->
-                <!--              <el-menu-item index="3-1">选项1</el-menu-item>-->
-                <!--              <el-menu-item index="3-2">选项2</el-menu-item>-->
-                <!--            </el-menu-item-group>-->
-          </div>
+            </el-menu-item>
 
-          <div @click="jumpToAllWorkOrder">
-            <el-submenu index="4">
-              <template slot="title">
-                <i class="el-icon-location"></i>
+            <el-menu-item index="4" @click="changePage(4)">
+                <i class="el-icon-tickets"></i>
                 <span>全部工单</span>
-              </template>
-              <!--            <el-menu-item-group>-->
-              <!--              <template slot="title"></template>-->
-              <!--              <el-menu-item index="4-1">选项1</el-menu-item>-->
-              <!--              <el-menu-item index="4-2">选项2</el-menu-item>-->
-              <!--            </el-menu-item-group>-->
-            </el-submenu>
-          </div>
+            </el-menu-item>
 
         </el-menu>
       </el-aside>
@@ -105,9 +65,9 @@
 
 <script>
 
-import examine from "./examine";
-import all_work_order from "./all_work_order";
-import pending_ticket from "./pending_ticket";
+import examine from "./examineLog";
+import all_work_order from "./allOrder";
+import pending_ticket from "./pendTickets";
 
 export default{
   name: "leader_header",
@@ -126,16 +86,22 @@ export default{
         this.$router.push({ path: "/" });
       });
     },
-    jumpToExamine(){
-      console.log("jump");
-      this.$router.push({path:'/leader_header'+'/examine'});
+    //改变页面
+    changePage(page){
+      if(page===1){
+        this.$router.push({path:"/leader/home"});
+      }
+      else if(page===2){
+        this.$router.push({path:"/leader/pendTickets"});
+      }
+      else if(page===3){
+        this.$router.push({path:"/leader/examineLog"});
+      }
+      else if(page===4){
+        this.$router.push({path:"/leader/allOrder"});
+      }
     },
-    jumpToAllWorkOrder(){
-      this.$router.push({path:'/leader_header'+'/all_work_order'});
-    },
-    jumpToPendingTicket(){
-      this.$router.push({path:'/leader_header'+'/pending_ticket'});
-    }
+
   }
 }
 </script>

@@ -149,21 +149,18 @@ export default {
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
           this.$axios.get("http://localhost:8084/staff/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data) {
+            if (res.data===1||res.data===2) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
                 type: 'success',
                 center: true
               });
-              // this.$axios.get("http://localhost:8081/admin/selectByname?name="+this.ruleForm.admin).then((res)=>{
-              //   if(res.data){
-              //     //配置路由权限，防止用户通过更改网址路径绕过身份验证进入主页面
-              //     sessionStorage.setItem("token", 'true');
-              //     sessionStorage.setItem("id",res.data.id);
-              //     this.$router.push('/main');
-              //   }
-              // })
+              //设置登录类型为员工
+              sessionStorage.setItem("type", "staff");
+              sessionStorage.setItem("staff", 'true');
+              this.$router.push('/leader');
+
             } else {
               this.$message({
                 message: '用户名或密码错误',
