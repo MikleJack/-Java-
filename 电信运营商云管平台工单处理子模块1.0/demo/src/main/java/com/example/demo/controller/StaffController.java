@@ -181,6 +181,7 @@ public class StaffController {
 
             if (password.equals(admin.getPassword())){
                 staffService.deleteAccount(work_num);
+                staffService.lockAccount(work_num);
                 return ResponseEntity.ok(true);
             }
             else
