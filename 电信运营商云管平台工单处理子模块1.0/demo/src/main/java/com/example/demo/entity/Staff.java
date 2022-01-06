@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Staff implements Serializable {
     private static final long serialVersionUID = -61898315031253318L;
 
-    private String workNum;
+    private Integer workNum;
 
     private String name;
 
@@ -33,11 +33,11 @@ public class Staff implements Serializable {
         this.inService = inService;
     }
 
-    public String getWorkNum() {
+    public Integer getWorkNum() {
         return workNum;
     }
 
-    public void setWorkNum(String workNum) {
+    public void setWorkNum(Integer workNum) {
         this.workNum = workNum;
     }
 

@@ -54,7 +54,7 @@ public class StaffController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<Staff> queryById(@PathVariable("id") String id) {
+    public ResponseEntity<Staff> queryById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(this.staffService.queryById(id));
     }
 
@@ -87,7 +87,7 @@ public class StaffController {
      * @return 删除是否成功
      */
     @DeleteMapping("delete")
-    public ResponseEntity<Boolean> deleteById(String id) {
+    public ResponseEntity<Boolean> deleteById(Integer id) {
         return ResponseEntity.ok(this.staffService.deleteById(id));
     }
     /**
@@ -98,7 +98,7 @@ public class StaffController {
      * 2 领导
      */
     @GetMapping("login")
-    public int login(String work_num, String password){
+    public int login(Integer work_num, String password){
         if(!work_num.equals("") && !password.equals("") ) {
             if (staffService.queryById(work_num) != null)
             {
@@ -125,7 +125,7 @@ public class StaffController {
      *
      */
     @GetMapping("reset")
-    public ResponseEntity<Boolean> ResetStaffPassword(String work_num,String root_num, String password){
+    public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password){
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
@@ -149,7 +149,7 @@ public class StaffController {
      *
      */
     @GetMapping("lockAccount")
-    public ResponseEntity<Boolean> lockAccount(String work_num){
+    public ResponseEntity<Boolean> lockAccount(Integer work_num){
         if(staffService.lockAccount(work_num)) {
             return ResponseEntity.ok(true);
         } else {
@@ -162,7 +162,7 @@ public class StaffController {
      *
      */
     @GetMapping("unlockAccount")
-    public ResponseEntity<Boolean> unlockAccount(String work_num,String root_num, String password){
+    public ResponseEntity<Boolean> unlockAccount(Integer work_num,String root_num, String password){
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
@@ -183,7 +183,7 @@ public class StaffController {
      *
      */
     @GetMapping("deleteAccount")
-    public ResponseEntity<Boolean> deleteAccount(String work_num, String root_num, String password){
+    public ResponseEntity<Boolean> deleteAccount(Integer work_num, String root_num, String password){
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
@@ -200,6 +200,36 @@ public class StaffController {
             return ResponseEntity.ok(false);
     }
 
+    /**
+     * 新增账户
+     *
+     */
+    @GetMapping("addAccount")
+    public ResponseEntity<Boolean> addAccount(String root_num, String admin_password,String name,String depNum,
+                                              String phone,String work_password){
+        if (!admin_password.equals("")&&!root_num.equals("")){
+            admin_password = SHA_256.getSHA256(admin_password);
 
+            Admin admin = this.temp.queryById("root");
+
+            if (admin_password.equals(admin.getPassword())){
+                staffService.addAccount(name,depNum,phone,SHA_256.getSHA256(work_password));
+                return ResponseEntity.ok(true);
+            }
+            else
+                return ResponseEntity.ok(false);
+        }else
+            return ResponseEntity.ok(false);
+    }
+
+    /**
+     * 根据工号查询账户
+     *
+     * @param work_num 用户编号
+     */
+    @GetMapping("searchAccount")
+    public ResponseEntity<Staff> searchAccount(Integer work_num ){
+        return ResponseEntity.ok(this.staffService.searchAccount(work_num));
+    }
 }
 

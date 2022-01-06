@@ -28,7 +28,7 @@ public class StaffServiceImpl implements StaffService {
      * @return 实例对象
      */
     @Override
-    public Staff queryById(String workNum) {
+    public Staff queryById(Integer workNum) {
         return this.staffDao.queryById(workNum);
     }
 
@@ -76,7 +76,7 @@ public class StaffServiceImpl implements StaffService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(String workNum) {
+    public boolean deleteById(Integer workNum) {
         return this.staffDao.deleteById(workNum) > 0;
     }
 
@@ -88,7 +88,7 @@ public class StaffServiceImpl implements StaffService {
      * @return 影响行数
      */
     @Override
-    public boolean updatePassword(String work_num,String password){
+    public boolean updatePassword(Integer work_num,String password){
         return this.staffDao.updatePassword(work_num,password);
     }
 
@@ -97,7 +97,7 @@ public class StaffServiceImpl implements StaffService {
      *
      */
     @Override
-    public boolean lockAccount(String workNum){
+    public boolean lockAccount(Integer workNum){
         return this.staffDao.lockAccount(workNum);
     }
 
@@ -106,7 +106,7 @@ public class StaffServiceImpl implements StaffService {
      *
      */
     @Override
-    public boolean unlockAccount(String workNum){
+    public boolean unlockAccount(Integer workNum){
         return this.staffDao.unlockAccount(workNum);
     }
 
@@ -115,7 +115,29 @@ public class StaffServiceImpl implements StaffService {
      * @param workNum 用户编号
      */
     @Override
-    public boolean deleteAccount(String workNum){
+    public boolean deleteAccount(Integer workNum){
         return this.staffDao.deleteAccount(workNum);
+    }
+
+    /**
+     * 新增账户
+     * @param name 账户名称
+     * @param depNum 账户部门编号
+     * @param phone 账户电话
+     * @param work_password 账户密码
+     */
+    @Override
+    public boolean addAccount(String name,String depNum,
+                       String phone,String work_password){
+        return this.staffDao.addAccount(name,depNum,phone,work_password);
+    }
+
+    /**
+     * 根据工号查询账户
+     * @param workNum 用户编号
+     */
+    @Override
+    public Staff searchAccount(Integer workNum){
+        return this.staffDao.searchAccount(workNum);
     }
 }
