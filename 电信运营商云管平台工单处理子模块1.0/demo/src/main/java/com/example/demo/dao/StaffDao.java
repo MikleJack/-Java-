@@ -93,7 +93,14 @@ public interface StaffDao {
     /**
      * 锁定当前账户，将账户状态从正常改为锁定
      *
+    * @param workNum 用户编号
      */
     boolean lockAccount(String workNum);
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     * @param workNum 用户编号
+     */
+    boolean unlockAccount(String workNum);
 }
 

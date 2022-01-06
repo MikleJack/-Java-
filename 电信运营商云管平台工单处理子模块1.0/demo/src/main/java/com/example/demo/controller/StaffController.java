@@ -146,5 +146,26 @@ public class StaffController {
             return ResponseEntity.ok(false);
         }
     }
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    @GetMapping("unlockAccount")
+    public ResponseEntity<Boolean> unlockAccount(String work_num,String root_num, String password){
+        if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
+            password = SHA_256.getSHA256(password);
+
+            Admin admin = this.temp.queryById("root");
+
+            if (password.equals(admin.getPassword())){
+                staffService.unlockAccount(work_num);
+                return ResponseEntity.ok(true);
+            }
+            else
+                return ResponseEntity.ok(false);
+        }else
+            return ResponseEntity.ok(false);
+    }
 }
 

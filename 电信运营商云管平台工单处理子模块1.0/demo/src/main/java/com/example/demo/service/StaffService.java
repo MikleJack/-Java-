@@ -67,4 +67,10 @@ public interface StaffService {
      *
      */
     boolean lockAccount(String workNum);
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    boolean unlockAccount(String workNum);
 }
