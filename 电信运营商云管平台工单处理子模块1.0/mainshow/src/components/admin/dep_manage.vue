@@ -142,7 +142,6 @@ export default {
       append(data) {
         this.dialogFormVisible=true;
         this.temp=data;
-        alert(this.data);
       },
 
       //移除部门
