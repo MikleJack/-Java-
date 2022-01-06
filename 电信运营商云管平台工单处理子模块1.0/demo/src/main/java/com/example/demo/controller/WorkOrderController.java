@@ -28,13 +28,14 @@ public class WorkOrderController {
     /**
      * 分页查询
      *
-     * @param workOrder   筛选条件
-     * @param pageRequest 分页对象
+     *@param  page 初始页面号
+     * @param size 分页大小
      * @return 查询结果
      */
-    @GetMapping
-    public ResponseEntity<Page<WorkOrder>> queryByPage(WorkOrder workOrder, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.workOrderService.queryByPage(workOrder, pageRequest));
+    @GetMapping("queryByPage")
+    public ResponseEntity<Page<WorkOrder>> queryByPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.workOrderService.queryByPage(pageRequest));
     }
 
     /**

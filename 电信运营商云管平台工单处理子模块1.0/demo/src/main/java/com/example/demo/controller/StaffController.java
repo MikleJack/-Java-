@@ -31,6 +31,7 @@ public class StaffController {
 //    private AdminService a;
     private String initPassword="brccq123456";
 
+
     //必须通过Autowired注解来生成其他服务类
     @Autowired
     AdminService temp =new AdminServiceImpl();

@@ -36,14 +36,13 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     /**
      * 分页查询
      *
-     * @param workOrder 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
     @Override
-    public Page<WorkOrder> queryByPage(WorkOrder workOrder, PageRequest pageRequest) {
-        long total = this.workOrderDao.count(workOrder);
-        return new PageImpl<>(this.workOrderDao.queryAllByLimit(workOrder, pageRequest), pageRequest, total);
+    public Page<WorkOrder> queryByPage(PageRequest pageRequest) {
+        long total = this.workOrderDao.count();
+        return new PageImpl<>(this.workOrderDao.queryAllByLimit(pageRequest), pageRequest, total);
     }
 
     /**
