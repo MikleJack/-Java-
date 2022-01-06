@@ -100,4 +100,13 @@ public class StaffServiceImpl implements StaffService {
     public boolean lockAccount(String workNum){
         return this.staffDao.lockAccount(workNum);
     }
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    @Override
+    public boolean unlockAccount(String workNum){
+        return this.staffDao.unlockAccount(workNum);
+    }
 }

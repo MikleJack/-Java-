@@ -151,5 +151,16 @@
         where work_num = #{work_num}
     </update>
 
+    <!--解锁账户-->
+    <update id="unlockAccount">
+        update staff
+        <set>
+            <if test="state != null">
+                state = true,
+            </if>
+        </set>
+        where work_num = #{workNum}
+    </update>
+
 </mapper>
 
