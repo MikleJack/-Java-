@@ -100,11 +100,11 @@ public class StaffController {
     @GetMapping("login")
     public int login(Integer work_num, String password){
         if(!work_num.equals("") && !password.equals("") ) {
-            if (staffService.queryById(work_num) != null)
+            Staff staff = staffService.queryById(work_num);
+            if (staff != null && staff.getState() && staff.getInService())
             {
                 password = SHA_256.getSHA256(password);
                 if(password.equals(staffService.queryById(work_num).getPassword())){
-                    Staff staff = staffService.queryById(work_num);
                     if(staff.getDepNum().equals("0001"))
                         return 1;
                     else
