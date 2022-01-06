@@ -1,62 +1,69 @@
 <template>
-   
+
    <div class="main" style="overflow-x:hidden">
     <div style="width:80px; margin-left:45%;margin-bottom:10px;font-weight:bolder">申请人信息</div>
     <div style="margin-left:10%;margin-bottom:10px;padding:0; width:1000px;height:0.5px;background-color:black;overflow:hidden;"></div>
       <!-- 申请人信息表单 -->
-      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
-        <el-form-item label="工号">
-          <el-input v-model="tabledata1.num" placeholder="工号"></el-input>
-        </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>
-      </el-form-item> 
-      </el-form>
-      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
-        <el-form-item label="申请时间">
-          <el-input v-model="tabledata1.time" placeholder="申请时间"></el-input>
-        </el-form-item>
-      <el-form-item label="联系方式">
-        <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>
-      </el-form-item> 
-      </el-form>
-      <el-form ref="form" :model="tabledata1" label-position=right label-width=430px>
-        <el-form-item label="所在部门">
-          <el-input v-model="tabledata1.depart" style="width:60%;float:left"></el-input>
-        </el-form-item>
-      </el-form>
+     <div class="page_block">
+       <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
+         <el-form-item label="工号">
+           <el-input v-model="tabledata1.num" placeholder="工号"></el-input>
+         </el-form-item>
+         <el-form-item label="姓名">
+           <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>
+         </el-form-item>
+       </el-form>
+       <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
+         <el-form-item label="申请时间">
+           <el-input v-model="tabledata1.time" placeholder="申请时间"></el-input>
+         </el-form-item>
+         <el-form-item label="联系方式">
+           <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>
+         </el-form-item>
+       </el-form>
+       <el-form ref="form" :model="tabledata1" label-position=right>
+         <el-form-item label="所在部门">
+           <el-input v-model="tabledata1.depart" style="width:60%;float:left"></el-input>
+         </el-form-item>
+       </el-form>
+     </div>
+
+
     <div style="width:80px; margin-left:46%;margin-bottom:10px;font-weight:bolder">工单信息</div>
     <div style="margin-left:10%;margin-bottom:10px;padding:0; width:1000px;height:0.5px;background-color:black;overflow:hidden;"></div>
     <!-- 工单信息填写表单 -->
-    <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
-        <el-form-item label="工单编号">
-          <el-input v-model="tabledata1.order_num" placeholder="工单编号"></el-input>
-        </el-form-item>
-      <el-form-item label="原工单编号">
-        <el-input v-model="tabledata1.order_num0" placeholder="原工单编号"></el-input>
-      </el-form-item> 
-    </el-form>
-   <el-form ref="form" :model="tabledata1" label-position=right label-width=150px style="margin-left:20%">
-        <el-form-item label="工单标题">
-          <el-input v-model="tabledata1.order_name" style="width:40%;float:left"></el-input>
-        </el-form-item>
-      </el-form>
-    <div class="block" style="margin-left:-27%;margin-bottom:20px;color:black">
-    <span class="demonstration">资源到期时间</span>
-    <el-date-picker
-      v-model="value1"
-      type="date"
-      placeholder="选择日期">
-    </el-date-picker>
-    </div>
-     <el-form ref="form" :model="tabledata1" label-position=right label-width=400px>
-        <el-form-item label="变更理由">
-          <el-input type="textarea" v-model="tabledata1.reason" style="width:60%;float:left"></el-input>
-        </el-form-item>
-      </el-form>
+     <div class="page_block">
+       <el-form :inline="true" :model="tabledata1" class="demo-form-inline">
+         <el-form-item label="工单编号">
+           <el-input v-model="tabledata1.order_num" placeholder="工单编号"></el-input>
+         </el-form-item>
+         <el-form-item label="原工单编号">
+           <el-input v-model="tabledata1.order_num0" placeholder="原工单编号"></el-input>
+         </el-form-item>
+       </el-form>
+       <el-form ref="form" :model="tabledata1" label-position=right label-width=150px >
+         <el-form-item label="工单标题">
+           <el-input v-model="tabledata1.order_name" style="width:40%;float:left"></el-input>
+         </el-form-item>
+<!--       </el-form>-->
+       <div class="block" style="margin-bottom:20px;color:black">
+         <span class="demonstration">资源到期时间</span>
+         <el-date-picker
+           v-model="value1"
+           type="date"
+           placeholder="选择日期">
+         </el-date-picker>
+       </div>
+<!--       <el-form ref="form" :model="tabledata1" label-position=right label-width=400px>-->
+         <el-form-item label="变更理由">
+           <el-input type="textarea" v-model="tabledata1.reason" style="width:60%;float:left"></el-input>
+         </el-form-item>
+       </el-form>
+     </div>
+
   <!-- 资源信息填写表单 -->
   <div style="width:80px; margin-left:46%;margin-bottom:10px;font-weight:bolder">资源信息</div>
-  <div style="margin-left:10%;margin-bottom:10px;padding:0; width:1000px;height:0.5px;background-color:black;overflow:hidden;"></div>      
+  <div style="margin-left:10%;margin-bottom:10px;padding:0; width:1000px;height:0.5px;background-color:black;overflow:hidden;"></div>
   <div style="margin-left:-50%;color:black;font-weight:bolder">物理机资源</div>
     <el-button type="success" plain @click="dialogTableVisible = true" style="margin-left:-50%;margin-top:10px;color:black;font-weight:bolder">新增</el-button>
     <!-- 新增物理机资源弹窗 -->
@@ -77,7 +84,7 @@
     <el-table-column property="storage" label="存储(G)" width="150"></el-table-column>
     <el-table-column property="ip" label="IP地址" width="150"></el-table-column>
     </el-table>
-   <div style="margin-left:-50%;margin-top:20px;color:black;font-weight:bolder">虚拟机资源</div> 
+   <div style="margin-left:-50%;margin-top:20px;color:black;font-weight:bolder">虚拟机资源</div>
    <!-- 虚拟机资源填写表单 -->
     <el-form :inline="true" :model="tabledata2" class="demo-form-inline" style="margin-left:-20px">
         <el-form-item label="CPU(核)">
@@ -85,7 +92,7 @@
         </el-form-item>
       <el-form-item label="内存(G)">
         <el-input v-model="tabledata2.memory" placeholder="内存(G)"></el-input>
-      </el-form-item> 
+      </el-form-item>
     </el-form>
     <el-form :inline="true" :model="tabledata2" class="demo-form-inline" style="margin-left:20px">
       <el-form-item label="存储(G)">
@@ -103,11 +110,11 @@
               <el-input v-model="tabledata2.IP" style="width:60%;float:left"></el-input>
             </el-form-item>
           </el-form>
-    
+
      <el-button>保存</el-button>
      <el-button type="success">提交</el-button>
   </div>
-  
+
 </template>
 
 <script>
@@ -127,7 +134,7 @@ export default {
             name:' ',
             time:'',
             phone:'',
-            depart:'', 
+            depart:'',
             order_num:'',
             order_num0:'',
             order_name:'',
@@ -157,7 +164,7 @@ export default {
         ]
       };
     },
-    
+
 mounted(){
   let that = this;
   //定时器
@@ -167,7 +174,7 @@ mounted(){
 },
 
    methods: {
-    
+
     // 点击selection多选框
      handleSelectionChange(data) {
       console.info(data);
@@ -177,13 +184,13 @@ mounted(){
       console.info(this.multipleSelection)
     },
     // 获取点击行的数据
-      getSelected() { 
+      getSelected() {
         this.dialogTableVisible=false
         while(this.i<this.length.length){
           this.tabledata2.push(this.multipleSelection[this.i]);
           this.gridData.slice
           this.i++;
-        }   
+        }
     },
      getDateFunc(){
         let year = new Date().getFullYear();//年
@@ -197,18 +204,21 @@ mounted(){
           '-' +
           (day >=10 ? day:'0' + day);
         console.info(this.tabledata1.time)
-        
+
    },
 
- 
- 
-  
-    
+
+
+
+
   }
-   
+
 }
 </script>
 
 <style>
- 
+.page_block{
+  width: 80%;
+  margin-left: 10%;
+}
 </style>
