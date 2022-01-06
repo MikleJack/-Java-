@@ -4,6 +4,7 @@ import com.example.demo.entity.Staff;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface StaffDao {
      * @param workNum 主键
      * @return 实例对象
      */
-    Staff queryById(String workNum);
+    Staff queryById(Integer workNum);
 
     /**
      * 查询指定行数据
@@ -79,7 +80,7 @@ public interface StaffDao {
      * @param workNum 主键
      * @return 影响行数
      */
-    int deleteById(String workNum);
+    int deleteById(Integer workNum);
 
     /**
      * 重置密码
@@ -88,25 +89,43 @@ public interface StaffDao {
      * @param password   密码
      * @return 影响行数
      */
-    boolean updatePassword(String work_num,String password);
+    boolean updatePassword(Integer work_num,String password);
 
     /**
      * 锁定当前账户，将账户状态从正常改为锁定
      *
     * @param workNum 用户编号
      */
-    boolean lockAccount(String workNum);
+    boolean lockAccount(Integer workNum);
 
     /**
      * 解锁当前账户，将账户状态从false改为true
      * @param workNum 用户编号
      */
-    boolean unlockAccount(String workNum);
+    boolean unlockAccount(Integer workNum);
 
     /**
      * 删除制定账户,将用户是否在公司的状态改为false
      * @param workNum 用户编号
      */
-    boolean deleteAccount(String workNum);
+    boolean deleteAccount(Integer workNum);
+
+    /**
+     * 新增账户
+     * @param name 账户名称
+     * @param depNum 账户部门编号
+     * @param phone 账户电话
+     * @param work_password 账户密码
+     */
+    boolean addAccount(String name,String depNum,
+                              String phone,String work_password);
+
+
+    /**
+     * 根据工号查询账户
+     * @param workNum 用户编号
+     */
+    Staff searchAccount(Integer workNum);
+
 }
 

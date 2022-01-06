@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.dao.StaffDao">
 
     <resultMap type="com.example.demo.entity.Staff" id="StaffMap">
-        <result property="workNum" column="work_num" jdbcType="VARCHAR"/>
+        <result property="workNum" column="work_num" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="depNum" column="dep_num" jdbcType="VARCHAR"/>
         <result property="phone" column="phone" jdbcType="VARCHAR"/>
@@ -163,7 +163,7 @@
         where work_num = #{workNum}
     </update>
 
-    <!--账户-->
+    <!--删除账户，将账号状态改为离职-->
     <update id="deleteAccount">
         update staff
         <set>
@@ -173,6 +173,21 @@
         </set>
         where work_num = #{workNum}
     </update>
+
+    <!--新增新账户-->
+    <insert id="addAccount" useGeneratedKeys="true">
+        insert into staff(name, dep_num, phone, password, state,in_service)
+        values (#{name}, #{depNum}, #{phone}, #{work_password}, true,true)
+    </insert>
+
+
+    <!--根据工号查找账户-->
+    <select id="searchAccount" resultMap="StaffMap">
+        select
+            work_num, name, dep_num, phone, password, state,in_service
+        from staff
+        where work_num = #{workNum}
+    </select>
 
 </mapper>
 
