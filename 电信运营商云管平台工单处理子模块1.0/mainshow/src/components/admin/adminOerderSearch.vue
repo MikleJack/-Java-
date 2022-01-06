@@ -5,10 +5,10 @@
         <!--    根据工单类型筛选工单-->
         <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
           <el-option
-            v-for="item in tableData"
-            :key="item.workOrderType"
-            :label="item.workOrderType"
-            :value="item.workOrderType">
+            v-for="item in orderType"
+            :key="item"
+            :label="item"
+            :value="item">
           </el-option>
         </el-select>
       </el-form-item>
@@ -35,7 +35,7 @@
       data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
       element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
-        prop="worker_num"
+        prop="workerNum"
         label="工号"
         width="150">
       </el-table-column>
@@ -64,19 +64,7 @@
         label="工单状态"
         width="180">
       </el-table-column>
-<!--      <el-table-column-->
-<!--        prop="workOrderState"-->
-<!--        label="项目状态"-->
-<!--        width="180">-->
-<!--        <template slot-scope="scope" >-->
-<!--          <div v-if="scope.row.projectStatus===1">-->
-<!--            已结项-->
-<!--          </div>-->
-<!--          <div v-else-if="scope.row.projectStatus===0">-->
-<!--            未结项-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+
 
       <el-table-column
         fixed="right"
@@ -229,8 +217,8 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-size="pageSize"
-        layout="total, prev, pager, next, jumper ,sizes"
-        :total="this.tableData.length">
+        layout="total, prev, pager, next, jumper"
+        :total="totalpage">
       </el-pagination>
     </div>
   </div>
@@ -244,26 +232,16 @@ export default {
       dialogVisible_detail: false,
       ticketData: [],
       currentPage:1,
+      totalpage:0,
       pageSize:8,
       search:'',
       workOrderTypeSelector:'',
-      tableData: [
-        {
-        worker_num: '00000001',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000002',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }
-      ],
+      //当前页面
+      thisPage:0,
+      //存放所有工单
+      tableData: [],
+      //工单类型
+      orderType:[],
       //字体大小
       size: '',
       //workNum工号
@@ -320,8 +298,10 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/workOrder/queryAll').then((res)=>{
-      this.tableData = res.data;
+    this.$axios.get('http://localhost:8084/workOrder/queryByPage?page='+this.currentPage+"&size="+this.pageSize).then((res)=>{
+      this.tableData = res.data.content;
+      this.totalpage = res.data.numberOfElements;
+      this.filtrateOrder();
     })
   },
   methods: {
@@ -336,7 +316,17 @@ export default {
       done();
       // })
       // .catch(_ => {});
-    }
+    },
+    //过滤工单类型
+    // filtrateOrder(){
+    //   for( let i=0 ;i<this.tableData.length;i=i+1){
+    //     if(this.orderType.find(this.tableData[i].workOrderType)){
+    //       alert('1')
+    //     }
+    //     else
+    //       this.orderType.push(this.tableData[i].workOrderType)
+    //   }
+    // }
   }
 }
 

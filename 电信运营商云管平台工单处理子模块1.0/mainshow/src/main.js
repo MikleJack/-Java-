@@ -6,9 +6,14 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from "axios";
+import VueCookies from 'vue-cookies'
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(VueCookies)
+
+
 Vue.prototype.$axios = axios;
 axios.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

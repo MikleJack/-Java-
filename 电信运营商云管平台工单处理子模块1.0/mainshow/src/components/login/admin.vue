@@ -154,8 +154,8 @@ export default {
                 center: true
               });
               //设置token以及路由
-              sessionStorage.setItem("type", "root");
-              sessionStorage.setItem("root", 'true');
+              sessionStorage.setItem("type", "admin");
+              sessionStorage.setItem("admin", 'true');
               this.$router.push('/adminMain');
             } else {
               this.$message({
