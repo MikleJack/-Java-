@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.AdminDao;
+import com.example.demo.entity.Admin;
 import com.example.demo.entity.Staff;
 import com.example.demo.service.AdminService;
 import com.example.demo.service.StaffService;
+import com.example.demo.service.impl.AdminServiceImpl;
 import com.example.demo.utils.SHA_256;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +28,8 @@ public class StaffController {
      */
     @Resource
     private StaffService staffService;
-    private AdminService adminService;
-    private String initPassword;
+//    private AdminService a;
+    private String initPassword="brccq123456";
 
     /**
      * 分页查询
@@ -79,7 +82,7 @@ public class StaffController {
      * @param id 主键
      * @return 删除是否成功
      */
-    @DeleteMapping
+    @DeleteMapping("delete")
     public ResponseEntity<Boolean> deleteById(String id) {
         return ResponseEntity.ok(this.staffService.deleteById(id));
     }
@@ -111,8 +114,13 @@ public class StaffController {
     public ResponseEntity<Boolean> ResetStaffPassword(String work_num,String root_num, String password){
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
-            if (password.equals(adminService.queryById(root_num).getPassword())){
-                staffService.queryById(work_num).setPassword(SHA_256.getSHA256(initPassword));
+
+            AdminService temp = new AdminServiceImpl();
+            Admin admin = temp.queryById("root");
+
+            if (password.equals(admin.getPassword())){
+                Staff staff = staffService.queryById(work_num);
+                staff.setPassword(SHA_256.getSHA256(initPassword));
                 return ResponseEntity.ok(true);
             }
             else
