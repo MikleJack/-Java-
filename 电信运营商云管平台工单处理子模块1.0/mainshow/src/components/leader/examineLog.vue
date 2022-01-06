@@ -124,14 +124,10 @@
 
 .page-body{
   position: relative;
-  bottom:60px;
-  top:64px;
 }
 .page-head{
   height: 100px;
-  padding: 30px ;
   position: relative;
-  /*background-color: rgb(51, 45, 243);*/
 }
 
 
@@ -140,7 +136,6 @@
   height: 60px;
   position: absolute;
   bottom: 0;
-  /*background-color: rgb(243, 119, 158);*/
 }
 
 </style>

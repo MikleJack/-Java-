@@ -1,13 +1,5 @@
 <template>
   <div>
-<!--    <el-form :inline="true" :model="formInline" class="demo-form-inline">-->
-<!--      <el-form-item>-->
-<!--        <el-input v-model="formInline.user" placeholder="请输入工号"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item>-->
-<!--        <el-button type="primary" @click="onSubmit">查询</el-button>-->
-<!--      </el-form-item>-->
-<!--    </el-form>-->
 
 <!--    新增账户-->
     <el-button @click="add_AccountNumber()" type="primary" icon="el-icon-plus">新增账号</el-button>
@@ -15,7 +7,7 @@
 
 <!--      人员管理页面的列表-->
       <el-table
-        :data="tableData.filter(data => !search || data.worker_num.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
         border
         style="width: 100%">
         <el-table-column

@@ -1,8 +1,8 @@
 <template>
   <div class="page">
-    <div class="page_top">
-      待审批工单
-    </div>
+<!--    <div class="page_top">-->
+<!--      待审批工单-->
+<!--    </div>-->
     <div class="page_central">
       <el-table
         :data="tableData"
@@ -22,6 +22,7 @@
         <el-table-column
           prop="apply_time"
           label="申请到的时间"
+          sortable
           width="auto">
         </el-table-column>
         <el-table-column
@@ -49,6 +50,14 @@
       <el-dialog title="工单详情" :visible.sync="dialogTableVisible">
         <ticket_details></ticket_details>
       </el-dialog>
+    </div>
+    <div class="page-tail">
+      <!--放置分页部分-->
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="1000">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -97,29 +106,18 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  /*left: 0;*/
-  /*top: 0;*/
-  /*background: #409EFF;*/
-  /*text-align: center;*/
 }
-/*页面头部*/
-.page_top{
-  position:relative;
-  width: 100%;
-  height: 60px;
-  /*background: #0c805f;*/
-  text-align: center;
-  font-size: 20px;
-  margin: auto;
-  line-height: 60px;
-}
+
 /*页面中部*/
 .page_central{
   position: relative;
   width: 80%;
-  /*height: 90%;*/
-  /*background: aqua;*/
-  top: 60px;
-  margin: auto;
+}
+
+.page-tail{
+  width:100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
 }
 </style>

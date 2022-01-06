@@ -124,21 +124,16 @@
     position: relative;
     width:100%;
     height: 100%;
-    /*background-color: rgb(255, 227, 89);*/
   }
 
 
   .page-head{
-    height: 100px;
-    padding: 30px ;
     position: relative;
-    /*background-color: rgb(51, 45, 243);*/
   }
 
 
   .page-body{
     position: relative;
-    /*bottom:0;*/
   }
 
   .page-tail{
@@ -146,7 +141,6 @@
     height: 60px;
     position: absolute;
     bottom: 0;
-    /*background-color: rgb(243, 119, 158);*/
   }
 
 </style>

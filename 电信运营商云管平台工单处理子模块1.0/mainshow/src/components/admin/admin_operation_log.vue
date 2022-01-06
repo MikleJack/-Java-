@@ -49,18 +49,19 @@
             label="地址">
           </el-table-column>
         </el-table>
-        <div class="page-tail" style="width:70%;text-align:center">
-          <!--放置分页部分-->
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :total="1000">
-          </el-pagination>
-        </div>
+
         <!--放置表格-->
 
 
       </div>
+    </div>
+    <div class="page-tail" style="width:70%;">
+      <!--放置分页部分-->
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="1000">
+      </el-pagination>
     </div>
   </div>
 
@@ -119,27 +120,17 @@
 <!--页面分区显示的设置-->
 <style scoped>
   .page-main{
-    /*padding: 0 50px 15px;*/
-    /*margin-left: 15%;*/
-    position: absolute;
-
+    position: relative;
     width:100%;
-    bottom:60px;
-    top:48px;
-    /*background-color: rgb(255, 227, 89);*/
+    height: 100%;
   }
 
   .page-body{
-    position: fixed;
-    bottom:60px;
-    top:164px;
-    left:200px;
-    right:200px;
+    position: relative;
     /*background-color: rgb(81, 227, 150);*/
   }
   .page-head{
     height: 100px;
-    padding: 30px ;
     position: relative;
     /*background-color: rgb(51, 45, 243);*/
   }
@@ -148,7 +139,7 @@
   .page-tail{
     width:100%;
     height: 60px;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     /*background-color: rgb(243, 119, 158);*/
   }
