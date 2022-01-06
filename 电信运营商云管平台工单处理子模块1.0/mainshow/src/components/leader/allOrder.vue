@@ -121,13 +121,9 @@
 <!--对界面各个部分进行划分范围-->
 <style scoped>
   .page-main{
-    /*padding: 0 50px 15px;*/
-    /*margin-left: 15%;*/
-    position: absolute;
-
+    position: relative;
     width:100%;
-    bottom:0;
-    top:48px;
+    height: 100%;
     /*background-color: rgb(255, 227, 89);*/
   }
 
@@ -141,18 +137,14 @@
 
 
   .page-body{
-    position: fixed;
-    bottom:0;
-    top:208px;
-    left:200px;
-    right:200px;
-    /*background-color: rgb(81, 227, 150);*/
+    position: relative;
+    /*bottom:0;*/
   }
 
   .page-tail{
     width:100%;
     height: 60px;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     /*background-color: rgb(243, 119, 158);*/
   }

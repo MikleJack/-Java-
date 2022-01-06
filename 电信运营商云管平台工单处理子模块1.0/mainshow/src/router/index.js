@@ -1,22 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '../components/HelloWorld'
+
 import admin from "../components/login/admin";
-import header from "../components/header";
+
 import user from "../components/login/user";
-import all_work_order from "../components/leader/all_work_order";
-import pending_ticket from "../components/leader/pending_ticket";
-import ticket_details from "../components/leader/ticket_details";
+import all_work_order from "../components/leader/allOrder";
+import pending_ticket from "../components/leader/pendTickets";
+
 import leader_header from "../components/leader/leader_header";
-import examine from "../components/leader/examine";
+import examine from "../components/leader/examineLog";
 import admin_header from "../components/admin/admin_header";
 import adminOerderSearch from "../components/admin/adminOerderSearch";
 import dep_manage from "../components/admin/dep_manage";
 import admin_operation_log from "../components/admin/admin_operation_log";
 import admin_employee from "../components/admin/admin_employee";
-import staffHeader from "../components/staff/staffHeader";
-import employeePortal from "../components/staff/employeePortal";
-import el from "element-ui/src/locale/lang/el";
 
 Vue.use(Router)
 

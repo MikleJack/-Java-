@@ -81,9 +81,9 @@
 
 <script>
 
-import examine from "./examine";
-import all_work_order from "./all_work_order";
-import pending_ticket from "./pending_ticket";
+import examine from "./examineLog";
+import all_work_order from "./allOrder";
+import pending_ticket from "./pendTickets";
 
 export default{
   name: "leader_header",
