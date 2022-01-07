@@ -21,7 +21,7 @@ public interface OperationLogDao {
      * @param workNum 主键
      * @return 实例对象
      */
-    OperationLog queryById(String workNum);
+    OperationLog queryById(Integer workNum);
 
     /**
      * 查询指定行数据
@@ -79,7 +79,7 @@ public interface OperationLogDao {
      * @param workNum 主键
      * @return 影响行数
      */
-    int deleteById(String workNum);
+    int deleteById(Integer workNum);
 
 }
 

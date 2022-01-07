@@ -18,7 +18,7 @@ public interface OperationLogService {
      * @param workNum 主键
      * @return 实例对象
      */
-    OperationLog queryById(String workNum);
+    OperationLog queryById(Integer workNum);
 
     /**
      * 分页查询
@@ -51,6 +51,6 @@ public interface OperationLogService {
      * @param workNum 主键
      * @return 是否成功
      */
-    boolean deleteById(String workNum);
+    boolean deleteById(Integer workNum);
 
 }

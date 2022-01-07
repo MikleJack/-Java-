@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.tags.Param;
 
 import javax.annotation.Resource;
 
@@ -46,9 +47,10 @@ public class StaffController {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    @GetMapping
-    public ResponseEntity<Page<Staff>> queryByPage(Staff staff, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.staffService.queryByPage(staff, pageRequest));
+    @GetMapping("allStaff")
+    public ResponseEntity<Page<Staff>> queryByPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.staffService.queryByPage( pageRequest));
     }
 
     /**
@@ -130,6 +132,7 @@ public class StaffController {
      */
     @GetMapping("reset")
     public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password){
+        System.out.println(work_num+" "+root_num+" "+password);
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
@@ -167,7 +170,8 @@ public class StaffController {
      */
     @GetMapping("unlockAccount")
     public ResponseEntity<Boolean> unlockAccount(Integer work_num,String root_num, String password){
-        if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
+
+        if (!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
             Admin admin = this.temp.queryById("root");

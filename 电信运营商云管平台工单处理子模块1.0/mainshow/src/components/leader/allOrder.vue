@@ -4,7 +4,7 @@
     <!--主要界面-->
     <div class="page-head">
       <!--界面头部-->
-      <div style="width:100%;text-align:center">
+
         <!--设置居中-->
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="工单类型">
@@ -23,7 +23,6 @@
       </el-form>
       </div>
 
-    </div>
 
       <div class="page-body">
         <!--界面体-->
@@ -69,7 +68,6 @@
 
       </div>
     <div class="page-tail">
-      <!--放置分页部分-->
       <el-pagination
         background
         layout="prev, pager, next"
@@ -129,6 +127,8 @@
 
   .page-head{
     position: relative;
+    width:100%;
+    text-align:center
   }
 
 

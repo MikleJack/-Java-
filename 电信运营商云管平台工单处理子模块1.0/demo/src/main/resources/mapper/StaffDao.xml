@@ -25,26 +25,26 @@
         select
           work_num, name, dep_num, phone, password, state
         from staff
-        <where>
-            <if test="workNum != null and workNum != ''">
-                and work_num = #{workNum}
-            </if>
-            <if test="name != null and name != ''">
-                and name = #{name}
-            </if>
-            <if test="depNum != null and depNum != ''">
-                and dep_num = #{depNum}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone = #{phone}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="state != null">
-                and state = #{state}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null and workNum != ''">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="depNum != null and depNum != ''">-->
+<!--                and dep_num = #{depNum}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="password != null and password != ''">-->
+<!--                and password = #{password}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--        </where>-->
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -52,26 +52,26 @@
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from staff
-        <where>
-            <if test="workNum != null and workNum != ''">
-                and work_num = #{workNum}
-            </if>
-            <if test="name != null and name != ''">
-                and name = #{name}
-            </if>
-            <if test="depNum != null and depNum != ''">
-                and dep_num = #{depNum}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone = #{phone}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="state != null">
-                and state = #{state}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null and workNum != ''">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="depNum != null and depNum != ''">-->
+<!--                and dep_num = #{depNum}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="password != null and password != ''">-->
+<!--                and password = #{password}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--        </where>-->
     </select>
 
     <!--新增所有列-->

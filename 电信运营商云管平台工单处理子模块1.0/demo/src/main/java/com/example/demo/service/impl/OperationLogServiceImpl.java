@@ -28,7 +28,7 @@ public class OperationLogServiceImpl implements OperationLogService {
      * @return 实例对象
      */
     @Override
-    public OperationLog queryById(String workNum) {
+    public OperationLog queryById(Integer workNum) {
         return this.operationLogDao.queryById(workNum);
     }
 
@@ -76,7 +76,7 @@ public class OperationLogServiceImpl implements OperationLogService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(String workNum) {
+    public boolean deleteById(Integer workNum) {
         return this.operationLogDao.deleteById(workNum) > 0;
     }
 }

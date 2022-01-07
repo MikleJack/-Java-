@@ -31,7 +31,7 @@ public class OperationLogController {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    @GetMapping
+    @GetMapping("queryByPage")
     public ResponseEntity<Page<OperationLog>> queryByPage(OperationLog operationLog, PageRequest pageRequest) {
         return ResponseEntity.ok(this.operationLogService.queryByPage(operationLog, pageRequest));
     }
@@ -43,7 +43,7 @@ public class OperationLogController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<OperationLog> queryById(@PathVariable("id") String id) {
+    public ResponseEntity<OperationLog> queryById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(this.operationLogService.queryById(id));
     }
 
@@ -76,7 +76,7 @@ public class OperationLogController {
      * @return 删除是否成功
      */
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(String id) {
+    public ResponseEntity<Boolean> deleteById(Integer id) {
         return ResponseEntity.ok(this.operationLogService.deleteById(id));
     }
 
