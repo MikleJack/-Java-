@@ -32,7 +32,7 @@ public class WorkOrderController {
      * @param size 分页大小
      * @return 查询结果
      */
-        @GetMapping("queryByPage")
+    @GetMapping("queryByPage")
     public ResponseEntity<Page<WorkOrder>> queryByPage(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.workOrderService.queryByPage(pageRequest));

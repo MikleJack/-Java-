@@ -27,7 +27,7 @@ public interface StaffService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Staff> queryByPage(Staff staff, PageRequest pageRequest);
+    Page<Staff> queryByPage( PageRequest pageRequest);
 
     /**
      * 新增数据

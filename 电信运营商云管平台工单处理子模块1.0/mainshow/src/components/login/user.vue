@@ -49,6 +49,8 @@ export default {
   mounted(){
     this.getIP();
     this.getVertifyCode();
+    //设置cookie过期时间
+    // this.$cookies.config('1d');
   },
   data(){
 
@@ -95,12 +97,6 @@ export default {
     }
   },
   methods: {
-    go_admin(){
-      this.$router.push({path:'/admin'});
-    },
-    go_user(){
-      this.$router.push({path:'/user'});
-    },
     // 获取当前时间
     getdate() {
       let date = new Date();
@@ -147,6 +143,7 @@ export default {
     logging() {
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
+        this.$cookies.set(this.ruleForm.work_num,0);
         if(this.code===res.data){
           this.$axios.get("http://localhost:8084/staff/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data===1||res.data===2) {
@@ -175,6 +172,8 @@ export default {
                 center: true
               });
               this.getVertifyCode();
+              // this.$cookies.set(this.ruleForm.work_num,this.$cookies.get(this.ruleForm.work_num)+1);
+              // alert(this.$cookies.get(this.ruleForm.work_num))
             }
           })
         }
