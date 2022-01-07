@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AdminWorkOrderInform;
+import com.example.demo.entity.adminSearchWorkOrderDetail.AdminWorkorderSingleDetail;
 import com.example.demo.service.AdminWorkOrderInformService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,6 +52,17 @@ public class AdminWorkOrderInformController {
         return ResponseEntity.ok(this.adminWorkOrderInformService.insert(adminWorkOrderInform));
     }
 
+    /**
+     * 管理员工单界面的详情按钮
+     *此处只返回上半部分信息，下半部分信息调用其他接口
+     *
+     * @param workOrderNum 工单编号
+     * @return 每个工单详情页面上的员工信息、部门信息、工单信息
+     */
+    @GetMapping("queryWorkOrderDetail")
+    public ResponseEntity<AdminWorkorderSingleDetail> queryWorkOrderDetail(String workOrderNum) {
+        return ResponseEntity.ok(this.adminWorkOrderInformService.queryWorkOrderDetail(workOrderNum));
+    }
 
 }
 
