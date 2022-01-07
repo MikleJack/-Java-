@@ -2,16 +2,18 @@
   <div>
 
 <!--    新增账户-->
-    <el-button @click="add_AccountNumber()" type="primary" icon="el-icon-plus">新增账号</el-button>
+    <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus">新增账号</el-button>
     <div>
 
+<!--       .slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
 <!--      人员管理页面的列表-->
       <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+
         border
         style="width: 100%">
         <el-table-column
-          prop="worker_num"
+          prop="workNum"
           label="工号"
           width="150">
         </el-table-column>
@@ -26,7 +28,7 @@
           width="200">
         </el-table-column>
         <el-table-column
-          prop="dep_name"
+          prop="depName"
           label="部门名称"
           width="200">
         </el-table-column>
@@ -52,16 +54,26 @@
           </template>
 <!--          对账户的各种操作-->
           <templte slot-scope="scope">
-            <el-button @click="handleClick_reset(scope.row)" type="text" size="small">重置密码</el-button>
-            <el-button @click="handleClick_lock(scope.row)" type="text" size="small">锁定</el-button>
-            <el-button @click="handleClick_unlock(scope.row)" type="text" size="small">解锁</el-button>
-            <el-button @click="handleClick_delect(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
+            <el-button @click="lock(scope.row)" type="text" size="small">锁定</el-button>
+            <el-button @click="unlock(scope.row)" type="text" size="small">解锁</el-button>
+            <el-button @click="delect(scope.row)" type="text" size="small">删除</el-button>
           </templte>
 
         </el-table-column>
 
 
       </el-table>
+
+      <div class="paging">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout=" prev, pager, next, jumper"
+          :total="totalSize">
+        </el-pagination>
+      </div>
 
 <!--确认密码的dialog-->
       <el-dialog
@@ -70,7 +82,7 @@
         width="30%"
         :before-close="handleClose">
         <span>确定添加一个账户？</span>
-        <el-input placeholder="请输入密码" v-model="input_password" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
 
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_add = false">取 消</el-button>
@@ -101,7 +113,7 @@
 
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_addAccount = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_addAccount = false">确 定</el-button>
+                <el-button type="primary" @click="add_AccountNumber">确 定</el-button>
               </span>
       </el-dialog>
 <!--      重置账户的dialog-->
@@ -111,10 +123,10 @@
         width="30%"
         :before-close="handleClose">
         <span>确定重置该用户账号？</span>
-        <el-input placeholder="请输入密码" v-model="input_reset" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_reset = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_reset = false">确 定</el-button>
+                <el-button type="primary" @click="handleClick_reset">确 定</el-button>
               </span>
       </el-dialog>
 <!--锁定账户的dialog-->
@@ -124,10 +136,10 @@
         width="30%"
         :before-close="handleClose">
         <span>确定锁定该用户账号？</span>
-        <el-input placeholder="请输入密码" v-model="input_lock" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_lock = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_lock = false">确 定</el-button>
+                <el-button type="primary" @click="handleClick_lock">确 定</el-button>
               </span>
       </el-dialog>
 <!--解锁账户的dialog-->
@@ -137,10 +149,10 @@
         width="30%"
         :before-close="handleClose">
         <span>确定解锁该用户账号？</span>
-        <el-input placeholder="请输入密码" v-model="input_unlock" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_unlock = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_unlock = false">确 定</el-button>
+                <el-button type="primary" @click="handleClick_unlock">确 定</el-button>
               </span>
       </el-dialog>
 <!--删除账户的dialog-->
@@ -150,23 +162,15 @@
         width="30%"
         :before-close="handleClose">
         <span>确定删除该用户账号？</span>
-        <el-input placeholder="请输入密码" v-model="input_delete" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_delete = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_delete = false">确 定</el-button>
+                <el-button type="primary" @click="handleClick_delect">确 定</el-button>
               </span>
       </el-dialog>
 
 <!--      分页-->
-      <div class="paging">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          layout="total, prev, pager, next, jumper ,sizes"
-          :total="this.tableData.length">
-        </el-pagination>
-      </div>
+
     </div>
   </div>
 
@@ -174,13 +178,21 @@
 </template>
 
 <script>
+
 export default {
   name: "admin_employee",
+  mounted() {
+    this.$axios.get("http://localhost:8084/staff/allStaff?page="+0+"&size="+this.pageSize).then((res)=>{
+      this.tableData= res.data.content;
+      this.totalSize = res.data.totalPages*this.pageSize;
+    })
+  },
   data() {
     return {
       // 分页
       currentPage:1,
-      pageSize:8,
+      pageSize:3,
+      totalSize:0,
       // dialog显示与不显示的参数
       dialogVisible_add:false,
       dialogVisible_addAccount:false,
@@ -189,68 +201,12 @@ export default {
       dialogVisible_unlock:false,
       dialogVisible_delete:false,
       //dialog中的密码验证参数
-      input_password: '',
-      input_delete: '',
-      input_reset: '',
-      input_lock: '',
-      input_unlock: '',
+      password_confirm: '',
 
       input: '',
       search: '',
-      // formInline: {
-      //   user: '',
-      //   region: ''
-      // },
-      tableData: [{
-        worker_num: '00000001',
-        name: '王二虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000002',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000003',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000004',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000005',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000006',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }, {
-        worker_num: '00000007',
-        name: '王小虎',
-        phone: '15155185464',
-        dep_name: '软件学院',
-        dep_level: '3',
-        state: '正常'
-      }],
+      //存储人员信息表
+      tableData: [],
       ruleForm: {
         name: '',
         department: ''
@@ -264,14 +220,10 @@ export default {
           { required: true, trigger: 'blur' },
         ]
       },
-      options: [{
-        value: '选项1',
-        label: '软件学院'
-      }, {
-        value: '选项2',
-        label: '19-2班'
-      }],
-      value: ''
+      options: [],
+      value: '',
+      //保存操作选择的行
+      row:{}
     }
 
 
@@ -287,32 +239,145 @@ export default {
     },
     //增加账户函数
     add_AccountNumber() {
-      this.dialogVisible_add = true;
+      this.$axios.get("http://localhost:8084/staff/addAccount?root_num=root&admin_password="+
+        this.password_confirm+"&name="+this.ruleForm.name+"&depNum=0003"+"&phone="+"&work_password=brccq123456").then((res)=>{
+          if (res.data===true)
+          {
+            this.$message({
+              message:'添加成功',
+              type:'success'
+            })
+
+          }
+
+          else
+            this.$message({
+              message: '添加失败',
+              type: 'error'
+            });
+          this.password_confirm='';
+        this.dialogVisible_addAccount = false;
+      })
     },
     //重置密码的函数
-    handleClick_reset(row) {
-      this.dialogVisible_reset = true;
+    reset(row){
+      this.row = row
+      this.dialogVisible_reset=true;
+    },
+    handleClick_reset() {
+      this.$axios.get("http://localhost:8084/staff/reset?work_num="+this.row.workNum+"&root_num=root&password="+
+        this.password_confirm).then((res)=>{
+        if (res.data===true)
+        {
+          this.$message({
+            message:'重置成功',
+            type:'success'
+          })
+
+        }
+        else
+          this.$message({
+            message: '重置失败',
+            type: 'error'
+          });
+      })
+      this.password_confirm='';
+      this.row={};
+      this.dialogVisible_reset = false;
+
     },
     //锁定用户账号的函数
-    handleClick_lock(row) {
+    lock(row){
       this.dialogVisible_lock = true;
+      this.row=row;
+    },
+    handleClick_lock() {
+      this.$axios.get("http://localhost:8084/staff/lockAccount?work_num="+this.row.workNum).then((res)=>{
+        if (res.data===true)
+        {
+          this.$message({
+            message:'锁定成功',
+            type:'success'
+          })
+
+        }
+        else
+          this.$message({
+            message: '锁定失败',
+            type: 'error'
+          });
+      })
+      this.password_confirm='';
+      this.row={};
+      this.dialogVisible_lock = false;
     },
     //解锁用户账号的函数
-    handleClick_unlock(row) {
+    unlock(row){
       this.dialogVisible_unlock = true;
+      this.row=row;
+    },
+    handleClick_unlock() {
+      this.$axios.get("http://localhost:8084/staff/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+        this.password_confirm).then((res)=>{
+        if (res.data===true)
+        {
+          this.$message({
+            message:'解锁成功',
+            type:'success'
+          })
+
+        }
+        else
+          this.$message({
+            message: '解锁失败',
+            type: 'error'
+          });
+        this.row={};
+      })
+      this.password_confirm='';
+      this.dialogVisible_unlock = false;
     },
     //删除用户函数
-    handleClick_delect(row) {
-      this.dialogVisible_unlock = true;
+    delect(row){
+      this.dialogVisible_delete=true;
+      this.row=row;
+    },
+    handleClick_delect() {
+      this.$axios.get("http://localhost:8084/staff/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+        this.password_confirm).then((res)=>{
+        if (res.data===true)
+        {
+          this.$message({
+            message:'删除成功',
+            type:'success'
+          })
+
+        }
+        else
+          this.$message({
+            message: '删除失败',
+            type: 'error'
+          });
+        this.row={};
+      })
+      this.password_confirm='';
+      this.dialogVisible_delete = false;
     },
     //dialog弹窗关闭提示函数
+
     handleClose(done) {
-      // this.$confirm('确认关闭？')
-        // .then(_ => {
           done();
-        // })
-        // .catch(_ => {});
-    }
+    },
+    //查询所有员工信息
+    handleCurrentChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get("http://localhost:8084/staff/allStaff?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
+    },
+
   }
 }
 </script>
@@ -321,7 +386,7 @@ export default {
 .paging {
   width:100%;
   height: 60px;
-  position: absolute;
+  position: relative;
   bottom: 0;
 }
 </style>
