@@ -1,12 +1,14 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.AdminWorkOrderInform;
 import com.example.demo.dao.AdminWorkOrderInformDao;
+import com.example.demo.dao.adminSearchWorkOrderDetail.AdminWorkorderSingleDetailDao;
+import com.example.demo.entity.AdminWorkOrderInform;
+import com.example.demo.entity.adminSearchWorkOrderDetail.AdminWorkorderSingleDetail;
 import com.example.demo.service.AdminWorkOrderInformService;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -21,6 +23,8 @@ public class AdminWorkOrderInformServiceImpl implements AdminWorkOrderInformServ
     @Resource
     private AdminWorkOrderInformDao adminWorkOrderInformDao;
 
+    @Resource
+    private AdminWorkorderSingleDetailDao adminWorkorderSingleDetailDao;
     /**
      * 分页查询
      *
@@ -43,6 +47,17 @@ public class AdminWorkOrderInformServiceImpl implements AdminWorkOrderInformServ
     public AdminWorkOrderInform insert(AdminWorkOrderInform adminWorkOrderInform) {
         this.adminWorkOrderInformDao.insert(adminWorkOrderInform);
         return adminWorkOrderInform;
+    }
+
+    /**
+     * 管理员工单界面的详情按钮
+     *
+     * @param workOrderNum 工单编号
+     * @return 每个工单详情页面上的员工信息、部门信息、工单信息
+     */
+    @Override
+    public AdminWorkorderSingleDetail queryWorkOrderDetail(String workOrderNum) {
+        return this.adminWorkorderSingleDetailDao.queryWorkOrderDetail(workOrderNum);
     }
 
 
