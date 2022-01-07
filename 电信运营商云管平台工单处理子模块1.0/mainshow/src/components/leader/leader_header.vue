@@ -73,6 +73,7 @@ export default{
   name: "leader_header",
   components:{examine,all_work_order,pending_ticket},
   mounted() {
+    this.$router.push({path:"/leader/home"});
   },
   methods:{
 
@@ -83,7 +84,8 @@ export default{
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/user" });
+        sessionStorage.removeItem("leader")
       });
     },
     //改变页面

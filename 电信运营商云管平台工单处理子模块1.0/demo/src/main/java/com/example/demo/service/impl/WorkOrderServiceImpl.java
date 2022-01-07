@@ -91,7 +91,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     }
 
     @Override
-    public List<WorkOrder> selectByWorkNum(String WorkNum){
+    public List<WorkOrder> selectByWorkNum(Integer WorkNum){
         return this.workOrderDao.selectByWorkNum(WorkNum);
     }
 
@@ -104,4 +104,6 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason){
         return this.workOrderDao.selectByWorkOrderReason(WorkOrderReason);
     }
+
+
 }

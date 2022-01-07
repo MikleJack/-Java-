@@ -66,6 +66,9 @@
 <script>
 import Dep_manage from "./dep_manage";
 export default {
+  mounted() {
+    this.$router.push({path:"/adminMain/home"});
+    },
   name: "header",
   components: {Dep_manage},
   methods: {
@@ -97,7 +100,7 @@ export default {
       }).then(() => {
         //先修改路由，然后删除token
         this.$router.push({ path: "/admin" });
-        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("root");
       });
     },
   },
