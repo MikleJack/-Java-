@@ -73,6 +73,7 @@ export default{
   name: "leader_header",
   components:{examine,all_work_order,pending_ticket},
   mounted() {
+    this.$router.push({path:"/leader/home"});
   },
   methods:{
 
