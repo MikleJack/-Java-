@@ -122,5 +122,16 @@
         where work_order_num = #{workOrderNum}
     </delete>
 
+    <!--查询单个-->
+    <select id="queryByWorkOrderNum" resultMap="FlowProcessMap">
+        select work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from brccq.flow_process
+        where work_order_num = #{workOrderNum}
+    </select>
+
 </mapper>
 

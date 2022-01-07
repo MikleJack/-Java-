@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.AdminWorkOrderInform;
+import com.example.demo.entity.adminSearchWorkOrderDetail.AdminWorkorderSingleDetail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -16,7 +17,6 @@ public interface AdminWorkOrderInformService {
     /**
      * 分页查询
      *
-     * @param adminWorkOrderInform 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
@@ -30,5 +30,13 @@ public interface AdminWorkOrderInformService {
      */
     AdminWorkOrderInform insert(AdminWorkOrderInform adminWorkOrderInform);
 
+
+    /**
+     * 管理员工单界面的详情按钮
+     *
+     * @param workOrderNum 工单编号
+     * @return 每个工单详情页面上的员工信息、部门信息、工单信息
+     */
+    AdminWorkorderSingleDetail queryWorkOrderDetail(String workOrderNum);
 
 }

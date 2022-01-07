@@ -1,12 +1,13 @@
 <template>
   <div class="employeePortal">
-    <!--    利用率饼图-->
+    <!--物理机利用率饼图-->
     <div class="left-top1">
-      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="12" width="120" :color="customColor"></el-progress>
+      <el-progress class="phyPie" :percentage="total_Phyutilization" :color="customColor"
+                   style="margin-left: 30%" type="circle" stroke-width="12" width="120"></el-progress>
     </div>
-    <!--        表格-->
+    <!--物理机饼状图表格-->
     <div class="left-top2">
-      <el-table class="phyTable" :data="Phy_Data">
+      <el-table class="phyTable" :data="Phy_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_phy_machine"
@@ -21,11 +22,14 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--虚拟机利用率饼图-->
     <div class="right-top1">
-            <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
+            <el-progress type="circle"  :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"
+                         style="margin-left: 30%"></el-progress>
     </div>
+    <!--虚拟机饼状图表格-->
     <div class="right-top2">
-      <el-table class="virTable" :data="Vir_Data">
+      <el-table class="virTable" :data="Vir_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_vir_machine"
@@ -40,16 +44,20 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--文字：物理机资源利用详情-->
     <div class="left-middle">
       <p align="center" style="margin-top: 5px">物理机资源利用详情</p>
     </div>
+    <!--文字：虚拟机资源利用详情-->
     <div class="right-middle">
       <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
     </div>
+    <!--左下方预留位，准备装饰-->
     <div class="left-bottom0"></div>
-<!--    用户申请的每台物理机详情信息-->
-    <div class="left-bottom">
-      <el-table :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small" >
+    <!-- 表格：用户申请的每台物理机详情信息-->
+    <div class="left-bottom" >
+      <el-table class="phyTableData" :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Host_num"
           label="主机号"
@@ -69,10 +77,12 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--两表之间预留位，准备装饰-->
     <div class="right-middle-bottom"></div>
-<!--    用户申请的每台虚拟机详情信息-->
+    <!-- 表格：用户申请的每台虚拟机详情信息-->
     <div class="left-middle-bottom">
-      <el-table :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small">
+      <el-table class="virTableData" :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Vir_num"
           label="虚拟机号"
@@ -92,21 +102,21 @@
         </el-table-column>
       </el-table>
     </div>
-<!--    快捷入口栏-->
+    <!--快捷入口栏-->
     <div class="right-bottom">
-<!--      快捷入口上方预留空位-->
+    <!--      快捷入口上方预留空位-->
       <div class="right-top-bottom"></div>
-<!--      快捷入口图标-->
+    <!--      快捷入口图标-->
       <div class="right-bottom-middle">
-<!--        <p align="center">快捷</p>-->
-<!--        <p align="center">入口</p>-->
+    <!--<p align="center">快捷</p>-->
+    <!--<p align="center">入口</p>-->
       </div>
-<!--      快捷入口具体按钮-->
+    <!--快捷入口具体按钮-->
       <div class="right-bottom-bottom" >
           <el-row>
             <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin:0 auto" circle ></el-button>
-            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
-            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
           </el-row>
       </div>
     </div>
@@ -118,7 +128,7 @@
 <script>
 export default {
   name: "employeePortal",
-  // components: {},
+  components: {},
   methods: {
     customColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
@@ -242,6 +252,7 @@ export default {
   float:left;
   /*background-color: #73c8b3;*/
 }
+
 .left-top2{
   width:30%;
   height:25%;
@@ -265,7 +276,8 @@ export default {
   margin-top: 15px;
   width: 1000%;
   height: 77%;
-  /*background-color: #76fbb6;*/
+  /*border: solid 2px #712f2f;*/
+  background-color: #ffffff;
 }
 .virTable{
   margin-top: 15px;
@@ -333,4 +345,16 @@ export default {
   float:left;
   /*background-color: #82eed7;*/
 }
+
+.phyTableData{
+  border-radius: 15px;
+  border: solid 2px rgba(82, 182, 154, 0.5);
+}
+.virTableData{
+  border-radius: 15px;
+  /*height: 20px;*/
+  border: solid 2px rgba(82, 182, 154, 0.5);
+  /*overflow-y: scroll;*/
+}
+
 </style>

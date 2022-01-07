@@ -58,4 +58,13 @@ public interface FlowProcessService {
 
 //    通过工号查询记录
     List<FlowProcess> selectByWorkNum(Integer WorkNum);
+
+    /**
+     * 管理员工单查询界面，详情按钮
+     * 通过工单编号查询该工单的所有流转过程
+     *
+     * @param workOrderNum 主键
+     * @return 该工单的所有流转过程
+     */
+    List<FlowProcess> queryByWorkOrderNum(String workOrderNum);
 }

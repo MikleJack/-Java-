@@ -86,4 +86,16 @@ public class FlowProcessServiceImpl implements FlowProcessService {
     public List<FlowProcess> selectByWorkNum(Integer WorkNum){
         return this.flowProcessDao.selectByWorkNum(WorkNum);
     }
+
+
+    /**
+     * 管理员工单查询界面，详情按钮
+     * 通过工单编号查询该工单的所有流转过程
+     *
+     * @param workOrderNum 主键
+     * @return 该工单的所有流转过程
+     */
+    public List<FlowProcess> queryByWorkOrderNum(String workOrderNum){
+        return this.flowProcessDao.queryByWorkOrderNum(workOrderNum);
+    }
 }
