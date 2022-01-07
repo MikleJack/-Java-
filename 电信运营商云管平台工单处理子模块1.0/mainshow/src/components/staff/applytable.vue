@@ -65,7 +65,12 @@
 
 <!--      弹窗-->
       <el-dialog title="现有物理机资源" :visible.sync="dialogTableVisible">
-        <el-table ref="multipleTable" :data="gridData" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" @row-click = "onRowClick">
+        <el-table
+          ref="multipleTable"
+          :data="gridData"
+          :row-class-name="tableRowClassName"
+          @selection-change="handleSelectionChange"
+          @select = "onRowClick">
           <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
           <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
           <el-table-column property="memory" label="内存(G)" width="200"></el-table-column>
@@ -140,9 +145,14 @@ export default {
     return{
       labelPosition: 'left',
       multipleSelection: [],
+      currentRowIndex: [],
       list:[],
       length:'',
-      i:'0',
+
+      // 多选选择数量循环计数器
+      multipleChoice_count:'0',
+      // 多选选择行号循环计数器
+      lineNumber_count:'0',
       //弹窗
       dialogTableVisible: false,
       // 个人信息以及工单信息表单数据
@@ -191,6 +201,12 @@ export default {
           memory:'3',
           storage:'8',
           ip:'5'
+        },
+        {
+          cpu:'7',
+          memory:'3',
+          storage:'8',
+          ip:'5'
         }],
     }
   },
@@ -203,13 +219,17 @@ export default {
     },1000)
   },
  methods: {
-   //  //获取选中数据的行号
-   // tableRowClassName({row, rowIndex}) {
-   //   row.row_index = rowIndex;
-   // },
-   // onRowClick (row, event, column) {
-   //   this.currentRowIndex = row.row_index;
-   // },
+    //获取选中数据的行号
+   tableRowClassName({row, rowIndex}) {
+     row.row_index = rowIndex;
+   },
+   onRowClick(row, event, column) {
+     for (var k = 0; k < row.length; k++) {
+       this.currentRowIndex.push(row[k].row_index)
+     }
+   },
+
+
    // getDetails(row){
    //   const data = row//此时就能拿到整行的信息
    // },
@@ -223,13 +243,18 @@ export default {
    // 获取点击行的数据
    getSelected() {
      this.dialogTableVisible=false//关闭弹窗
+     console.log(this.currentRowIndex)
+     while(this.multipleChoice_count<this.length.length){
+       this.tabledata2.push(this.multipleSelection[this.multipleChoice_count]);
+       this.gridData.splice(this.currentRowIndex[this.lineNumber_count],1)
+       this.multipleChoice_count++;
+       this.lineNumber_count++;
 
-     while(this.i<this.length.length){
-       this.tabledata2.push(this.multipleSelection[this.i]);
-       this.gridData.splice(this.length,1)
-       this.i++;
      }
-
+     this.$refs.multipleTable.clearSelection()
+     this.multipleChoice_count=0;
+     this.lineNumber_count=0;
+     this.currentRowIndex.splice(0,this.currentRowIndex.length)
    },
    // 获取当前时间并赋值给this.tabledata1.time
    getDateFunc(){
@@ -248,8 +273,10 @@ export default {
    // 删除选中的物理机资源
    deleteRow(index, rows) {
      const data = this.tabledata2.slice(index,index+1)
+     console.info(data)
+
      this.tabledata2.splice(index,1);
-     this.gridData.splice(-1,0,data)
+     this.gridData.splice(-1,0,data[0])
    }
  }
 }
