@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.StaffDepDao">
+
+    <resultMap type="com.example.demo.entity.StaffDep" id="StaffDepMap">
+        <result property="depNum" column="dep_num" jdbcType="VARCHAR"/>
+        <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
+        <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+        <result property="workNum" column="work_num" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="inService" column="in_service" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="StaffDepMap">
+        select
+          dep_num, dep_name, dep_level, work_num, name, phone, state, in_service
+        from staff_dep
+
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from staff_dep
+
+    </select>
+
+
+</mapper>
+
