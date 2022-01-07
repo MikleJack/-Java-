@@ -2,17 +2,44 @@
   <div class="page">
 <!-- -->
 <!--    <div class="page_top">工单详情</div>-->
-
     <div class="page_body">
+        <div class="page_title">申请人信息</div>
+
+        <div class="page_line"></div>
+
+        <div class="page_block">
+
+          <el-form :inline="true" :model="tabledata1" class="demo-form-inline" :label-position="labelPosition">
+            <el-form-item label="工号">
+              <el-input v-model="tabledata1.num" placeholder="工号"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名">
+              <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>
+            </el-form-item>
+    <!--      </el-form>-->
+
+    <!--      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">-->
+            <el-form-item label="申请时间">
+              <el-input v-model="tabledata1.time" placeholder="申请时间" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式">
+              <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>
+            </el-form-item>
+            <el-form-item label="所在部门">
+              <el-input v-model="tabledata1.depart"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+
 <!--      审批工单时显示申请人信息的无框表格-->
-      <el-descriptions class="margin-top" title="申请人信息" :column="3" :size="size" border></el-descriptions>
-        <el-descriptions class="margin-top":column="3" :size="size">
-          <el-descriptions-item label="申请人姓名">{{name}}</el-descriptions-item>
-          <el-descriptions-item label="工号">{{workNum}}</el-descriptions-item>
-          <el-descriptions-item label="所在部门编号">{{depNum}}</el-descriptions-item>
-          <el-descriptions-item label="所在部门名称">{{depName}}</el-descriptions-item>
-          <el-descriptions-item label="电话号码">{{phone}}</el-descriptions-item>
-        </el-descriptions>
+<!--      <el-descriptions class="margin-top" title="申请人信息" :column="3" :size="size" border></el-descriptions>-->
+<!--        <el-descriptions class="margin-top":column="3" :size="size">-->
+<!--          <el-descriptions-item label="申请人姓名">{{name}}</el-descriptions-item>-->
+<!--          <el-descriptions-item label="工号">{{workNum}}</el-descriptions-item>-->
+<!--          <el-descriptions-item label="所在部门编号">{{depNum}}</el-descriptions-item>-->
+<!--          <el-descriptions-item label="所在部门名称">{{depName}}</el-descriptions-item>-->
+<!--          <el-descriptions-item label="电话号码">{{phone}}</el-descriptions-item>-->
+<!--        </el-descriptions>-->
 
 <!--      显示工单基础信息-->
       <el-descriptions class="margin-top" title="工单信息信息" :column="3" :size="size" border></el-descriptions>
@@ -123,6 +150,7 @@ export default {
   name: "ticket_details",
   data () {
     return {
+      labelPosition: 'left',
       //字体大小
       size: '',
       //workNum工号
@@ -159,6 +187,19 @@ export default {
         //批注
         dealComment:'申请合理，建议通过',
       }],
+
+      tabledata1:[{
+        num: ' ',
+        name:' ',
+        time:'',
+        phone:'',
+        depart:'',
+        order_num:'',
+        order_name:'',
+        reason:''
+      }],
+
+
       allocatedCom:[{
       //  计算机类型
         comType:'物理机',
