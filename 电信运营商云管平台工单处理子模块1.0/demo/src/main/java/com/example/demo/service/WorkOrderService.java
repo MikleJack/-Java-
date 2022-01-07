@@ -61,7 +61,7 @@ public interface WorkOrderService {
      */
     List<WorkOrder> queryAll();
 
-    List<WorkOrder> selectByWorkNum(String WorkNum);
+    List<WorkOrder> selectByWorkNum(Integer WorkNum);
 
     List<WorkOrder> selectByWorkOrderType(String WorKOrderType);
 

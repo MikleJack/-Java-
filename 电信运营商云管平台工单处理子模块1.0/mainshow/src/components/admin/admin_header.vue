@@ -66,6 +66,9 @@
 <script>
 import Dep_manage from "./dep_manage";
 export default {
+  mounted() {
+    this.$router.push({path:"/adminMain/home"});
+    },
   name: "header",
   components: {Dep_manage},
   methods: {

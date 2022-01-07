@@ -28,6 +28,7 @@
         from work_order
         where worker_num = #{WorkNum}
     </select>
+
 <!--查询某种类型的所有工单-->
     <select id="selectByWorkOrderType" resultMap="WorkOrderMap">
         select
