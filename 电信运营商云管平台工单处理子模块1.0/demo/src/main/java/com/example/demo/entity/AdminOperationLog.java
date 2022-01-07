@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
 public class AdminOperationLog implements Serializable {
     private static final long serialVersionUID = -30701167850050447L;
 
-    private Date operateTime;
+    private String operateTime;
 
     private String operate;
 
@@ -33,12 +34,13 @@ public class AdminOperationLog implements Serializable {
     private Integer workNum;
 
 
-    public Date getOperateTime() {
+    public String getOperateTime() {
         return operateTime;
     }
 
     public void setOperateTime(Date operateTime) {
-        this.operateTime = operateTime;
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        this.operateTime = ft.format(operateTime);
     }
 
     public String getOperate() {
