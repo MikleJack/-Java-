@@ -91,5 +91,7 @@ public interface WorkOrderDao {
     List<WorkOrder> selectByWorkOrderType(String WorkOrderType);
 
     List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason);
+
+    List<WorkOrder> selectByWorkOrderState(String WorkOrderState);
 }
 

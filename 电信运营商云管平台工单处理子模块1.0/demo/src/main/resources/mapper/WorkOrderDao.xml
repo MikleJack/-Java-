@@ -21,6 +21,13 @@
         where work_order_num = #{workOrderNum}
     </select>
 
+
+    <select id="selectByWorkOrderState" resultMap="WorkOrderMap">
+        select
+            work_order_num, work_order_type, work_order_name, apply_time, worker_num, file, work_order_state, reason
+        from work_order
+        where work_order_state = #{state}
+    </select>
 <!--    查询员工的工单-->
     <select id="selectByWorkNum" resultMap="WorkOrderMap">
         select
