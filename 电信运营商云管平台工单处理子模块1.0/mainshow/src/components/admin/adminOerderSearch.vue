@@ -316,17 +316,17 @@ export default {
       done();
       // })
       // .catch(_ => {});
-    },
+    },filtrateOrder(){
+      //   for( let i=0 ;i<this.tableData.length;i=i+1){
+      //     if(this.orderType.find(this.tableData[i].workOrderType)){
+      //       alert('1')
+      //     }
+      //     else
+      //       this.orderType.push(this.tableData[i].workOrderType)
+      //   }
+      }
     //过滤工单类型
-    // filtrateOrder(){
-    //   for( let i=0 ;i<this.tableData.length;i=i+1){
-    //     if(this.orderType.find(this.tableData[i].workOrderType)){
-    //       alert('1')
-    //     }
-    //     else
-    //       this.orderType.push(this.tableData[i].workOrderType)
-    //   }
-    // }
+    //
   }
 }
 
