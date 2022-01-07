@@ -1,32 +1,33 @@
 <template>
   <div class="page">
-    <div class="page_title">申请人信息</div>
+<!--    <div class="page_title">申请人信息</div>-->
 
-    <div class="page_line"></div>
+<!--    <div class="page_line"></div>-->
 
-    <div class="page_block">
+<!--    <div class="page_block">-->
 
-      <el-form :inline="true" :model="tabledata1" class="demo-form-inline" :label-position="labelPosition">
-        <el-form-item label="工号">
-          <el-input v-model="tabledata1.num" placeholder="工号"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名">
-          <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>
-        </el-form-item>
+<!--      <el-form :inline="true" :model="tabledata1" class="demo-form-inline" :label-position="labelPosition">-->
+<!--        <el-form-item label="工号">-->
+<!--          <el-input v-model="tabledata1.num" placeholder="工号"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="姓名">-->
+<!--          <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>-->
+<!--        </el-form-item>-->
+<!--&lt;!&ndash;      </el-form>&ndash;&gt;-->
+
+<!--&lt;!&ndash;      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">&ndash;&gt;-->
+<!--        <el-form-item label="申请时间">-->
+<!--          <el-input v-model="tabledata1.time" placeholder="申请时间" disabled></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="联系方式">-->
+<!--          <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="所在部门">-->
+<!--          <el-input v-model="tabledata1.depart"></el-input>-->
+<!--        </el-form-item>-->
 <!--      </el-form>-->
-
-<!--      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">-->
-        <el-form-item label="申请时间">
-          <el-input v-model="tabledata1.time" placeholder="申请时间" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>
-        </el-form-item>
-        <el-form-item label="所在部门">
-          <el-input v-model="tabledata1.depart"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
+<!--    </div>-->
+    <div style="border: rgba(82,182,154,0.25) solid 3px">
     <div class="page_title">工单信息</div>
     <div class="page_line"></div>
     <div class="page_block">
@@ -53,32 +54,37 @@
         </el-form-item>
       </el-form>
     </div>
+    </div>
 
-    <div class="page_title">资源信息</div>
+    <p></p>
+    <div style="border: rgba(82,182,154,0.25) solid 3px">
+    <div class="page_title">物理机资源</div>
     <div class="page_line"></div>
 
     <div class="page_block">
-      <div class="page_title_min">
-        物理机资源
-      </div>
-      <el-button class="el-icon-plus" type="primary"  @click="dialogTableVisible = true" style=" float: left">  新增</el-button>
+<!--      <div class="page_title_min">-->
+<!--        物理机资源-->
+<!--      </div>-->
+      <el-button class="el-icon-plus" type="success" @click="dialogTableVisible = true" style=" float: left;">  新增</el-button>
 
 <!--      弹窗-->
       <el-dialog title="现有物理机资源" :visible.sync="dialogTableVisible">
         <el-table
+          :header-cell-style="tableHeaderColor"
+
           ref="multipleTable"
           :data="gridData"
           :row-class-name="tableRowClassName"
           @selection-change="handleSelectionChange"
           @select = "onRowClick">
-          <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+          <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>
           <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
           <el-table-column property="memory" label="内存(G)" width="200"></el-table-column>
           <el-table-column property="storage" label="存储(G)"></el-table-column>
           <el-table-column property="ip" label="IP地址" width="150"></el-table-column>
         </el-table>
-
-          <el-button type="primary" @click="getSelected()">添加选中结果</el-button>
+        <p></p>
+          <el-button class="add_type" type="primary" @click="getSelected()">添加选中结果</el-button>
 
       </el-dialog>
 
@@ -96,7 +102,9 @@
             <el-button
               @click.native.prevent="deleteRow(scope.$index, tabledata2)"
               type="text"
-              size="small">
+              size="small"
+              style="color: #52b69a"
+            >
               移除
             </el-button>
           </template>
@@ -104,7 +112,15 @@
       </el-table>
     </div>
 
-    <div class="page_title_min">虚拟机资源</div>
+      <p></p>
+    </div>
+
+    <p></p>
+
+    <div style="border: rgba(82,182,154,0.25) solid 3px">
+
+      <div class="page_title">虚拟机资源</div>
+    <!--    <div class="page_title_min">虚拟机资源</div>-->
     <div class="page_line"></div>
     <div class="page_block">
       <el-form :inline="true" :model="tabledata3" class="demo-form-inline" :label-position="labelPosition">
@@ -130,10 +146,13 @@
         </el-form-item>
       </el-form>
     </div>
+    </div>
+
+    <p></p>
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button type="success">提交</el-button>
+      <el-button class="add_type">提交</el-button>
     </div>
   </div>
 </template>
@@ -148,7 +167,8 @@ export default {
       currentRowIndex: [],
       list:[],
       length:'',
-
+      value1:'',
+      // selectRow: [],
       // 多选选择数量循环计数器
       multipleChoice_count:'0',
       // 多选选择行号循环计数器
@@ -277,7 +297,33 @@ export default {
 
      this.tabledata2.splice(index,1);
      this.gridData.splice(-1,0,data[0])
+   },
+
+//设置表头行的样式
+   tableHeaderColor({row,column,rowIndex,columnIndex}){
+     return 'background-color:rgba(82, 182, 154, 0.76);color:#fff;font-wight:500'
+
    }
+   //改变多选时选中行的样式
+   // rowClass({ row, rowIndex }) {
+   //   if (this.selectRow.includes(rowIndex)) {
+   //     return { background: "#a7a742" };
+   //   }
+   // },
+   // handleRowClick(row, column, event) {
+   //   // list -- 已选的数据
+   //   let index = this.multipleSelection.findIndex((item) => {
+   //     // 判断已选数组中是否已存在该条数据
+   //     return item.id === row.id;
+   //   });
+   //   if (index === -1) {
+   //     // 如果未存在，设置已选状态，并在list中添加这条数据
+   //     this.$refs.multipleTable.toggleRowSelection(row, true); //设置复选框为选中状态
+   //   } else {
+   //     // 如果已存在，设置未选状态，并在list中删除这条数据
+   //     this.$refs.multipleTable.toggleRowSelection(row, false); //设置复选框为未选状态
+   //   }
+   // },
  }
 }
 </script>
@@ -297,7 +343,8 @@ export default {
   margin-left:50%;
   /*text-align: center;*/
   margin-bottom:10px;
-  font-weight:bolder
+  font-weight:bolder;
+  color: #0c805f;
 }
 
 .page_line{
@@ -306,7 +353,7 @@ export default {
   padding:0;
   width:80%;
   height:0.5px;
-  background-color:black;
+  background-color:#52b69a;
   overflow:hidden;
   text-align: center;
 }
@@ -319,8 +366,23 @@ export default {
 
 .page_title_min{
   width:80px;
-  margin-left:50%;
+  margin-left:0%;
   /*text-align: center;*/
   margin-bottom:10px;
+}
+.el-icon-plus {
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.76);
+  border-color: #52b69a;
+}
+.add_type {
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
+}
+.el-tableColumn {
+  color: #fff;
+  background-color: #52b69a;
+  border-color: #52b69a;
 }
 </style>
