@@ -33,12 +33,12 @@
           width="200">
         </el-table-column>
         <el-table-column
-          prop="dep_level"
+          prop="depLevel"
           label="部门级别"
           width="100">
         </el-table-column>
         <el-table-column
-          prop="state"
+          prop="state_string"
           label="账户状态"
           width="200">
         </el-table-column>
@@ -182,7 +182,7 @@
 export default {
   name: "admin_employee",
   mounted() {
-    this.$axios.get("http://localhost:8084/staff/allStaff?page="+0+"&size="+this.pageSize).then((res)=>{
+    this.$axios.get("http://localhost:8084/staffDep/allStaff?page="+0+"&size="+this.pageSize).then((res)=>{
       this.tableData= res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
     })
@@ -191,7 +191,7 @@ export default {
     return {
       // 分页
       currentPage:1,
-      pageSize:3,
+      pageSize:8,
       totalSize:0,
       // dialog显示与不显示的参数
       dialogVisible_add:false,
@@ -372,7 +372,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/staff/allStaff?page="+page+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get("http://localhost:8084/staffDep/allStaff?page="+page+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -386,7 +386,7 @@ export default {
 .paging {
   width:100%;
   height: 60px;
-  position: relative;
+  position: absolute;
   bottom: 0;
 }
 </style>
