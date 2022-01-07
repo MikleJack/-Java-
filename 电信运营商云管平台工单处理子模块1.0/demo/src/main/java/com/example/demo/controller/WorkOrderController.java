@@ -32,7 +32,7 @@ public class WorkOrderController {
      * @param size 分页大小
      * @return 查询结果
      */
-    @GetMapping("queryByPage")
+        @GetMapping("queryByPage")
     public ResponseEntity<Page<WorkOrder>> queryByPage(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.workOrderService.queryByPage(pageRequest));
@@ -93,7 +93,7 @@ public class WorkOrderController {
     }
 
     @GetMapping("selectByWorkNum")
-    public List<WorkOrder> selectByWorkNum(String WorkNum){
+    public List<WorkOrder> selectByWorkNum(Integer WorkNum){
         return this.workOrderService.selectByWorkNum(WorkNum);
     }
 
@@ -106,5 +106,6 @@ public class WorkOrderController {
     public List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason){
         return this.workOrderService.selectByWorkOrderReason(WorkOrderReason);
     }
+
 }
 

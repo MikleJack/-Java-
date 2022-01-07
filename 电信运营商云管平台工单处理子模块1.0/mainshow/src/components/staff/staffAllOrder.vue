@@ -18,6 +18,7 @@
         <el-input
           placeholder="输入工单标题搜索"
           v-model="search"
+
           clearable>
         </el-input>
       </el-form-item>
@@ -30,7 +31,10 @@
     <el-table
       border
       style="width: 100%"
-      :data = "tableData">
+      :data="tableData.filter(data => !search || data.workOrderName.toLowerCase().includes(search.toLowerCase()))"
+
+    >
+<!--      :data = "tableData"-->
 
       <!--      接口调用数据-->
       <!--      :data="tableData.filter(data => !search || data.workOrderType.equals(workOrderTypeSelector) ||-->
@@ -307,23 +311,25 @@ export default {
       ticketData: [],
       currentPage:1,
       pageSize:8,
+
       search:'',
+
       workOrderTypeSelector:'',
       tableData: [
         {
-          worker_num: '00000001',
-          name: '王小虎',
-          phone: '15155185464',
-          dep_name: '软件学院',
-          dep_level: '3',
-          state: '正常'
+          // worker_num: '00000001',
+          // name: '王小虎',
+          // phone: '15155185464',
+          // dep_name: '软件学院',
+          // dep_level: '3',
+          // state: '正常'
         }, {
-          worker_num: '00000002',
-          name: '王小虎',
-          phone: '15155185464',
-          dep_name: '软件学院',
-          dep_level: '3',
-          state: '正常'
+          // worker_num: '00000002',
+          // name: '王小虎',
+          // phone: '15155185464',
+          // dep_name: '软件学院',
+          // dep_level: '3',
+          // state: '正常'
         }
       ],
       pickerOptions: {

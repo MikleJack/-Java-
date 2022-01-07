@@ -59,13 +59,47 @@
     <div class="page_line"></div>
     <div class="page_block">
       <div class="page_title_min">物理机资源</div>
+      <el-button class="el-icon-plus" type="primary"  @click="dialogTableVisible = true" style=" float: left">  新增</el-button>
+
+      <el-dialog title="现有物理机资源" :visible.sync="dialogTableVisible">
+        <el-table
+          ref="multipleTable"
+          :data="gridData"
+          :row-class-name="tableRowClassName"
+          @selection-change="handleSelectionChange"
+          @select = "onRowClick">
+          <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+          <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
+          <el-table-column property="memory" label="内存(G)" width="200"></el-table-column>
+          <el-table-column property="storage" label="存储(G)"></el-table-column>
+          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>
+        </el-table>
+
+        <el-button type="primary" @click="getSelected()">添加选中结果</el-button>
+
+      </el-dialog>
 
       <el-table :data="tabledata2" border>
         <el-table-column property="cpu" label="CPU(核)" ></el-table-column>
         <el-table-column property="memory" label="内存(G)" ></el-table-column>
         <el-table-column property="storage" label="存储(G)" ></el-table-column>
         <el-table-column property="ip" label="IP地址"></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="120">
+          <template slot-scope="scope">
+            <el-button
+              @click.native.prevent="deleteRow(scope.$index, tabledata2)"
+              type="text"
+              size="small">
+              移除
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
+
+
       <div class="page_title_min">虚拟机资源</div>
       <el-form :inline="true" :model="tabledata3" class="demo-form-inline">
         <el-form-item label="CPU(核)">
@@ -100,15 +134,17 @@
 
 <script>
 export default {
-  name: "changetable2",
+  name: "changeable2",
   data(){
     return{
       multipleSelection: [],
       list:[],
       length:'',
-      i:'0',
+      multipleChoice_count:'0',
+      lineNumber_count:'0',
       dialogTableVisible: false,
       value1:'',
+      currentRowIndex:[],
       // 个人信息以及工单信息表单数据
       tabledata1:[{
         num: ' ',
@@ -150,6 +186,45 @@ export default {
         win:'',
         IP:''
       }]
+    }
+  },
+  methods: {
+    //获取选中数据的行号
+    tableRowClassName({row, rowIndex}) {
+      row.row_index = rowIndex;
+    },
+    onRowClick(row, event, column) {
+      for (var k = 0; k < row.length; k++) {
+        this.currentRowIndex.push(row[k].row_index)
+      }
+    },
+    // 点击selection多选框
+    handleSelectionChange(data) {
+      this.multipleSelection = data;
+      this.length=this.$refs.multipleTable.selection;//获取当前选中数据的行数
+    },
+    // 获取点击行的数据
+    getSelected() {
+      this.dialogTableVisible=false//关闭弹窗
+      while(this.multipleChoice_count<this.length.length){
+        this.tabledata2.push(this.multipleSelection[this.multipleChoice_count]);
+        this.gridData.splice(this.currentRowIndex[this.lineNumber_count],1)
+        this.multipleChoice_count++;
+        this.lineNumber_count++;
+
+      }
+      this.$refs.multipleTable.clearSelection()
+      this.multipleChoice_count=0;
+      this.lineNumber_count=0;
+      this.currentRowIndex.splice(0,this.currentRowIndex.length)
+    },
+    // 删除选中的物理机资源
+    deleteRow(index, rows) {
+      const data = this.tabledata2.slice(index,index+1)
+      console.info(data)
+
+      this.tabledata2.splice(index,1);
+      this.gridData.splice(-1,0,data[0])
     }
   }
 };
