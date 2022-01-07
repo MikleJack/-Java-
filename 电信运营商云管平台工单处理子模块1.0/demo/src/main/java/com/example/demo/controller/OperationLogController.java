@@ -31,7 +31,7 @@ public class OperationLogController {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    @GetMapping
+    @GetMapping("queryByPage")
     public ResponseEntity<Page<OperationLog>> queryByPage(OperationLog operationLog, PageRequest pageRequest) {
         return ResponseEntity.ok(this.operationLogService.queryByPage(operationLog, pageRequest));
     }
