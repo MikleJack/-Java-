@@ -40,9 +40,9 @@ public class StaffServiceImpl implements StaffService {
      * @return 查询结果
      */
     @Override
-    public Page<Staff> queryByPage(Staff staff, PageRequest pageRequest) {
-        long total = this.staffDao.count(staff);
-        return new PageImpl<>(this.staffDao.queryAllByLimit(staff, pageRequest), pageRequest, total);
+    public Page<Staff> queryByPage(PageRequest pageRequest) {
+        long total = this.staffDao.count();
+        return new PageImpl<>(this.staffDao.queryAllByLimit(pageRequest), pageRequest, total);
     }
 
     /**

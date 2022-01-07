@@ -31,7 +31,7 @@ public interface StaffDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Staff> queryAllByLimit(Staff staff, @Param("pageable") Pageable pageable);
+    List<Staff> queryAllByLimit( @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
@@ -39,7 +39,8 @@ public interface StaffDao {
      * @param staff 查询条件
      * @return 总行数
      */
-    long count(Staff staff);
+//    Staff staff
+    long count();
 
     /**
      * 新增数据

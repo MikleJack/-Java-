@@ -46,9 +46,10 @@ public class StaffController {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    @GetMapping
-    public ResponseEntity<Page<Staff>> queryByPage(Staff staff, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.staffService.queryByPage(staff, pageRequest));
+    @GetMapping("allStaff")
+    public ResponseEntity<Page<Staff>> queryByPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.staffService.queryByPage( pageRequest));
     }
 
     /**

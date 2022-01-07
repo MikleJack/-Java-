@@ -13,24 +13,24 @@ import java.io.Serializable;
  */
 public class OperationLog implements Serializable {
     private static final long serialVersionUID = -48180332884626691L;
-    
-    private String work_num;
+
+    private Integer work_num;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date operate_time;
-    
+
     private String operate;
-    
+
     private String ip;
-    
+
     private String address;
 
 
-    public String getWork_num() {
+    public Integer getWork_num() {
         return work_num;
     }
 
-    public void setWork_num(String work_num) {
+    public void setWork_num(Integer work_num) {
         this.work_num = work_num;
     }
 
