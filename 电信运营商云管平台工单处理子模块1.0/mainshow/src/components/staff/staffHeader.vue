@@ -62,11 +62,14 @@
 </template>
 
 <script>
-import EmployeePortal from "./employeePortal";
+import EmployeePortal from "./staffPortal";
 
 export default {
   name: "header",
   components: { EmployeePortal},
+  mounted() {
+    this.$router.push({path:"/staff/home"});
+  },
   methods: {
     //退出
     logoutFn() {

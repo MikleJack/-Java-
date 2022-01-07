@@ -18,7 +18,9 @@ import staffHeader from "../components/staff/staffHeader";
 import applytable from "../components/staff/applytable";
 import changetable from "../components/staff/changetable";
 import staffAllOrder from "../components/staff/staffAllOrder";
-import employeePortal from "../components/staff/employeePortal";
+import employeePortal from "../components/staff/staffPortal";
+import leaderPortal from "../components/leader/leaderPortal"
+import adminPortal from "../components/admin/adminPortal"
 
 Vue.use(Router)
 
@@ -43,6 +45,15 @@ const router = new Router({
         role:'admin'
       },
       children:[
+        {
+          path: 'home',
+          name:'home',
+          component: adminPortal,
+          meta:{
+            requireAuth: true,
+            role:'admin'
+          },
+        },
         {
           path:'search',
           name:'search',
@@ -90,6 +101,15 @@ const router = new Router({
         role:'leader'
       },
       children:[
+        {
+          path: 'home',
+          name:'home',
+          component: leaderPortal,
+          meta:{
+            requireAuth: true,
+            role:'leader'
+          },
+        },
         {
           path: 'pendTickets',
           name:'pendTickets',

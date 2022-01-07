@@ -20,7 +20,7 @@ public class WorkOrder implements Serializable {
 
     private Date applyTime;
 
-    private String workerNum;
+    private Integer workerNum;
 
     private String file;
 
@@ -61,11 +61,11 @@ public class WorkOrder implements Serializable {
         this.applyTime = applyTime;
     }
 
-    public String getWorkerNum() {
+    public Integer getWorkerNum() {
         return workerNum;
     }
 
-    public void setWorkerNum(String workerNum) {
+    public void setWorkerNum(Integer workerNum) {
         this.workerNum = workerNum;
     }
 
