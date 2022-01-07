@@ -20,7 +20,7 @@
             <el-form-item label="电话" prop="phone" :label-width="formLabelWidth">
               <el-col :span="8">   <el-input v-model="userlist.phone" placeholder="请输入电话"></el-input></el-col>
             </el-form-item>
-<!--保存-->
+<!--保存按钮-->
           </el-form>
           <div class="grid-content bg-purple" style="margin-left: 20%">
             <el-button type="primary"  @click="EditorUserClick('userlist')" >保存</el-button>
