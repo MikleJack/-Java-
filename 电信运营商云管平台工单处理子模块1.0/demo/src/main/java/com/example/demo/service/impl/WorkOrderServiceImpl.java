@@ -105,5 +105,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         return this.workOrderDao.selectByWorkOrderReason(WorkOrderReason);
     }
 
-
+    @Override
+    public List<WorkOrder> selectByWorkOrderState(String state){
+        return this.workOrderDao.selectByWorkOrderState(state);
+    }
 }

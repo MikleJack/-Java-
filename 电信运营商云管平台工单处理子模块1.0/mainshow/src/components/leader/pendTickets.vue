@@ -47,9 +47,10 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog title="工单详情" :visible.sync="dialogTableVisible">
+      <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
         <ticket_details></ticket_details>
       </el-dialog>
+
     </div>
     <div class="page-tail">
       <!--放置分页部分-->

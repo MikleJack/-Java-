@@ -107,5 +107,10 @@ public class WorkOrderController {
         return this.workOrderService.selectByWorkOrderReason(WorkOrderReason);
     }
 
+    @GetMapping("selectByWorkOrderState")
+    public List<WorkOrder> selectByWorkOrderState(String state){
+        return this.workOrderService.selectByWorkOrderState(state);
+    }
+
 }
 

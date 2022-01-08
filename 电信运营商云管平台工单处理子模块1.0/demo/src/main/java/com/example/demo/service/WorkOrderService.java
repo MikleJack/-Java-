@@ -66,4 +66,6 @@ public interface WorkOrderService {
     List<WorkOrder> selectByWorkOrderType(String WorKOrderType);
 
     List<WorkOrder> selectByWorkOrderReason(String WorkOrderReason);
+
+    List<WorkOrder> selectByWorkOrderState(String state);
 }

@@ -23,7 +23,7 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="work_num"
+            prop="workNum"
             label="工号"
             width="180">
           </el-table-column>
@@ -33,15 +33,15 @@
             width="180">
           </el-table-column>
           <el-table-column
-            prop="operation_time"
+            prop="operateTime"
             label="操作时间">
           </el-table-column>
           <el-table-column
-            prop="operation"
+            prop="operate"
             label="操作">
           </el-table-column>
           <el-table-column
-            prop="ip_num"
+            prop="ip"
             label="ip地址">
           </el-table-column>
           <el-table-column
@@ -58,9 +58,11 @@
     <div class="page-tail" style="width:70%;">
       <!--放置分页部分-->
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        layout=" prev, pager, next, jumper"
+        :total="totalSize">
       </el-pagination>
     </div>
   </div>
@@ -70,40 +72,26 @@
 <script>
   export default {
     name: "admin_operation_log",
-
+    mounted() {
+      this.$axios.get("http://localhost:8084/adminOperationLog/queryByPage?page="+0+"&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
+    },
     data() {
       return {
+        //给后端一个姓名
         formInline: {
           name: '',
         },
-        //给后端一个姓名
+        //分页相关
+        currentPage:1,
+        pageSize:9,
+        totalSize:0,
 
-
-        tableData: [{
-          work_num: '00000001',
-          name: '张大炮',
-          operation_time: '2022-01-03 11:39:13',
-          operation:'登陆',
-          ip_num:'117.136.117.15',
-          address:'CHINA'
-        }, {
-          work_num: '00000001',
-          name: '张大炮',
-          operation_time: '2022-01-03 11:45:43',
-          operation:'登陆',
-          ip_num:'58.243.254.154',
-          address:'安徽省合肥市'
-        },
-          {
-            work_num: '00000002',
-            name: '陈大炮',
-            operation_time: '2022-01-03 11:45:43',
-            operation:'登陆',
-            ip_num:'58.243.254.154',
-            address:'安徽省合肥市'
-          }
-        ]
         //  表格数据，需要后端传递工号、姓名、操作时间、操作、ip地址、地址
+        tableData: []
+
       }
     },
     methods: {
@@ -111,7 +99,16 @@
         console.log('submit!');
       },
       //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
-    }
+      handleCurrentChange(val){
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get("http://localhost:8084/adminOperationLog/queryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+    },
+
 
   }
 </script>
