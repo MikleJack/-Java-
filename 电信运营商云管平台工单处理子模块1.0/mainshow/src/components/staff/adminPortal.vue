@@ -1,12 +1,13 @@
 <template>
   <div class="employeePortal">
-    <!--    利用率饼图-->
+    <!--饼图：利用率饼图-->
     <div class="left-top1">
-      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="12" width="120" :color="customColor"></el-progress>
+      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="15" width="120"
+                   style="margin-left: 30%" :color="customColor"></el-progress>
     </div>
-    <!--        表格-->
+    <!--表格：物理机饼图表格-->
     <div class="left-top2">
-      <el-table class="phyTable" :data="Phy_Data">
+      <el-table class="phyTable" :data="Phy_Data":cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_phy_machine"
@@ -21,11 +22,14 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--饼图：虚拟机饼图-->
     <div class="right-top1">
-      <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
+      <el-progress class="virPie" type="circle" :percentage="total_Virutilization" :stroke-width="15" :width="120"
+                   style="margin-left: 30%" :color="customColor"></el-progress>
     </div>
+    <!--表格：虚拟机饼图表格-->
     <div class="right-top2">
-      <el-table class="virTable" :data="Vir_Data">
+      <el-table class="virTable" :data="Vir_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_vir_machine"
@@ -40,16 +44,70 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--管理员系统自定义审核以及系统资源量调整按钮-->
+    <div class="right-top">
+      <div class="right-top-top"></div>
+      <el-row>
+<!--        系统自定义审核-->
+        <el-tooltip content="系统自定义审核" placement="bottom" effect="light">
+        <el-button type="primary" @click="dialogVisible_set = true" icon="el-icon-set-up"  circle></el-button>
+        </el-tooltip>
+        <el-dialog
+          title="系统自定义审核"
+          :visible.sync="dialogVisible_set"
+          width="50%"
+          :before-close="handleClose">
+          <p>请设置CPU核（个）范围</p>
+          <div class="block" style="width: 80%;margin: auto">
+            <el-slider
+              v-model="CPU_value"
+              max="1024"
+              show-input>
+            </el-slider>
+          </div>
+          <div style="margin-top: 30px">请设置内存（G）范围</div>
+          <div class="block" style="width: 80%;margin: auto">
+            <el-slider
+              v-model="RAM_value"
+              max="1024"
+              show-input>
+            </el-slider>
+          </div>
+          <p style="margin-top: 30px">请设置存储（G）范围</p>
+          <div class="block" style="width: 80%;margin: auto">
+            <el-slider
+              v-model="ROM_value"
+              max="1024"
+              show-input>
+            </el-slider>
+          </div>
+          <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible_set = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible_set = false">确 定</el-button>
+  </span>
+        </el-dialog>
+
+<!--        系统资源调整-->
+        <el-tooltip content="系统资源调整" placement="bottom" effect="light">
+        <el-button type="success" icon="el-icon-odometer" circle></el-button>
+        </el-tooltip>
+      </el-row>
+
+    </div>
+    <!--文字：物理机资源利用详情-->
     <div class="left-middle">
       <p align="center" style="margin-top: 5px">物理机资源利用详情</p>
     </div>
+    <!--文字：虚拟机资源利用详情-->
     <div class="right-middle">
       <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
     </div>
+    <!--左下方预留位，准备装饰-->
     <div class="left-bottom0"></div>
-    <!--    每位员工申请的每台物理机详情信息-->
+    <!--表格：系统每台物理机详情信息-->
     <div class="left-bottom">
-      <el-table :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small" >
+      <el-table class="phyTableData" :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Host_num"
           label="主机号"
@@ -81,18 +139,12 @@
         </el-table-column>
       </el-table>
     </div>
-<!--    管理员系统自定义审核以及系统资源量调整按钮-->
-    <div class="right-middle-bottom">
-      <el-row class="adminButton1" type="flex" justify="center" align="middle">
-        <el-button size="small" type="primary" round>系统审核自定义</el-button>
-      </el-row>
-      <el-row class="adminButton2" type="flex" justify="center" align="middle">
-        <el-button size="small" type="primary" round>系统资源量调整</el-button>
-      </el-row>
-    </div>
-    <!--    每位员工申请的每台虚拟机详情信息-->
+    <!--预留位：两表之间-->
+    <div class="right-middle-bottom"></div>
+    <!--系统每台虚拟机详情信息-->
     <div class="left-middle-bottom">
-      <el-table :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small">
+      <el-table class="virTableData" :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Vir_num"
           label="虚拟机号"
@@ -124,14 +176,14 @@
         </el-table-column>
       </el-table>
     </div>
-    <!--    快捷入口栏-->
+    <!-- 预留：快捷入口栏-->
     <div class="right-bottom">
-      <!--      快捷入口上方预留空位-->
-      <div class="right-top-bottom"></div>
-      <!--      快捷入口图标-->
-      <div class="right-bottom-middle"></div>
-      <!--      快捷入口具体按钮-->
-      <div class="right-bottom-bottom" ></div>
+<!--      &lt;!&ndash;      快捷入口上方预留空位&ndash;&gt;-->
+<!--      <div class="right-top-bottom"></div>-->
+<!--      &lt;!&ndash;      快捷入口图标&ndash;&gt;-->
+<!--      <div class="right-bottom-middle"></div>-->
+<!--      &lt;!&ndash;      快捷入口具体按钮&ndash;&gt;-->
+<!--      <div class="right-bottom-bottom" ></div>-->
     </div>
 
   </div>
@@ -160,12 +212,23 @@ export default {
         return 'success-row';
       }
       return '';
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     }
+
   },
 
 // 表格数据
   data() {
     return {
+      CPU_value: 0,
+      RAM_value: 0,
+      ROM_value: 0,
       total_Phyutilization:'76.29',
       total_Virutilization:'35.83',
       // 物理机总利用率
@@ -173,7 +236,7 @@ export default {
         All_phy_machine: '8台',
         Total_utilization: '76.29%',
       },],
-
+      dialogVisible_set: false,
       // 虚拟机总利用率
       Vir_Data: [{
         All_vir_machine: '3712GB',
@@ -308,6 +371,7 @@ export default {
       },
       ]
     }
+
   },
 }
 </script>
@@ -320,7 +384,7 @@ export default {
   position: relative;
 }
 .left-top1{
-  width:20%;
+  width:17.5%;
   height:25%;
   float:left;
   /*background-color: #73c8b3;*/
@@ -332,7 +396,7 @@ export default {
   /*background-color: #38836e;*/
 }
 .right-top1{
-  width:20%;
+  width:17.5%;
   height:25%;
   float:left;
   position: relative;
@@ -343,6 +407,18 @@ export default {
   height:25%;
   float:left;
   /*background-color: #6cbaa4;*/
+}
+.right-top{
+  width:5%;
+  height:25%;
+  float:left;
+  /*background-color: #5bc2a5;*/
+}
+.right-top-top{
+  width:100%;
+  height:30%;
+  float:left;
+  /*background-color: #5bc2a5;*/
 }
 .phyTable{
   margin-top: 15px;
@@ -398,30 +474,42 @@ export default {
   height: 68%;
   float:left;
 }
-.right-top-bottom{
-  width:100%;
-  height:35%;
-  float:left;
-  /*background-color: #63bba8;*/
+.phyTableData{
+  border-radius: 15px;
+  border: solid 2px rgba(82, 182, 154, 0.5);
 }
-.right-bottom-middle{
-  width:100%;
-  height:25%;
-  float:left;
-  /*background-color: #51a08f;*/
+.virTableData{
+  border-radius: 15px;
+  /*height: 20px;*/
+  border: solid 2px rgba(82, 182, 154, 0.5);
+  /*overflow-y: scroll;*/
 }
-.right-bottom-bottom{
-  width:100%;
-  height:40%;
-  float:left;
-  /*background-color: #82eed7;*/
-}
-.adminButton1 {
-  height: 20%;
-}
-.adminButton2 {
-  height: 20%;
-}
+
+/*预留快捷入口*/
+/*.right-top-bottom{*/
+/*  width:100%;*/
+/*  height:35%;*/
+/*  float:left;*/
+/*  !*background-color: #63bba8;*!*/
+/*}*/
+/*.right-bottom-middle{*/
+/*  width:100%;*/
+/*  height:25%;*/
+/*  float:left;*/
+/*  !*background-color: #51a08f;*!*/
+/*}*/
+/*.right-bottom-bottom{*/
+/*  width:100%;*/
+/*  height:40%;*/
+/*  float:left;*/
+/*  !*background-color: #82eed7;*!*/
+/*}*/
+/*.adminButton1 {*/
+/*  height: 20%;*/
+/*}*/
+/*.adminButton2 {*/
+/*  height: 20%;*/
+/*}*/
 
 
 </style>
