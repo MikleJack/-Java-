@@ -2,7 +2,7 @@
   <div class="all-container">
     <div class="all-container-padding bg" >
 <!--      修改个人信息表单-->
-      <el-tabs v-model="activeName" @tab-click="handleClick" >
+      <el-tabs v-model="activeName" @tab-click="handleClick" class="tabs" >
 <!--        上方导航栏-->
         <el-tab-pane label="基本信息" name="first" style="margin-left: 30%">
           <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
@@ -126,3 +126,28 @@ export default {
   }
 }
 </script>
+<style scoped></style>
+<style>
+/*按钮颜色改变*/
+.el-button {
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
+}
+
+/*鼠标移到标签上时颜色改变*/
+.el-tabs__item:hover {
+  color: #52b69a;
+  /*background-color: #52b69a ;*/
+}
+/*鼠标选中标签时颜色改变*/
+.el-tabs__item.is-active {
+  color:#52b69a;
+  /*background-color: #52b69a;*/
+}
+/*tabs el-tab-pane切换时的蓝色下划线改为绿色*/
+.el-tabs__active-bar {
+  background-color: #52b69a !important;
+}
+</style>
+
