@@ -6,10 +6,7 @@ import com.example.demo.service.AdminWorkOrderInformService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -29,6 +26,20 @@ public class AdminWorkOrderInformController {
     private AdminWorkOrderInformService adminWorkOrderInformService;
 
     /**
+     * 带条件的分页查询
+     *
+     * @param adminWorkOrderInform
+     *@param  page 初始页面号
+     * @param size 分页大小
+     * @return 查询结果
+     */
+    @PostMapping("criteriaQueryByPage")
+    public ResponseEntity<Page<AdminWorkOrderInform>> criteriaQueryByPage(@RequestBody AdminWorkOrderInform adminWorkOrderInform) {
+        PageRequest pageRequest = PageRequest.of(0,8);
+        return ResponseEntity.ok(this.adminWorkOrderInformService.criteriaQueryByPage(adminWorkOrderInform, pageRequest));
+    }
+
+    /**
      * 分页查询
      *
      *@param  page 初始页面号
@@ -40,6 +51,7 @@ public class AdminWorkOrderInformController {
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.adminWorkOrderInformService.queryByPage(pageRequest));
     }
+
 
     /**
      * 新增数据

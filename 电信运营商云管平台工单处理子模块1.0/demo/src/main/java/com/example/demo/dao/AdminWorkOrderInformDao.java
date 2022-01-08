@@ -3,7 +3,9 @@ package com.example.demo.dao;
 import com.example.demo.entity.AdminWorkOrderInform;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 /**
@@ -25,11 +27,29 @@ public interface AdminWorkOrderInformDao {
     List<AdminWorkOrderInform> queryAllByLimit(@Param("pageable") Pageable pageable);
 
     /**
+     * 带条件的分页查询
+     *
+     * @param adminWorkOrderInform
+     *@param  pageRequest      分页对象
+     * @return 查询结果
+     */
+    List<AdminWorkOrderInform> criteriaQueryByPage(@Param("adminWorkOrderInform") AdminWorkOrderInform adminWorkOrderInform,
+                                                   @Param("pageRequest") PageRequest pageRequest);
+
+    /**
      * 统计总行数
      *
      * @return 总行数
      */
     long count();
+
+    /**
+     * 带条件的分页查询，统计总行数
+     *
+     * @param adminWorkOrderInform 查询条件
+     * @return 总行数
+     */
+    long criteriaCount(@Param("adminWorkOrderInform") AdminWorkOrderInform adminWorkOrderInform);
 
     /**
      * 新增数据
