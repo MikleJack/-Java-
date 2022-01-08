@@ -116,18 +116,6 @@ export default {
       tableDetailTop: [],
       tableDetailResource: [],
       tableDetailProcess: [],
-      dialogTableVisible: true,
-      dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       formLabelWidth: '120px'
     }
   },
@@ -147,11 +135,7 @@ export default {
         this.tableDetailProcess = res.data;
       })
     }
-
-
   },
-  mounted() {
-  }
 }
 </script>
 
