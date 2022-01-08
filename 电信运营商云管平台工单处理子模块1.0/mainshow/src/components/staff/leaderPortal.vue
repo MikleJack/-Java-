@@ -1,12 +1,13 @@
 <template>
   <div class="employeePortal">
-    <!--    利用率饼图-->
+    <!--饼图：下属利用率饼图-->
     <div class="left-top1">
-      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="12" width="120" :color="customColor"></el-progress>
+      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="15" width="120"
+                   style="margin-left: 30%" :color="customColor"></el-progress>
     </div>
-    <!--        表格-->
+    <!--表格：物理机饼图表格-->
     <div class="left-top2">
-      <el-table class="phyTable" :data="Phy_Data">
+      <el-table class="phyTable" :data="Phy_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_phy_machine"
@@ -21,11 +22,15 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--饼图：虚拟机饼状图表格-->
     <div class="right-top1">
-      <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
+      <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="15" :width="120"
+                   :color="customColor" style="margin-left: 30%"></el-progress>
     </div>
+    <!--表格：虚拟机饼状图表格-->
     <div class="right-top2">
-      <el-table class="virTable" :data="Vir_Data">
+      <el-table class="virTable" :data="Vir_Data"
+                :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_vir_machine"
@@ -40,16 +45,20 @@
         </el-table-column>
       </el-table>
     </div>
+    <!--文字：系统物理机资源利用详情-->
     <div class="left-middle">
-      <p align="center" style="margin-top: 5px">物理机资源利用详情</p>
+      <p align="center" style="margin-top: 5px">系统物理机资源利用详情</p>
     </div>
+    <!--文字：系统虚拟机资源利用详情-->
     <div class="right-middle">
-      <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
+      <p align="center" style="margin-top: 5px">系统虚拟机资源利用详情</p>
     </div>
+    <!--左下方预留位，准备装饰-->
     <div class="left-bottom0"></div>
     <!--    下属申请的每台物理机详情信息-->
     <div class="left-bottom">
-      <el-table :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small" >
+      <el-table class="phyTableData" :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Host_num"
           label="主机号"
@@ -84,7 +93,8 @@
     <div class="right-middle-bottom"></div>
     <!--    下属申请的每台虚拟机详情信息-->
     <div class="left-middle-bottom">
-      <el-table :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small">
+      <el-table class="virTableData" :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
+                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
         <el-table-column
           prop="Vir_num"
           label="虚拟机号"
@@ -341,7 +351,8 @@ export default {
   margin-top: 15px;
   width: 1000%;
   height: 77%;
-  /*background-color: #76fbb6;*/
+  border-color: #68e1ad;
+  /*background-color: #68e1ad;*/
 }
 .virTable{
   margin-top: 15px;
@@ -409,6 +420,15 @@ export default {
   float:left;
   /*background-color: #82eed7;*/
 }
-
+.phyTableData{
+  border-radius: 15px;
+  border: solid 2px rgba(82, 182, 154, 0.5);
+}
+.virTableData{
+  border-radius: 15px;
+  /*height: 20px;*/
+  border: solid 2px rgba(82, 182, 154, 0.5);
+  /*overflow-y: scroll;*/
+}
 
 </style>
