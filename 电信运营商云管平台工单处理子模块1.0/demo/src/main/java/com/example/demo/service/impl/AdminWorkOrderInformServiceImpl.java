@@ -38,6 +38,19 @@ public class AdminWorkOrderInformServiceImpl implements AdminWorkOrderInformServ
     }
 
     /**
+     * 带条件的分页查询
+     *
+     * @param adminWorkOrderInform
+     *@param  pageRequest      分页对象
+     * @return 查询结果
+     */
+    @Override
+    public Page<AdminWorkOrderInform> criteriaQueryByPage(AdminWorkOrderInform adminWorkOrderInform, PageRequest pageRequest){
+        long total = this.adminWorkOrderInformDao.criteriaCount(adminWorkOrderInform);
+        return new PageImpl<>(this.adminWorkOrderInformDao.criteriaQueryByPage(adminWorkOrderInform,pageRequest), pageRequest, total);
+    }
+
+    /**
      * 新增数据
      *
      * @param adminWorkOrderInform 实例对象

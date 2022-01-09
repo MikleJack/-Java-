@@ -20,18 +20,126 @@
         <result property="inService" column="in_service" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="AdminWorkOrderInformMap">
+    <!--查询指定行数据，带有条件分页-->
+    <select id="criteriaQueryByPage" resultMap="AdminWorkOrderInformMap" parameterType="com.example.demo.entity.AdminWorkOrderInform">
         select
           rollback_old_order, changed_old_order, work_order_num, work_order_name, work_order_type, apply_time, worker_num, file, work_order_state, reason, name, dep_num, phone, state, in_service
         from admin_work_order_inform
-        limit #{pageable.offset}, #{pageable.pageSize}
+        <where>
+            <if test="adminWorkOrderInform.rollbackOldOrder != null and adminWorkOrderInform.rollbackOldOrder != ''">
+                and rollback_old_order = #{adminWorkOrderInform.rollbackOldOrder}
+            </if>
+            <if test="adminWorkOrderInform.changedOldOrder != null and adminWorkOrderInform.changedOldOrder != ''">
+                and changed_old_order = #{adminWorkOrderInform.changedOldOrder}
+            </if>
+            <if test="adminWorkOrderInform.workOrderNum != null and adminWorkOrderInform.workOrderNum != ''">
+                and work_order_num = #{adminWorkOrderInform.workOrderNum}
+            </if>
+            <if test="adminWorkOrderInform.workOrderName != null and adminWorkOrderInform.workOrderName != ''">
+                and work_order_name = #{adminWorkOrderInform.workOrderName}
+            </if>
+            <if test="adminWorkOrderInform.workOrderType != null and adminWorkOrderInform.workOrderType != ''">
+                and work_order_type = #{adminWorkOrderInform.workOrderType}
+            </if>
+            <if test="adminWorkOrderInform.applyTime != null">
+                and apply_time = #{adminWorkOrderInform.applyTime}
+            </if>
+            <if test="adminWorkOrderInform.workerNum != null">
+                and worker_num = #{adminWorkOrderInform.workerNum}
+            </if>
+            <if test="adminWorkOrderInform.file != null and adminWorkOrderInform.file != ''">
+                and file = #{adminWorkOrderInform.file}
+            </if>
+            <if test="adminWorkOrderInform.workOrderState != null and adminWorkOrderInform.workOrderState != ''">
+                and work_order_state = #{adminWorkOrderInform.workOrderState}
+            </if>
+            <if test="adminWorkOrderInform.reason != null and adminWorkOrderInform.reason != ''">
+                and reason = #{adminWorkOrderInform.reason}
+            </if>
+            <if test="adminWorkOrderInform.name != null and adminWorkOrderInform.name != ''">
+                and name = #{adminWorkOrderInform.name}
+            </if>
+            <if test="adminWorkOrderInform.depNum != null and adminWorkOrderInform.depNum != ''">
+                and dep_num = #{adminWorkOrderInform.depNum}
+            </if>
+            <if test="adminWorkOrderInform.phone != null and adminWorkOrderInform.phone != ''">
+                and phone = #{adminWorkOrderInform.phone}
+            </if>
+            <if test="adminWorkOrderInform.state != null">
+                and state = #{adminWorkOrderInform.state}
+            </if>
+            <if test="adminWorkOrderInform.inService != null">
+                and in_service = #{adminWorkOrderInform.inService}
+            </if>
+        </where>
+        limit #{pageRequest.offset}, #{pageRequest.pageSize}
     </select>
 
-    <!--统计总行数-->
+    <!--查询指定行数据，无条件分页-->
+    <select id="queryAllByLimit" resultMap="AdminWorkOrderInformMap">
+        select
+            rollback_old_order, changed_old_order, work_order_num, work_order_name, work_order_type, apply_time, worker_num, file, work_order_state, reason, name, dep_num, phone, state, in_service
+        from admin_work_order_inform
+                 limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数，无条件分页-->
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from admin_work_order_inform
+    </select>
+
+    <!--统计总行数，有条件分页-->
+    <select id="criteriaCount" resultType="java.lang.Long">
+        select count(1)
+        from admin_work_order_inform
+        <where>
+            <if test="adminWorkOrderInform.rollbackOldOrder != null and adminWorkOrderInform.rollbackOldOrder != ''">
+                and rollback_old_order = #{adminWorkOrderInform.rollbackOldOrder}
+            </if>
+            <if test="adminWorkOrderInform.changedOldOrder != null and adminWorkOrderInform.changedOldOrder != ''">
+                and changed_old_order = #{adminWorkOrderInform.changedOldOrder}
+            </if>
+            <if test="adminWorkOrderInform.workOrderNum != null and adminWorkOrderInform.workOrderNum != ''">
+                and work_order_num = #{adminWorkOrderInform.workOrderNum}
+            </if>
+            <if test="adminWorkOrderInform.workOrderName != null and adminWorkOrderInform.workOrderName != ''">
+                and work_order_name = #{adminWorkOrderInform.workOrderName}
+            </if>
+            <if test="adminWorkOrderInform.workOrderType != null and adminWorkOrderInform.workOrderType != ''">
+                and work_order_type = #{adminWorkOrderInform.workOrderType}
+            </if>
+            <if test="adminWorkOrderInform.applyTime != null">
+                and apply_time = #{adminWorkOrderInform.applyTime}
+            </if>
+            <if test="adminWorkOrderInform.workerNum != null">
+                and worker_num = #{adminWorkOrderInform.workerNum}
+            </if>
+            <if test="adminWorkOrderInform.file != null and adminWorkOrderInform.file != ''">
+                and file = #{adminWorkOrderInform.file}
+            </if>
+            <if test="adminWorkOrderInform.workOrderState != null and adminWorkOrderInform.workOrderState != ''">
+                and work_order_state = #{adminWorkOrderInform.workOrderState}
+            </if>
+            <if test="adminWorkOrderInform.reason != null and adminWorkOrderInform.reason != ''">
+                and reason = #{adminWorkOrderInform.reason}
+            </if>
+            <if test="adminWorkOrderInform.name != null and adminWorkOrderInform.name != ''">
+                and name = #{adminWorkOrderInform.name}
+            </if>
+            <if test="adminWorkOrderInform.depNum != null and adminWorkOrderInform.depNum != ''">
+                and dep_num = #{adminWorkOrderInform.depNum}
+            </if>
+            <if test="adminWorkOrderInform.phone != null and adminWorkOrderInform.phone != ''">
+                and phone = #{adminWorkOrderInform.phone}
+            </if>
+            <if test="adminWorkOrderInform.state != null">
+                and state = #{adminWorkOrderInform.state}
+            </if>
+            <if test="adminWorkOrderInform.inService != null">
+                and in_service = #{adminWorkOrderInform.inService}
+            </if>
+        </where>
     </select>
 
     <!--新增所有列-->

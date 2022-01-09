@@ -23,6 +23,15 @@ public interface AdminWorkOrderInformService {
     Page<AdminWorkOrderInform> queryByPage(PageRequest pageRequest);
 
     /**
+     * 带条件的分页查询
+     *
+     * @param adminWorkOrderInform
+     *@param  pageRequest      分页对象
+     * @return 查询结果
+     */
+    Page<AdminWorkOrderInform> criteriaQueryByPage(AdminWorkOrderInform adminWorkOrderInform, PageRequest pageRequest);
+
+    /**
      * 新增数据
      *
      * @param adminWorkOrderInform 实例对象
