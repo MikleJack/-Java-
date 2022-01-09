@@ -25,22 +25,31 @@
           border
          >
           <el-table-column
-            prop="work_order_num"
-            label="工单号"
-            width="180">
+            fixed
+            prop="workOrderNum"
+            label="工单编号"
+            width="auto">
           </el-table-column>
           <el-table-column
-            prop="work_order_name"
-            label="工单名"
-            width="180">
+            prop="workOrderName"
+            label="工单标题"
+            width="auto">
           </el-table-column>
           <el-table-column
-            prop="work_num"
-            label="审批人号">
+            prop="applyTime"
+            label="资源到期时间"
+            sortable
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="workerNum"
+            label="申请人工号"
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="审批人姓名">
+            label="申请人姓名"
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="deal_date"
@@ -61,9 +70,11 @@
     <div class="page-tail">
       <!--放置分页部分-->
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        layout=" prev, pager, next, jumper"
+        :total="totalSize">
       </el-pagination>
     </div>
   </div>
@@ -73,32 +84,29 @@
 <script>
     export default {
         name: "examine",
+      mounted() {
+        this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+0+"&size="
+          +this.pageSize+"&orderState=待审批").then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      },
       data() {
         return {
-
+          //分页相关
+          currentPage:1,
+          pageSize:9,
+          totalSize:0,
+          //给后端一个工单号
           formInline:
             {
             work_order_num: '',
           },
-          //给后端一个工单号
 
 
-          tableData: [{
-            work_order_num: '000000000000000001',
-            work_order_name: '工单一',
-            work_num: '00000001',
-            name:'张大炮',
-            deal_date:'2022-01-04 00:00:00',
-            deal_comment:'无'
-          }, {
-            work_order_num: '000000000000000002',
-            work_order_name: '工单二',
-            work_num: '00000001',
-            name:'张大炮',
-            deal_date:'2022-01-05 00:00:00',
-            deal_comment:'无'
-          }]
         //  表格数据，需要后端传递工单号、工单名、审批人号、审批人名、处理时间、处理批注这些信息
+          tableData: []
+
         }
       },
       methods: {
@@ -106,7 +114,15 @@
           console.log('submit!');
         },
         //进行查询，后端给前端工单号对应的工单审批日志,包括工单号、工单名、审批人号、审批人名、处理时间、处理批注这些信息
-
+        handleCurrentChange(val){
+          this.currentPage=parseInt(val);
+          let page = this.currentPage-1;
+          this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+page+"&size="
+            +this.pageSize+"&orderState=待审批").then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
+        }
 
       }
 

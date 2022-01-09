@@ -29,9 +29,9 @@ public class LeaderOrderDetailServiceImpl implements LeaderOrderDetailService {
      * @return 查询结果
      */
     @Override
-    public Page<LeaderOrderDetail> queryByPage(String leader_num, PageRequest pageRequest) {
+    public Page<LeaderOrderDetail> queryByPage(String leader_num, PageRequest pageRequest,String orderState) {
         long total = this.leaderOrderDetailDao.count(leader_num);
-        return new PageImpl<>(this.leaderOrderDetailDao.queryAllByLimit(leader_num,pageRequest), pageRequest, total);
+        return new PageImpl<>(this.leaderOrderDetailDao.queryAllByLimit(leader_num,pageRequest,orderState), pageRequest, total);
     }
 
 

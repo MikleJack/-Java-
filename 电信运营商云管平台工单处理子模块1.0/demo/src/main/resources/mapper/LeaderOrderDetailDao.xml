@@ -20,7 +20,7 @@
         select
           work_order_num, work_order_type, work_order_name, apply_time, worker_num, name, work_order_state, leder_num
         from leader_order_detail
-            where leder_num = #{leader_num}
+            where leder_num = #{leader_num} and work_order_state = #{orderState}
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 

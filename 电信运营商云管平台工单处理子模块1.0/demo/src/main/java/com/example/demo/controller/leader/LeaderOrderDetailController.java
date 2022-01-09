@@ -30,9 +30,9 @@ public class LeaderOrderDetailController {
      * @return 查询结果
      */
     @GetMapping("selectByLeader")
-    public ResponseEntity<Page<LeaderOrderDetail>> queryByPage(String leader_num, int page, int size) {
+    public ResponseEntity<Page<LeaderOrderDetail>> queryByPage(String leader_num, int page, int size,String orderState) {
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.leaderOrderDetailService.queryByPage( leader_num,pageRequest));
+        return ResponseEntity.ok(this.leaderOrderDetailService.queryByPage( leader_num,pageRequest,orderState));
     }
 
 

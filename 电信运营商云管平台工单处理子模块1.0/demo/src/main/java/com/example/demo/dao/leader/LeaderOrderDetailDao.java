@@ -23,7 +23,7 @@ public interface LeaderOrderDetailDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<LeaderOrderDetail> queryAllByLimit( String leader_num,@Param("pageable") Pageable pageable);
+    List<LeaderOrderDetail> queryAllByLimit( String leader_num,@Param("pageable") Pageable pageable,String orderState);
 
     /**
      * 统计总行数

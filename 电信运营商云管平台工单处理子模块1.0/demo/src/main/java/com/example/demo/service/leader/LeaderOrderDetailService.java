@@ -19,6 +19,6 @@ public interface LeaderOrderDetailService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<LeaderOrderDetail> queryByPage(String leader_num,PageRequest pageRequest);
+    Page<LeaderOrderDetail> queryByPage(String leader_num,PageRequest pageRequest,String orderState);
 
 }

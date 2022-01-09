@@ -1,5 +1,8 @@
 package com.example.demo.entity.leader;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -17,8 +20,8 @@ public class LeaderOrderDetail implements Serializable {
     private String workOrderType;
     
     private String workOrderName;
-    
-    private Date applyTime;
+
+    private String applyTime;
     
     private Integer workerNum;
     
@@ -53,12 +56,14 @@ public class LeaderOrderDetail implements Serializable {
         this.workOrderName = workOrderName;
     }
 
-    public Date getApplyTime() {
+    public String getApplyTime() {
         return applyTime;
     }
 
     public void setApplyTime(Date applyTime) {
-        this.applyTime = applyTime;
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+
+        this.applyTime = ft.format(applyTime);
     }
 
     public Integer getWorkerNum() {

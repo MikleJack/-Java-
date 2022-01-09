@@ -55,7 +55,6 @@ public class OperationLogController {
      */
     @PostMapping("add")
     public ResponseEntity<OperationLog> add(OperationLog operationLog) {
-        System.out.println(operationLog.getOperate_time());
         return ResponseEntity.ok(this.operationLogService.insert(operationLog));
     }
     /**
