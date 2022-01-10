@@ -1,11 +1,14 @@
 <template>
   <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <!--    工单详情对话框-->
+    <WorkOrderDetail ref="WorkOrderDetail"></WorkOrderDetail>
+
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
         <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
           <el-option
-            v-for="item in orderType"
+            v-for="item in searchForm.searchOrderType"
             :key="item"
             :label="item"
             :value="item">
@@ -16,8 +19,7 @@
         <!--          通过项目名称搜索项目-->
         <el-input
           placeholder="输入工单标题搜索"
-          v-model="search"
-          clearable>
+          v-model="searchForm.searchOrderTitle">
         </el-input>
       </el-form-item>
       <el-form-item>
@@ -25,44 +27,44 @@
       </el-form-item>
     </el-form>
 
+
+<!--    data => !searchForm.searchOrderTitle || data.workOrderName.includes(searchForm.searchOrderTitle) 勿删，原版备份-->
+<!--    .filter(data => data.workOrderName.includes(searchForm.searchOrderTitle))-->
     <!--    管理员表单查询-->
-
-
     <el-table
       border
       style="width: 100%"
-      :data="tableData.filter(data => !search ||
-      data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="tableData"
       element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
-        prop="workerNum"
+        prop="workOrderNum"
         label="工号"
-        width="150">
+        width="auto">
       </el-table-column>
       <el-table-column
         prop="workOrderType"
         label="工单类型"
-        width="150">
+        width="auto">
       </el-table-column>
       <el-table-column
-        width="180"
+        width="auto"
         prop="workOrderName"
         label="工单标题">
       </el-table-column>
       <el-table-column
-        prop="applicant"
+        prop="name"
         label="申请人"
-        width="150">
+        width="auto">
       </el-table-column>
       <el-table-column
         prop="applyTime"
         label="时间"
-        width="250">
+        width="auto">
       </el-table-column>
       <el-table-column
         prop="workOrderState"
         label="工单状态"
-        width="180">
+        width="auto">
       </el-table-column>
 
 
@@ -71,145 +73,11 @@
         label="操作"
         width="250">
         <templte slot-scope="scope">
-          <el-button @click="handleClick_detail(scope.row)" type="text" size="small">详情</el-button>
+          <el-button @click="handleClick_detail(scope.row.workOrderNum)" type="text" size="small">详情</el-button>
         </templte>
 
       </el-table-column>
     </el-table>
-
-<!--    点击详情后的dialog界面-->
-    <el-dialog
-      title="工单详情"
-      :visible.sync="dialogVisible_detail"
-      width="80%"
-      :before-close="handleClose"
-      center>
-
-      <div class="page">
-        <!-- -->
-<!--        <div class="page_top">工单详情</div>-->
-        <div class="page_body">
-          <!--      审批工单时显示申请人信息的无框表格-->
-          <el-descriptions class="margin-top" title="申请人信息" :column="3" :size="size" border></el-descriptions>
-          <el-descriptions class="margin-top":column="3" :size="size">
-            <el-descriptions-item label="申请人姓名">{{name}}</el-descriptions-item>
-            <el-descriptions-item label="工号">{{workNum}}</el-descriptions-item>
-            <el-descriptions-item label="所在部门编号">{{depNum}}</el-descriptions-item>
-            <el-descriptions-item label="所在部门名称">{{depName}}</el-descriptions-item>
-            <el-descriptions-item label="电话号码">{{phone}}</el-descriptions-item>
-          </el-descriptions>
-
-          <!--      显示工单基础信息-->
-          <el-descriptions class="margin-top" title="工单信息信息" :column="3" :size="size" border></el-descriptions>
-          <el-descriptions class="margin-top" :column="3" :size="size">
-            <el-descriptions-item label="工单编号">{{workOrderNum}}</el-descriptions-item>
-            <el-descriptions-item label="工单标题">{{workOrderName}}</el-descriptions-item>
-            <el-descriptions-item label="工单类型">{{workType}}</el-descriptions-item>
-            <el-descriptions-item label="工单申请时间">{{applyTime}}</el-descriptions-item>
-          </el-descriptions>
-          <el-descriptions class="margin-top" :title="reason" :column="3" :size="size" border></el-descriptions>
-          <div class="reason_contect">{{reasonContect}}</div>
-
-          <el-descriptions class="margin-top" title="资源" :column="3" :size="size" border></el-descriptions>
-          <el-table
-            :data="allocatedCom"
-            border
-            style="width: 100%">
-            <el-table-column
-              type="index"
-              width="50">
-            </el-table-column>
-
-            <el-table-column
-              prop="comType"
-              label="计算机类型"
-              width="auto">
-            </el-table-column>
-            <el-table-column
-              prop="cpuCore"
-              label="CPU核数"
-              width="auto">
-            </el-table-column>
-            <el-table-column
-              prop="ram"
-              label="内存">
-            </el-table-column>
-            <el-table-column
-              prop="strange"
-              label="存储大小">
-            </el-table-column>
-            <el-table-column
-              prop="ip"
-              label="ip地址">
-            </el-table-column>
-            <el-table-column
-              prop="os"
-              label="操作系统">
-            </el-table-column>
-          </el-table>
-
-          <!--      <el-descriptions class="margin-top" title="虚拟机资源" :column="3" :size="size" border></el-descriptions>-->
-
-          <!--显示流转过程-->
-          <el-descriptions class="margin-top" title="流转过程" :column="3" :size="size" border></el-descriptions>
-
-          <div class="resoure_usage">
-            <el-table
-              :data="informData"
-              border
-              style="width: 100%">
-              <el-table-column
-                prop="dealNum"
-                label="处理人工号"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealName"
-                label="处理人姓名"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="operationType"
-                label="操作类型"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealDate"
-                label="处理日期"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealComment"
-                label="批注"
-                width="auto">
-              </el-table-column>
-            </el-table>
-          </div>
-          <el-descriptions class="margin-top" title="批注" :column="3" :size="size" border></el-descriptions>
-          <div class="resoure_usage">
-            <el-input
-              type="textarea"
-              :rows="3"
-              :disabled="true"
-              placeholder="请输入内容"
-              v-model="textarea">
-            </el-input>
-            <span slot="footer" class="dialog-footer">
-              <div>
-                <el-button @click="dialogVisible_detail = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_detail = false">确 定</el-button>
-              </div>
-          </span>
-          </div>
-<!--          <div >-->
-
-<!--          </div>-->
-        </div>
-
-      </div>
-
-
-    </el-dialog>
 
 <!--    分页-->
     <div class="paging">
@@ -225,90 +93,83 @@
 </template>
 
 <script>
+import WorkOrderDetail from "./dialogs/WorkOrderDetail";
 export default {
   name: "ticketSearch",
+  components:{WorkOrderDetail},
   data() {
     return {
+      dialogVisibleDetail: false,
       dialogVisible_detail: false,
       ticketData: [],
+
+      adminWorkOrderInform:{
+        rollbackOldOrder: '',
+        changedOldOrder: '',
+        workOrderNum: '',
+        workOrderName: "",
+        workOrderType: "",
+        applyTime: "",
+        workerNum: null,
+        file: null,
+        workOrderState: "",
+        reason: "",
+        name: "",
+        depNum: "",
+        phone: "",
+        state: null,
+        inService: null
+      },
+
       currentPage:1,
       totalpage:0,
       pageSize:8,
-      search:'',
+
+      //搜索栏数据
+      searchForm:{
+        searchOrderTitle: '',
+        searchOrderType: ['申请工单','回退工单']
+      },
       workOrderTypeSelector:'',
+
+
       //当前页面
       thisPage:0,
       //存放所有工单
       tableData: [],
       //工单类型
-      orderType:[],
-      //字体大小
-      size: '',
-      //workNum工号
-      workNum:'00000001',
-      //name人员姓名
-      name:'张大炮',
-      //所在部门编号
-      depNum:'0003',
-      //所在部门名称
-      depName:'小组1',
-      //电话号码
-      phone:'13000000000',
-      //工单编号
-      workOrderNum:'000000000000000001',
-      //工单标题
-      workOrderName:'资源申请工单',
-      //工单类型
-      workType:'申请工单',
-      //申请时间
-      applyTime:'2023-5-3 00:00:00',
-      //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
-      reason:'申请理由',
-      reasonContect:'申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由',
-      //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum:'00000002',
-        //处理人姓名
-        dealName:'陈大炮',
-        //操作类型
-        operationType:'审批通过',
-        //操作日期
-        dealDate:'2021-12-28 15:30:00',
-        //批注
-        dealComment:'申请合理，建议通过',
-      }],
-      allocatedCom:[{
-        //  计算机类型
-        comType:'物理机',
-        //cpu核数
-        cpuCore:'8',
-        //  内存
-        ram:'16',
-        //  存储
-        strange:'256',
-        //  ip
-        ip:'194.15.1.1',
-        //  操作系统
-        os:'Window'
-      }],
-      //  输入的批注内容
-      textarea: ''
+      orderType:['申请工单'],
     }
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/workOrder/queryByPage?page='+this.currentPage+"&size="+this.pageSize).then((res)=>{
+    this.$axios.get('http://localhost:8084/adminWorkOrderInform/queryByPage?page='+(this.currentPage-1)+"&size="+this.pageSize).then((res)=>{
       this.tableData = res.data.content;
       this.totalpage = res.data.numberOfElements;
       this.filtrateOrder();
     })
+    //条件查询工单信息
+
+
   },
   methods: {
     //操作的详情dialog函数
-    handleClick_detail() {
-      this.dialogVisible_detail = true;
+    handleClick_detail( workOrderNum ) {
+      this.$store.state.workOrderDetailVisibleDetail = true;
+      this.$refs.WorkOrderDetail.autoGetAllDetail(workOrderNum);
     },
+
+    //条件并分页查询
+    handleClick_search(){
+      this.$axios.get('http://localhost:8084/adminWorkOrderInform/queryByPage?adminWorkOrderInform=' + adminWorkOrderInform +
+        ' page='+(this.currentPage-1)+"&size="+this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
+        this.totalpage = res.data.numberOfElements;
+        this.filtrateOrder();
+      })
+    },
+
+
     //dialog弹窗关闭提示函数
     handleClose(done) {
       // this.$confirm('确认关闭？')

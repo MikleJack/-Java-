@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.FlowProcessDao">
+
+    <resultMap type="com.example.demo.entity.FlowProcess" id="FlowProcessMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="dealNum" column="deal_num" jdbcType="INTEGER"/>
+        <result property="operationType" column="operation_type" jdbcType="VARCHAR"/>
+        <result property="dealDate" column="deal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealComment" column="deal_comment" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FlowProcessMap">
+        select work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from brccq.flow_process
+        where work_order_num = #{workOrderNum}
+    </select>
+
+
+<!--    通过工号查询相关工单-->
+    <select id="selectOrderNumByWorkNum" resultMap="FlowProcessMap">
+        select work_order_num
+        from flow_process
+        where deal_num = #{WorkNum} limit #{page},#{size}
+    </select>
+
+<!--通过工号查询相关记录-->
+    <select id="selectByWorkNum" resultMap="FlowProcessMap">
+        select work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from flow_process
+        where deal_num = #{WorkNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="FlowProcessMap">
+        select work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from brccq.flow_process limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FlowProcessMap">
+        select
+        work_order_num, deal_num, operation_type, deal_date, deal_comment
+        from brccq.flow_process
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="dealNum != null">
+                and deal_num = #{dealNum}
+            </if>
+            <if test="operationType != null and operationType != ''">
+                and operation_type = #{operationType}
+            </if>
+            <if test="dealDate != null">
+                and deal_date = #{dealDate}
+            </if>
+            <if test="dealComment != null and dealComment != ''">
+                and deal_comment = #{dealComment}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq.flow_process(operation_type, deal_date, deal_comment)
+        values (#{operationType}, #{dealDate}, #{dealComment})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq.flow_process(operation_type, deal_date, deal_comment)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.operationType}, #{entity.dealDate}, #{entity.dealComment})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq.flow_process(operation_type, deal_date, deal_comment)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.operationType}, #{entity.dealDate}, #{entity.dealComment})
+        </foreach>
+        on duplicate key update
+        operation_type = values(operation_type) , deal_date = values(deal_date) , deal_comment = values(deal_comment)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update brccq.flow_process
+        <set>
+            <if test="operationType != null and operationType != ''">
+                operation_type = #{operationType},
+            </if>
+            <if test="dealDate != null">
+                deal_date = #{dealDate},
+            </if>
+            <if test="dealComment != null and dealComment != ''">
+                deal_comment = #{dealComment},
+            </if>
+        </set>
+        where work_order_num = #{workOrderNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from brccq.flow_process
+        where work_order_num = #{workOrderNum}
+    </delete>
+
+    <!--查询单个-->
+    <select id="queryByWorkOrderNum" resultMap="FlowProcessMap">
+        select work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from brccq.flow_process
+        where work_order_num = #{workOrderNum}
+    </select>
+
+</mapper>
+

@@ -10,7 +10,7 @@
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_phy_machine"
-          label="全部物理机资源"
+          label="系统物理机资源"
           width="130">
         </el-table-column>
         <!--            总利用率-->
@@ -22,14 +22,14 @@
       </el-table>
     </div>
     <div class="right-top1">
-            <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
+      <el-progress type="circle" :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"></el-progress>
     </div>
     <div class="right-top2">
       <el-table class="virTable" :data="Vir_Data">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_vir_machine"
-          label="全部虚拟机资源"
+          label="系统虚拟机资源"
           width="130">
         </el-table-column>
         <!--            总利用率-->
@@ -47,13 +47,25 @@
       <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
     </div>
     <div class="left-bottom0"></div>
-<!--    用户申请的每台物理机详情信息-->
+    <!--    每位员工申请的每台物理机详情信息-->
     <div class="left-bottom">
       <el-table :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small" >
         <el-table-column
           prop="Host_num"
           label="主机号"
-          width="100"
+          width="80"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="worker_num"
+          label="员工工号"
+          width="80"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="worker_name"
+          label="员工姓名"
+          width="80"
           align="center">
         </el-table-column>
         <el-table-column
@@ -69,14 +81,34 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="right-middle-bottom"></div>
-<!--    用户申请的每台虚拟机详情信息-->
+<!--    管理员系统自定义审核以及系统资源量调整按钮-->
+    <div class="right-middle-bottom">
+      <el-row class="adminButton1" type="flex" justify="center" align="middle">
+        <el-button size="small" type="primary" round>系统审核自定义</el-button>
+      </el-row>
+      <el-row class="adminButton2" type="flex" justify="center" align="middle">
+        <el-button size="small" type="primary" round>系统资源量调整</el-button>
+      </el-row>
+    </div>
+    <!--    每位员工申请的每台虚拟机详情信息-->
     <div class="left-middle-bottom">
       <el-table :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small">
         <el-table-column
           prop="Vir_num"
           label="虚拟机号"
-          width="100"
+          width="80"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="worker_num"
+          label="员工工号"
+          width="80"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          prop="worker_name"
+          label="员工姓名"
+          width="80"
           align="center">
         </el-table-column>
         <el-table-column
@@ -92,33 +124,26 @@
         </el-table-column>
       </el-table>
     </div>
-<!--    快捷入口栏-->
+    <!--    快捷入口栏-->
     <div class="right-bottom">
-<!--      快捷入口上方预留空位-->
+      <!--      快捷入口上方预留空位-->
       <div class="right-top-bottom"></div>
-<!--      快捷入口图标-->
-      <div class="right-bottom-middle">
-<!--        <p align="center">快捷</p>-->
-<!--        <p align="center">入口</p>-->
-      </div>
-<!--      快捷入口具体按钮-->
-      <div class="right-bottom-bottom" >
-          <el-row>
-            <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin:0 auto" circle ></el-button>
-            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
-            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle circle></el-button>
-          </el-row>
-      </div>
+      <!--      快捷入口图标-->
+      <div class="right-bottom-middle"></div>
+      <!--      快捷入口具体按钮-->
+      <div class="right-bottom-bottom" ></div>
     </div>
 
   </div>
+
+
 
 </template>
 
 <script>
 export default {
-  name: "employeePortal",
-  // components: {},
+  name: "adminPortal",
+  components: {},
   methods: {
     customColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
@@ -145,7 +170,7 @@ export default {
       total_Virutilization:'35.83',
       // 物理机总利用率
       Phy_Data: [{
-        All_phy_machine: '7台',
+        All_phy_machine: '8台',
         Total_utilization: '76.29%',
       },],
 
@@ -158,71 +183,128 @@ export default {
       // 物理机详情信息
       all_PhyData: [{
         Host_num: '00000001',
+        worker_num: '20220014',
+        worker_name: '王二',
         configuration: '8+128GB',
         utilization: '80.00%'
       }, {
         Host_num: '00000002',
+        worker_num: '20220015',
+        worker_name: '王平',
         configuration: '16+128GB',
         utilization: '76.50%'
       }, {
         Host_num: '00000003',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: '16+512GB',
         utilization: '71.50%'
       },{
         Host_num: '00000004',
+        worker_num: '20220001',
+        worker_name: '张大炮',
         configuration: '32+1TB',
         utilization: '76.50%'
       },{
         Host_num: '00000005',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: '16+512GG',
         utilization: '76.50%'
       }, {
         Host_num: '00000006',
+        worker_num: '20220015',
+        worker_name: '王平',
         configuration: '16+128G',
         utilization: '76.50%'
       }, {
         Host_num: '00000007',
-        configuration: '16+128G',
+        worker_num: '20220015',
+        worker_name: '王平',
+        configuration: '16+128GB',
         utilization: '76.50%'
-      }],
+      },{
+        Host_num: '00000008',
+        worker_num: '20220015',
+        worker_name: '王平',
+        configuration: '16+128GB',
+        utilization: '76.50%'
+      },
+      ],
 
       // 虚拟机详情信息
       all_VirData: [{
         Vir_num: '00000001',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: 'Windows,8+128GB',
         utilization: '80.00%'
       }, {
         Vir_num: '00000002',
+        worker_num: '20220001',
+        worker_name: '张大炮',
         configuration: 'Linux,16+128GB',
         utilization: '35.50%'
       }, {
         Vir_num: '00000003',
+        worker_num: '20220001',
+        worker_name: '张大炮',
         configuration: 'Linux,16+512GB',
         utilization: '21.50%'
       },{
         Vir_num: '00000004',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: 'Windows,32+1TB',
         utilization: '42.50%'
       },{
         Vir_num: '00000005',
+        worker_num: '20220001',
+        worker_name: '张大炮',
         configuration: 'Windows,16+512GB',
         utilization: '11.50%'
       }, {
         Vir_num: '00000006',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: 'Windows,16+128G',
         utilization: '57.50%'
       }, {
         Vir_num: '00000007',
+        worker_num: '20220015',
+        worker_name: '王平',
         configuration: 'Linux,16+128G',
         utilization: '41.57%'
       },{
         Vir_num: '00000008',
+        worker_num: '20220001',
+        worker_name: '张大炮',
         configuration: 'Linux,16+128G',
         utilization: '47.82%'
       },{
         Vir_num: '00000009',
+        worker_num: '20220013',
+        worker_name: '王伟',
         configuration: 'Linux,16+1TB',
         utilization: '38.09%'
+      },{
+        Vir_num: '00000009',
+        worker_num: '20220001',
+        worker_name: '张大炮',
+        configuration: 'Linux,16+1TB',
+        utilization: '35.83%'
+      },{
+        Vir_num: '00000009',
+        worker_num: '20220014',
+        worker_name: '王二',
+        configuration: 'Linux,16+1TB',
+        utilization: '35.83%'
+      },{
+        Vir_num: '00000009',
+        worker_num: '20220015',
+        worker_name: '王平',
+        configuration: 'Linux,16+1TB',
+        utilization: '35.83%'
       },
       ]
     }
@@ -231,6 +313,7 @@ export default {
 </script>
 
 <style scoped>
+
 .employeePortal{
   width: 100%;
   height: 100%;
@@ -333,4 +416,12 @@ export default {
   float:left;
   /*background-color: #82eed7;*/
 }
+.adminButton1 {
+  height: 20%;
+}
+.adminButton2 {
+  height: 20%;
+}
+
+
 </style>

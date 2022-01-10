@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from "axios";
 import VueCookies from 'vue-cookies'
+import store from './store/store.js'
 
 
 Vue.config.productionTip = false
@@ -30,6 +31,7 @@ axios.defaults.transformRequest = [function (data) {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

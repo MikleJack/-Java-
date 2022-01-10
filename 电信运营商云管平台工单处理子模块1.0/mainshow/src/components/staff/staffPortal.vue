@@ -3,7 +3,7 @@
     <!--物理机利用率饼图-->
     <div class="left-top1">
       <el-progress class="phyPie" :percentage="total_Phyutilization" :color="customColor"
-                   style="margin-left: 30%" type="circle" stroke-width="12" width="120"></el-progress>
+                   style="margin-left: 30%" type="circle" stroke-width="15" width="120"></el-progress>
     </div>
     <!--物理机饼状图表格-->
     <div class="left-top2">
@@ -24,12 +24,13 @@
     </div>
     <!--虚拟机利用率饼图-->
     <div class="right-top1">
-            <el-progress type="circle"  :percentage="total_Virutilization" :stroke-width="12" :width="120" :color="customColor"
-                         style="margin-left: 30%"></el-progress>
+            <el-progress type="circle"  :percentage="total_Virutilization" :stroke-width="15" :width="120"
+                         :color="customColor" style="margin-left: 30%"></el-progress>
     </div>
-    <!--虚拟机饼状图表格-->
+    <!--表格：虚拟机饼状图表格-->
     <div class="right-top2">
-      <el-table class="virTable" :data="Vir_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
+      <el-table class="virTable" :data="Vir_Data"
+                :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
         <!--            全部物理机资源-->
         <el-table-column
           prop="All_vir_machine"
@@ -127,7 +128,7 @@
 
 <script>
 export default {
-  name: "employeePortal",
+  name: "staffPortal",
   components: {},
   methods: {
     customColor(total_Phyutilization) {
