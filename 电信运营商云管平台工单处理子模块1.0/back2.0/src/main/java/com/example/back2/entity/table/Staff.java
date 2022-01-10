@@ -1,6 +1,5 @@
 package com.example.back2.entity.table;
 
-import java.util.Boolean;
 import java.io.Serializable;
 
 /**

@@ -145,7 +145,7 @@ export default {
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
-          this.$axios.get("http://localhost:8084/admin/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+          this.$axios.get("http://localhost:8084/login/admin?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data) {
               //   $message消息提示框
               this.$message({

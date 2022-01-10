@@ -1,6 +1,7 @@
 package com.example.back2.dao.table;
 
 import com.example.back2.entity.table.Staff;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2022-01-10 19:34:37
  */
+@Mapper
 public interface StaffDao {
 
     /**
