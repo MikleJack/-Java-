@@ -69,9 +69,11 @@
       </div>
     <div class="page-tail">
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        layout=" prev, pager, next, jumper"
+        :total="totalSize">
       </el-pagination>
     </div>
   </div>
@@ -80,36 +82,38 @@
 <script>
     export default {
         name: "all_work_order",
+      mounted() {
+        this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+0+"&size="
+          +this.pageSize+"&orderState=已审批").then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      },
       data() {
         return {
           formInline: {
             work_order_type: ''
           },
-          tableData: [{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },
-          ]
+          tableData: [],
+          //分页相关
+          currentPage:1,
+          pageSize:9,
+          totalSize:0,
         }
       },
       methods: {
         onSubmit() {
           console.log('submit!');
+        },
+        //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
+        handleCurrentChange(val){
+          this.currentPage=parseInt(val);
+          let page = this.currentPage-1;
+          this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+page+"&size="
+            +this.pageSize+"&orderState=已审批").then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
         }
       }
     }
