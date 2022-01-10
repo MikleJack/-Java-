@@ -1,56 +1,28 @@
 <template>
   <div class="page">
-<!--    <div class="page_title">申请人信息</div>-->
 
-<!--    <div class="page_line"></div>-->
-
-<!--    <div class="page_block">-->
-
-<!--      <el-form :inline="true" :model="tabledata1" class="demo-form-inline" :label-position="labelPosition">-->
-<!--        <el-form-item label="工号">-->
-<!--          <el-input v-model="tabledata1.num" placeholder="工号"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="姓名">-->
-<!--          <el-input v-model="tabledata1.name" placeholder="姓名"></el-input>-->
-<!--        </el-form-item>-->
-<!--&lt;!&ndash;      </el-form>&ndash;&gt;-->
-
-<!--&lt;!&ndash;      <el-form :inline="true" :model="tabledata1" class="demo-form-inline">&ndash;&gt;-->
-<!--        <el-form-item label="申请时间">-->
-<!--          <el-input v-model="tabledata1.time" placeholder="申请时间" disabled></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="联系方式">-->
-<!--          <el-input v-model="tabledata1.phone" placeholder="联系方式"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="所在部门">-->
-<!--          <el-input v-model="tabledata1.depart"></el-input>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-<!--    </div>-->
     <div style="border: rgba(82,182,154,0.25) solid 3px">
     <div class="page_title">工单信息</div>
     <div class="page_line"></div>
     <div class="page_block">
 
       <!-- 工单信息填写表单 -->
-      <el-form :inline="true" :model="tabledata1" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
-        <el-form-item label="工单编号">
-          <el-input v-model="tabledata1.order_num" placeholder="工单编号"></el-input>
-        </el-form-item>
+      <el-form :inline="true" :model="tabledata_message" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
+
         <el-form-item label="工单标题">
-          <el-input v-model="tabledata1.order_name" placeholder="工单标题"></el-input>
+          <el-input v-model="tabledata_message.order_name" placeholder="工单标题"></el-input>
         </el-form-item>
         <span class="demonstration">资源到期时间</span>
         <el-date-picker
-          v-model="value1"
+          v-model="tabledata_message.apply_time"
           type="date"
           placeholder="选择日期">
         </el-date-picker>
 
       </el-form>
-      <el-form :model="tabledata1">
+      <el-form :model="tabledata_message">
         <el-form-item label="申请理由">
-          <el-input type="textarea" v-model="tabledata1.reason" style="width:100%;float:left"></el-input>
+          <el-input type="textarea" v-model="tabledata_message.reason" style="width:100%;float:left"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -65,42 +37,44 @@
 <!--      <div class="page_title_min">-->
 <!--        物理机资源-->
 <!--      </div>-->
-      <el-button class="el-icon-plus" type="success" @click="dialogTableVisible = true" style=" float: left;">  新增</el-button>
+      <el-button class="el-icon-plus" type="success" @click="dialogTableVisible_physics = true" style=" float: left;">  新增</el-button>
 
 <!--      弹窗-->
-      <el-dialog title="现有物理机资源" :visible.sync="dialogTableVisible">
+      <el-dialog title="现有物理机资源" :visible.sync="dialogTableVisible_physics" width="45%">
         <el-table
           :header-cell-style="tableHeaderColor"
 
-          ref="multipleTable"
-          :data="gridData"
-          :row-class-name="tableRowClassName"
-          @selection-change="handleSelectionChange"
-          @select = "onRowClick">
+          ref="multipleTable_physics"
+          :data="gridData_physics"
+          :row-class-name="tableRowClassName_physics"
+          @selection-change="handleSelectionChange_physics"
+          @select = "onRowClick_physics">
           <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>
           <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
-          <el-table-column property="memory" label="内存(G)" width="200"></el-table-column>
-          <el-table-column property="storage" label="存储(G)"></el-table-column>
-          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>
+          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="storage" label="硬盘(G)" width="150"></el-table-column>
+          <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+<!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
         </el-table>
         <p></p>
-          <el-button class="add_type" type="primary" @click="getSelected()">添加选中结果</el-button>
+          <el-button class="add_type" type="primary" @click="getSelected(1)">添加选中结果</el-button>
 
       </el-dialog>
 
 
-      <el-table :data="tabledata2" border @row-click="getDetails">
+      <el-table :data="tabledata_physics" border >
         <el-table-column property="cpu" label="CPU(核)" ></el-table-column>
         <el-table-column property="memory" label="内存(G)" ></el-table-column>
-        <el-table-column property="storage" label="存储(G)" ></el-table-column>
-        <el-table-column property="ip" label="IP地址"></el-table-column>
+        <el-table-column property="storage" label="硬盘(G)" ></el-table-column>
+        <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+<!--        <el-table-column property="ip" label="IP地址"></el-table-column>-->
         <el-table-column
           fixed="right"
           label="操作"
           width="120">
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="deleteRow(scope.$index, tabledata2)"
+              @click.native.prevent="deleteRow_physics(scope.$index, tabledata_physics)"
               type="text"
               size="small"
               style="color: #52b69a"
@@ -122,27 +96,89 @@
       <div class="page_title">虚拟机资源</div>
     <!--    <div class="page_title_min">虚拟机资源</div>-->
     <div class="page_line"></div>
+
     <div class="page_block">
-      <el-form :inline="true" :model="tabledata3" class="demo-form-inline" :label-position="labelPosition">
-        <el-form-item label="CPU(核)">
-          <el-input v-model="tabledata3.cpu" placeholder="CPU(核)"></el-input>
-        </el-form-item>
-        <el-form-item label="内存(G)">
-          <el-input v-model="tabledata3.memory" placeholder="内存(G)"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-form :inline="true" :model="tabledata3" class="demo-form-inline">
+      <el-button class="el-icon-plus" type="success" @click="dialogTableVisible_virtual = true" style=" float: left;">  新增</el-button>
+      <el-dialog title="现有虚拟机资源" :visible.sync="dialogTableVisible_virtual" width="70%">
+        <el-table
+          :header-cell-style="tableHeaderColor"
+          ref="multipleTable_virtual"
+          :data="gridData_virtual"
+          highlight-current-row
+          :row-class-name="tableRowClassName_virtual"
+          @row-click = "onRowClick_virtual"
+          >
+<!--          <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>-->
+          <el-table-column label="选择" width="100">
+            <template slot-scope="scope">
+              <el-radio v-model="radio" :label="scope.$index"
+                        @change.native="radioChange(scope.row, scope.$index)"
+                        >
+              </el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column property="spe_family" label="规格族" width="150"></el-table-column>
+          <el-table-column property="cpu" label="VCPu" width="150"></el-table-column>
+          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="200"></el-table-column>
+          <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
+          <el-table-column property="unit_price" label="单价(/月)"></el-table-column>
+
+          <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
+        </el-table>
+        <p></p>
+        <el-button class="add_type" type="primary" @click="getSelected(2)">添加选中结果</el-button>
+
+      </el-dialog>
+
+      <el-table :data="tabledata_virtual" border >
+        <el-table-column property="spe_family" label="规格族" width="130"></el-table-column>
+        <el-table-column property="cpu" label="VCPu" width="100"></el-table-column>
+        <el-table-column property="memory" label="内存(G)" width="100"></el-table-column>
+        <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="150"></el-table-column>
+        <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
+        <el-table-column property="unit_price" label="单价(/月)" width="100"></el-table-column>
+          <el-table-column property="account_virtual" label="数量" >
+            <template scope="scope">
+              <el-input-number v-model="scope.row.num"
+                               controls-position="right"
+                               :min="1"
+                               @change="(value) => handleChange_virtual(value, scope)
+                               "
+              ></el-input-number>
+            </template>
+
+          </el-table-column>
+
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="100">
+          <template slot-scope="scope">
+            <el-button
+              @click.native.prevent="deleteRow_virtual(scope.$index, tabledata_virtual)"
+              type="text"
+              size="small"
+              style="color: #52b69a"
+            >
+              移除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+
+
+
+      <el-form :inline="true" :model="tabledata_virtual" class="demo-form-inline">
         <el-form-item label="存储(G)">
-          <el-input v-model="tabledata3.storage" placeholder="存储(G)"></el-input>
+          <el-input v-model="tabledata_virtual.storage" placeholder="存储(G)"></el-input>
         </el-form-item>
         <el-form-item label="操作系统">
-          <el-select v-model="tabledata3.win" placeholder="操作系统">
+          <el-select v-model="tabledata_virtual.win" placeholder="操作系统">
             <el-option label="windows" value="windows"></el-option>
             <el-option label="linux" value="linux"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="IP地址">
-          <el-input v-model="tabledata3.IP" style="width:60%;float:left"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -162,72 +198,106 @@ export default {
   name: "applytable2",
   data(){
     return{
+
+      radio: '',//单选
+      radioSelect: '',//选中的数据赋值给它
+
       labelPosition: 'left',
-      multipleSelection: [],
-      currentRowIndex: [],
+
+      multipleSelection_physics: [],//存储选中物理机的数据
+      multipleSelection_virtual: [],//存储选中虚拟机的数据
+
+      currentRowIndex_physics: [],//存储选中物理机的行号
+      currentRowIndex_virtual: '',//存储选中虚拟机的行号
+
       list:[],
-      length:'',
-      value1:'',
+      length:'',//选中物理机的个数
       // selectRow: [],
       // 多选选择数量循环计数器
       multipleChoice_count:'0',
       // 多选选择行号循环计数器
       lineNumber_count:'0',
-      //弹窗
-      dialogTableVisible: false,
+      //物理机虚拟机弹窗
+      dialogTableVisible_physics: false,
+      dialogTableVisible_virtual: false,
       // 个人信息以及工单信息表单数据
-      tabledata1:[{
-        num: ' ',
-        name:' ',
-        time:'',
-        phone:'',
-        depart:'',
-        order_num:'',
+      tabledata_message:[{
+
+        //资源到期时间
+        apply_time: '',
         order_name:'',
         reason:''
       }],
       // 已添加的物理机资源信息表数据
-      tabledata2:[
+      tabledata_physics:[
       ],
-      // 虚拟机资源填写表数据
-      tabledata3:[{
-        cpu:'',
-        memory:'',
-        storage:'',
-        win:'',
-        IP:''
-      }],
+      // 已添加的虚拟机资源信息表数据
+      tabledata_virtual:[
+      ],
       // 新增物理机弹窗内表格数据
-      gridData:[{
+      gridData_physics:[{
         cpu:'2',
         memory:'3',
         storage:'3',
-        ip:'7'
+        unit_price:'1000'
+
       },
         {
           cpu:'1',
           memory:'3',
           storage:'3',
-          ip:'5'
+          unit_price:'500'
         },
         {
           cpu:'10',
           memory:'3',
           storage:'3',
-          ip:'5'
+          unit_price:'10000'
         },
         {
           cpu:'10',
           memory:'3',
           storage:'8',
-          ip:'5'
+          unit_price:'11000'
         },
         {
           cpu:'7',
           memory:'3',
           storage:'8',
-          ip:'5'
+          unit_price:'8000'
         }],
+      // 新增虚拟机弹窗内表格数据
+      gridData_virtual :[{
+        spe_family:'共享标准型s6',
+        cpu:'1vCPU',
+        memory:'1',
+        cpu_frequency:'2.5/3.2GHz',
+        cpu_model:'intel1',
+        unit_price:'30',
+
+      },
+        {
+          spe_family:'共享标准型s6',
+          cpu:'1vCPU',
+          memory:'2',
+          cpu_frequency:'2.5/3.2GHz',
+          cpu_model:'intel1',
+          unit_price:'60',
+        },{
+          spe_family:'共享标准型s6',
+          cpu:'1vCPU',
+          memory:'3',
+          cpu_frequency:'2.5/3.2GHz',
+          cpu_model:'intel1',
+          unit_price:'90',
+        },{
+          spe_family:'共享标准型s6',
+          cpu:'1vCPU',
+          memory:'4',
+          cpu_frequency:'2.5/3.2GHz',
+          cpu_model:'intel1',
+          unit_price:'120',
+        },]
     }
   },
   // 获取当前时间的定时器
@@ -239,50 +309,68 @@ export default {
     },1000)
   },
  methods: {
+    //获取单选行的数据
+   radioChange(row, index) {
+     this.radioSelect = row;
+   },
+
     //获取选中数据的行号
-   tableRowClassName({row, rowIndex}) {
+   tableRowClassName_physics({row, rowIndex}) {
      row.row_index = rowIndex;
    },
-   onRowClick(row, event, column) {
+   onRowClick_physics(row, event, column) {
      for (var k = 0; k < row.length; k++) {
-       this.currentRowIndex.push(row[k].row_index)
+       this.currentRowIndex_physics.push(row[k].row_index)
      }
    },
 
-
-   // getDetails(row){
-   //   const data = row//此时就能拿到整行的信息
-   // },
+   tableRowClassName_virtual({row,rowIndex}){
+     row.row_index = rowIndex
+   },
+   onRowClick_virtual(row, event, column){
+     this.currentRowIndex_virtual = row.row_index;
+   },
 
 
    // 点击selection多选框
-   handleSelectionChange(data) {
-     this.multipleSelection = data;
-     this.length=this.$refs.multipleTable.selection;//获取当前选中数据的行数
+   handleSelectionChange_physics(data) {
+     this.multipleSelection_physics = data;
+     this.length=this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
    },
-   // 获取点击行的数据
-   getSelected() {
-     this.dialogTableVisible=false//关闭弹窗
-     console.log(this.currentRowIndex)
-     while(this.multipleChoice_count<this.length.length){
-       this.tabledata2.push(this.multipleSelection[this.multipleChoice_count]);
-       this.gridData.splice(this.currentRowIndex[this.lineNumber_count],1)
-       this.multipleChoice_count++;
-       this.lineNumber_count++;
 
+   // 获取点击行的数据
+
+   getSelected(type) {
+     if(type===1){
+       this.dialogTableVisible_physics=false//关闭弹窗
+       while(this.multipleChoice_count<this.length.length){
+         this.tabledata_physics.push(this.multipleSelection_physics[this.multipleChoice_count]);
+         this.gridData_physics.splice(this.currentRowIndex_physics[this.lineNumber_count],1)
+         this.multipleChoice_count++;
+         this.lineNumber_count++;
+
+       }
+       this.$refs.multipleTable_physics.clearSelection()
+       this.multipleChoice_count=0;
+       this.lineNumber_count=0;
+       this.currentRowIndex_physics.splice(0,this.currentRowIndex_physics.length)
+     }else{
+       this.dialogTableVisible_virtual=false//关闭弹窗
+
+         this.tabledata_virtual.push(this.radioSelect);
+         this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
+       this.$refs.multipleTable_virtual.clearSelection()
+       this.radioSelect.splice(0,this.radioSelect.length)
+       this.currentRowIndex_virtual.splice(0,this.currentRowIndex_virtual.length)
      }
-     this.$refs.multipleTable.clearSelection()
-     this.multipleChoice_count=0;
-     this.lineNumber_count=0;
-     this.currentRowIndex.splice(0,this.currentRowIndex.length)
    },
-   // 获取当前时间并赋值给this.tabledata1.time
+   // 获取当前时间并赋值给this.tabledata_message.time
    getDateFunc(){
      let year = new Date().getFullYear();//年
      let month = new Date().getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
      let day = new Date().getDate();//日
      //拼接日期 YYYY-MM-DD HH:mm:ss
-     this.tabledata1.time=
+     this.tabledata_message.time=
        year +
        '-' +
        (month >=10 ? month:'0'+ month) +
@@ -291,39 +379,32 @@ export default {
    },
 
    // 删除选中的物理机资源
-   deleteRow(index, rows) {
-     const data = this.tabledata2.slice(index,index+1)
+   deleteRow_physics(index, rows) {
+     const data = this.tabledata_physics.slice(index,index+1)
      console.info(data)
 
-     this.tabledata2.splice(index,1);
-     this.gridData.splice(-1,0,data[0])
+     this.tabledata_physics.splice(index,1);
+     this.gridData_physics.splice(-1,0,data[0])
    },
+    //删除选中的虚拟机资源
+   deleteRow_virtual(index,rows) {
+     const data = this.tabledata_virtual.slice(index,index+1)
 
+     this.tabledata_virtual.splice(index,1);
+     this.gridData_virtual.splice(-1,0,data[0])
+   },
 //设置表头行的样式
    tableHeaderColor({row,column,rowIndex,columnIndex}){
      return 'background-color:rgba(82, 182, 154, 0.76);color:#fff;font-wight:500'
 
+   },
+
+//虚拟机资源数量改变
+   handleChange_virtual(value,scope){
+     this.$nextTick(()=>{
+
+     })
    }
-   //改变多选时选中行的样式
-   // rowClass({ row, rowIndex }) {
-   //   if (this.selectRow.includes(rowIndex)) {
-   //     return { background: "#a7a742" };
-   //   }
-   // },
-   // handleRowClick(row, column, event) {
-   //   // list -- 已选的数据
-   //   let index = this.multipleSelection.findIndex((item) => {
-   //     // 判断已选数组中是否已存在该条数据
-   //     return item.id === row.id;
-   //   });
-   //   if (index === -1) {
-   //     // 如果未存在，设置已选状态，并在list中添加这条数据
-   //     this.$refs.multipleTable.toggleRowSelection(row, true); //设置复选框为选中状态
-   //   } else {
-   //     // 如果已存在，设置未选状态，并在list中删除这条数据
-   //     this.$refs.multipleTable.toggleRowSelection(row, false); //设置复选框为未选状态
-   //   }
-   // },
  }
 }
 </script>
