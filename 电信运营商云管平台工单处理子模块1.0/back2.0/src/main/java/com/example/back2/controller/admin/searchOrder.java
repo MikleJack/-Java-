@@ -41,8 +41,8 @@ public class searchOrder {
      * @return 查询结果
      */
     @GetMapping("parameterQueryByPage")
-    public ResponseEntity<Page<AdminsearchorderTable>> parameterQueryByPage(String workOrderType,String workerName) {
-        PageRequest pageRequest = PageRequest.of(0,8);
+    public ResponseEntity<Page<AdminsearchorderTable>> parameterQueryByPage(String workOrderType,String workerName,int page,int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.adminsearchorderTableService.parameterQueryByPage(workOrderType,workerName, pageRequest));
     }
 

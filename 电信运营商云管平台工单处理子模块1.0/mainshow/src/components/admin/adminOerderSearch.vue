@@ -107,6 +107,7 @@ export default {
       currentPage:1,
       pageSize:9,
       totalSize:0,
+      ifPagination:false,
 
       //搜索栏数据
       searchOrderType: ['申请工单','回退工单'],
@@ -141,10 +142,11 @@ export default {
 
     //条件并分页查询
     handleClick_search(){
+      this.resetPageSituation();
       this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
-                                                                              + '&workerName=' + this.searchOrderWorkerName).then((res)=>{
+                      + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
-        this.totalpage = res.data.numberOfElements;})
+        this.totalSize = res.data.totalPages*this.pageSize;})
       // let data = JSON.stringify(this.adminWorkOrderInform);
       // this.$axios({
       //   method: 'post',
@@ -164,12 +166,30 @@ export default {
 
     //分页按钮操作
     handleCurrentChange(val){
-      this.currentPage=parseInt(val);
-      let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
-        this.tableData= res.data.content;
-        this.totalSize = res.data.totalPages*this.pageSize;
-      })
+      if(!this.ifPagination){
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }else{
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
+                + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+
+    },
+
+    resetPageSituation(){
+      this.ifPagination = true,
+      this.currentPage = 1;
+      this.pageSize = 9;
+      this.totalSize = 0;
     }
   }
 }
