@@ -1,8 +1,8 @@
-package com.example.back2.service.impl;
+package com.example.back2.service.impl.view;
 
-import com.example.back2.entity.AdminsearchorderDetailperson;
-import com.example.back2.dao.AdminsearchorderDetailpersonDao;
-import com.example.back2.service.AdminsearchorderDetailpersonService;
+import com.example.back2.entity.view.AdminsearchorderDetailperson;
+import com.example.back2.dao.view.AdminsearchorderDetailpersonDao;
+import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

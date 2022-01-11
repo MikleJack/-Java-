@@ -1,11 +1,10 @@
 package com.example.back2.controller.admin;
 
 
-import com.example.back2.entity.AdminsearchorderDetailperson;
-import com.example.back2.entity.AdminsearchorderTable;
-import com.example.back2.service.AdminsearchorderDetailpersonService;
-import com.example.back2.service.AdminsearchorderTableService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.back2.entity.view.AdminsearchorderDetailperson;
+import com.example.back2.entity.view.AdminsearchorderTable;
+import com.example.back2.service.view.AdminsearchorderDetailpersonService;
+import com.example.back2.service.view.AdminsearchorderTableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;

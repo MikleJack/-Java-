@@ -150,7 +150,7 @@ export default {
 
       currentPage:1,
       totalpage:0,
-      pageSize:8,
+      pageSize:5,
 
       //搜索栏数据
       searchForm:{
@@ -240,51 +240,10 @@ export default {
 </script>
 
 <style scoped>
-.page{
-  position: relative;
-  width: 100%;
-  height: auto;
-  left: 0;
-  top: 0;
-  background: #fffefe;
-}
-.page_top{
-  width: 100%;
-  height: 60px;
-  text-align: center;
-  line-height: 60px;
-}
-.page_body{
-  position: relative;
-  width: 90%;
-  /*height: 20px;*/
-  height: 100%;
-  /*top: 0;*/
-  left: 5%;
-  /*background: #0c805f;*/
-}
-.reason_contect{
-  width: 100%;
-  height: 150px;
-  /*background: #409EFF;*/
-}
-.resoure_usage{
-  width: 100%;
-  height: auto;
-  background: #ffffff;
-}
-.dialog-footer{
-  width: 100%;
-  height: 100px;
-  bottom: 0;
-  /*background: #888888;*/
-  text-align: center;
-  line-height: 100px;
-}
 .paging{
   width:100%;
   height: 60px;
-  position: absolute;
+  position: relative;
   bottom: 0;
 }
 </style>
