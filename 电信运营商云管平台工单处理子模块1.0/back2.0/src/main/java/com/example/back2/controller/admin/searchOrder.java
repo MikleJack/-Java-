@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -35,6 +32,25 @@ public class searchOrder {
         return ResponseEntity.ok(this.adminsearchorderTableService.queryByPage(adminsearchorderTable, pageRequest));
     }
 
+    /**
+     * 无条件的分页查询
+     *
+     * @return 查询结果
+     */
+    @GetMapping("normalQueryByPage")
+    public ResponseEntity<Page<AdminsearchorderTable>> normalQueryByPage() {
+        PageRequest pageRequest = PageRequest.of(0,8);
+        return ResponseEntity.ok(this.adminsearchorderTableService.normalQueryByPage(pageRequest));
+    }
+
 
 //---------------------------首页表单显示-底部-----------------------------------------------------------
+
+
+
+//-----------------------------详情按钮-顶部---------------------------
+
+
+
+//-----------------------------详情按钮-顶部---------------------------
 }
