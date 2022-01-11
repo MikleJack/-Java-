@@ -33,7 +33,7 @@
             <if test="adminsearchorderTable.workOrderState != null and adminsearchorderTable.workOrderState != ''">
                 and work_order_state = #{workOrderState}
             </if>
-            <if test="adminsearchorderTable.expirationTime != null">
+            <if test="adminsearchorderTable.expirationTime != null and adminsearchorderTable.expirationTime != ''">
                 and expiration_time = #{expirationTime}
             </if>
             <if test="adminsearchorderTable.name != null and adminsearchorderTable.name != ''">
@@ -87,7 +87,7 @@
             <if test="adminsearchorderTable.workOrderState != null and adminsearchorderTable.workOrderState != ''">
                 and work_order_state = #{workOrderState}
             </if>
-            <if test="adminsearchorderTable.expirationTime != null">
+            <if test="adminsearchorderTable.expirationTime != null and adminsearchorderTable.expirationTime != ''">
                 and expiration_time = #{expirationTime}
             </if>
             <if test="adminsearchorderTable.name != null and adminsearchorderTable.name != ''">
