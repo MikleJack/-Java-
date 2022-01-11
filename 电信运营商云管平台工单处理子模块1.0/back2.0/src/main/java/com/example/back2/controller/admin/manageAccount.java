@@ -1,11 +1,13 @@
 package com.example.back2.controller.admin;
 
 import com.example.back2.entity.table.Admin;
+import com.example.back2.entity.table.Department;
 import com.example.back2.entity.table.Staff;
 import com.example.back2.entity.view.Adminaccountmanage;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.impl.table.StaffServiceImpl;
 import com.example.back2.service.table.AdminService;
+import com.example.back2.service.table.DepartmentService;
 import com.example.back2.service.table.StaffService;
 import com.example.back2.service.view.AdminaccountmanageService;
 import com.example.back2.utils.SHA_256;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("account")
@@ -27,6 +30,8 @@ public class manageAccount {
     private StaffService staffService;
     @Resource
     private AdminaccountmanageService adminaccountmanageService;
+    @Resource
+    private DepartmentService departmentService;
 
     @Autowired
     AdminService temp =new AdminServiceImpl();
@@ -142,5 +147,15 @@ public class manageAccount {
                 return ResponseEntity.ok(false);
         }else
             return ResponseEntity.ok(false);
+    }
+
+    /**
+     * 查询所有部门
+     *
+     * @return 查询结果
+     */
+    @GetMapping("getDep")
+    public List<Department> getAllDep() {
+        return this.departmentService.AllDep();
     }
 }

@@ -100,12 +100,12 @@
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="请选择部门" prop="department">
-            <el-select v-model="value" placeholder="请选择部门">
+            <el-select v-model="ruleForm.department" placeholder="请选择部门">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.depNum"
+                :label="item.depName"
+                :value="item.depNum">
               </el-option>
             </el-select>
           </el-form-item>
@@ -182,10 +182,7 @@
 export default {
   name: "admin_employee",
   mounted() {
-    this.$axios.get("http://localhost:8084/account/all?page="+0+"&size="+this.pageSize).then((res)=>{
-      this.tableData= res.data.content;
-      this.totalSize = res.data.totalPages*this.pageSize;
-    })
+    this.init();
   },
   data() {
     return {
@@ -220,7 +217,7 @@ export default {
           { required: true, trigger: 'blur' },
         ]
       },
-      options: [],
+      options: [{value:"小组1",label:"小组1"}],
       value: '',
       //保存操作选择的行
       row:{}
@@ -229,6 +226,16 @@ export default {
 
   },
   methods: {
+    //页面初始化
+    init(){
+      this.$axios.get("http://localhost:8084/account/all?page="+0+"&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      });
+      this.$axios.get("http://localhost:8084/account/getDep").then((res)=>{
+        this.options = res.data;
+      })
+    },
     addAccount() {
       this.dialogVisible_add = false;
       this.dialogVisible_addAccount = true;
@@ -240,7 +247,7 @@ export default {
     //增加账户函数
     add_AccountNumber() {
       this.$axios.get("http://localhost:8084/account/addAccount?root_num=root&admin_password="+
-        this.password_confirm+"&name="+this.ruleForm.name+"&depNum=0003"+"&phone="+"&work_password=brccq123456").then((res)=>{
+        this.password_confirm+"&name="+this.ruleForm.name+"&depNum="+this.ruleForm.department+"&phone="+"&work_password=brccq123456").then((res)=>{
           if (res.data===true)
           {
             this.$message({
@@ -257,6 +264,7 @@ export default {
             });
           this.password_confirm='';
         this.dialogVisible_addAccount = false;
+        this.init();
       })
     },
     //重置密码的函数
@@ -385,8 +393,7 @@ export default {
 <style scoped>
 .paging {
   width:100%;
-  height: 60px;
-  position: absolute;
+  position: relative;
   bottom: 0;
 }
 </style>
