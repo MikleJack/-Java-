@@ -40,9 +40,9 @@ public class OperationLogServiceImpl implements OperationLogService {
      * @return 查询结果
      */
     @Override
-    public Page<OperationLog> queryByPage(OperationLog operationLog, PageRequest pageRequest) {
-        long total = this.operationLogDao.count(operationLog);
-        return new PageImpl<>(this.operationLogDao.queryAllByLimit(operationLog, pageRequest), pageRequest, total);
+    public Page<OperationLog> queryByPage( PageRequest pageRequest) {
+        long total = this.operationLogDao.count();
+        return new PageImpl<>(this.operationLogDao.queryAllByLimit(pageRequest), pageRequest, total);
     }
 
     /**

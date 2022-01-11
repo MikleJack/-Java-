@@ -27,7 +27,7 @@ public interface OperationLogService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<OperationLog> queryByPage(OperationLog operationLog, PageRequest pageRequest);
+    Page<OperationLog> queryByPage(PageRequest pageRequest);
 
     /**
      * 新增数据

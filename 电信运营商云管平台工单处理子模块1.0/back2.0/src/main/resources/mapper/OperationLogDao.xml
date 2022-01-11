@@ -23,23 +23,23 @@
         select
           work_num, operate_time, operate, ip, address
         from operation_log
-        <where>
-            <if test="workNum != null and workNum != ''">
-                and work_num = #{workNum}
-            </if>
-            <if test="operateTime != null">
-                and operate_time = #{operateTime}
-            </if>
-            <if test="operate != null and operate != ''">
-                and operate = #{operate}
-            </if>
-            <if test="ip != null and ip != ''">
-                and ip = #{ip}
-            </if>
-            <if test="address != null and address != ''">
-                and address = #{address}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null and workNum != ''">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="operateTime != null">-->
+<!--                and operate_time = #{operateTime}-->
+<!--            </if>-->
+<!--            <if test="operate != null and operate != ''">-->
+<!--                and operate = #{operate}-->
+<!--            </if>-->
+<!--            <if test="ip != null and ip != ''">-->
+<!--                and ip = #{ip}-->
+<!--            </if>-->
+<!--            <if test="address != null and address != ''">-->
+<!--                and address = #{address}-->
+<!--            </if>-->
+<!--        </where>-->
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -47,23 +47,23 @@
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from operation_log
-        <where>
-            <if test="workNum != null and workNum != ''">
-                and work_num = #{workNum}
-            </if>
-            <if test="operateTime != null">
-                and operate_time = #{operateTime}
-            </if>
-            <if test="operate != null and operate != ''">
-                and operate = #{operate}
-            </if>
-            <if test="ip != null and ip != ''">
-                and ip = #{ip}
-            </if>
-            <if test="address != null and address != ''">
-                and address = #{address}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null and workNum != ''">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="operateTime != null">-->
+<!--                and operate_time = #{operateTime}-->
+<!--            </if>-->
+<!--            <if test="operate != null and operate != ''">-->
+<!--                and operate = #{operate}-->
+<!--            </if>-->
+<!--            <if test="ip != null and ip != ''">-->
+<!--                and ip = #{ip}-->
+<!--            </if>-->
+<!--            <if test="address != null and address != ''">-->
+<!--                and address = #{address}-->
+<!--            </if>-->
+<!--        </where>-->
     </select>
 
     <!--新增所有列-->

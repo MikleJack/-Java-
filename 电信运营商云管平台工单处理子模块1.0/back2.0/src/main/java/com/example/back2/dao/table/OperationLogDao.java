@@ -31,7 +31,7 @@ public interface OperationLogDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<OperationLog> queryAllByLimit(OperationLog operationLog, @Param("pageable") Pageable pageable);
+    List<OperationLog> queryAllByLimit(@Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
@@ -39,7 +39,7 @@ public interface OperationLogDao {
      * @param operationLog 查询条件
      * @return 总行数
      */
-    long count(OperationLog operationLog);
+    long count();
 
     /**
      * 新增数据
