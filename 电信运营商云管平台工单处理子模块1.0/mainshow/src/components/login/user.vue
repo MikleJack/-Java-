@@ -190,7 +190,7 @@ export default {
       })
 
       //增加登录日志
-      this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
+      this.$axios.post("http://localhost:8084/login/addLog", this.ruleForm);
 
     }
   }
