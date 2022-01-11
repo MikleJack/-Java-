@@ -1,8 +1,13 @@
 package com.example.back2.controller.admin;
 
 
+import com.example.back2.dao.view.AdminsearchorderComDao;
+import com.example.back2.entity.view.AdminsearceorderVm;
+import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.AdminsearchorderTable;
+import com.example.back2.service.view.AdminsearceorderVmService;
+import com.example.back2.service.view.AdminsearchorderComService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.AdminsearchorderTableService;
 import org.springframework.data.domain.Page;
@@ -11,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("adminSearchOrder")
@@ -78,6 +84,22 @@ public class searchOrder {
     @GetMapping("queryWorkOrderDetailTop")
     public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) {
         return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    }
+
+    @Resource
+    private AdminsearchorderComService adminsearchorderComService;
+
+    @GetMapping("getOrderCom")
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
+        return this.adminsearchorderComService.getOrderCom(workOrderNum);
+    }
+
+    @Resource
+    private AdminsearceorderVmService adminsearceorderVmService;
+
+    @GetMapping("getOrderVm")
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
+        return this.adminsearceorderVmService.getOrderVm(workOrderNum);
     }
 
 
