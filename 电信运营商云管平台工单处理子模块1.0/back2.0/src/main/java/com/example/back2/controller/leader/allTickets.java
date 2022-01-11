@@ -1,8 +1,11 @@
 package com.example.back2.controller.leader;
 
 
-import com.example.back2.entity.Leaderworkorderall;
-import com.example.back2.service.LeaderworkorderallService;
+import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.service.view.LeaderworkorderallService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +21,19 @@ public class allTickets {
     @Resource
     private LeaderworkorderallService leaderworkorderallService;
 
-    @GetMapping("selectAll")
-    public List<Leaderworkorderall> selectAll(int work_num,int page,int size){
-        return this.leaderworkorderallService.selectAll();
+    /**
+     * 分页查询
+     *
+     * @param leader_num 筛选条件
+     * @param pageRequest      分页对象
+     * @return 查询结果
+     */
+    @GetMapping("selectTicketsByNum")
+    public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
+                                                                Integer first_leader_num,
+                                                                int page,int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,first_leader_num, pageRequest));
     }
 
 
