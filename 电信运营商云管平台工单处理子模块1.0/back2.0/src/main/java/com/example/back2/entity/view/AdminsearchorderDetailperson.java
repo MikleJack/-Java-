@@ -1,4 +1,4 @@
-package com.example.back2.entity;
+package com.example.back2.entity.view;
 
 import java.util.Date;
 import java.io.Serializable;

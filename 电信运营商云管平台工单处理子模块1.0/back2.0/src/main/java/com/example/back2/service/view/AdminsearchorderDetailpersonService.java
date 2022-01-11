@@ -1,10 +1,8 @@
-package com.example.back2.service;
+package com.example.back2.service.view;
 
-import com.example.back2.entity.AdminsearchorderDetailperson;
+import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * (AdminsearchorderDetailperson)表服务接口
