@@ -145,7 +145,7 @@ export default {
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         this.$cookies.set(this.ruleForm.work_num,0);
         if(this.code===res.data){
-          this.$axios.get("http://localhost:8084/staff/login?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+          this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data===1||res.data===2) {
               //   $message消息提示框
               this.$message({
@@ -153,6 +153,7 @@ export default {
                 type: 'success',
                 center: true
               });
+              sessionStorage.setItem("work_num",this.ruleForm.work_num);
               //设置登录类型为员工
               if(res.data===1){
                 sessionStorage.setItem("type", "staff");
@@ -190,7 +191,7 @@ export default {
       })
 
       //增加登录日志
-      this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
+      this.$axios.post("http://localhost:8084/login/addLog", this.ruleForm);
 
     }
   }

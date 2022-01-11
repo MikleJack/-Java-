@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.leader.LeaderOrderDetailDao">
+
+    <resultMap type="com.example.demo.entity.leader.LeaderOrderDetail" id="LeaderOrderDetailMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="workOrderType" column="work_order_type" jdbcType="VARCHAR"/>
+        <result property="workOrderName" column="work_order_name" jdbcType="VARCHAR"/>
+        <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+        <result property="workerNum" column="worker_num" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="workOrderState" column="work_order_state" jdbcType="VARCHAR"/>
+        <result property="lederNum" column="leder_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LeaderOrderDetailMap">
+        select
+          work_order_num, work_order_type, work_order_name, apply_time, worker_num, name, work_order_state, leder_num
+        from leader_order_detail
+            where leder_num = #{leader_num} and work_order_state = #{orderState}
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from leader_order_detail
+        where leder_num = #{leader_num}
+    </select>
+
+
+</mapper>
+

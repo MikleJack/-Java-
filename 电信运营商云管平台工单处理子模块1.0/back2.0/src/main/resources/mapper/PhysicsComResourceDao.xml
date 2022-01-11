@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.PhysicsComResourceDao">
+
+    <resultMap type="com.example.back2.entity.table.PhysicsComResource" id="PhysicsComResourceMap">
+        <result property="comNum" column="com_num" jdbcType="INTEGER"/>
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+        <result property="assign" column="assign" jdbcType="BOOLEAN"/>
+        <result property="price" column="price" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PhysicsComResourceMap">
+        select com_num,
+               cpu_core,
+               ram,
+               storage,
+               assign,
+               price
+        from brccq2.physics_com_resource
+        where com_num = #{comNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PhysicsComResourceMap">
+        select com_num,
+               cpu_core,
+               ram,
+               storage,
+               assign,
+               price
+        from brccq2.physics_com_resource limit #{offset}, #{limit}
+    </select>
+
+    <!--查询未分配出去的计算机-->
+    <select id="selectAllpc" resultMap="PhysicsComResourceMap">
+        select com_num,
+               cpu_core,
+               ram,
+               storage,
+               assign,
+               price
+        from brccq2.physics_com_resource
+        where assign = true
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PhysicsComResourceMap">
+        select
+        com_num, cpu_core, ram, storage, assign, price
+        from brccq2.physics_com_resource
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+            <if test="assign != null">
+                and assign = #{assign}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.physics_com_resource(cpu_core, ram, storage, assign, price)
+        values (#{cpuCore}, #{ram}, #{storage}, #{assign}, #{price})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.physics_com_resource(cpu_core, ram, storage, assign, price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cpuCore}, #{entity.ram}, #{entity.storage}, #{entity.assign}, #{entity.price})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.physics_com_resource(cpu_core, ram, storage, assign, price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cpuCore}, #{entity.ram}, #{entity.storage}, #{entity.assign}, #{entity.price})
+        </foreach>
+        on duplicate key update
+        cpu_core = values(cpu_core) , ram = values(ram) , storage = values(storage) , assign = values(assign) , price =
+        values(price)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update brccq2.physics_com_resource
+        <set>
+            <if test="cpuCore != null">
+                cpu_core = #{cpuCore},
+            </if>
+            <if test="ram != null">
+                ram = #{ram},
+            </if>
+            <if test="storage != null">
+                storage = #{storage},
+            </if>
+            <if test="assign != null">
+                assign = #{assign},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+        </set>
+        where com_num = #{comNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from brccq2.physics_com_resource
+        where com_num = #{comNum}
+    </delete>
+
+</mapper>
+

@@ -25,12 +25,12 @@
           <el-table-column
             prop="workNum"
             label="工号"
-            width="180">
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="name"
             label="姓名"
-            width="180">
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="operateTime"
@@ -73,7 +73,7 @@
   export default {
     name: "admin_operation_log",
     mounted() {
-      this.$axios.get("http://localhost:8084/adminOperationLog/queryByPage?page="+0+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get("http://localhost:8084/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -102,7 +102,7 @@
       handleCurrentChange(val){
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get("http://localhost:8084/adminOperationLog/queryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get("http://localhost:8084/Log/query?page="+page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })

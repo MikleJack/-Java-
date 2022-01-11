@@ -32,22 +32,32 @@
           style="width: 100%">
           <el-table-column
             fixed
-            prop="ticket_num"
+            prop="workOrderNum"
             label="工单编号"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="ticket_name"
+            prop="workOrderName"
             label="工单标题"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="apply_time"
-            label="时间"
+            prop="workOrderType"
+            label="工单类型"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="work_num"
+            prop="workOrderState"
+            label="工单状态"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="expirationTime"
+            label="到期时间"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="workerNum"
             label="申请人工号"
             width="auto">
           </el-table-column>
@@ -69,9 +79,11 @@
       </div>
     <div class="page-tail">
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="1000">
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        layout=" prev, pager, next, jumper"
+        :total="totalSize">
       </el-pagination>
     </div>
   </div>
@@ -80,36 +92,37 @@
 <script>
     export default {
         name: "all_work_order",
+      mounted() {
+        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      },
       data() {
         return {
           formInline: {
             work_order_type: ''
           },
-          tableData: [{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },{
-            ticket_num:'000000000000000002',
-            ticket_name: '二班资源申请工单',
-            apply_time: '2023-02-03 00:00:00',
-            work_num:'00000002',
-            name:'陈大炮'
-          },
-          ]
+          tableData: [],
+          //分页相关
+          currentPage:1,
+          pageSize:8,
+          totalSize:0,
         }
       },
       methods: {
         onSubmit() {
           console.log('submit!');
+        },
+        //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
+        handleCurrentChange(val){
+          this.currentPage=parseInt(val);
+          let page = this.currentPage-1;
+          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page="+page+"&size="
+            +this.pageSize).then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
         }
       }
     }
@@ -138,8 +151,8 @@
 
   .page-tail{
     width:100%;
-    height: 60px;
-    position: absolute;
+    /*height: 60px;*/
+    position: relative;
     bottom: 0;
   }
 

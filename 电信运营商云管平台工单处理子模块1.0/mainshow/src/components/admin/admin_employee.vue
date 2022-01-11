@@ -15,32 +15,32 @@
         <el-table-column
           prop="workNum"
           label="工号"
-          width="150">
+          width="auto">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="150">
+          width="auto">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="200">
+          width="auto">
         </el-table-column>
         <el-table-column
           prop="depName"
           label="部门名称"
-          width="200">
+          width="auto">
         </el-table-column>
         <el-table-column
           prop="depLevel"
           label="部门级别"
-          width="100">
+          width="auto">
         </el-table-column>
         <el-table-column
           prop="state_string"
           label="账户状态"
-          width="200">
+          width="auto">
         </el-table-column>
 
         <el-table-column
@@ -100,12 +100,12 @@
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="请选择部门" prop="department">
-            <el-select v-model="value" placeholder="请选择部门">
+            <el-select v-model="ruleForm.department" placeholder="请选择部门">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.depNum"
+                :label="item.depName"
+                :value="item.depNum">
               </el-option>
             </el-select>
           </el-form-item>
@@ -182,10 +182,7 @@
 export default {
   name: "admin_employee",
   mounted() {
-    this.$axios.get("http://localhost:8084/staffDep/allStaff?page="+0+"&size="+this.pageSize).then((res)=>{
-      this.tableData= res.data.content;
-      this.totalSize = res.data.totalPages*this.pageSize;
-    })
+    this.init();
   },
   data() {
     return {
@@ -220,7 +217,7 @@ export default {
           { required: true, trigger: 'blur' },
         ]
       },
-      options: [],
+      options: [{value:"小组1",label:"小组1"}],
       value: '',
       //保存操作选择的行
       row:{}
@@ -229,6 +226,16 @@ export default {
 
   },
   methods: {
+    //页面初始化
+    init(){
+      this.$axios.get("http://localhost:8084/account/all?page="+0+"&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      });
+      this.$axios.get("http://localhost:8084/account/getDep").then((res)=>{
+        this.options = res.data;
+      })
+    },
     addAccount() {
       this.dialogVisible_add = false;
       this.dialogVisible_addAccount = true;
@@ -239,8 +246,8 @@ export default {
     },
     //增加账户函数
     add_AccountNumber() {
-      this.$axios.get("http://localhost:8084/staff/addAccount?root_num=root&admin_password="+
-        this.password_confirm+"&name="+this.ruleForm.name+"&depNum=0003"+"&phone="+"&work_password=brccq123456").then((res)=>{
+      this.$axios.get("http://localhost:8084/account/addAccount?root_num=root&admin_password="+
+        this.password_confirm+"&name="+this.ruleForm.name+"&depNum="+this.ruleForm.department+"&phone="+"&work_password=brccq123456").then((res)=>{
           if (res.data===true)
           {
             this.$message({
@@ -257,6 +264,7 @@ export default {
             });
           this.password_confirm='';
         this.dialogVisible_addAccount = false;
+        this.init();
       })
     },
     //重置密码的函数
@@ -265,7 +273,7 @@ export default {
       this.dialogVisible_reset=true;
     },
     handleClick_reset() {
-      this.$axios.get("http://localhost:8084/staff/reset?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get("http://localhost:8084/account/reset?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -292,7 +300,7 @@ export default {
       this.row=row;
     },
     handleClick_lock() {
-      this.$axios.get("http://localhost:8084/staff/lockAccount?work_num="+this.row.workNum).then((res)=>{
+      this.$axios.get("http://localhost:8084/account/lockAccount?work_num="+this.row.workNum).then((res)=>{
         if (res.data===true)
         {
           this.$message({
@@ -317,7 +325,7 @@ export default {
       this.row=row;
     },
     handleClick_unlock() {
-      this.$axios.get("http://localhost:8084/staff/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get("http://localhost:8084/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -343,7 +351,7 @@ export default {
       this.row=row;
     },
     handleClick_delect() {
-      this.$axios.get("http://localhost:8084/staff/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get("http://localhost:8084/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -372,7 +380,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/staffDep/allStaff?page="+page+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get("http://localhost:8084/account/all?page="+page+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -385,8 +393,7 @@ export default {
 <style scoped>
 .paging {
   width:100%;
-  height: 60px;
-  position: absolute;
+  position: relative;
   bottom: 0;
 }
 </style>

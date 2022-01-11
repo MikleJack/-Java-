@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.LeaderworkorderallDao">
+
+    <resultMap type="com.example.back2.entity.view.Leaderworkorderall" id="LeaderworkorderallMap">
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="workOrderType" column="work_order_type" jdbcType="VARCHAR"/>
+        <result property="expirationTime" column="expiration_time" jdbcType="TIMESTAMP"/>
+        <result property="workOrderName" column="work_order_name" jdbcType="VARCHAR"/>
+        <result property="workerNum" column="worker_num" jdbcType="INTEGER"/>
+        <result property="file" column="file" jdbcType="VARCHAR"/>
+        <result property="workOrderState" column="work_order_state" jdbcType="VARCHAR"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="offlineReason" column="offline_reason" jdbcType="VARCHAR"/>
+        <result property="depNum" column="dep_num" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="inService" column="in_service" jdbcType="VARCHAR"/>
+        <result property="firstLeaderName" column="first_leader_name" jdbcType="VARCHAR"/>
+        <result property="firstLeaderNum" column="first_leader_num" jdbcType="INTEGER"/>
+        <result property="secondLeaderNum" column="second_leader_num" jdbcType="INTEGER"/>
+        <result property="secondLeaderName" column="second_leader_name" jdbcType="VARCHAR"/>
+        <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
+        <result property="depBudget" column="dep_budget" jdbcType="INTEGER"/>
+        <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LeaderworkorderallMap">
+        select
+          name, work_order_num, work_order_type, expiration_time, work_order_name, worker_num, file, work_order_state, reason, price, offline_reason, dep_num, phone, state, in_service, first_leader_name, first_leader_num, second_leader_num, second_leader_name, dep_name, dep_budget, dep_level
+        from leaderWorkOrderAll
+        <where>
+            <if test="firstLeaderNum != null">
+                and first_leader_num = #{firstLeaderNum}
+            </if>
+            <if test="secondLeaderNum != null">
+                and second_leader_num = #{secondLeaderNum}
+            </if>
+            <if test="orderState != null">
+                and work_order_state = #{orderState}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from leaderWorkOrderAll
+        <where>
+            <if test="firstLeaderNum != null">
+                and first_leader_num = #{firstLeaderNum}
+            </if>
+            <if test="secondLeaderNum != null">
+                and second_leader_num = #{secondLeaderNum}
+            </if>
+            <if test="orderState != null">
+                and work_order_state = #{orderState}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+
