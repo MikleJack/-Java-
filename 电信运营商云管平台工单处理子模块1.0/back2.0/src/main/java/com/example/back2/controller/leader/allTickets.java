@@ -19,7 +19,7 @@ public class allTickets {
     private LeaderworkorderallService leaderworkorderallService;
 
     @GetMapping("selectAll")
-    public List<Leaderworkorderall> selectAll(){
+    public List<Leaderworkorderall> selectAll(int work_num,int page,int size){
         return this.leaderworkorderallService.selectAll();
     }
 
