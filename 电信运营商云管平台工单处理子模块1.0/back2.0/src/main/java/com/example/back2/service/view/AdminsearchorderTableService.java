@@ -3,6 +3,8 @@ package com.example.back2.service.view;
 import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * (AdminsearchorderTable)表服务接口
@@ -37,4 +39,13 @@ public interface AdminsearchorderTableService {
      */
     Page<AdminsearchorderTable> normalQueryByPage(PageRequest pageRequest);
 
+
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workOrderType 工单类型
+     * @param workerName 工人姓名
+     * @return 查询结果
+     */
+    Page<AdminsearchorderTable> parameterQueryByPage(String workOrderType, String workerName,PageRequest pageRequest);
 }

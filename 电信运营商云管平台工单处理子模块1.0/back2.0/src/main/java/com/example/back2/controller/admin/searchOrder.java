@@ -34,6 +34,19 @@ public class searchOrder {
     }
 
     /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workOrderType 工单类型
+     * @param workerName 工人姓名
+     * @return 查询结果
+     */
+    @GetMapping("parameterQueryByPage")
+    public ResponseEntity<Page<AdminsearchorderTable>> parameterQueryByPage(String workOrderType,String workerName) {
+        PageRequest pageRequest = PageRequest.of(0,8);
+        return ResponseEntity.ok(this.adminsearchorderTableService.parameterQueryByPage(workOrderType,workerName, pageRequest));
+    }
+
+    /**
      * 无条件的分页查询
      *
      * @return 查询结果
