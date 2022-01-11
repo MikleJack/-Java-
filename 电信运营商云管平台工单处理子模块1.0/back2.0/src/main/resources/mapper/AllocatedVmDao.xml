@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.AllocatedVmDao">
+
+    <resultMap type="com.example.back2.entity.table.AllocatedVm" id="AllocatedVmMap">
+        <result property="comNum" column="com_num" jdbcType="INTEGER"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="os" column="os" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AllocatedVmMap">
+        select com_num,
+               work_order_num,
+               cpu_core,
+               ram,
+               storage,
+               ip,
+               os,
+               price
+        from brccq2.allocated_vm
+        where com_num = #{comNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AllocatedVmMap">
+        select com_num,
+               work_order_num,
+               cpu_core,
+               ram,
+               storage,
+               ip,
+               os,
+               price
+        from brccq2.allocated_vm limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AllocatedVmMap">
+        select
+        com_num, work_order_num, cpu_core, ram, storage, ip, os, price
+        from brccq2.allocated_vm
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="os != null and os != ''">
+                and os = #{os}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.allocated_vm(cpu_core, ram, storage, ip, os, price)
+        values (#{cpuCore}, #{ram}, #{storage}, #{ip}, #{os}, #{price})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.allocated_vm(cpu_core, ram, storage, ip, os, price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cpuCore}, #{entity.ram}, #{entity.storage}, #{entity.ip}, #{entity.os}, #{entity.price})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="comNum" useGeneratedKeys="true">
+        insert into brccq2.allocated_vm(cpu_core, ram, storage, ip, os, price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cpuCore}, #{entity.ram}, #{entity.storage}, #{entity.ip}, #{entity.os}, #{entity.price})
+        </foreach>
+        on duplicate key update
+        cpu_core = values(cpu_core) , ram = values(ram) , storage = values(storage) , ip = values(ip) , os = values(os)
+        , price = values(price)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update brccq2.allocated_vm
+        <set>
+            <if test="cpuCore != null">
+                cpu_core = #{cpuCore},
+            </if>
+            <if test="ram != null">
+                ram = #{ram},
+            </if>
+            <if test="storage != null">
+                storage = #{storage},
+            </if>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="os != null and os != ''">
+                os = #{os},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+        </set>
+        where com_num = #{comNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from brccq2.allocated_vm
+        where com_num = #{comNum}
+    </delete>
+
+</mapper>
+
