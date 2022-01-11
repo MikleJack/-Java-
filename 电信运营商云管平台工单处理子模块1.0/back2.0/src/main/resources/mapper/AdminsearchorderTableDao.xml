@@ -43,6 +43,14 @@
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
+    <!--无条件查询指定行数据-->
+    <select id="normalQueryAllByLimit" resultMap="AdminsearchorderTableMap">
+        select
+        work_order_num, work_order_type, work_order_name, worker_num, work_order_state, expiration_time, name
+        from adminSearchOrder_table
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
     <!--统计总行数-->
     <select id="count" resultType="java.lang.Long">
         select count(1)
@@ -70,6 +78,12 @@
                 and name = #{name}
             </if>
         </where>
+    </select>
+
+    <!--无条件查询统计总行数-->
+    <select id="normalCount" resultType="java.lang.Long">
+        select count(1)
+        from adminSearchOrder_table
     </select>
 
     <!--新增所有列-->

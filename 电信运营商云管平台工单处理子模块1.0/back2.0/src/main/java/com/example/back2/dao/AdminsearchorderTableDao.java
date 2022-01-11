@@ -25,13 +25,22 @@ public interface AdminsearchorderTableDao {
     List<AdminsearchorderTable> queryAllByLimit(@Param("adminsearchorderTable") AdminsearchorderTable adminsearchorderTable, @Param("pageable") Pageable pageable);
 
     /**
+     * 查询指定行数据
+     *
+     * @param pageable         分页对象
+     * @return 对象列表
+     */
+    List<AdminsearchorderTable> normalQueryAllByLimit(@Param("pageable") Pageable pageable);
+
+
+    /**
      * 统计总行数
      *
      * @param adminsearchorderTable 查询条件
      * @return 总行数
      */
     long count(@Param("adminsearchorderTable") AdminsearchorderTable adminsearchorderTable);
-
+    long normalCount();
     /**
      * 新增数据
      *

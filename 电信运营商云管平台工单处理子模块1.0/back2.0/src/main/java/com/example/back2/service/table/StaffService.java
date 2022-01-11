@@ -23,11 +23,10 @@ public interface StaffService {
     /**
      * 分页查询
      *
-     * @param staff 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Staff> queryByPage(Staff staff, PageRequest pageRequest);
+    Page<Staff> queryByPage( PageRequest pageRequest);
 
     /**
      * 新增数据
@@ -52,5 +51,43 @@ public interface StaffService {
      * @return 是否成功
      */
     boolean deleteById(Integer workNum);
+
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password    密码
+     * @return 影响行数
+     */
+    boolean updatePassword(Integer work_num,String password);
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     * @param workNum 用户编号
+     */
+    boolean lockAccount(Integer workNum);
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     * @param workNum 用户编号
+     */
+    boolean unlockAccount(Integer workNum);
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    boolean deleteAccount(Integer workNum);
+
+    /**
+     * 新增账户
+     * @param name 账户名称
+     * @param depNum 账户部门编号
+     * @param phone 账户电话
+     * @param work_password 账户密码
+     */
+    boolean addAccount(String name,String depNum,
+                       String phone,String work_password);
+
 
 }

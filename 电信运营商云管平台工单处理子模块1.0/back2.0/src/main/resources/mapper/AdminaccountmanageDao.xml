@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AdminaccountmanageDao">
+
+    <resultMap type="com.example.back2.entity.view.Adminaccountmanage" id="AdminaccountmanageMap">
+        <result property="workNum" column="work_num" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
+        <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminaccountmanageMap">
+        select
+          work_num, name, phone, state, dep_name, dep_level
+        from adminAccountManage
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--            <if test="depName != null and depName != ''">-->
+<!--                and dep_name = #{depName}-->
+<!--            </if>-->
+<!--            <if test="depLevel != null">-->
+<!--                and dep_level = #{depLevel}-->
+<!--            </if>-->
+<!--        </where>-->
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from adminAccountManage
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--            <if test="depName != null and depName != ''">-->
+<!--                and dep_name = #{depName}-->
+<!--            </if>-->
+<!--            <if test="depLevel != null">-->
+<!--                and dep_level = #{depLevel}-->
+<!--            </if>-->
+<!--        </where>-->
+    </select>
+
+</mapper>
+

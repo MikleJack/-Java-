@@ -8,12 +8,14 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from "axios";
 import VueCookies from 'vue-cookies'
 import store from './store/store.js'
+import qs from 'qs'
 
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)
 
+Vue.prototype.$qs = qs
 
 Vue.prototype.$axios = axios;
 axios.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -32,6 +34,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  qs,
   components: { App },
   template: '<App/>'
 })

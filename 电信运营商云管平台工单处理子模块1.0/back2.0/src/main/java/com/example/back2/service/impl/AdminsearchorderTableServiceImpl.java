@@ -3,10 +3,12 @@ package com.example.back2.service.impl;
 import com.example.back2.entity.AdminsearchorderTable;
 import com.example.back2.dao.AdminsearchorderTableDao;
 import com.example.back2.service.AdminsearchorderTableService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
 
@@ -46,4 +48,14 @@ public class AdminsearchorderTableServiceImpl implements AdminsearchorderTableSe
         return adminsearchorderTable;
     }
 
+
+    /**
+     * 无条件的分页查询
+     *
+     * @return 查询结果
+     */
+    public Page<AdminsearchorderTable> normalQueryByPage(PageRequest pageRequest) {
+        long total = this.adminsearchorderTableDao.normalCount();
+        return new PageImpl<>(this.adminsearchorderTableDao.normalQueryAllByLimit(pageRequest), pageRequest, total);
+    }
 }

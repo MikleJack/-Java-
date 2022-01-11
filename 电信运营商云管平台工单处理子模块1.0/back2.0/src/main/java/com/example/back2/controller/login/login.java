@@ -1,9 +1,11 @@
 package com.example.back2.controller.login;
 
+import com.example.back2.entity.table.OperationLog;
 import com.example.back2.entity.table.Staff;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.impl.table.StaffServiceImpl;
 import com.example.back2.service.table.AdminService;
+import com.example.back2.service.table.OperationLogService;
 import com.example.back2.service.table.StaffService;
 import com.example.back2.utils.SHA_256;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,10 @@ public class login {
 
     @Resource
     private AdminService adminService;
-    private StaffService staffService;
+//    @Resource
+//    private StaffService staffService;
+    @Resource
+    private OperationLogService operationLogService;
 
     private String initPassword="brccq123456";
 
@@ -29,6 +34,11 @@ public class login {
     @Autowired
     StaffService staff_temp = new StaffServiceImpl();
 
+    /**
+     *  管理员登录接口
+        @ work_num 管理员工号
+        @ password 管理员登录密码
+     */
     @GetMapping("admin")
     public ResponseEntity<Boolean> adminLogin(String work_num, String password){
         if(!work_num.equals("") && !password.equals("") ) {
@@ -44,6 +54,12 @@ public class login {
             return ResponseEntity.ok(false);
     }
 
+    /**
+     *  员工及领导登录接口
+     *  @param  work_num 工号
+     *  @param password 登录密码
+     *  @return 0 登录失败 1 普通员工 2 领导
+     */
     @GetMapping("user")
     public int userLogin(Integer work_num, String password){
         if(!password.equals("") ) {
@@ -65,6 +81,17 @@ public class login {
         }
         else
             return 0;
+    }
+
+    /**
+     * 新增登录记录
+     *
+     * @param operationLog 实体
+     * @return 新增结果
+     */
+    @PostMapping("addLog")
+    public ResponseEntity<OperationLog> add(OperationLog operationLog) {
+        return ResponseEntity.ok(this.operationLogService.insert(operationLog));
     }
 
 }

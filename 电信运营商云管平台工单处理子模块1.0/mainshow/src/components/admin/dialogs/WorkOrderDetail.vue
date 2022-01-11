@@ -123,7 +123,7 @@ export default {
     //获取所有详情
     autoGetAllDetail(workOrderNum){
       //上半部分个人信息、工单信息和部门信息
-      this.$axios.get('http://localhost:8084/adminWorkOrderInform/queryWorkOrderDetail?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.tableDetailTop = res.data;
       });
       //获取计算机使用情况

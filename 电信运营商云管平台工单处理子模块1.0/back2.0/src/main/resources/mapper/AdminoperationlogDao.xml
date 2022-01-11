@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AdminoperationlogDao">
+
+    <resultMap type="com.example.back2.entity.view.Adminoperationlog" id="AdminoperationlogMap">
+        <result property="workNum" column="work_num" jdbcType="INTEGER"/>
+        <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+        <result property="operate" column="operate" jdbcType="VARCHAR"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminoperationlogMap">
+        select
+          work_num, operate_time, operate, ip, address, name
+        from adminOperationLog
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="operateTime != null">-->
+<!--                and operate_time = #{operateTime}-->
+<!--            </if>-->
+<!--            <if test="operate != null and operate != ''">-->
+<!--                and operate = #{operate}-->
+<!--            </if>-->
+<!--            <if test="ip != null and ip != ''">-->
+<!--                and ip = #{ip}-->
+<!--            </if>-->
+<!--            <if test="address != null and address != ''">-->
+<!--                and address = #{address}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--        </where>-->
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from adminOperationLog
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="operateTime != null">-->
+<!--                and operate_time = #{operateTime}-->
+<!--            </if>-->
+<!--            <if test="operate != null and operate != ''">-->
+<!--                and operate = #{operate}-->
+<!--            </if>-->
+<!--            <if test="ip != null and ip != ''">-->
+<!--                and ip = #{ip}-->
+<!--            </if>-->
+<!--            <if test="address != null and address != ''">-->
+<!--                and address = #{address}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--        </where>-->
+    </select>
+
+
+</mapper>
+

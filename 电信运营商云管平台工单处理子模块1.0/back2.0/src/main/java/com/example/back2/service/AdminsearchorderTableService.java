@@ -3,6 +3,7 @@ package com.example.back2.service;
 import com.example.back2.entity.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 
 /**
  * (AdminsearchorderTable)表服务接口
@@ -30,5 +31,11 @@ public interface AdminsearchorderTableService {
      */
     AdminsearchorderTable insert(AdminsearchorderTable adminsearchorderTable);
 
+    /**
+     * 无条件的分页查询
+     *
+     * @return 查询结果
+     */
+    Page<AdminsearchorderTable> normalQueryByPage(PageRequest pageRequest);
 
 }
