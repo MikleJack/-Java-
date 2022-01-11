@@ -43,7 +43,7 @@
                assign,
                price
         from brccq2.physics_com_resource
---         where assign = true
+        where assign = true
     </select>
 
     <!--通过实体作为筛选条件查询-->
