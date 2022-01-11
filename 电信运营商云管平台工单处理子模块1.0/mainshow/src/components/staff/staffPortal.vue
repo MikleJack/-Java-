@@ -15,14 +15,14 @@
         </div>
         <!--姓名及所属部门-->
         <div class="nameInf">
-          <p>{{worker_name}}</p>
+          <p>{{workerInform.name}}</p>
         </div>
         <div class="depInf">
-          <p>{{worker_dep}}</p>
+          <p>{{workerInform.depName}}</p>
         </div>
         <div class="workerInf">
-          <p>工号 ：{{worker_num}}</p>
-          <p>电话号码：{{worker_phone}}</p>
+          <p>工号 ：{{workerInform.workNum}}</p>
+          <p>电话号码：{{workerInform.phone}}</p>
         </div>
       </div>
     </div>
@@ -172,6 +172,8 @@ export default {
       depBudget:'78.90',
       fits: ['cover'],
       url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
+
+      workerInform:{},
       worker_power:'普通员工',
       worker_name:'付守宇',
       worker_dep:'小组1',
@@ -181,10 +183,17 @@ export default {
       online_order:'12',
       untreated_order:'3',
 
+
     }
 
   },
   mounted(){
+    //获取左上角用户信息
+    this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
+      this.workerInform = res.data;
+    });
+
+
     var chartDom = document.getElementById('budmain');
     var budChart = echarts.init(chartDom);
     var budOption;
