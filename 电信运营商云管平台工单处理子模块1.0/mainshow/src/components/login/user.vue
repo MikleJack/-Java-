@@ -153,6 +153,7 @@ export default {
                 type: 'success',
                 center: true
               });
+              sessionStorage.setItem("work_num",this.ruleForm.work_num);
               //设置登录类型为员工
               if(res.data===1){
                 sessionStorage.setItem("type", "staff");

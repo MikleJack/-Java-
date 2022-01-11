@@ -32,22 +32,32 @@
           style="width: 100%">
           <el-table-column
             fixed
-            prop="ticket_num"
+            prop="workOrderNum"
             label="工单编号"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="ticket_name"
+            prop="workOrderName"
             label="工单标题"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="apply_time"
-            label="时间"
+            prop="workOrderType"
+            label="工单类型"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="work_num"
+            prop="workOrderState"
+            label="工单状态"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="expirationTime"
+            label="到期时间"
+            width="auto">
+          </el-table-column>
+          <el-table-column
+            prop="workerNum"
             label="申请人工号"
             width="auto">
           </el-table-column>
@@ -83,8 +93,7 @@
     export default {
         name: "all_work_order",
       mounted() {
-        this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+0+"&size="
-          +this.pageSize+"&orderState=已审批").then((res)=>{
+        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -97,7 +106,7 @@
           tableData: [],
           //分页相关
           currentPage:1,
-          pageSize:9,
+          pageSize:8,
           totalSize:0,
         }
       },
@@ -109,8 +118,8 @@
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+page+"&size="
-            +this.pageSize+"&orderState=已审批").then((res)=>{
+          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page="+page+"&size="
+            +this.pageSize).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
           })
@@ -142,8 +151,8 @@
 
   .page-tail{
     width:100%;
-    height: 60px;
-    position: absolute;
+    /*height: 60px;*/
+    position: relative;
     bottom: 0;
   }
 
