@@ -66,8 +66,6 @@
         label="工单状态"
         width="auto">
       </el-table-column>
-
-
       <el-table-column
         fixed="right"
         label="操作"
@@ -75,7 +73,6 @@
         <templte slot-scope="scope">
           <el-button @click="handleClick_detail(scope.row.workOrderNum)" type="text" size="small">详情</el-button>
         </templte>
-
       </el-table-column>
     </el-table>
 

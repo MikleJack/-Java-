@@ -174,11 +174,6 @@ export default {
       url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
 
       workerInform:{},
-      worker_power:'普通员工',
-      worker_name:'付守宇',
-      worker_dep:'小组1',
-      worker_num:'20220003',
-      worker_phone:'13895782546',
       due_order:'5',
       online_order:'12',
       untreated_order:'3',
