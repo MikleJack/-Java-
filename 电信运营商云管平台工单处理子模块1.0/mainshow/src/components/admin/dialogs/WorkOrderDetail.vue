@@ -3,7 +3,7 @@
   <el-dialog
     title="工单详情信息"
     :visible.sync="$store.state.workOrderDetailVisibleDetail"
-    width="50%"
+    width="70%"
     append-to-body=“true”>
 
     <!--      申请人信息展示-->
@@ -41,7 +41,7 @@
     <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px ">
       <div class="page_title">物理机资源信息</div>
       <el-table
-        :data="tableDetailResource"
+        :data="OrderCom"
         border
         :summary-method="getSum"
         show-summary
@@ -52,20 +52,20 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="phy_cpuCore"
+          prop="cpuCore"
           label="CPU核数/个"
           width="auto">
         </el-table-column>
         <el-table-column
-          prop="phy_ram"
+          prop="ram"
           label="内存/G">
         </el-table-column>
         <el-table-column
-          prop="phy_mem"
+          prop="storage"
           label="存储大小/G">
         </el-table-column>
         <el-table-column
-          prop="phy_price"
+          prop="price"
           label="单价 元/月">
         </el-table-column>
       </el-table>
@@ -76,45 +76,45 @@
       <div class="page_title">虚拟机资源信息</div>
       <el-descriptions class="margin-top" title="" :column="3" :size="size" border></el-descriptions>
       <el-table
-        :data="virtualCom"
+        :data="OrderVm"
         border
       ><el-table-column
-        prop="vir_require"
+        prop="description"
         label="规格族"
         width="auto">
       </el-table-column>
         <el-table-column
-          prop="vir_cpuCore"
+          prop="cpuCore"
           label="CPU核数/个"
           width="auto">
         </el-table-column>
         <el-table-column
-          prop="vir_ram"
+          prop="ram"
           label="内存/G">
         </el-table-column>
         <el-table-column
-          prop="vir_frequency"
+          prop="processorFrequency"
           label="处理机主频/GHz"
           width="150px">
         </el-table-column>
         <el-table-column
-          prop="vir_model"
+          prop="processorModel"
           label="处理器型号">
         </el-table-column>
         <el-table-column
-          prop="vir_os"
+          prop="os"
           label="操作系统">
         </el-table-column>
         <el-table-column
-          prop="vir_price"
+          prop="perprice"
           label="单价 元/月">
         </el-table-column>
         <el-table-column
-          prop="hardDisk"
+          prop="storage"
           label="硬盘大小/G">
         </el-table-column>
         <el-table-column
-          prop="vir_totalPrice"
+          prop="allprice"
           label="总价/元">
         </el-table-column>
       </el-table>
@@ -186,8 +186,8 @@ export default {
   data(){
     return{
       tableDetailTop: [],
-      tableDetailResource: [],
-      tableDetailProcess: [],
+      OrderCom: [],
+      OrderVm: [],
       formLabelWidth: '120px',
       //部门总预算利用情况
       used_budget:'1000',
@@ -205,6 +205,12 @@ export default {
       //上半部分个人信息、工单信息和部门信息
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.tableDetailTop = res.data;
+      });
+      this.$axios.get("http://localhost:8084/adminSearchOrder/getOrderCom?workOrderNum="+workOrderNum).then((res)=>{
+        this.OrderCom = res.data;
+      });
+      this.$axios.get("http://localhost:8084/adminSearchOrder/getOrderVm?workOrderNum="+workOrderNum).then((res)=>{
+        this.OrderVm = res.data;
       });
     },
     //物理机价钱求和
