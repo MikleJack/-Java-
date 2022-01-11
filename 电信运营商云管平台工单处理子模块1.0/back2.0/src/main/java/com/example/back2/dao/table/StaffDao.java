@@ -26,19 +26,17 @@ public interface StaffDao {
     /**
      * 查询指定行数据
      *
-     * @param staff 查询条件
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Staff> queryAllByLimit(Staff staff, @Param("pageable") Pageable pageable);
+    List<Staff> queryAllByLimit(@Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param staff 查询条件
      * @return 总行数
      */
-    long count(Staff staff);
+    long count();
 
     /**
      * 新增数据
@@ -80,6 +78,45 @@ public interface StaffDao {
      * @return 影响行数
      */
     int deleteById(Integer workNum);
+
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password   密码
+     * @return 影响行数
+     */
+    boolean updatePassword(Integer work_num,String password);
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     * @param workNum 用户编号
+     */
+    boolean lockAccount(Integer workNum);
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     * @param workNum 用户编号
+     */
+    boolean unlockAccount(Integer workNum);
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    boolean deleteAccount(Integer workNum);
+
+    /**
+     * 新增账户
+     * @param name 账户名称
+     * @param depNum 账户部门编号
+     * @param phone 账户电话
+     * @param work_password 账户密码
+     */
+    boolean addAccount(String name,String depNum,
+                       String phone,String work_password);
+
 
 }
 

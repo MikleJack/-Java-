@@ -40,9 +40,9 @@ public class StaffServiceImpl implements StaffService {
      * @return 查询结果
      */
     @Override
-    public Page<Staff> queryByPage(Staff staff, PageRequest pageRequest) {
-        long total = this.staffDao.count(staff);
-        return new PageImpl<>(this.staffDao.queryAllByLimit(staff, pageRequest), pageRequest, total);
+    public Page<Staff> queryByPage(PageRequest pageRequest) {
+        long total = this.staffDao.count();
+        return new PageImpl<>(this.staffDao.queryAllByLimit( pageRequest), pageRequest, total);
     }
 
     /**
@@ -79,4 +79,57 @@ public class StaffServiceImpl implements StaffService {
     public boolean deleteById(Integer workNum) {
         return this.staffDao.deleteById(workNum) > 0;
     }
+
+    /**
+     * 重置密码
+     *
+     * @param work_num 用户编号
+     * @param password    密码
+     * @return 影响行数
+     */
+    @Override
+    public boolean updatePassword(Integer work_num,String password){
+        return this.staffDao.updatePassword(work_num,password);
+    }
+
+    /**
+     * 锁定当前账户，将账户状态从正常改为锁定
+     *
+     */
+    @Override
+    public boolean lockAccount(Integer workNum){
+        return this.staffDao.lockAccount(workNum);
+    }
+
+    /**
+     * 解锁当前账户，将账户状态从false改为true
+     *
+     */
+    @Override
+    public boolean unlockAccount(Integer workNum){
+        return this.staffDao.unlockAccount(workNum);
+    }
+
+    /**
+     * 删除制定账户,将用户是否在公司的状态改为false
+     * @param workNum 用户编号
+     */
+    @Override
+    public boolean deleteAccount(Integer workNum){
+        return this.staffDao.deleteAccount(workNum);
+    }
+
+    /**
+     * 新增账户
+     * @param name 账户名称
+     * @param depNum 账户部门编号
+     * @param phone 账户电话
+     * @param work_password 账户密码
+     */
+    @Override
+    public boolean addAccount(String name,String depNum,
+                              String phone,String work_password){
+        return this.staffDao.addAccount(name,depNum,phone,work_password);
+    }
+
 }
