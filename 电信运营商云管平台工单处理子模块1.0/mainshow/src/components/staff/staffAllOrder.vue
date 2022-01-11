@@ -27,70 +27,37 @@
       </el-form-item>
     </el-form>
 
-    <!--    管理员表单查询-->
+    <!--    用户所有表单查询-->
     <el-table
       border
       style="width: 100%"
-      :data="tableData.filter(data => !search || data.workOrderName.toLowerCase().includes(search.toLowerCase()))"
-
-    >
-<!--      :data = "tableData"-->
-
-      <!--      接口调用数据-->
-      <!--      :data="tableData.filter(data => !search || data.workOrderType.equals(workOrderTypeSelector) ||-->
-      <!--      data.workOrderName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
-      <!--      element-loading-background="rgba(245, 247, 250, 1)">-->
+      :data="tableData"
+      element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
-        prop="worker_num"
+        prop="workOrderNum"
         label="工号"
-        width="150">
-        <!--        <template slot="header" slot-scope="scope">-->
-
-        <!--        </template>-->
-        <template slot-scope="scope">
-          <!--          文字链接，当点击项目名称后将跳x  转到该项目的考核页面-->
-          <el-link :underline="false" type="primary" @click="go(scope.row.workOrderNum)">{{ scope.row.workOrderNum }}</el-link>
-        </template>
+        width="auto">
       </el-table-column>
       <el-table-column
         prop="workOrderType"
         label="工单类型"
-        width="150">
+        width="auto">
       </el-table-column>
       <el-table-column
-        width="180"
+        width="auto"
         prop="workOrderName"
         label="工单标题">
       </el-table-column>
       <el-table-column
-        prop="applicant"
-        label="申请人"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="applyTime"
-        label="时间"
-        width="250">
+        prop="expirationTime"
+        label="到期时间"
+        width="auto">
       </el-table-column>
       <el-table-column
         prop="workOrderState"
         label="工单状态"
-        width="180">
+        width="auto">
       </el-table-column>
-      <el-table-column
-        prop="workOrderState"
-        label="项目状态"
-        width="180">
-        <template slot-scope="scope" >
-          <div v-if="scope.row.projectStatus===1">
-            已结项
-          </div>
-          <div v-else-if="scope.row.projectStatus===0">
-            未结项
-          </div>
-        </template>
-      </el-table-column>
-
       <el-table-column
         fixed="right"
         label="操作"
@@ -100,10 +67,18 @@
           <el-button @click="handleClick_delay(scope.row)" type="text" size="small">延期</el-button>
           <el-button @click="handleClick_offline(scope.row)" type="text" size="small">下线</el-button>
         </templte>
-
       </el-table-column>
     </el-table>
-
+    <div class="page-tail" style="width:70%;">
+      <!--放置分页部分-->
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        layout=" prev, pager, next, jumper"
+        :total="totalSize">
+      </el-pagination>
+    </div>
     <!--    点击详情后的dialog界面-->
     <el-dialog
       title="详情"
@@ -285,16 +260,6 @@
                 <el-button type="primary" @click="dialogVisible_offline = false">确 定</el-button>
               </span>
     </el-dialog>
-
-    <div>
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        layout="total, prev, pager, next, jumper ,sizes"
-        :total="this.tableData.length">
-      </el-pagination>
-    </div>
   </div>
 
 </template>
@@ -309,29 +274,17 @@ export default {
       dialogVisible_delay: false,
       dialogVisible_offline: false,
       ticketData: [],
+
+      //分页相关
       currentPage:1,
-      pageSize:8,
+      pageSize:9,
+      totalSize:0,
+      ifPagination:false,
 
       search:'',
 
       workOrderTypeSelector:'',
-      tableData: [
-        {
-          // worker_num: '00000001',
-          // name: '王小虎',
-          // phone: '15155185464',
-          // dep_name: '软件学院',
-          // dep_level: '3',
-          // state: '正常'
-        }, {
-          // worker_num: '00000002',
-          // name: '王小虎',
-          // phone: '15155185464',
-          // dep_name: '软件学院',
-          // dep_level: '3',
-          // state: '正常'
-        }
-      ],
+      tableData: [],
       pickerOptions: {
         shortcuts: [{
           text: '今天',
@@ -361,11 +314,41 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/workOrder/queryAll').then((res)=>{
-      this.tableData = res.data;
+    this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=20220003&page=0&size=8').then((res)=>{
+      this.tableData = res.data.content;
+      this.totalSize = res.data.totalPages*this.pageSize;
     })
+
   },
   methods: {
+    // //条件并分页查询
+    // handleClick_search(){
+    //   this.resetPageSituation();
+    //   this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?' + this.workOrderTypeSelector
+    //     + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+    //     this.tableData = res.data.content;
+    //     this.totalSize = res.data.totalPages*this.pageSize;})
+    // },
+    //
+    // //分页按钮操作
+    // handleCurrentChange(val){
+    //   if(!this.ifPagination){
+    //     this.currentPage=parseInt(val);
+    //     let page = this.currentPage-1;
+    //     this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+    //       this.tableData= res.data.content;
+    //       this.totalSize = res.data.totalPages*this.pageSize;
+    //     })
+    //   }else{
+    //     this.currentPage=parseInt(val);
+    //     let page = this.currentPage-1;
+    //     this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
+    //       + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
+    //       this.tableData= res.data.content;
+    //       this.totalSize = res.data.totalPages*this.pageSize;
+    //     })
+    //   }
+    // },
     //操作的详情dialog函数
     handleClick_detail() {
       this.dialogVisible_detail = true;
@@ -378,14 +361,6 @@ export default {
     handleClick_offline() {
       this.dialogVisible_offline = true;
     },
-    //dialog弹窗关闭提示函数
-    handleClose(done) {
-      // this.$confirm('确认关闭？')
-      // .then(_ => {
-      done();
-      // })
-      // .catch(_ => {});
-    }
   }
 }
 

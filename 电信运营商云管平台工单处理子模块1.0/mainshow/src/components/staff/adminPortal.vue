@@ -1,191 +1,116 @@
 <template>
-  <div class="employeePortal">
-    <!--饼图：利用率饼图-->
-    <div class="left-top1">
-      <el-progress class="phyPie" type="circle" :percentage="total_Phyutilization" stroke-width="15" width="120"
-                   style="margin-left: 30%" :color="customColor"></el-progress>
+  <div class="adminPortal">
+    <!--页面顶部：用户信息-->
+    <div class="left-top">
+      <!--头像-->
+      <div class="headPortrait" :key="fit">
+        <el-image class="head" :src="url" :fit="fit">
+        </el-image>
+      </div>
+      <!--信息-->
+      <div class="worker_information">
+        <!--权限-->
+        <div class="powerInf">
+          <el-tag class="power" type="success">{{worker_power}}</el-tag>
+        </div>
+        <!--姓名及所属部门-->
+        <div class="nameInf">
+          <p>{{worker_name}}</p>
+        </div>
+        <div class="depInf">
+          <p>{{worker_dep}}</p>
+        </div>
+        <div class="workerInf">
+          <p>工号 ：{{worker_num}}</p>
+        </div>
+      </div>
     </div>
-    <!--表格：物理机饼图表格-->
-    <div class="left-top2">
-      <el-table class="phyTable" :data="Phy_Data":cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
-        <!--            全部物理机资源-->
-        <el-table-column
-          prop="All_phy_machine"
-          label="系统物理机资源"
-          width="130">
-        </el-table-column>
-        <!--            总利用率-->
-        <el-table-column
-          prop="Total_utilization"
-          label="总利用率"
-          width="150">
-        </el-table-column>
-      </el-table>
-    </div>
-    <!--饼图：虚拟机饼图-->
-    <div class="right-top1">
-      <el-progress class="virPie" type="circle" :percentage="total_Virutilization" :stroke-width="15" :width="120"
-                   style="margin-left: 30%" :color="customColor"></el-progress>
-    </div>
-    <!--表格：虚拟机饼图表格-->
-    <div class="right-top2">
-      <el-table class="virTable" :data="Vir_Data" :cell-style="{borderColor:'#ffffff'}" :header-cell-style="{borderColor:'#ffffff'}">
-        <!--            全部物理机资源-->
-        <el-table-column
-          prop="All_vir_machine"
-          label="系统虚拟机资源"
-          width="130">
-        </el-table-column>
-        <!--            总利用率-->
-        <el-table-column
-          prop="Total_utilization"
-          label="总利用率"
-          width="150">
-        </el-table-column>
-      </el-table>
-    </div>
-    <!--管理员系统自定义审核以及系统资源量调整按钮-->
+    <!--页面饼图部分-->
     <div class="right-top">
-      <div class="right-top-top"></div>
-      <el-row>
-<!--        系统自定义审核-->
-        <el-tooltip content="系统自定义审核" placement="bottom" effect="light">
-        <el-button type="primary" @click="dialogVisible_set = true" icon="el-icon-set-up"  circle></el-button>
-        </el-tooltip>
-        <el-dialog
-          title="系统自定义审核"
-          :visible.sync="dialogVisible_set"
-          width="50%"
-          :before-close="handleClose">
-          <p>请设置CPU核（个）范围</p>
-          <div class="block" style="width: 80%;margin: auto">
-            <el-slider
-              v-model="CPU_value"
-              max="1024"
-              show-input>
-            </el-slider>
-          </div>
-          <div style="margin-top: 30px">请设置内存（G）范围</div>
-          <div class="block" style="width: 80%;margin: auto">
-            <el-slider
-              v-model="RAM_value"
-              max="1024"
-              show-input>
-            </el-slider>
-          </div>
-          <p style="margin-top: 30px">请设置存储（G）范围</p>
-          <div class="block" style="width: 80%;margin: auto">
-            <el-slider
-              v-model="ROM_value"
-              max="1024"
-              show-input>
-            </el-slider>
-          </div>
-          <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible_set = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible_set = false">确 定</el-button>
-  </span>
-        </el-dialog>
-
-<!--        系统资源调整-->
-        <el-tooltip content="系统资源调整" placement="bottom" effect="light">
-        <el-button type="success" icon="el-icon-odometer" circle></el-button>
-        </el-tooltip>
-      </el-row>
-
+      <!--物理机-->
+      <div class="phy">
+        <!--饼图：物理机利用率饼图-->
+        <div class="phyPie">
+          <el-progress :percentage="total_Phyutilization" :color="resCustomColor"
+                       style="margin-left: 27%; margin-top: 20%"
+                       type="circle" stroke-width="15" width="120"></el-progress>
+        </div>
+        <div class="phyMessage">
+          <p style="text-align: center" >系统物理机利用率</p>
+        </div>
+      </div>
+      <!--预算-->
+      <div class="bud">
+        <!--饼图：预算使用情况饼图-->
+        <div class="budPie">
+          <el-progress :percentage="depBudget" :color="budCustomcolors"
+                       style="margin-left: 26%; margin-top: 20%"
+                       type="dashboard" stroke-width="15" width="120"></el-progress>
+        </div>
+        <div class="budMessage">
+          <p style="text-align: center">公司预算使用情况</p>
+        </div>
+      </div>
+      <!--虚拟机-->
+      <div class="vir">
+        <!--饼图：虚拟机利用率饼图-->
+        <div class="virPie">
+          <el-progress :percentage="total_Virutilization" :color="resCustomColor"
+                       style="margin-left:27%; margin-top: 20%"
+                       type="circle" :stroke-width="15" :width="120"></el-progress>
+        </div>
+        <div class="virMessage">
+          <p style="text-align: center">系统虚拟机利用率</p>
+        </div>
+      </div>
     </div>
-    <!--文字：物理机资源利用详情-->
-    <div class="left-middle">
-      <p align="center" style="margin-top: 5px">物理机资源利用详情</p>
-    </div>
-    <!--文字：虚拟机资源利用详情-->
-    <div class="right-middle">
-      <p align="center" style="margin-top: 5px">虚拟机资源利用详情</p>
-    </div>
-    <!--左下方预留位，准备装饰-->
-    <div class="left-bottom0"></div>
-    <!--表格：系统每台物理机详情信息-->
-    <div class="left-bottom">
-      <el-table class="phyTableData" :data="all_PhyData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
-                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
-        <el-table-column
-          prop="Host_num"
-          label="主机号"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="worker_num"
-          label="员工工号"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="worker_name"
-          label="员工姓名"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="configuration"
-          label="配置"
-          width="180"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="utilization"
-          label="利用率"
-          align="center">
-        </el-table-column>
-      </el-table>
-    </div>
-    <!--预留位：两表之间-->
-    <div class="right-middle-bottom"></div>
-    <!--系统每台虚拟机详情信息-->
-    <div class="left-middle-bottom">
-      <el-table class="virTableData" :data="all_VirData" height="100%" border style="width: 100%; height:100%; font-size: x-small"
-                :header-cell-style="{borderColor:'#55c5a7'}" :cell-style="{borderColor:'#55c5a7'}">
-        <el-table-column
-          prop="Vir_num"
-          label="虚拟机号"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="worker_num"
-          label="员工工号"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="worker_name"
-          label="员工姓名"
-          width="80"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="configuration"
-          label="配置"
-          width="180"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          prop="utilization"
-          label="利用率"
-          align="center">
-        </el-table-column>
-      </el-table>
-    </div>
-    <!-- 预留：快捷入口栏-->
+    <!--通知栏-->
+    <div class="left-bottom"></div>
+    <!--右下方-->
     <div class="right-bottom">
-<!--      &lt;!&ndash;      快捷入口上方预留空位&ndash;&gt;-->
-<!--      <div class="right-top-bottom"></div>-->
-<!--      &lt;!&ndash;      快捷入口图标&ndash;&gt;-->
-<!--      <div class="right-bottom-middle"></div>-->
-<!--      &lt;!&ndash;      快捷入口具体按钮&ndash;&gt;-->
-<!--      <div class="right-bottom-bottom" ></div>-->
+      <div class="chart">
+        <!--公司预算折线图-->
+        <div class="budChart" id="budmain"></div>
+      </div>
+      <!--管理员按钮-->
+      <div class="adminBottom">
+        <el-row class="adminButton1" type="flex" justify="center" align="middle">
+          <el-button @click="dialogVisible_budget=true" size="small" type="primary" round>部门预算设置</el-button>
+        </el-row>
+        <el-row class="adminButton2" type="flex" justify="center" align="middle">
+          <el-button size="small" type="primary" round>系统资源量调整</el-button>
+        </el-row>
+      </div>
     </div>
-
+    <!--    点击部门预算设置后的dialog界面-->
+    <el-dialog
+      title="部门预算设置"
+      :visible.sync="dialogVisible_budget"
+      width="500px"
+      height="700px"
+      :before-close="handleClose">
+      <div class="block" style="text-align: center">
+        <el-table class="budTable" frame=above
+          :data="tableData_bud"
+          border
+          style="width: 100%"
+        :cell-style="{textAlign:'center'}">
+          <el-table-column prop="department_name" label="部门名称" width="180" align="center">
+          </el-table-column>
+          <el-table-column prop="budget" label="预算" width="278.5" align="center">
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.budget" controls-position="right" @change="handleChange"
+                               :precision="2" :step="0.1" :min="0" :max="9999"
+                               style="margin-left: 8%" size="mini"></el-input-number>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible_budget = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible_budget = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 
@@ -193,16 +118,24 @@
 </template>
 
 <script>
+import * as echarts from 'echarts';
+
 export default {
   name: "adminPortal",
   components: {},
   methods: {
-    customColor(total_Phyutilization) {
+    resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
-        return '#f56c6c';
+        return 'rgb(255,186,39)';
       } else if (total_Phyutilization > 80) {
-        return '#f56c6c';
+        return 'rgb(226,131,22)';
       } else return '#41c6a2'
+    },
+
+    budCustomcolors(depBudget){
+      if (depBudget <= 90){
+        return '#41c6a2';
+      } else return '#f56c6c';
     },
 
     tableRowClassName({row, rowIndex}) {
@@ -213,303 +146,367 @@ export default {
       }
       return '';
     },
+
+    //部门预算设置的dialog函数
+    handleClick_budget() {
+      this.dialogVisible_budget = true;
+    },
     handleClose(done) {
       this.$confirm('确认关闭？')
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    }
+      .then(_ => {
+      done();
+      })
+      .catch(_ => {});
+    },
 
+    handleChange(value) {
+      console.log(value);
+    }
   },
 
 // 表格数据
   data() {
     return {
-      CPU_value: 0,
-      RAM_value: 0,
-      ROM_value: 0,
+      // 全部物理机资源利用率
       total_Phyutilization:'76.29',
+      // 全部虚拟机资源利用率
       total_Virutilization:'35.83',
-      // 物理机总利用率
-      Phy_Data: [{
-        All_phy_machine: '8台',
-        Total_utilization: '76.29%',
-      },],
-      dialogVisible_set: false,
-      // 虚拟机总利用率
-      Vir_Data: [{
-        All_vir_machine: '3712GB',
-        Total_utilization: '35.83%',
-      },],
+      // 部门预算使用率
+      depBudget:'78.90',
+      fits: ['cover'],
+      //头像地址
+      url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
+      //左上角信息展示数据
+      //权限
+      worker_power:'管理员',
+      //姓名
+      worker_name:'Admin',
+      //部门
+      worker_dep:'软件学院',
+      //工号
+      worker_num:'root',
 
-      // 物理机详情信息
-      all_PhyData: [{
-        Host_num: '00000001',
-        worker_num: '20220014',
-        worker_name: '王二',
-        configuration: '8+128GB',
-        utilization: '80.00%'
-      }, {
-        Host_num: '00000002',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: '16+128GB',
-        utilization: '76.50%'
-      }, {
-        Host_num: '00000003',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: '16+512GB',
-        utilization: '71.50%'
-      },{
-        Host_num: '00000004',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: '32+1TB',
-        utilization: '76.50%'
-      },{
-        Host_num: '00000005',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: '16+512GG',
-        utilization: '76.50%'
-      }, {
-        Host_num: '00000006',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: '16+128G',
-        utilization: '76.50%'
-      }, {
-        Host_num: '00000007',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: '16+128GB',
-        utilization: '76.50%'
-      },{
-        Host_num: '00000008',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: '16+128GB',
-        utilization: '76.50%'
-      },
-      ],
+      //部门预算
+      //部门名称
+      department_name:'小组1',
+      //具体部门预算
+      department_nameBud:'10',
+      dialogVisible_budget: false,
 
-      // 虚拟机详情信息
-      all_VirData: [{
-        Vir_num: '00000001',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: 'Windows,8+128GB',
-        utilization: '80.00%'
-      }, {
-        Vir_num: '00000002',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: 'Linux,16+128GB',
-        utilization: '35.50%'
-      }, {
-        Vir_num: '00000003',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: 'Linux,16+512GB',
-        utilization: '21.50%'
+      tableData_bud: [{
+        department_name: '小组1',
+        budget: '10',
       },{
-        Vir_num: '00000004',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: 'Windows,32+1TB',
-        utilization: '42.50%'
-      },{
-        Vir_num: '00000005',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: 'Windows,16+512GB',
-        utilization: '11.50%'
-      }, {
-        Vir_num: '00000006',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: 'Windows,16+128G',
-        utilization: '57.50%'
-      }, {
-        Vir_num: '00000007',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: 'Linux,16+128G',
-        utilization: '41.57%'
-      },{
-        Vir_num: '00000008',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: 'Linux,16+128G',
-        utilization: '47.82%'
-      },{
-        Vir_num: '00000009',
-        worker_num: '20220013',
-        worker_name: '王伟',
-        configuration: 'Linux,16+1TB',
-        utilization: '38.09%'
-      },{
-        Vir_num: '00000009',
-        worker_num: '20220001',
-        worker_name: '张大炮',
-        configuration: 'Linux,16+1TB',
-        utilization: '35.83%'
-      },{
-        Vir_num: '00000009',
-        worker_num: '20220014',
-        worker_name: '王二',
-        configuration: 'Linux,16+1TB',
-        utilization: '35.83%'
-      },{
-        Vir_num: '00000009',
-        worker_num: '20220015',
-        worker_name: '王平',
-        configuration: 'Linux,16+1TB',
-        utilization: '35.83%'
-      },
+        department_name: '小组2',
+        budget: '10',
+      }
       ]
+
     }
 
+  },
+  mounted(){
+    var chartDom = document.getElementById('budmain');
+    var budChart = echarts.init(chartDom);
+    var budOption;
+    budOption = {
+      width: '700px',
+      height: '250px',
+      color:'#349165',
+      title:{
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'click',
+          formatter: '{b}:{c}'
+        },
+        subtext:'近四年部门预算使用情况',
+        x:'center',
+        subtextStyle: {//副标题文本样式{"color": "#aaa"}
+          // fontFamily: 'Arial, Verdana, sans...',
+          fontSize: 15,
+          fontStyle: 'normal',
+          fontWeight: 'normal',
+          "color": "#48b981"
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: ['2019', '2020', '2021', '2022'],
+        scale: true
+      },
+      yAxis: {
+        type: 'value',
+        scale: true
+      },
+      series: [
+        {
+          data: [8.7, 9.6, 7.4, 0.9],
+          type: 'line',
+          label: {
+            show: true,	// 是否可见
+            // color:'green',
+            rotate: 0 	// 旋转角度
+          },
+          lineStyle:{
+            color: 'green',
+            // type: 'dashed'//可选值还有 dotted  solid
+          }
+        }
+      ]
+    };
+    budOption && budChart.setOption(budOption);
+
+    var chartDome = document.getElementById('order');
+    var orderCharts = echarts.init(chartDome);
+    var orderOption;
+    orderOption = {
+      height: '120px',
+      color:'rgba(63,152,111,0.9)',
+      title:{
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'click',
+          formatter: '{b}:{c}'
+        },
+        subtext:'最近工单申请情况',
+        x:'center',
+        subtextStyle: {//副标题文本样式{"color": "#aaa"}
+          // fontFamily: 'Arial, Verdana, sans...',
+          fontSize: 15,
+          fontStyle: 'normal',
+          fontWeight: 'normal',
+          "color": "#48b981"
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: ['2021.9','2021.9','2021.10', '2021.11', '2021.12', '2022.1'],
+        scale: true
+      },
+      yAxis: {
+        type: 'value',
+        scale: true
+      },
+      series: [
+        {
+          data: [9.8, 8.7, 8.7, 9.6, 7.4, 0.9],
+          type: 'bar',
+          label: {
+            show: true,	// 是否可见
+            // color:'green',
+          },
+          barStyle:{
+            color: 'green',
+            // type: 'dashed'//可选值还有 dotted  solid
+          },
+          markPoint: {
+            data: [
+              {
+                type: 'max', name: '最大值'
+              },
+              {
+                type: 'min', name: '最小值'
+              }
+            ]
+          }
+        }
+      ]
+    };
+    orderOption && orderCharts.setOption(orderOption);
   },
 }
 </script>
 
 <style scoped>
-
-.employeePortal{
+.adminPortal{
   width: 100%;
   height: 100%;
   position: relative;
+  overflow-y: hidden;
 }
-.left-top1{
-  width:17.5%;
-  height:25%;
-  float:left;
+.left-top{
+  width: 37%;
+  height: 38%;
+  float: left;
   /*background-color: #73c8b3;*/
+  /*布局线框颜色*/
+  /*border-bottom:2px dashed #55c97e*/
 }
-.left-top2{
-  width:30%;
-  height:25%;
-  float:left;
-  /*background-color: #38836e;*/
+.headPortrait{
+  width: 45%;
+  height: 100%;
+  float: left;
+  /*background-color: #55cfb0;*/
+  /*布局线框颜色*/
+  /*border:3px solid #000*/
 }
-.right-top1{
-  width:17.5%;
-  height:25%;
-  float:left;
-  position: relative;
-  /*background-color: #49937b;*/
+.head{
+  width: 90%;
+  height: 90%;
+  margin-top: 5%;
+  margin-left: 5%;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border:2px solid #53c59e;
+
 }
-.right-top2{
-  width:30%;
-  height:25%;
-  float:left;
-  /*background-color: #6cbaa4;*/
+.worker_information{
+  width: 55%;
+  height: 100%;
+  float: left;
+  /*background-color: #1caf8a;*/
+  /*布局线框颜色*/
+  /*border-bottom:2px dashed #55c97e*/
+}
+.powerInf{
+  width: 100%;
+  height: 15%;
+  float: left;
+  /*background-color: #147960;*/
+}
+.power{
+  margin-left: 70%;
+  margin-top: 5%;
+}
+.nameInf{
+  width: 100%;
+  height: 20%;
+  font-size: 35px;
+  margin-left: 10%;
+  /*background-color: #55cfb0;*/
+}
+.depInf{
+  width: 100%;
+  height: 15%;
+  font-size: 25px;
+  margin-left: 10%;
+  /*background-color: #52b69a;*/
+}
+.workerInf{
+  width: 100%;
+  height: 50%;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.55);
+  margin-top: 5%;
+  margin-left: 10%;
+  /*background-color: #19755e;*/
 }
 .right-top{
-  width:5%;
-  height:25%;
-  float:left;
-  /*background-color: #5bc2a5;*/
+  width: 63%;
+  height: 38%;
+  float: left;
+  /*background-color: #235c4e;*/
+  /*布局线框颜色*/
+  /*border-bottom:2px dashed #55c97e*/
 }
-.right-top-top{
-  width:100%;
-  height:30%;
-  float:left;
-  /*background-color: #5bc2a5;*/
+.phy{
+  width: 30%;
+  height: 100%;
+  float: left;
+  /*background-color: #73c8b3;*/
 }
-.phyTable{
-  margin-top: 15px;
-  width: 1000%;
-  height: 77%;
-  /*background-color: #76fbb6;*/
-}
-.virTable{
-  margin-top: 15px;
+.phyPie{
   width: 100%;
-  height: 77%;
-  /*background-color: #5be6b7;*/
+  height: 75%;
+  float: left;
+
+  /*background-color: #73c8b3;*/
 }
-.left-middle{
-  width:50%;
-  height:5%;
-  float:left;
-  /*background-color: #83e1c8;*/
+.phyMessage{
+  width: 100%;
+  height: 25%;
+  float: left;
+  font-size: 15px;
+  /*margin-left: 14%;*/
+  /*background-color: #73c8b3;*/
 }
-.right-middle{
-  width:50%;
-  height:5%;
-  float:left;
-  /*background-color: #65dac3;*/
+.bud{
+  width: 30%;
+  height: 100%;
+  float: left;
+  /*background-color: #3eb698;*/
 }
-/*占位，美观*/
-.left-bottom0{
-  width:5%;
-  height:68%;
-  float:left;
-  /*background-color: #73d3ba;*/
+.budPie{
+  width: 100%;
+  height: 75%;
+  float: left;
+  /*background-color: #3eb698;*/
+}
+.budMessage{
+  width: 100%;
+  height: 25%;
+  float: left;
+  font-size: 15px;
+  /*background-color: #36ba99;*/
+}
+.vir{
+  width: 30%;
+  height: 100%;
+  float: left;
+  /*background-color: #1e4d42;*/
+}
+.virPie{
+  width: 100%;
+  height: 75%;
+  float: left;
+  /*background-color: #1e4d42;*/
+}
+.virMessage{
+  width: 100%;
+  height: 25%;
+  float: left;
+  font-size: 15px;
+  /*background-color: #4cbda3;*/
+}
+.enter{
+  width: 10%;
+  height: 100%;
+  float: left;
+  /*background-color: #36ba99;*/
 }
 .left-bottom{
-  width:40%;
-  height:68%;
-  float:left;
-  /*background-color: #73d3ba;*/
-}
-.left-middle-bottom{
-  width:40%;
-  height:68%;
-  float:left;
-  /*background-color: #538e81;*/
-}
-.right-middle-bottom{
-  width:10%;
-  height:68%;
-  float:left;
-  /*background-color: #538e81;*/
+  width: 36%;
+  height: 61%;
+  float: left;
+  /*background-color: #33ab8a;*/
+  border:2px solid #53c59e
+  /*布局线框颜色*/
+  /*border-bottom:2px dashed #55c97e*/
 }
 .right-bottom{
-  width: 5%;
-  height: 68%;
-  float:left;
+  width: 63%;
+  height: 62%;
+  float: left;
+  /*background-color: #50b299;*/
+  /*布局线框颜色*/
+  /*border:2px solid #53c59e*/
+  /*border-bottom:2px dashed #55c97e*/
 }
-.phyTableData{
-  border-radius: 15px;
-  border: solid 2px rgba(82, 182, 154, 0.5);
+.chart{
+  width: 85%;
+  height: 100%;
+  float: left;
+  /*background-color: #34957a*/
 }
-.virTableData{
-  border-radius: 15px;
-  /*height: 20px;*/
-  border: solid 2px rgba(82, 182, 154, 0.5);
-  /*overflow-y: scroll;*/
+.budChart{
+  width: 100%;
+  height: 100%;
+  float: left;
+  margin-top: 5%;
+  background-color: #34957a
 }
-
-/*预留快捷入口*/
-/*.right-top-bottom{*/
-/*  width:100%;*/
-/*  height:35%;*/
-/*  float:left;*/
-/*  !*background-color: #63bba8;*!*/
-/*}*/
-/*.right-bottom-middle{*/
-/*  width:100%;*/
-/*  height:25%;*/
-/*  float:left;*/
-/*  !*background-color: #51a08f;*!*/
-/*}*/
-/*.right-bottom-bottom{*/
-/*  width:100%;*/
-/*  height:40%;*/
-/*  float:left;*/
-/*  !*background-color: #82eed7;*!*/
-/*}*/
-/*.adminButton1 {*/
-/*  height: 20%;*/
-/*}*/
-/*.adminButton2 {*/
-/*  height: 20%;*/
-/*}*/
-
+.adminButton1 {
+  height: 20%;
+}
+.adminButton2 {
+  height: 20%;
+}
+.budTable{
+  /*border:2px solid #53c59e;*/
+  /*border-color: #52b69a;*/
+  border:solid #add9c0;
+  border-width:1px 1px 1px 1px;
+}
 
 </style>

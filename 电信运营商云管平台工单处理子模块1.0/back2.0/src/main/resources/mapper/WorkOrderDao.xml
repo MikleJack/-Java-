@@ -17,41 +17,65 @@
 
     <!--查询单个-->
     <select id="queryById" resultMap="WorkOrderMap">
-        select work_order_num,
-               work_order_type,
-               work_order_name,
-               expiration_time,
-               worker_num,
-               file,
-               work_order_state,
-               reason,
-               price,
-               offline_reason
-        from brccq2.work_order
+        select
+          work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason
+        from work_order
         where work_order_num = #{workOrderNum}
+    </select>
+
+    <!--根据员工编号查询指定行数据-->
+    <select id="criteriaQueryAllByLimit" resultMap="WorkOrderMap">
+        select
+        work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason
+        from work_order
+        where worker_num = #{workerNum}
+        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="WorkOrderMap">
-        select work_order_num,
-               work_order_type,
-               work_order_name,
-               expiration_time,
-               worker_num,
-               file,
-               work_order_state,
-               reason,
-               price,
-               offline_reason
-        from brccq2.work_order limit #{offset}, #{limit}
+        select
+          work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason
+        from work_order
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="workOrderType != null and workOrderType != ''">
+                and work_order_type = #{workOrderType}
+            </if>
+            <if test="workOrderName != null and workOrderName != ''">
+                and work_order_name = #{workOrderName}
+            </if>
+            <if test="expirationTime != null">
+                and expiration_time = #{expirationTime}
+            </if>
+            <if test="workerNum != null">
+                and worker_num = #{workerNum}
+            </if>
+            <if test="file != null and file != ''">
+                and file = #{file}
+            </if>
+            <if test="workOrderState != null and workOrderState != ''">
+                and work_order_state = #{workOrderState}
+            </if>
+            <if test="reason != null and reason != ''">
+                and reason = #{reason}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="offlineReason != null and offlineReason != ''">
+                and offline_reason = #{offlineReason}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
-    <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="WorkOrderMap">
-        select
-        work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason,
-        price, offline_reason
-        from brccq2.work_order
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from work_order
         <where>
             <if test="workOrderNum != null and workOrderNum != ''">
                 and work_order_num = #{workOrderNum}
@@ -86,42 +110,48 @@
         </where>
     </select>
 
+    <!--统计总行数-->
+    <select id="criteriaCount" resultType="java.lang.Long">
+        select count(1)
+        from work_order
+        where worker_num = #{workerNum}
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="workOrderNum" useGeneratedKeys="true">
-        insert into brccq2.work_order(work_order_num,work_order_type, work_order_name, expiration_time, worker_num, file,
-                                      work_order_state, reason, price, offline_reason)
-        values (#{workOrderNum},#{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState},
-                #{reason}, #{price}, #{offlineReason})
+        insert into work_order(work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
+        values (#{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState}, #{reason}, #{price}, #{offlineReason})
     </insert>
 
     <insert id="insertBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
-        insert into brccq2.work_order(work_order_type, work_order_name, expiration_time, worker_num, file,
-        work_order_state, reason, price, offline_reason)
+        insert into work_order(work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.workOrderType}, #{entity.workOrderName}, #{entity.expirationTime}, #{entity.workerNum},
-            #{entity.file}, #{entity.workOrderState}, #{entity.reason}, #{entity.price}, #{entity.offlineReason})
+        (#{entity.workOrderType}, #{entity.workOrderName}, #{entity.expirationTime}, #{entity.workerNum}, #{entity.file}, #{entity.workOrderState}, #{entity.reason}, #{entity.price}, #{entity.offlineReason})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
-        insert into brccq2.work_order(work_order_type, work_order_name, expiration_time, worker_num, file,
-        work_order_state, reason, price, offline_reason)
+        insert into work_order(work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.workOrderType}, #{entity.workOrderName}, #{entity.expirationTime}, #{entity.workerNum},
-            #{entity.file}, #{entity.workOrderState}, #{entity.reason}, #{entity.price}, #{entity.offlineReason})
+            (#{entity.workOrderType}, #{entity.workOrderName}, #{entity.expirationTime}, #{entity.workerNum}, #{entity.file}, #{entity.workOrderState}, #{entity.reason}, #{entity.price}, #{entity.offlineReason})
         </foreach>
         on duplicate key update
-        work_order_type = values(work_order_type) , work_order_name = values(work_order_name) , expiration_time =
-        values(expiration_time) , worker_num = values(worker_num) , file = values(file) , work_order_state =
-        values(work_order_state) , reason = values(reason) , price = values(price) , offline_reason =
-        values(offline_reason)
+        work_order_type = values(work_order_type),
+        work_order_name = values(work_order_name),
+        expiration_time = values(expiration_time),
+        worker_num = values(worker_num),
+        file = values(file),
+        work_order_state = values(work_order_state),
+        reason = values(reason),
+        price = values(price),
+        offline_reason = values(offline_reason)
     </insert>
 
     <!--通过主键修改数据-->
     <update id="update">
-        update brccq2.work_order
+        update work_order
         <set>
             <if test="workOrderType != null and workOrderType != ''">
                 work_order_type = #{workOrderType},
@@ -156,9 +186,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete
-        from brccq2.work_order
-        where work_order_num = #{workOrderNum}
+        delete from work_order where work_order_num = #{workOrderNum}
     </delete>
 
 </mapper>
