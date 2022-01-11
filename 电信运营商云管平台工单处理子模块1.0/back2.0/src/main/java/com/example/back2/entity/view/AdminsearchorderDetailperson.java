@@ -1,5 +1,6 @@
 package com.example.back2.entity.view;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -20,7 +21,7 @@ public class AdminsearchorderDetailperson implements Serializable {
 
     private String workOrderType;
 
-    private Date expirationTime;
+    private String expirationTime;
 
     private String workOrderName;
 
@@ -83,12 +84,13 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.workOrderType = workOrderType;
     }
 
-    public Date getExpirationTime() {
+    public String  getExpirationTime() {
         return expirationTime;
     }
 
     public void setExpirationTime(Date expirationTime) {
-        this.expirationTime = expirationTime;
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        this.expirationTime = ft.format(expirationTime);
     }
 
     public String getWorkOrderName() {

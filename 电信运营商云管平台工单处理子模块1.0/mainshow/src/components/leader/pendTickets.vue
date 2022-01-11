@@ -9,43 +9,51 @@
           fixed
           prop="workOrderNum"
           label="工单编号"
-          width="auto">
+          style="margin: auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderName"
           label="工单标题"
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderType"
           label="工单类型"
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderState"
           label="工单状态"
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="expirationTime"
           label="资源到期时间"
           sortable
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="workerNum"
           label="申请人工号"
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="name"
           label="申请人姓名"
-          width="auto">
+          width="auto"
+          align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="100">
+          width="100"
+          align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="dialogTableVisible = true">查看详情</el-button>
           </template>
@@ -55,7 +63,6 @@
       <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
         <ticket_details></ticket_details>
       </el-dialog>
-
     </div>
     <div class="page-tail">
       <!--放置分页部分-->
@@ -114,6 +121,7 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
+  left:130px;
   width: 100%;
   height: 100%;
 }
@@ -122,6 +130,7 @@ export default {
 .page_central{
   position: relative;
   width: 80%;
+
 }
 
 .page-tail{
