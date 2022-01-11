@@ -1,7 +1,6 @@
 <template>
   <div class="page">
     <div class="page_central">
-      <div style="width:100%;text-align:center">
       <el-table
         :data="tableData"
         border
@@ -10,7 +9,7 @@
           fixed
           prop="workOrderNum"
           label="工单编号"
-          width="auto"
+          style="margin: auto"
           align="center">
         </el-table-column>
         <el-table-column
@@ -64,7 +63,6 @@
       <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
         <ticket_details></ticket_details>
       </el-dialog>
-      </div>
     </div>
     <div class="page-tail">
       <!--放置分页部分-->
@@ -123,6 +121,7 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
+  left:130px;
   width: 100%;
   height: 100%;
 }
@@ -131,6 +130,7 @@ export default {
 .page_central{
   position: relative;
   width: 80%;
+
 }
 
 .page-tail{
