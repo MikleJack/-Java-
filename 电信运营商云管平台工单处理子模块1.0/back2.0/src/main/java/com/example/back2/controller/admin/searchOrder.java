@@ -1,7 +1,9 @@
 package com.example.back2.controller.admin;
 
 
+import com.example.back2.entity.AdminsearchorderDetailperson;
 import com.example.back2.entity.AdminsearchorderTable;
+import com.example.back2.service.AdminsearchorderDetailpersonService;
 import com.example.back2.service.AdminsearchorderTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,8 +51,24 @@ public class searchOrder {
 
 
 //-----------------------------详情按钮-顶部---------------------------
+    @Resource
+    AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
+
+    /**
+     * 管理员工单界面的详情按钮
+     *此处只返回上半部分信息，下半部分信息调用其他接口
+     *
+     * @param workOrderNum 工单编号
+     * @return 每个工单详情页面上的员工信息、部门信息、工单信息
+     */
+    @GetMapping("queryWorkOrderDetailTop")
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) {
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    }
 
 
 
-//-----------------------------详情按钮-顶部---------------------------
+
+
+//-----------------------------详情按钮-底部---------------------------
 }

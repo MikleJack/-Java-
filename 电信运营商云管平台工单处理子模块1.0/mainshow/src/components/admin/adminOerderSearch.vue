@@ -23,7 +23,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="handleClick_search">查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -57,8 +57,8 @@
         width="auto">
       </el-table-column>
       <el-table-column
-        prop="applyTime"
-        label="时间"
+        prop="expirationTime"
+        label="到期时间"
         width="auto">
       </el-table-column>
       <el-table-column
@@ -103,22 +103,49 @@ export default {
       dialogVisible_detail: false,
       ticketData: [],
 
+      // adminWorkOrderInform:{
+      //   rollbackOldOrder: '',
+      //   changedOldOrder: '',
+      //   workOrderNum: '',
+      //   workOrderName: '',
+      //   workOrderType: '申请工单',
+      //   applyTime: null,
+      //   workerNum: '',
+      //   file: '',
+      //   workOrderState: '',
+      //   reason: '',
+      //   name: '',
+      //   depNum: '',
+      //   phone: '',
+      //   state: null,
+      //   inService: null
+      // },
+      // adminWorkOrderInform:{
+      //   "rollbackOldOrder": '',
+      //   "changedOldOrder": '',
+      //   "workOrderNum": '',
+      //   "workOrderName": '',
+      //   "workOrderType": '申请工单',
+      //   "applyTime": null,
+      //   "workerNum": '',
+      //   "file": '',
+      //   "workOrderState": '',
+      //   "reason": '',
+      //   "name": '',
+      //   "depNum": '',
+      //   "phone": '',
+      //   "state": null,
+      //   "inService": null
+      // },
+
       adminWorkOrderInform:{
-        rollbackOldOrder: '',
-        changedOldOrder: '',
-        workOrderNum: '',
+        workOrderNum: null,
+        workOrderType: null,
         workOrderName: "",
-        workOrderType: "",
-        applyTime: "",
-        workerNum: null,
-        file: null,
+        workerNum: "",
         workOrderState: "",
-        reason: "",
-        name: "",
-        depNum: "",
-        phone: "",
-        state: null,
-        inService: null
+        expirationTime: "",
+        name: ""
       },
 
       currentPage:1,
@@ -143,7 +170,7 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/adminWorkOrderInform/queryByPage?page='+(this.currentPage-1)+"&size="+this.pageSize).then((res)=>{
+    this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage').then((res)=>{
       this.tableData = res.data.content;
       this.totalpage = res.data.numberOfElements;
       this.filtrateOrder();
@@ -161,12 +188,30 @@ export default {
 
     //条件并分页查询
     handleClick_search(){
-      this.$axios.get('http://localhost:8084/adminWorkOrderInform/queryByPage?adminWorkOrderInform=' + adminWorkOrderInform +
-        ' page='+(this.currentPage-1)+"&size="+this.pageSize).then((res)=>{
-        this.tableData = res.data.content;
-        this.totalpage = res.data.numberOfElements;
-        this.filtrateOrder();
-      })
+      // let data = this.adminWorkOrderInform;
+      // this.$axios.post('http://localhost:8084/adminWorkOrderInform/criteriaQueryByPage',{data},{
+      //   headers:{"content-type":"application/json"}
+      // }).then((res)=>{
+      //   this.tableData = res.data.content;
+      //   this.totalpage = res.data.numberOfElements;
+      //   this.filtrateOrder();
+      // })
+
+      let data = JSON.stringify(this.adminWorkOrderInform);
+      this.$axios({
+        method: 'post',
+        url: 'http://localhost:8084/adminSearchOrder/criteriaQueryByPage',
+        data: {data},
+        headers:{"Content-Type":"application/json"},
+        transformRequest: [
+          (data) => {
+            return this.$qs.stringify(data); //使用Qs将请求参数序列化
+          }
+        ]
+      }).then((res) => {
+        //逻辑代码
+        console.log(res);
+      });
     },
 
 
