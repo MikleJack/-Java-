@@ -8,18 +8,18 @@
         <!--    根据工单类型筛选工单-->
         <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
           <el-option
-            v-for="item in searchForm.searchOrderType"
+            v-for="item in searchOrderType"
             :key="item"
             :label="item"
             :value="item">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="工单标题">
+      <el-form-item label="员工姓名">
         <!--          通过项目名称搜索项目-->
         <el-input
-          placeholder="输入工单标题搜索"
-          v-model="searchForm.searchOrderTitle">
+          placeholder="输入员工姓名搜索"
+          v-model="searchOrderWorkerName">
         </el-input>
       </el-form-item>
       <el-form-item>
@@ -85,8 +85,8 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-size="pageSize"
-        layout="total, prev, pager, next, jumper"
-        :total="totalpage">
+        layout="prev, pager, next, jumper"
+        :total="totalSize">
       </el-pagination>
     </div>
   </div>
@@ -103,61 +103,15 @@ export default {
       dialogVisible_detail: false,
       ticketData: [],
 
-      // adminWorkOrderInform:{
-      //   rollbackOldOrder: '',
-      //   changedOldOrder: '',
-      //   workOrderNum: '',
-      //   workOrderName: '',
-      //   workOrderType: '申请工单',
-      //   applyTime: null,
-      //   workerNum: '',
-      //   file: '',
-      //   workOrderState: '',
-      //   reason: '',
-      //   name: '',
-      //   depNum: '',
-      //   phone: '',
-      //   state: null,
-      //   inService: null
-      // },
-      // adminWorkOrderInform:{
-      //   "rollbackOldOrder": '',
-      //   "changedOldOrder": '',
-      //   "workOrderNum": '',
-      //   "workOrderName": '',
-      //   "workOrderType": '申请工单',
-      //   "applyTime": null,
-      //   "workerNum": '',
-      //   "file": '',
-      //   "workOrderState": '',
-      //   "reason": '',
-      //   "name": '',
-      //   "depNum": '',
-      //   "phone": '',
-      //   "state": null,
-      //   "inService": null
-      // },
-
-      adminWorkOrderInform:{
-        workOrderNum: null,
-        workOrderType: null,
-        workOrderName: "",
-        workerNum: "",
-        workOrderState: "",
-        expirationTime: "",
-        name: ""
-      },
-
+      //分页相关
       currentPage:1,
-      totalpage:0,
-      pageSize:5,
+      pageSize:9,
+      totalSize:0,
 
       //搜索栏数据
-      searchForm:{
-        searchOrderTitle: '',
-        searchOrderType: ['申请工单','回退工单']
-      },
+      searchOrderType: ['申请工单','回退工单'],
       workOrderTypeSelector:'',
+      searchOrderWorkerName:'',
 
 
       //当前页面
@@ -170,10 +124,9 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage').then((res)=>{
+    this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
       this.tableData = res.data.content;
-      this.totalpage = res.data.numberOfElements;
-      this.filtrateOrder();
+      this.totalSize = res.data.totalPages*this.pageSize;
     })
     //条件查询工单信息
 
@@ -188,51 +141,36 @@ export default {
 
     //条件并分页查询
     handleClick_search(){
-      // let data = this.adminWorkOrderInform;
-      // this.$axios.post('http://localhost:8084/adminWorkOrderInform/criteriaQueryByPage',{data},{
-      //   headers:{"content-type":"application/json"}
-      // }).then((res)=>{
-      //   this.tableData = res.data.content;
-      //   this.totalpage = res.data.numberOfElements;
-      //   this.filtrateOrder();
-      // })
-
-      let data = JSON.stringify(this.adminWorkOrderInform);
-      this.$axios({
-        method: 'post',
-        url: 'http://localhost:8084/adminSearchOrder/criteriaQueryByPage',
-        data: {data},
-        headers:{"Content-Type":"application/json"},
-        transformRequest: [
-          (data) => {
-            return this.$qs.stringify(data); //使用Qs将请求参数序列化
-          }
-        ]
-      }).then((res) => {
-        //逻辑代码
-        console.log(res);
-      });
+      this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
+                                                                              + '&workerName=' + this.searchOrderWorkerName).then((res)=>{
+        this.tableData = res.data.content;
+        this.totalpage = res.data.numberOfElements;})
+      // let data = JSON.stringify(this.adminWorkOrderInform);
+      // this.$axios({
+      //   method: 'post',
+      //   url: 'http://localhost:8084/adminSearchOrder/criteriaQueryByPage',
+      //   data: {data},
+      //   headers:{"Content-Type":"application/json"},
+      //   transformRequest: [
+      //     (data) => {
+      //       return this.$qs.stringify(data); //使用Qs将请求参数序列化
+      //     }
+      //   ]
+      // }).then((res) => {
+      //   //逻辑代码
+      //   console.log(res);
+      // });
     },
 
-
-    //dialog弹窗关闭提示函数
-    handleClose(done) {
-      // this.$confirm('确认关闭？')
-      // .then(_ => {
-      done();
-      // })
-      // .catch(_ => {});
-    },filtrateOrder(){
-      //   for( let i=0 ;i<this.tableData.length;i=i+1){
-      //     if(this.orderType.find(this.tableData[i].workOrderType)){
-      //       alert('1')
-      //     }
-      //     else
-      //       this.orderType.push(this.tableData[i].workOrderType)
-      //   }
-      }
-    //过滤工单类型
-    //
+    //分页按钮操作
+    handleCurrentChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
+    }
   }
 }
 

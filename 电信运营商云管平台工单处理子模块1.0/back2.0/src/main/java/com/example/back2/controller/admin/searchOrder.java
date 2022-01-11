@@ -48,12 +48,14 @@ public class searchOrder {
 
     /**
      * 无条件的分页查询
+     * @param page 分页页面
+     * @param size 分页大小
      *
      * @return 查询结果
      */
     @GetMapping("normalQueryByPage")
-    public ResponseEntity<Page<AdminsearchorderTable>> normalQueryByPage() {
-        PageRequest pageRequest = PageRequest.of(0,8);
+    public ResponseEntity<Page<AdminsearchorderTable>> normalQueryByPage(int page,int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.adminsearchorderTableService.normalQueryByPage(pageRequest));
     }
 
