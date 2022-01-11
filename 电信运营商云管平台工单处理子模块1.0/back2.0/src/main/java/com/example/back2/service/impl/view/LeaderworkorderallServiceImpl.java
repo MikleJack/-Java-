@@ -29,9 +29,13 @@ public class LeaderworkorderallServiceImpl implements LeaderworkorderallService 
      * @return 查询结果
      */
     @Override
-    public Page<Leaderworkorderall> queryByPage(Integer second_leader_num,Integer first_leader_num, PageRequest pageRequest) {
-        long total = this.leaderworkorderallDao.count(second_leader_num,first_leader_num);
-        return new PageImpl<>(this.leaderworkorderallDao.queryAllByLimit(second_leader_num,first_leader_num, pageRequest), pageRequest, total);
+    public Page<Leaderworkorderall> queryByPage(Integer second_leader_num,
+                                                Integer first_leader_num,
+                                                String orderState,
+                                                PageRequest pageRequest) {
+        long total = this.leaderworkorderallDao.count(second_leader_num,first_leader_num, orderState);
+        return new PageImpl<>(this.leaderworkorderallDao.queryAllByLimit(second_leader_num,
+                first_leader_num, orderState, pageRequest), pageRequest, total);
     }
 
 }

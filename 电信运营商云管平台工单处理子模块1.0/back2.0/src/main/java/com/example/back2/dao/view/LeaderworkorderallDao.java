@@ -22,15 +22,19 @@ public interface LeaderworkorderallDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Leaderworkorderall> queryAllByLimit(Integer secondLeaderNum,Integer firstLeaderNum, @Param("pageable") Pageable pageable);
+    List<Leaderworkorderall> queryAllByLimit(Integer secondLeaderNum,
+                                             Integer firstLeaderNum,
+                                             String orderState,
+                                             @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param leader_num 查询条件
      * @return 总行数
      */
-    long count(Integer secondLeaderNum,Integer firstLeaderNum);
+    long count(Integer secondLeaderNum,
+               Integer firstLeaderNum,
+               String orderState);
 
 
 }

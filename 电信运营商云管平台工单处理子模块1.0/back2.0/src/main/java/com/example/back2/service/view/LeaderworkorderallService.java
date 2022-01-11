@@ -20,7 +20,10 @@ public interface LeaderworkorderallService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Leaderworkorderall> queryByPage(Integer second_leader_num,Integer first_leader_num, PageRequest pageRequest);
+    Page<Leaderworkorderall> queryByPage(Integer second_leader_num,
+                                         Integer first_leader_num,
+                                         String orderState,
+                                         PageRequest pageRequest);
 
 
 }

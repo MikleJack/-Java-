@@ -35,7 +35,7 @@ public class allTickets {
                                                                 Integer first_leader_num,
                                                                 int page,int size) {
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,first_leader_num, pageRequest));
+        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,first_leader_num,null, pageRequest));
     }
 
 

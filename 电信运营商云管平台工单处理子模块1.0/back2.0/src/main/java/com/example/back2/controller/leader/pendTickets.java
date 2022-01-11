@@ -6,9 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+@RestController
+@RequestMapping("leader")
 public class pendTickets {
     //--------------查询某个领导未审批的工单信息----------------------
     @Resource
@@ -24,18 +28,13 @@ public class pendTickets {
      * @param size 页面大小
      * @return 查询结果
      */
-    @GetMapping("selectTicketsByNum")
+    @GetMapping("selectTicketsByState")
     public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
                                                                 Integer first_leader_num,
                                                                 String orderState,
                                                                 int page, int size) {
-        Leaderworkorderall leaderworkorderall = new Leaderworkorderall();
-        if(second_leader_num!=null)
-            leaderworkorderall.setFirstLeaderNum(first_leader_num);
-        else
-            leaderworkorderall.setSecondLeaderNum(second_leader_num);
-        leaderworkorderall.setWorkOrderState(orderState);
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(leaderworkorderall, pageRequest));
+        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
+                first_leader_num,orderState, pageRequest));
     }
 }

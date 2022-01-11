@@ -39,6 +39,9 @@
             <if test="secondLeaderNum != null">
                 and second_leader_num = #{secondLeaderNum}
             </if>
+            <if test="orderState != null">
+                and work_order_state = #{orderState}
+            </if>
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
@@ -53,6 +56,9 @@
             </if>
             <if test="secondLeaderNum != null">
                 and second_leader_num = #{secondLeaderNum}
+            </if>
+            <if test="orderState != null">
+                and work_order_state = #{orderState}
             </if>
         </where>
     </select>
