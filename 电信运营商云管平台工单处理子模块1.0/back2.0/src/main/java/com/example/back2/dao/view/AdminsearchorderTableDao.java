@@ -1,6 +1,6 @@
-package com.example.back2.dao;
+package com.example.back2.dao.view;
 
-import com.example.back2.entity.AdminsearchorderTable;
+import com.example.back2.entity.view.AdminsearchorderTable;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;

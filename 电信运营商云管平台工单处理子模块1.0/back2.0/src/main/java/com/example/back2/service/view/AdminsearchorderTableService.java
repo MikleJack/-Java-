@@ -1,9 +1,8 @@
-package com.example.back2.service;
+package com.example.back2.service.view;
 
-import com.example.back2.entity.AdminsearchorderTable;
+import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 
 /**
  * (AdminsearchorderTable)表服务接口

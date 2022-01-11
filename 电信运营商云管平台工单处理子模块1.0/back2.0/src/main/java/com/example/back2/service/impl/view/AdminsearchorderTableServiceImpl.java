@@ -1,14 +1,12 @@
-package com.example.back2.service.impl;
+package com.example.back2.service.impl.view;
 
-import com.example.back2.entity.AdminsearchorderTable;
-import com.example.back2.dao.AdminsearchorderTableDao;
-import com.example.back2.service.AdminsearchorderTableService;
-import org.springframework.http.ResponseEntity;
+import com.example.back2.entity.view.AdminsearchorderTable;
+import com.example.back2.dao.view.AdminsearchorderTableDao;
+import com.example.back2.service.view.AdminsearchorderTableService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
 
