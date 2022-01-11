@@ -33,7 +33,7 @@
             <if test="adminsearchorderTable.workOrderState != null and adminsearchorderTable.workOrderState != ''">
                 and work_order_state = #{workOrderState}
             </if>
-            <if test="adminsearchorderTable.expirationTime != null">
+            <if test="adminsearchorderTable.expirationTime != null and adminsearchorderTable.expirationTime != ''">
                 and expiration_time = #{expirationTime}
             </if>
             <if test="adminsearchorderTable.name != null and adminsearchorderTable.name != ''">
@@ -48,6 +48,22 @@
         select
         work_order_num, work_order_type, work_order_name, worker_num, work_order_state, expiration_time, name
         from adminSearchOrder_table
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--参数查询指定行数据-->
+    <select id="parameterQueryByPage" resultMap="AdminsearchorderTableMap">
+        select
+        work_order_num, work_order_type, work_order_name, worker_num, work_order_state, expiration_time, name
+        from adminSearchOrder_table
+        <where>
+            <if test="workOrderType != null and workOrderType != ''">
+                and work_order_type = #{workOrderType}
+            </if>
+            <if test="workerName != null and workerName != ''">
+                and name = #{workerName}
+            </if>
+        </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -71,7 +87,7 @@
             <if test="adminsearchorderTable.workOrderState != null and adminsearchorderTable.workOrderState != ''">
                 and work_order_state = #{workOrderState}
             </if>
-            <if test="adminsearchorderTable.expirationTime != null">
+            <if test="adminsearchorderTable.expirationTime != null and adminsearchorderTable.expirationTime != ''">
                 and expiration_time = #{expirationTime}
             </if>
             <if test="adminsearchorderTable.name != null and adminsearchorderTable.name != ''">
@@ -84,6 +100,20 @@
     <select id="normalCount" resultType="java.lang.Long">
         select count(1)
         from adminSearchOrder_table
+    </select>
+
+    <!--参数统计总行数-->
+    <select id="paramCount" resultType="java.lang.Long">
+        select count(1)
+        from adminSearchOrder_table
+        <where>
+            <if test="workOrderType != null and workOrderType != ''">
+                and work_order_type = #{workOrderType}
+            </if>
+            <if test="workerName != null and workerName != ''">
+                and name = #{workerName}
+            </if>
+        </where>
     </select>
 
     <!--新增所有列-->

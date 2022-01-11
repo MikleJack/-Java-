@@ -16,7 +16,7 @@ import java.util.List;
 public interface AdminsearchorderTableDao {
 
     /**
-     * 查询指定行数据
+     * 对象查询指定行数据
      *
      * @param adminsearchorderTable 查询条件
      * @param pageable         分页对象
@@ -25,12 +25,22 @@ public interface AdminsearchorderTableDao {
     List<AdminsearchorderTable> queryAllByLimit(@Param("adminsearchorderTable") AdminsearchorderTable adminsearchorderTable, @Param("pageable") Pageable pageable);
 
     /**
-     * 查询指定行数据
+     * 无条件查询指定行数据
      *
      * @param pageable         分页对象
      * @return 对象列表
      */
     List<AdminsearchorderTable> normalQueryAllByLimit(@Param("pageable") Pageable pageable);
+
+    /**
+     * 参数查询指定行数据
+     *
+     * @param pageable         分页对象
+     * @param workerName 员工姓名
+     * @return 对象列表
+     */
+    List<AdminsearchorderTable> parameterQueryByPage(@Param("workOrderType") String workOrderType,
+                                                     @Param("workerName") String workerName ,@Param("pageable") Pageable pageable);
 
 
     /**
@@ -41,6 +51,8 @@ public interface AdminsearchorderTableDao {
      */
     long count(@Param("adminsearchorderTable") AdminsearchorderTable adminsearchorderTable);
     long normalCount();
+    long paramCount(@Param("workOrderType") String workOrderType, @Param("workerName") String workerName);
+
     /**
      * 新增数据
      *

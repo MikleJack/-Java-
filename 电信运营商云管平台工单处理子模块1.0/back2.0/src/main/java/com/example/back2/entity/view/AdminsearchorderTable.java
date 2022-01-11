@@ -1,5 +1,9 @@
 package com.example.back2.entity.view;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -22,6 +26,7 @@ public class AdminsearchorderTable implements Serializable {
 
     private String workOrderState;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date expirationTime;
 
     private String name;
@@ -73,6 +78,8 @@ public class AdminsearchorderTable implements Serializable {
 
     public void setExpirationTime(Date expirationTime) {
         this.expirationTime = expirationTime;
+//        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+//        this.expirationTime = ft.format(expirationTime);
     }
 
     public String getName() {

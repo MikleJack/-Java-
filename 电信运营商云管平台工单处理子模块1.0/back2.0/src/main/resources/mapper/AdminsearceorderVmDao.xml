@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AdminsearceorderVmDao">
+
+    <resultMap type="com.example.back2.entity.view.AdminsearceorderVm" id="AdminsearceorderVmMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="comNum" column="com_num" jdbcType="INTEGER"/>
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="processorModel" column="processor_model" jdbcType="VARCHAR"/>
+        <result property="processorFrequency" column="processor_frequency" jdbcType="NUMERIC"/>
+        <result property="allprice" column="allPrice" jdbcType="NUMERIC"/>
+        <result property="perprice" column="perPrice" jdbcType="NUMERIC"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="os" column="os" jdbcType="VARCHAR"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminsearceorderVmMap">
+        select
+          work_order_num, com_num, cpu_core, ram, processor_model, processor_frequency, allPrice, perPrice, ip, os, storage
+        from adminSearceOrder_Vm
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="processorModel != null and processorModel != ''">
+                and processor_model = #{processorModel}
+            </if>
+            <if test="processorFrequency != null">
+                and processor_frequency = #{processorFrequency}
+            </if>
+            <if test="allprice != null">
+                and allPrice = #{allprice}
+            </if>
+            <if test="perprice != null">
+                and perPrice = #{perprice}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="os != null and os != ''">
+                and os = #{os}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from adminSearceOrder_Vm
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="processorModel != null and processorModel != ''">
+                and processor_model = #{processorModel}
+            </if>
+            <if test="processorFrequency != null">
+                and processor_frequency = #{processorFrequency}
+            </if>
+            <if test="allprice != null">
+                and allPrice = #{allprice}
+            </if>
+            <if test="perprice != null">
+                and perPrice = #{perprice}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="os != null and os != ''">
+                and os = #{os}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getOrderVm" resultMap="AdminsearceorderVmMap">
+        select
+        work_order_num, com_num, cpu_core, ram, processor_model, processor_frequency, allPrice, perPrice, ip, os, storage,description
+        from adminSearceOrder_Vm
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+        </where>
+    </select>
+</mapper>
+

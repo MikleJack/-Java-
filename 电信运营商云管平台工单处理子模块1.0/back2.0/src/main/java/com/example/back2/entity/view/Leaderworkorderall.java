@@ -5,60 +5,58 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
- * (AdminsearchorderDetailperson)实体类
+ * (Leaderworkorderall)实体类
  *
  * @author makejava
- * @since 2022-01-11 09:50:13
+ * @since 2022-01-11 11:28:34
  */
-public class AdminsearchorderDetailperson implements Serializable {
-    private static final long serialVersionUID = -27183124731054197L;
-
-    private String workOrderNum;
-
+public class Leaderworkorderall implements Serializable {
+    private static final long serialVersionUID = -25455824979785705L;
+    
     private String name;
-
-    private Integer workerNum;
-
+    
+    private String workOrderNum;
+    
     private String workOrderType;
-
+    
     private String expirationTime;
-
+    
     private String workOrderName;
-
+    
+    private Integer workerNum;
+    
     private String file;
-
+    
     private String workOrderState;
-
-    private Double price;
-
+    
     private String reason;
-
+    
+    private Double price;
+    
     private String offlineReason;
-
+    
     private Integer depNum;
-
+    
     private String phone;
-
-    private String password;
-
+    
     private Boolean state;
-
+    
     private Boolean inService;
-
+    
+    private String firstLeaderName;
+    
+    private Integer firstLeaderNum;
+    
+    private Integer secondLeaderNum;
+    
+    private String secondLeaderName;
+    
     private String depName;
-
+    
+    private Integer depBudget;
+    
     private Integer depLevel;
 
-    private Integer depBudget;
-
-
-    public String getWorkOrderNum() {
-        return workOrderNum;
-    }
-
-    public void setWorkOrderNum(String workOrderNum) {
-        this.workOrderNum = workOrderNum;
-    }
 
     public String getName() {
         return name;
@@ -68,12 +66,12 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.name = name;
     }
 
-    public Integer getWorkerNum() {
-        return workerNum;
+    public String getWorkOrderNum() {
+        return workOrderNum;
     }
 
-    public void setWorkerNum(Integer workerNum) {
-        this.workerNum = workerNum;
+    public void setWorkOrderNum(String workOrderNum) {
+        this.workOrderNum = workOrderNum;
     }
 
     public String getWorkOrderType() {
@@ -101,6 +99,14 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.workOrderName = workOrderName;
     }
 
+    public Integer getWorkerNum() {
+        return workerNum;
+    }
+
+    public void setWorkerNum(Integer workerNum) {
+        this.workerNum = workerNum;
+    }
+
     public String getFile() {
         return file;
     }
@@ -117,20 +123,20 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.workOrderState = workOrderState;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public String getReason() {
         return reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getOfflineReason() {
@@ -157,14 +163,6 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Boolean getState() {
         return state;
     }
@@ -181,6 +179,38 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.inService = inService;
     }
 
+    public String getFirstLeaderName() {
+        return firstLeaderName;
+    }
+
+    public void setFirstLeaderName(String firstLeaderName) {
+        this.firstLeaderName = firstLeaderName;
+    }
+
+    public Integer getFirstLeaderNum() {
+        return firstLeaderNum;
+    }
+
+    public void setFirstLeaderNum(Integer firstLeaderNum) {
+        this.firstLeaderNum = firstLeaderNum;
+    }
+
+    public Integer getSecondLeaderNum() {
+        return secondLeaderNum;
+    }
+
+    public void setSecondLeaderNum(Integer secondLeaderNum) {
+        this.secondLeaderNum = secondLeaderNum;
+    }
+
+    public String getSecondLeaderName() {
+        return secondLeaderName;
+    }
+
+    public void setSecondLeaderName(String secondLeaderName) {
+        this.secondLeaderName = secondLeaderName;
+    }
+
     public String getDepName() {
         return depName;
     }
@@ -189,20 +219,20 @@ public class AdminsearchorderDetailperson implements Serializable {
         this.depName = depName;
     }
 
-    public Integer getDepLevel() {
-        return depLevel;
-    }
-
-    public void setDepLevel(Integer depLevel) {
-        this.depLevel = depLevel;
-    }
-
     public Integer getDepBudget() {
         return depBudget;
     }
 
     public void setDepBudget(Integer depBudget) {
         this.depBudget = depBudget;
+    }
+
+    public Integer getDepLevel() {
+        return depLevel;
+    }
+
+    public void setDepLevel(Integer depLevel) {
+        this.depLevel = depLevel;
     }
 
 }
