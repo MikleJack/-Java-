@@ -17,15 +17,17 @@ import java.util.List;
 @RequestMapping("leader")
 public class allTickets {
 
-    //--------------查询所有工单信息----------------------
+    //--------------查询某个领导所有工单信息----------------------
     @Resource
     private LeaderworkorderallService leaderworkorderallService;
 
     /**
      * 分页查询
      *
-     * @param leader_num 筛选条件
-     * @param pageRequest      分页对象
+     * @param second_leader_num 二级领导人工号
+     * @param first_leader_num      一级领导人工号
+     * @param page 页面
+     * @param size 页面大小
      * @return 查询结果
      */
     @GetMapping("selectTicketsByNum")
