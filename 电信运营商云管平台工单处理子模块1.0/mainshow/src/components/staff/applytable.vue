@@ -62,7 +62,11 @@
       </el-dialog>
 
 
-      <el-table :data="tabledata_physics" border >
+      <el-table :data="tabledata_physics"
+                border
+                :summary-method="getSum"
+                show-summary
+      >
         <el-table-column property="cpu" label="CPU(核)" ></el-table-column>
         <el-table-column property="memory" label="内存(G)" ></el-table-column>
         <el-table-column property="storage" label="硬盘(G)" ></el-table-column>
@@ -139,12 +143,11 @@
         <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
         <el-table-column property="unit_price" label="单价(/月)" width="100"></el-table-column>
           <el-table-column property="account_virtual" label="数量" >
-            <template scope="scope">
+            <template slot-scope="scope" >
               <el-input-number v-model="scope.row.num"
                                controls-position="right"
                                :min="1"
-                               @change="(value) => handleChange_virtual(value, scope)
-                               "
+                               @change="(value) => handleChange_virtual(value, scope)"
               ></el-input-number>
             </template>
 
@@ -169,7 +172,7 @@
 
 
 
-
+      <P></P>
       <el-form :inline="true" :model="tabledata_virtual" class="demo-form-inline">
         <el-form-item label="存储(G)">
           <el-input v-model="tabledata_virtual.storage" placeholder="存储(G)"></el-input>
@@ -180,6 +183,12 @@
             <el-option label="linux" value="linux"></el-option>
           </el-select>
         </el-form-item>
+        <el-button type="primary" @click="calculate_price()">主要按钮</el-button>
+        <el-input
+          placeholder="请输入内容"
+          v-model="total_price"
+          :disabled="true">
+        </el-input>
       </el-form>
     </div>
     </div>
@@ -198,7 +207,15 @@ export default {
   name: "applytable2",
   data(){
     return{
+      virtual_price_temp: 0,//暂存虚拟机总价
 
+      current_time:'',//当前时间
+      expire_time:'',//资源到期时间
+      diff_time:0,//资源到期时间-当前时间
+
+      physics_price:'',//物理机总价
+      virtual_price:'',//虚拟机总价
+      total_price:'',//资源总价
       radio: '',//单选
       radioSelect: '',//选中的数据赋值给它
 
@@ -274,7 +291,7 @@ export default {
         cpu_frequency:'2.5/3.2GHz',
         cpu_model:'intel1',
         unit_price:'30',
-
+        account_virtual:'',
       },
         {
           spe_family:'共享标准型s6',
@@ -283,6 +300,7 @@ export default {
           cpu_frequency:'2.5/3.2GHz',
           cpu_model:'intel1',
           unit_price:'60',
+          account_virtual:'',
         },{
           spe_family:'共享标准型s6',
           cpu:'1vCPU',
@@ -290,6 +308,7 @@ export default {
           cpu_frequency:'2.5/3.2GHz',
           cpu_model:'intel1',
           unit_price:'90',
+          account_virtual:'',
         },{
           spe_family:'共享标准型s6',
           cpu:'1vCPU',
@@ -297,6 +316,7 @@ export default {
           cpu_frequency:'2.5/3.2GHz',
           cpu_model:'intel1',
           unit_price:'120',
+          account_virtual:'',
         },]
     }
   },
@@ -309,6 +329,53 @@ export default {
     },1000)
   },
  methods: {
+   //计算资源总价格
+   // calculate_price(){
+   //   let virtual_price_temp = 0
+   //   for(let i = 0; i < this.tabledata_virtual.length; ++i){
+   //     // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+   //     virtual_price_temp += this.tabledata_virtual[i].unit_price*3
+   //   }
+   //   virtual_price_temp = this.diff_time*virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
+   //   this.total_price = virtual_price_temp + this.physics_price
+   //
+   // },
+
+   //物理机价钱求和
+   getSum(param) {
+//此处打印param可以看到有两项，一项是columns，一项是data，最后一列可以通过columns.length获取到。
+     const {columns, data} = param
+     const len = columns.length
+     const sums = []
+     columns.forEach((column, index) => {
+       //如果是第一列，则最后一行展示为“总计”两个字
+       if (index === 0) {
+         sums[index] = '总计/元'
+         //如果是最后一列，索引为列数-1，则显示计算总和
+       } else if (index === 3) {
+         const values = data.map(item => Number(item[column.property]))
+         if (!values.every(value => isNaN(value))) {
+           sums[index] = values.reduce((prev, curr) => {
+             const value = Number(curr)
+             if (!isNaN(value)) {
+               return prev + curr*this.diff_time;
+             } else {
+               return prev
+             }
+           }, 0)
+         } else {
+           sums[index] = 'N/A'
+         }
+         //如果是除了第一列和最后一列的其他列，则显示为空
+       } else {
+         sums[index] = ''
+       }
+     })
+     this.physics_price = sums[3]
+     return sums
+
+   },
+
     //获取单选行的数据
    radioChange(row, index) {
      this.radioSelect = row;
@@ -369,14 +436,39 @@ export default {
      let year = new Date().getFullYear();//年
      let month = new Date().getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
      let day = new Date().getDate();//日
+
+     let year1 = this.tabledata_message.apply_time.getFullYear();//年
+     let month1 = this.tabledata_message.apply_time.getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
+     let day1 = this.tabledata_message.apply_time.getDate();//日
      //拼接日期 YYYY-MM-DD HH:mm:ss
-     this.tabledata_message.time=
+     this.current_time=
        year +
        '-' +
        (month >=10 ? month:'0'+ month) +
        '-' +
        (day >=10 ? day:'0' + day);
+
+     this.expire_time=
+       year1 +
+       '-' +
+       (month1 >=10 ? month1:'0'+ month1) +
+       '-' +
+       (day1 >=10 ? day1:'0' + day1);
+
+     let date1 = this.current_time.split('-');
+     let date2 = this.expire_time.split('-');
+     date1 = parseInt(date1[0]*12*30+parseInt(date1[1]*30)+parseInt(date1[2]));
+     date2= parseInt(date2[0]*12*30+parseInt(date2[1]*30)+parseInt(date2[2]));
+     this.diff_time = parseInt(date2-date1)
+     if(this.diff_time%30 !== 0){
+       this.diff_time = parseInt(this.diff_time/30) + 1
+     }else{
+       this.diff_time = parseInt(this.diff_time/30)
+     }
+     console.log(this.diff_time)
    },
+
+
 
    // 删除选中的物理机资源
    deleteRow_physics(index, rows) {
@@ -392,6 +484,13 @@ export default {
 
      this.tabledata_virtual.splice(index,1);
      this.gridData_virtual.splice(-1,0,data[0])
+
+     this.virtual_price_temp = 0
+     for(let i = 0; i < this.tabledata_virtual.length; ++i){
+       // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+     }
+     console.log(this.virtual_price_temp)
    },
 //设置表头行的样式
    tableHeaderColor({row,column,rowIndex,columnIndex}){
@@ -401,11 +500,35 @@ export default {
 
 //虚拟机资源数量改变
    handleChange_virtual(value,scope){
-     this.$nextTick(()=>{
+     this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
+     this.virtual_price_temp = 0
+     // console.log(this.tabledata_virtual[scope.$index].unit_price)
+     // console.log(this.tabledata_virtual[scope.$index].unit_price)
+     for(let i = 0; i < this.tabledata_virtual.length; ++i){
+       // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+     }
 
-     })
+     // this.virtual_price_temp += scope.row.num * scope.row.unit_price
+
+     console.log(this.virtual_price_temp)
+     this.virtual_price_temp = this.diff_time*this.virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
+
+     this.total_price = this.virtual_price_temp + this.physics_price
+     // console.log(scope.row.num)
+      console.log(scope)
+     console.log(this.total_price)
+     // console.log(value)
+     // console.log(scope.$index)
+
    }
- }
+ },
+
+
+
+
+
+
 }
 </script>
 
