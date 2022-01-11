@@ -1,0 +1,56 @@
+package com.example.back2.entity.table;
+
+import java.io.Serializable;
+
+/**
+ * (Department)实体类
+ *
+ * @author makejava
+ * @since 2022-01-11 15:19:28
+ */
+public class Department implements Serializable {
+    private static final long serialVersionUID = 116660775774922741L;
+    
+    private Integer depNum;
+    
+    private String depName;
+    
+    private Integer depLevel;
+    
+    private Integer depBudget;
+
+
+    public Integer getDepNum() {
+        return depNum;
+    }
+
+    public void setDepNum(Integer depNum) {
+        this.depNum = depNum;
+    }
+
+    public String getDepName() {
+        return depName;
+    }
+
+    public void setDepName(String depName) {
+        this.depName = depName;
+    }
+
+    public Integer getDepLevel() {
+        return depLevel;
+    }
+
+    public void setDepLevel(Integer depLevel) {
+        this.depLevel = depLevel;
+    }
+
+    public Integer getDepBudget() {
+        return depBudget;
+    }
+
+    public void setDepBudget(Integer depBudget) {
+        this.depBudget = depBudget;
+    }
+
+}
+

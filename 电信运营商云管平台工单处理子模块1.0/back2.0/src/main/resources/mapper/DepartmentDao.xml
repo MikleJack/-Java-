@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.DepartmentDao">
+
+    <resultMap type="com.example.back2.entity.table.Department" id="DepartmentMap">
+        <result property="depNum" column="dep_num" jdbcType="INTEGER"/>
+        <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
+        <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+        <result property="depBudget" column="dep_budget" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DepartmentMap">
+        select
+          dep_num, dep_name, dep_level, dep_budget
+        from department
+        where dep_num = #{depNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DepartmentMap">
+        select
+          dep_num, dep_name, dep_level, dep_budget
+        from department
+        <where>
+            <if test="depNum != null">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depName != null and depName != ''">
+                and dep_name = #{depName}
+            </if>
+            <if test="depLevel != null">
+                and dep_level = #{depLevel}
+            </if>
+            <if test="depBudget != null">
+                and dep_budget = #{depBudget}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from department
+        <where>
+            <if test="depNum != null">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depName != null and depName != ''">
+                and dep_name = #{depName}
+            </if>
+            <if test="depLevel != null">
+                and dep_level = #{depLevel}
+            </if>
+            <if test="depBudget != null">
+                and dep_budget = #{depBudget}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="depNum" useGeneratedKeys="true">
+        insert into department(dep_name, dep_level, dep_budget)
+        values (#{depName}, #{depLevel}, #{depBudget})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="depNum" useGeneratedKeys="true">
+        insert into department(dep_name, dep_level, dep_budget)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.depName}, #{entity.depLevel}, #{entity.depBudget})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="depNum" useGeneratedKeys="true">
+        insert into department(dep_name, dep_level, dep_budget)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.depName}, #{entity.depLevel}, #{entity.depBudget})
+        </foreach>
+        on duplicate key update
+        dep_name = values(dep_name),
+        dep_level = values(dep_level),
+        dep_budget = values(dep_budget)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update department
+        <set>
+            <if test="depName != null and depName != ''">
+                dep_name = #{depName},
+            </if>
+            <if test="depLevel != null">
+                dep_level = #{depLevel},
+            </if>
+            <if test="depBudget != null">
+                dep_budget = #{depBudget},
+            </if>
+        </set>
+        where dep_num = #{depNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from department where dep_num = #{depNum}
+    </delete>
+
+
+    <!--查询指定行数据-->
+    <select id="AllDep" resultMap="DepartmentMap">
+        select
+        dep_num, dep_name, dep_level, dep_budget
+        from department
+    </select>
+</mapper>
+
