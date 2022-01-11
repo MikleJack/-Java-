@@ -192,7 +192,7 @@ export default {
       //部门总预算利用情况
       used_budget:'1000',
       //部门总预算
-      total_budget:'2000',
+      total_budget:0,
       //部门剩余预算
       surplus_budget:'',
       //工单预算
@@ -205,6 +205,9 @@ export default {
       //上半部分个人信息、工单信息和部门信息
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.tableDetailTop = res.data;
+        this.$axios.get("http://localhost:8084/adminSearchOrder/getDepBudget?depNum="+res.data.depNum).then((budget)=>{
+          this.total_budget = budget.data;
+        })
       });
       this.$axios.get("http://localhost:8084/adminSearchOrder/getOrderCom?workOrderNum="+workOrderNum).then((res)=>{
         this.OrderCom = res.data;

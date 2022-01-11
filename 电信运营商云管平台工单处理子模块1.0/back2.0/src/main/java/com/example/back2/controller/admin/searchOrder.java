@@ -6,6 +6,7 @@ import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.AdminsearchorderTable;
+import com.example.back2.service.table.DepartmentService;
 import com.example.back2.service.view.AdminsearceorderVmService;
 import com.example.back2.service.view.AdminsearchorderComService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
@@ -89,6 +90,11 @@ public class searchOrder {
     @Resource
     private AdminsearchorderComService adminsearchorderComService;
 
+    /**
+     *
+     * @param workOrderNum 工单号
+     * @return 返回该工单申请的物理机信息
+     */
     @GetMapping("getOrderCom")
     public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
         return this.adminsearchorderComService.getOrderCom(workOrderNum);
@@ -97,11 +103,29 @@ public class searchOrder {
     @Resource
     private AdminsearceorderVmService adminsearceorderVmService;
 
+    /**
+     *
+     * @param workOrderNum 工单号
+     * @return 返回该工单申请的虚拟机信息
+     */
     @GetMapping("getOrderVm")
     public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
         return this.adminsearceorderVmService.getOrderVm(workOrderNum);
     }
 
+
+    @Resource
+    private DepartmentService departmentService;
+
+    /**
+     *
+     * @param depNum 部门号
+     * @return 返回该部门预算
+     */
+    @GetMapping("getDepBudget")
+    public int getDepBudget(Integer depNum){
+        return departmentService.queryById(depNum).getDepBudget();
+    }
 
 
 
