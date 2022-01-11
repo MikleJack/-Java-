@@ -25,29 +25,29 @@
         select
           work_num, name, dep_num, phone, password, state, in_service
         from staff
-        <where>
-            <if test="workNum != null">
-                and work_num = #{workNum}
-            </if>
-            <if test="name != null and name != ''">
-                and name = #{name}
-            </if>
-            <if test="depNum != null">
-                and dep_num = #{depNum}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone = #{phone}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="state != null">
-                and state = #{state}
-            </if>
-            <if test="inService != null">
-                and in_service = #{inService}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="depNum != null">-->
+<!--                and dep_num = #{depNum}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="password != null and password != ''">-->
+<!--                and password = #{password}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--            <if test="inService != null">-->
+<!--                and in_service = #{inService}-->
+<!--            </if>-->
+<!--        </where>-->
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -55,29 +55,29 @@
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from staff
-        <where>
-            <if test="workNum != null">
-                and work_num = #{workNum}
-            </if>
-            <if test="name != null and name != ''">
-                and name = #{name}
-            </if>
-            <if test="depNum != null">
-                and dep_num = #{depNum}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone = #{phone}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="state != null">
-                and state = #{state}
-            </if>
-            <if test="inService != null">
-                and in_service = #{inService}
-            </if>
-        </where>
+<!--        <where>-->
+<!--            <if test="workNum != null">-->
+<!--                and work_num = #{workNum}-->
+<!--            </if>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name = #{name}-->
+<!--            </if>-->
+<!--            <if test="depNum != null">-->
+<!--                and dep_num = #{depNum}-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone = #{phone}-->
+<!--            </if>-->
+<!--            <if test="password != null and password != ''">-->
+<!--                and password = #{password}-->
+<!--            </if>-->
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--            <if test="inService != null">-->
+<!--                and in_service = #{inService}-->
+<!--            </if>-->
+<!--        </where>-->
     </select>
 
     <!--新增所有列-->
@@ -139,6 +139,57 @@
     <delete id="deleteById">
         delete from staff where work_num = #{workNum}
     </delete>
+
+    <!--重置密码-->
+    <update id="updatePassword">
+        update staff
+        <set>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+        </set>
+        where work_num = #{work_num}
+    </update>
+
+    <!--锁定账户-->
+    <update id="lockAccount">
+        update staff
+        <set>
+            <if test="state != null">
+                state = false,
+            </if>
+        </set>
+        where work_num = #{work_num}
+    </update>
+
+    <!--解锁账户-->
+    <update id="unlockAccount">
+        update staff
+        <set>
+            <if test="state != null">
+                state = true,
+            </if>
+        </set>
+        where work_num = #{workNum}
+    </update>
+
+    <!--删除账户，将账号状态改为离职-->
+    <update id="deleteAccount">
+        update staff
+        <set>
+            <if test="in_service != null">
+                in_service = false,
+            </if>
+        </set>
+        where work_num = #{workNum}
+    </update>
+
+    <!--新增新账户-->
+    <insert id="addAccount" useGeneratedKeys="true">
+        insert into staff(name, dep_num, phone, password, state,in_service)
+        values (#{name}, #{depNum}, #{phone}, #{work_password}, true,true)
+    </insert>
+
 
 </mapper>
 
