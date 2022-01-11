@@ -50,10 +50,10 @@
           @selection-change="handleSelectionChange_physics"
           @select = "onRowClick_physics">
           <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>
-          <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
-          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="cpuCore" label="CPU(核)" width="150"></el-table-column>
+          <el-table-column property="ram" label="内存(G)" width="150"></el-table-column>
           <el-table-column property="storage" label="硬盘(G)" width="150"></el-table-column>
-          <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+          <el-table-column property="price" label="单价(/月)" ></el-table-column>
 <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
         </el-table>
         <p></p>
@@ -67,10 +67,10 @@
                 :summary-method="getSum"
                 show-summary
       >
-        <el-table-column property="cpu" label="CPU(核)" ></el-table-column>
-        <el-table-column property="memory" label="内存(G)" ></el-table-column>
+        <el-table-column property="cpuCore" label="CPU(核)" ></el-table-column>
+        <el-table-column property="ram" label="内存(G)" ></el-table-column>
         <el-table-column property="storage" label="硬盘(G)" ></el-table-column>
-        <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+        <el-table-column property="price" label="单价(/月)" ></el-table-column>
 <!--        <el-table-column property="ip" label="IP地址"></el-table-column>-->
         <el-table-column
           fixed="right"
@@ -120,12 +120,12 @@
               </el-radio>
             </template>
           </el-table-column>
-          <el-table-column property="spe_family" label="规格族" width="150"></el-table-column>
-          <el-table-column property="cpu" label="VCPu" width="150"></el-table-column>
-          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
-          <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="200"></el-table-column>
-          <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
-          <el-table-column property="unit_price" label="单价(/月)"></el-table-column>
+          <el-table-column property="description" label="规格族" width="150"></el-table-column>
+          <el-table-column property="cpuCore" label="VCPu" width="150"></el-table-column>
+          <el-table-column property="ram" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="processorFrequency" label="处理器主频/睿频" width="200"></el-table-column>
+          <el-table-column property="processorModel" label="处理器型号" width="150"></el-table-column>
+          <el-table-column property="price" label="单价(/月)"></el-table-column>
 
           <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
         </el-table>
@@ -135,12 +135,12 @@
       </el-dialog>
 
       <el-table :data="tabledata_virtual" border >
-        <el-table-column property="spe_family" label="规格族" width="130"></el-table-column>
-        <el-table-column property="cpu" label="VCPu" width="100"></el-table-column>
-        <el-table-column property="memory" label="内存(G)" width="100"></el-table-column>
-        <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="150"></el-table-column>
-        <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
-        <el-table-column property="unit_price" label="单价(/月)" width="100"></el-table-column>
+        <el-table-column property="description" label="规格族" width="130"></el-table-column>
+        <el-table-column property="cpuCore" label="VCPu" width="100"></el-table-column>
+        <el-table-column property="ram" label="内存(G)" width="100"></el-table-column>
+        <el-table-column property="processorFrequency" label="处理器主频/睿频" width="150"></el-table-column>
+        <el-table-column property="processorModel" label="处理器型号" width="150"></el-table-column>
+        <el-table-column property="price" label="单价(/月)" width="100"></el-table-column>
           <el-table-column property="account_virtual" label="数量" >
             <template slot-scope="scope" >
               <el-input-number v-model="scope.row.num"
@@ -265,81 +265,19 @@ export default {
       tabledata_virtual:[
       ],
       // 新增物理机弹窗内表格数据
-      gridData_physics:[{
-        cpu:'2',
-        memory:'3',
-        storage:'3',
-        unit_price:'1000'
-
-      },
-        {
-          cpu:'1',
-          memory:'3',
-          storage:'3',
-          unit_price:'500'
-        },
-        {
-          cpu:'10',
-          memory:'3',
-          storage:'3',
-          unit_price:'10000'
-        },
-        {
-          cpu:'10',
-          memory:'3',
-          storage:'8',
-          unit_price:'11000'
-        },
-        {
-          cpu:'7',
-          memory:'3',
-          storage:'8',
-          unit_price:'8000'
-        }],
+      gridData_physics:[],
       // 新增虚拟机弹窗内表格数据
-      gridData_virtual :[{
-        spe_family:'共享标准型s6',
-        cpu:'1vCPU',
-        memory:'1',
-        cpu_frequency:'2.5/3.2GHz',
-        cpu_model:'intel1',
-        unit_price:'30',
-        account_virtual:'',
-      },
-        {
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'2',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'60',
-          account_virtual:'',
-        },{
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'3',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'90',
-          account_virtual:'',
-        },{
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'4',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'120',
-          account_virtual:'',
-        },]
+      gridData_virtual :[]
     }
   },
   // 获取当前时间的定时器
   mounted(){
-    let that = this;
-    //定时器
-    setInterval(()=>{
-      that.getDateFunc();
-    },1000)
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res)=>{
+      this.gridData_physics = res.data;
+    });
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res)=>{
+      this.gridData_virtual = res.data;
+    });
   },
  methods: {
    //计算资源总价格

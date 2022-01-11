@@ -31,7 +31,7 @@ public class applyTicket {
      * 查询所有未分配的物理机
      * @return
      */
-    @GetMapping("selectAllpc")
+    @GetMapping("selectAllPc")
     public List<PhysicsComResource> selectAllpc(){
         return this.physicsComResourceService.selectAllpc();
     }
@@ -40,7 +40,7 @@ public class applyTicket {
      * 查询所有虚拟机规格
      * @return
      */
-    @GetMapping("selectAllvm")
+    @GetMapping("selectAllVm")
     public List<VmSpecifications> selectAllvm(){
         return this.vmSpecificationsService.selectAllvm();
     }
