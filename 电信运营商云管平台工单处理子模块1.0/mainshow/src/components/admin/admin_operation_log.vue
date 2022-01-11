@@ -25,12 +25,12 @@
           <el-table-column
             prop="workNum"
             label="工号"
-            width="180">
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="name"
             label="姓名"
-            width="180">
+            width="auto">
           </el-table-column>
           <el-table-column
             prop="operateTime"
