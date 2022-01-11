@@ -98,7 +98,6 @@
     <div style="border: rgba(82,182,154,0.25) solid 3px">
 
       <div class="page_title">虚拟机资源</div>
-    <!--    <div class="page_title_min">虚拟机资源</div>-->
     <div class="page_line"></div>
 
     <div class="page_block">
@@ -185,12 +184,23 @@
         </el-form-item>
         <el-button type="primary" @click="calculate_price()">主要按钮</el-button>
         <el-input
-          placeholder="请输入内容"
+          placeholder="总价"
           v-model="total_price"
           :disabled="true">
         </el-input>
       </el-form>
+
+
     </div>
+    </div>
+
+    <p></p>
+    <div style="border: rgba(82,182,154,0.25) solid 3px">
+      <div class="page_title">虚拟机资源</div>
+      <div class="page_line"></div>
+      <div class="page_block">
+        <upload_file_new></upload_file_new>
+      </div>
     </div>
 
     <p></p>
@@ -203,7 +213,10 @@
 </template>
 
 <script>
+import upload_file from "./upload_file";
+import Upload_file_new from "./upload_file_new";
 export default {
+  components:{Upload_file_new, upload_file},
   name: "applytable2",
   data(){
     return{
@@ -424,11 +437,12 @@ export default {
      }else{
        this.dialogTableVisible_virtual=false//关闭弹窗
 
-         this.tabledata_virtual.push(this.radioSelect);
-         this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
+       this.tabledata_virtual.push(this.radioSelect);
+       this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
        this.$refs.multipleTable_virtual.clearSelection()
        this.radioSelect.splice(0,this.radioSelect.length)
        this.currentRowIndex_virtual.splice(0,this.currentRowIndex_virtual.length)
+
      }
    },
    // 获取当前时间并赋值给this.tabledata_message.time
@@ -502,26 +516,34 @@ export default {
    handleChange_virtual(value,scope){
      this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
      this.virtual_price_temp = 0
-     // console.log(this.tabledata_virtual[scope.$index].unit_price)
-     // console.log(this.tabledata_virtual[scope.$index].unit_price)
+
      for(let i = 0; i < this.tabledata_virtual.length; ++i){
        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
        this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
      }
-
-     // this.virtual_price_temp += scope.row.num * scope.row.unit_price
-
-     console.log(this.virtual_price_temp)
      this.virtual_price_temp = this.diff_time*this.virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
 
      this.total_price = this.virtual_price_temp + this.physics_price
-     // console.log(scope.row.num)
-      console.log(scope)
-     console.log(this.total_price)
-     // console.log(value)
-     // console.log(scope.$index)
 
-   }
+   },
+
+   handleAdd() {
+     this.$refs.fileUploadDialog.show()
+   },
+   // getAttachList() {
+   //   this.loading = true
+   //   this.attachQuery.billId = this.form.noticeId
+   //   this.attachQuery.billType = 10
+   //   listAttachment(this.attachQuery).then(response => {
+   //     this.attachList = response.rows
+   //     this.attachList.forEach(el => {
+   //       // 转为kb，取小数点后2位
+   //       el.fileSize = parseFloat(el.fileSize / 1024).toFixed(2)
+   //     })
+   //     this.attachTotal = response.total
+   //     this.loading = false
+   //   }).catch(() => {})
+   // },
  },
 
 
