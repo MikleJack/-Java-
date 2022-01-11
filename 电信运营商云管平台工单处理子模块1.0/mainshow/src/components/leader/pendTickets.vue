@@ -17,7 +17,17 @@
           width="auto">
         </el-table-column>
         <el-table-column
-          prop="applyTime"
+          prop="workOrderType"
+          label="工单类型"
+          width="auto">
+        </el-table-column>
+        <el-table-column
+          prop="workOrderState"
+          label="工单状态"
+          width="auto">
+        </el-table-column>
+        <el-table-column
+          prop="expirationTime"
           label="资源到期时间"
           sortable
           width="auto">
@@ -66,7 +76,7 @@ export default {
   name: "pending_ticket",
   components: {Ticket_details},
   mounted() {
-    this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+0+"&size="
+    this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+0+"&size="
       +this.pageSize+"&orderState=待审批").then((res)=>{
       this.tableData= res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
@@ -77,7 +87,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+page+"&size="
+      this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+page+"&size="
         +this.pageSize+"&orderState=待审批").then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
