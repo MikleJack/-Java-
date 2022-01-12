@@ -6,12 +6,16 @@ import com.example.back2.service.table.AllocatedComService;
 import com.example.back2.service.table.PhysicsComResourceService;
 import com.example.back2.service.table.VmSpecificationsService;
 import com.example.back2.service.table.WorkOrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,18 +51,16 @@ public class applyTicket {
     public List<VmSpecifications> selectAllvm(){
         return this.vmSpecificationsService.selectAllvm();
     }
-//申请工单接口
+
+    //申请工单接口
     @PostMapping("intsertApplyTicket")
-    public String intsertApplyTicket(String workOrderName,Date expirationTime,String reason,Integer workernum,String file,Double price){
+    public String intsertApplyTicket(String workOrderName,Date expirationTime,String reason,Integer workNum,String file,Double price){
 //        生成工单号，并传入
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String workOrderNum = df.format(d);
-        double t1 = Math.random();
-        t1 *= 10000;
-        int t2 = (int) t1;
-        workOrderNum += t2+ "";
-//        System.out.println(workOrderNum);
+        int randomNum = (int) ((Math.random() * 9 + 1) * 1000);
+        workOrderNum += randomNum+ "";
 
         WorkOrder workOrder = new WorkOrder();
 //        修改工单号
@@ -71,7 +73,7 @@ public class applyTicket {
 //  传入理由描述
         workOrder.setReason(reason);
 // 传入申请人工号
-        workOrder.setWorkerNum(workernum);
+        workOrder.setWorkerNum(workNum);
 //传入工单类型
         workOrder.setWorkOrderType("申请工单");
 //传入附件
@@ -80,16 +82,24 @@ public class applyTicket {
         workOrder.setPrice(price);
 // 修改工单状态
         workOrder.setWorkOrderState("待审批");
-//
-        this.workOrderService.insert(workOrder);
-//
+//        System.out.println(workOrder.getWorkOrderNum());
+        System.out.println(this.workOrderService.insert(workOrder).getWorkOrderNum());
         return workOrder.getWorkOrderNum();
+
     }
 
     @PostMapping("insertAllocatedCom")
-    public boolean insertAllocatedCom(String qs){
-        Object m = JSON.parse(qs);
-        System.out.println(qs);
+    public boolean insertAllocatedCom(String qs,String workOrderNum){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<AllocatedCom> listAllocateCom = mapper.readValue(qs, new TypeReference<List<AllocatedCom>>() {
+            });
+            for (AllocatedCom i:listAllocateCom){
+
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -116,8 +126,8 @@ public class applyTicket {
 
         String strFormat = simpleDateFormat.format(new Date());
         //文件保存路径
-        String realPath = req.getServletContext().getRealPath("/") + strFormat;
-
+        String realPath = "" + strFormat;
+        System.out.println(realPath);
         File folder = new File(realPath);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -139,4 +149,4 @@ public class applyTicket {
 
         return resultMap;
     }
-    }
+}

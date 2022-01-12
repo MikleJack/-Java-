@@ -207,7 +207,7 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type">提交</el-button>
+      <el-button class="add_type" @click="submit">提交</el-button>
     </div>
   </div>
 </template>
@@ -284,6 +284,7 @@ export default {
       that.getDateFunc();
       that.calculate_sum();
     },1000)
+    this.scope.row.num = 50;
   },
  methods: {
    //计算资源总价格
@@ -509,6 +510,14 @@ export default {
    //     this.loading = false
    //   }).catch(() => {})
    // },
+   //提交所有工单数据
+   submit(){
+     this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
+       {workOrderName:this.tabledata_message.order_name,expirationTime:this.tabledata_message.apply_time,
+         reason:this.tabledata_message.reason,workNum:sessionStorage.getItem("work_num"),file:"",price:this.total_price}).then((res)=>{
+           alert(res.data);
+     })
+   }
  },
 
 

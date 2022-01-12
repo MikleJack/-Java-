@@ -65,7 +65,57 @@
       </div>
     </div>
     <!--通知栏-->
-    <div class="left-bottom"></div>
+    <div class="left-bottom">
+      <div class="size-icon">
+        <i class="el-icon-message-solid" ></i>
+      </div>
+      <div class="message_title">
+        通知中心
+      </div>
+      <div class="round-i1">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729已被审批通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729审批未通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729即将到期 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 您的账号已被解除锁定 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 请尽快完善个人信息 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729已被审批通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729审批未通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+
+      <div class="pagination">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="1000"
+          style="color: #0c805f">
+        </el-pagination>
+      </div>
+    </div>
     <!--右下方-->
     <div class="right-bottom">
       <div class="chart">
@@ -75,15 +125,32 @@
       <!--管理员按钮-->
       <div class="adminBottom">
         <el-row class="adminButton1" type="flex" justify="center" align="middle">
-          <el-button @click="dialogVisible_budget=true" size="small" type="primary" round>部门预算设置</el-button>
+          <el-tooltip effect="light" content="部门预算设置" placement="left">
+          <el-button style="margin-top: 20%; color: white;background-color: #52b69a;font-size: 30px"
+                     @click="dialogVisible_budget=true" size="mini"
+                     icon="el-icon-odometer" circle
+                     ></el-button>
+          </el-tooltip>
         </el-row>
         <el-row class="adminButton2" type="flex" justify="center" align="middle">
-          <el-button size="small" type="primary" round>系统资源量调整</el-button>
+          <el-tooltip effect="light" content="物理机资源及价格配置" placement="left">
+          <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
+                     @click="dialogVisible_phy=true" size="mini"
+                     icon="el-icon-monitor" circle></el-button>
+          </el-tooltip>
+        </el-row>
+        <el-row class="adminButton2" type="flex" justify="center" align="middle">
+          <el-tooltip effect="light" content="虚拟机资源及价格配置" placement="left">
+            <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
+                       @click="dialogVisible_vir=true" size="mini"
+                       icon="el-icon-connection" circle></el-button>
+          </el-tooltip>
         </el-row>
       </div>
     </div>
     <!--    点击部门预算设置后的dialog界面-->
     <el-dialog
+      style="text-align: center"
       title="部门预算设置"
       :visible.sync="dialogVisible_budget"
       width="500px"
@@ -99,7 +166,7 @@
           </el-table-column>
           <el-table-column prop="budget" label="预算" width="278.5" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.budget" controls-position="right" @change="handleChange"
+              <el-input-number v-model="scope.row.budget" controls-position="right" @change="handleChange_bud"
                                :precision="2" :step="0.1" :min="0" :max="9999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
@@ -108,7 +175,74 @@
       </div>
       <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_budget = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_budget = false">确 定</el-button>
+                <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="dialogVisible_budget = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!--    点击物理机资源配置后的dialog界面-->
+    <el-dialog
+      style="text-align: center"
+      title="物理机资源及价格配置"
+      :visible.sync="dialogVisible_phy"
+      width="762px"
+      height="700px"
+      :before-close="handleClose">
+      <div class="block" style="text-align: center">
+        <el-table class="budTable" frame=above
+                  :data="tableData_phy"
+                  border
+                  style="width: 100%"
+                  :cell-style="{textAlign:'center'}">
+          <el-table-column prop="phyNum" label="物理机编号" width="120" align="center"></el-table-column>
+          <el-table-column prop="cpu" label="CPU(核)" width="120" align="center"></el-table-column>
+          <el-table-column prop="memory" label="内存(G)" width="120" align="center"></el-table-column>
+          <el-table-column prop="men" label="存储(G)" width="120" align="center"></el-table-column>
+          <el-table-column label="价格(元/月)" width="240" align="center">
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.index" controls-position="right" @change="handleChange_phy"
+                               :precision="2" :step="0.1" :min="0" :max="9999"
+                               style="margin-left: 8%" size="mini"></el-input-number>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible_phy = false">取 消</el-button>
+                <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="dialogVisible_phy = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!--点击虚拟机资源配置后的dialog界面-->
+    <el-dialog
+      style="text-align: center"
+      title="物理机资源及价格配置"
+      :visible.sync="dialogVisible_vir"
+      width="762px"
+      height="700px"
+      :before-close="handleClose">
+      <div class="block" style="text-align: center">
+        <el-table class="budTable" frame=above
+                  :data="tableData_vir"
+                  border
+                  style="width: 100%"
+                  :cell-style="{textAlign:'center'}">
+          <el-table-column prop="specific" label="规格族" width="100" align="center"></el-table-column>
+          <el-table-column prop="model" label="处理机型号" width="100" align="center"></el-table-column>
+          <el-table-column prop="v_cpu" label="CPU(核)" width="100" align="center"></el-table-column>
+          <el-table-column prop="memory" label="内存(G)" width="100" align="center"></el-table-column>
+          <el-table-column prop="men" label="存储(G)" width="100" align="center"></el-table-column>
+          <el-table-column label="价格(元/月)" width="220" align="center">
+            <template slot-scope="scope">
+              <el-input-number v-model="scope.row.index" controls-position="right" @change="handleChange_vir"
+                               :precision="2" :step="0.1" :min="0" :max="9999"
+                               style="margin-left: 8%" size="mini"></el-input-number>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible_vir = false">取 消</el-button>
+                <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="dialogVisible_vir = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -148,9 +282,6 @@ export default {
     },
 
     //部门预算设置的dialog函数
-    handleClick_budget() {
-      this.dialogVisible_budget = true;
-    },
     handleClose(done) {
       this.$confirm('确认关闭？')
       .then(_ => {
@@ -159,7 +290,13 @@ export default {
       .catch(_ => {});
     },
 
-    handleChange(value) {
+    handleChange_bud(budValue) {
+      console.log(value);
+    },
+    handleChange_phy(phyValue) {
+      console.log(value);
+    },
+    handleChange_vir(phyValue) {
       console.log(value);
     }
   },
@@ -191,7 +328,10 @@ export default {
       department_name:'小组1',
       //具体部门预算
       department_nameBud:'10',
+
       dialogVisible_budget: false,
+      dialogVisible_phy: false,
+      dialogVisible_vir: false,
 
       tableData_bud: [{
         department_name: '小组1',
@@ -200,8 +340,52 @@ export default {
         department_name: '小组2',
         budget: '10',
       }
-      ]
+      ],
 
+      tableData_phy:[{
+        phyNum: 'system S2',
+        cpu: '双核',
+        memory: 100,
+        men: 100
+      },{
+        phyNum: 'system S2',
+        cpu: '双核',
+        memory: 100,
+        men: 100
+      },{
+        phyNum: 'system S2',
+        cpu: '双核',
+        memory: 100,
+        men: 100
+      },
+      ],
+      num: '',
+
+      tableData_vir:[{
+        specific:'s6',
+        model: 'intel 1',
+        v_cpu: '1',
+        memory: 8,
+        men: 100,
+      },{
+        specific:'s6',
+        model: 'intel 1',
+        v_cpu: '1',
+        memory: 8,
+        men: 100,
+      },{
+        specific:'s6',
+        model: 'intel 1',
+        v_cpu: '1',
+        memory: 8,
+        men: 100,
+      },{
+        specific:'s6',
+        model: 'intel 1',
+        v_cpu: '1',
+        memory: 8,
+        men: 100,
+      }]
     }
 
   },
@@ -210,7 +394,7 @@ export default {
     var budChart = echarts.init(chartDom);
     var budOption;
     budOption = {
-      width: '700px',
+      width: '600px',
       height: '250px',
       color:'#349165',
       title:{
@@ -250,55 +434,8 @@ export default {
           lineStyle:{
             color: 'green',
             // type: 'dashed'//可选值还有 dotted  solid
-          }
-        }
-      ]
-    };
-    budOption && budChart.setOption(budOption);
-
-    var chartDome = document.getElementById('order');
-    var orderCharts = echarts.init(chartDome);
-    var orderOption;
-    orderOption = {
-      height: '120px',
-      color:'rgba(63,152,111,0.9)',
-      title:{
-        tooltip: {
-          trigger: 'item',
-          triggerOn: 'click',
-          formatter: '{b}:{c}'
-        },
-        subtext:'最近工单申请情况',
-        x:'center',
-        subtextStyle: {//副标题文本样式{"color": "#aaa"}
-          // fontFamily: 'Arial, Verdana, sans...',
-          fontSize: 15,
-          fontStyle: 'normal',
-          fontWeight: 'normal',
-          "color": "#48b981"
-        },
-      },
-      xAxis: {
-        type: 'category',
-        data: ['2021.9','2021.9','2021.10', '2021.11', '2021.12', '2022.1'],
-        scale: true
-      },
-      yAxis: {
-        type: 'value',
-        scale: true
-      },
-      series: [
-        {
-          data: [9.8, 8.7, 8.7, 9.6, 7.4, 0.9],
-          type: 'bar',
-          label: {
-            show: true,	// 是否可见
-            // color:'green',
           },
-          barStyle:{
-            color: 'green',
-            // type: 'dashed'//可选值还有 dotted  solid
-          },
+          //显示最大值与最小值
           markPoint: {
             data: [
               {
@@ -308,11 +445,20 @@ export default {
                 type: 'min', name: '最小值'
               }
             ]
+          },
+          //显示平均值
+          markLine: {
+            data: [
+              {
+                type: 'average', name: '平均值'
+              }
+            ]
           }
         }
       ]
     };
-    orderOption && orderCharts.setOption(orderOption);
+    budOption && budChart.setOption(budOption);
+
   },
 }
 </script>
@@ -459,12 +605,6 @@ export default {
   font-size: 15px;
   /*background-color: #4cbda3;*/
 }
-.enter{
-  width: 10%;
-  height: 100%;
-  float: left;
-  /*background-color: #36ba99;*/
-}
 .left-bottom{
   width: 36%;
   height: 61%;
@@ -494,7 +634,7 @@ export default {
   height: 100%;
   float: left;
   margin-top: 5%;
-  background-color: #34957a
+  /*background-color: #34957a*/
 }
 .adminButton1 {
   height: 20%;
@@ -508,5 +648,65 @@ export default {
   border:solid #add9c0;
   border-width:1px 1px 1px 1px;
 }
+.size-icon{
+  font-size: 50px;
+  color: #0c805f;
+  width:60px;
+  float: left;
+  height:50px;
+}
+.message_title{
+  font-size: 25px;
+  color: #3e8f76;
+  font-weight: bolder;
+  margin-left: 40%;
+  margin-top: 2%;
+}
+.round-i1{
 
+
+  height: 10px;
+  /*width: 10px;*/
+  margin-top: 10%;
+  margin-left: 3%;
+}
+.round-i{
+
+
+  height: 10px;
+  /*width: 10px;*/
+  margin-top: 30px;
+  margin-left: 3%;
+}
+.round{
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  margin-top: 6px;
+
+  background: rgb(62, 143, 118) !important;
+
+  margin-left: 0;
+}
+.message{
+  display: block;
+  float: left;
+  width: fit-content;
+  color: rgba(12, 12, 12, 0.51);
+  margin-left: 5px;
+}
+.message_date{
+  display: block;
+  float: right;
+  color: rgba(12, 12, 12, 0.51);
+
+  margin-right: 5px;
+}
+.pagination {
+  height: fit-content;
+  margin-bottom: 1px;
+  margin-top: 5%;
+}
 </style>
