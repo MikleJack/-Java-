@@ -199,6 +199,11 @@
         where work_order_num = #{workOrderNum}
     </update>
 
+    <!--插入延期工单-->
+    <insert id="insertDelayWorkOrder" useGeneratedKeys="true">
+        insert into work_order(work_order_num,work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
+        values (#{workOrderNum}, #{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState}, #{reason}, #{price}, #{offlineReason})
+    </insert>
 
 </mapper>
 

@@ -4,6 +4,8 @@ import com.example.back2.entity.table.WorkOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,7 +100,28 @@ public interface WorkOrderDao {
      * @param offlineReason  下线原因
      * @return 用户的全部工单
      */
-    Boolean offline(@Param("workOrderNum")String workOrderNum,@Param("offlineReason") String offlineReason);
+    Boolean offline(String workOrderNum, String offlineReason);
+
+
+//----------------------------延期按钮-顶部----------------------------
+
+    /**
+     * 通过工单编号进行延期操作
+     *
+     * @param workOrder  延期工单
+     * @return 是否发起延期请求成功
+     */
+    Boolean insertDelayWorkOrder(WorkOrder workOrder);
+
+    /**
+     * 通过工单编号查询该工单的价格
+     *
+     * @param workOrderNum 主键
+     * @return 该工单总价
+     */
+    Double queryPriceById(String workOrderNum);
+
+//----------------------------延期按钮-底部----------------------------
 
 }
 
