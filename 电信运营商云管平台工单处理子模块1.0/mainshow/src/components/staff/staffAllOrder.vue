@@ -1,6 +1,7 @@
 <template>
   <div>
     <StaffAllOrderOffline ref="StaffAllOrderOffline"></StaffAllOrderOffline>
+    <StaffAllOrderDelay ref="StaffAllOrderDelay"></StaffAllOrderDelay>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
@@ -64,7 +65,10 @@
         width="250">
         <templte slot-scope="scope">
           <el-button @click="handleClick_detail(scope.row)" type="text" size="small">详情</el-button>
-          <el-button @click="handleClick_delay(scope.row)" type="text" size="small">延期</el-button>
+          <el-button @click="handleClick_delay(scope.row.workOrderNum)"
+                     type="text"
+                     size="small"
+                     :disabled="scope.row.workOrderState != '二级审批通过'">延期</el-button>
           <el-button @click="handleClick_offline(scope.row.workOrderNum,scope.row.workOrderState)"
                      type="text"
                      size="small"
@@ -211,48 +215,15 @@
 
       </div>
     </el-dialog>
-
-      <!--    点击延期后的dialog界面-->
-      <el-dialog
-        title="延期申请"
-        :visible.sync="dialogVisible_delay"
-        width="50%"
-        :before-close="handleClose">
-<!--        延期日期选择-->
-        <div class="block">
-          <el-date-picker
-            v-model="value1"
-            type="datetime"
-            placeholder="选择延期时间">
-          </el-date-picker>
-        </div>
-
-<!--        空格占位，美观-->
-        <div style="margin: 20px 0;"></div>
-
-<!--        延期原因-->
-        <el-input
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入延期原因"
-          v-model="delayTextarea">
-        </el-input>
-
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_delay = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_delay = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
-
   </div>
 </template>
 
 <script>
 import StaffAllOrderOffline from "./dialogs/StaffAllOrderOffline";
+import StaffAllOrderDelay from "./dialogs/StaffAllOrderDelay";
 export default {
   name: "StaffAllOrder",
-  components:{StaffAllOrderOffline},
+  components:{StaffAllOrderOffline,StaffAllOrderDelay},
   data() {
     return {
       dialogVisible_detail: false,
@@ -341,9 +312,10 @@ export default {
     handleClick_detail() {
       this.dialogVisible_detail = true;
     },
-    //操作的延期dialog函数
-    handleClick_delay() {
-      this.dialogVisible_delay = true;
+    //延期按钮对话框显示
+    handleClick_delay(workOrderNum) {
+      this.$store.state.staffAllOrder_DelayDialogVisible = true;
+      this.$refs.StaffAllOrderDelay.setWorkOrderNum(workOrderNum);
     },
     //下线按钮对话框显示
     handleClick_offline(workOrderNum,workOrderState) {
@@ -354,11 +326,6 @@ export default {
       this.$axios.get("http://localhost:8084/staffAllTickets/offline?workOrderNum=" + sessionStorage.getItem("work_num") +
                         '&workOrderState='+  + '&offlineReason=' +this.offLineTextarea )
     },
-
-    //通过工单是否通过二级审批判断下线按钮是否可用
-    ableToOffline(){
-
-    }
   }
 }
 
