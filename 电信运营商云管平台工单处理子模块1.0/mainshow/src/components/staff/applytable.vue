@@ -514,7 +514,9 @@ export default {
    submit(){
      this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
        {workOrderName:this.tabledata_message.order_name,expirationTime:this.tabledata_message.apply_time,
-         reason:this.tabledata_message.reason,workNum:sessionStorage.getItem("work_num"),file:"",price:this.total_price})
+         reason:this.tabledata_message.reason,workNum:sessionStorage.getItem("work_num"),file:"",price:this.total_price}).then((res)=>{
+           alert(res.data);
+     })
    }
  },
 

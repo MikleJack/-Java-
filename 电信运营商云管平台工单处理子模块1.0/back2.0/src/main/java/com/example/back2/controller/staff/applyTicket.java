@@ -6,6 +6,9 @@ import com.example.back2.service.table.AllocatedComService;
 import com.example.back2.service.table.PhysicsComResourceService;
 import com.example.back2.service.table.VmSpecificationsService;
 import com.example.back2.service.table.WorkOrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,11 +59,8 @@ public class applyTicket {
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String workOrderNum = df.format(d);
-        double t1 = Math.random();
-        t1 *= 10000;
-        int t2 = (int) t1;
-        workOrderNum += t2+ "";
-//        System.out.println(workOrderNum);
+        int randomNum = (int) ((Math.random() * 9 + 1) * 1000);
+        workOrderNum += randomNum+ "";
 
         WorkOrder workOrder = new WorkOrder();
 //        修改工单号
@@ -82,16 +82,24 @@ public class applyTicket {
         workOrder.setPrice(price);
 // 修改工单状态
         workOrder.setWorkOrderState("待审批");
-//
-        this.workOrderService.insert(workOrder);
-//
+//        System.out.println(workOrder.getWorkOrderNum());
+        System.out.println(this.workOrderService.insert(workOrder).getWorkOrderNum());
         return workOrder.getWorkOrderNum();
+
     }
 
     @PostMapping("insertAllocatedCom")
-    public boolean insertAllocatedCom(String qs){
-        Object m = JSON.parse(qs);
-        System.out.println(qs);
+    public boolean insertAllocatedCom(String qs,String workOrderNum){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<AllocatedCom> listAllocateCom = mapper.readValue(qs, new TypeReference<List<AllocatedCom>>() {
+            });
+            for (AllocatedCom i:listAllocateCom){
+
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -141,4 +149,4 @@ public class applyTicket {
 
         return resultMap;
     }
-    }
+}
