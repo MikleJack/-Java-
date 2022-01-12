@@ -189,5 +189,16 @@
         delete from work_order where work_order_num = #{workOrderNum}
     </delete>
 
+    <!--将工单下线-->
+    <update id="offline">
+        update work_order
+        <set>
+            work_order_state = "下线",
+            offline_reason = #{offlineReason}
+        </set>
+        where work_order_num = #{workOrderNum}
+    </update>
+
+
 </mapper>
 

@@ -91,5 +91,14 @@ public interface WorkOrderDao {
      */
     int deleteById(String workOrderNum);
 
+    /**
+     * 通过员工编号分页查询
+     *
+     * @param workOrderNum 工单编号
+     * @param offlineReason  下线原因
+     * @return 用户的全部工单
+     */
+    Boolean offline(@Param("workOrderNum")String workOrderNum,@Param("offlineReason") String offlineReason);
+
 }
 
