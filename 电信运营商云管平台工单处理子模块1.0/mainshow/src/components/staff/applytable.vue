@@ -143,7 +143,7 @@
         <el-table-column property="price" label="单价(/月)" width="100"></el-table-column>
           <el-table-column property="account_virtual" label="数量" >
             <template slot-scope="scope" >
-              <el-input-number v-model="scope.row.num"
+              <el-input-number v-model="scope.row.quantity"
                                controls-position="right"
                                :min="1"
                                @change="(value) => handleChange_virtual(value, scope)"
@@ -172,12 +172,12 @@
 
 
       <P></P>
-      <el-form :inline="true" :model="tabledata_virtual" class="demo-form-inline">
+      <el-form :inline="true"  class="demo-form-inline">
         <el-form-item label="存储(G)">
-          <el-input v-model="tabledata_virtual.storage" placeholder="存储(G)"></el-input>
+          <el-input v-model="storage" placeholder="存储(G)"></el-input>
         </el-form-item>
         <el-form-item label="操作系统">
-          <el-select v-model="tabledata_virtual.win" placeholder="操作系统">
+          <el-select v-model="os" placeholder="操作系统">
             <el-option label="windows" value="windows"></el-option>
             <el-option label="linux" value="linux"></el-option>
           </el-select>
@@ -222,7 +222,8 @@ export default {
   data() {
     return {
       virtual_price_temp: 0,//暂存虚拟机总价
-      storage: 0,
+      storage: 40,
+      os:"",
       storage_price: 0.5,
       current_time: '',//当前时间
       expire_time: '',//资源到期时间
@@ -267,7 +268,8 @@ export default {
       // 新增物理机弹窗内表格数据
       gridData_physics: [],
       // 新增虚拟机弹窗内表格数据
-      gridData_virtual: []
+      gridData_virtual: [],
+
     }
   },
   // 获取当前时间的定时器
@@ -284,7 +286,7 @@ export default {
       that.getDateFunc();
       that.calculate_sum();
     }, 1000)
-    this.scope.row.num = 50;
+    this.scope.row.quantity = 50;
   },
   methods: {
     //计算资源总价格
@@ -455,7 +457,7 @@ export default {
 
 //虚拟机资源数量改变
     handleChange_virtual(value, scope) {
-      this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
+      this.tabledata_virtual[scope.$index].account_virtual = scope.row.quantity
       this.virtual_price_temp = 0
 
       for (let i = 0; i < this.tabledata_virtual.length; ++i) {
@@ -467,7 +469,6 @@ export default {
 
     },
     calculate_sum() {
-      this.storage = this.tabledata_virtual.storage
       let storage_sum = this.storage * this.storage_price * this.diff_time
       if (isNaN(this.virtual_price_temp)) {
         this.virtual_price_temp = 0
@@ -507,6 +508,7 @@ export default {
 
     //提交所有工单数据
     submit() {
+      console.log(this.tabledata_virtual);
       this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
         {
           workOrderName: this.tabledata_message.order_name, expirationTime: this.tabledata_message.apply_time,
@@ -518,6 +520,14 @@ export default {
             qs: JSON.stringify(this.tabledata_physics),
             workOrderNum: res.request.response
           })
+            this.$axios.post("http://localhost:8084/applyTickets/insertAllocationVm",{
+              qs:JSON.stringify(this.tabledata_virtual),
+              workOrderNum:res.request.response,
+              storage:this.storage,
+              os:this.os
+            });
+
+
         }
       })
     }
