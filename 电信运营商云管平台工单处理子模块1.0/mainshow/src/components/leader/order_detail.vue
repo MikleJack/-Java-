@@ -38,8 +38,6 @@
         <el-table
           :data="phyCom"
           border
-          :summary-method="getSum"
-          show-summary
         >
           <el-table-column
             type="index"
@@ -115,13 +113,36 @@
         </el-table>
       </div>
       <!--      部门资源利用情况展示-->
-      <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px ">
+      <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">
         <div class="page_title" >部门预算利用情况</div>
-        <!--        部门已用预算/部门总预算-->
-        <el-progress :text-inside="true" :stroke-width="25":format="format" :percentage="total_percentage()":color="customColorMethod"></el-progress>
-        <!--        工单预算/部门剩余预算-->
-        <el-progress :text-inside="true" :stroke-width="25":format="format2" :percentage="percentage()"></el-progress>
+        <div class="total_progress">
+          <br>
+          <el-progress type="circle" class="left_progress"
+                       :stroke-width="15"
+                       :percentage="total_percentage()"
+                       :color="customColorMethod">
+          </el-progress>
+        </div>
+        <div class="total_description">
+          <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
+          已使用预算：&nbsp;{{used_budget}}元
+        </div>
+        <div class="progress">
+          <br>
+          <el-progress type="circle"
+                       class="right_progress"
+                       :stroke-width="15"
+                       :percentage="percentage()"
+                       :color="customColorMethod">
+          </el-progress>
+        </div>
+        <div class="description">
+          <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
+          工单使用预算：&nbsp;{{order_budget}}元
+        </div>
+
       </div>
+
       <!--显示流转过程-->
       <div class="frame" style=" border: rgba(82,182,154,0.25) solid 3px ">
         <div class="page_title">流转过程</div>
@@ -254,59 +275,21 @@ export default {
     };
   },
   methods: {
-    //物理机价钱求和
-    getSum(param) {
-//此处打印param可以看到有两项，一项是columns，一项是data，最后一列可以通过columns.length获取到。
-      const {columns, data} = param
-      const len = columns.length
-      const sums = []
-      columns.forEach((column, index) => {
-        //如果是第一列，则最后一行展示为“总计”两个字
-        if (index === 0) {
-          sums[index] = '总计/元'
-          //如果是最后一列，索引为列数-1，则显示计算总和
-        } else if (index === 4) {
-          const values = data.map(item => Number(item[column.property]))
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            }, 0)
-          } else {
-            sums[index] = 'N/A'
-          }
-          //如果是除了第一列和最后一列的其他列，则显示为空
-        } else {
-          sums[index] = ''
-        }
-      })
-      return sums
-    },
     //部门已用预算/部门总预算进度条
     total_percentage(){
       return 100*this.used_budget/this.total_budget;
     },
-    format(){
-      return '部门总预算：'+this.total_budget+'  '+'已使用预算'+this.used_budget;
-    },
     //工单预算/部门剩余预算进度条
     percentage(){
-      return 100*this.order_budget/this.surplus_budget;
-    },
-    format2(){
       this.surplus_budget=this.total_budget-this.used_budget;
-      return '部门剩余预算：'+this.surplus_budget+'  '+'工单所需预算'+this.order_budget;
+      return 100*this.order_budget/this.surplus_budget;
     },
     customColorMethod(percentage) {
       if (percentage < 90) {
         return '#52b69a';
 
       } else {
-        return 'rgba(255,165,0,0.7)';
+        return 'rgba(250,116,14,0.55)';
       }
     },
   }
@@ -382,25 +365,35 @@ export default {
 }
 .frame{
   margin-bottom: 3%;
-
 }
-.el-progress{
-  margin-left: 10%;
-  width: 80%;
-  white-space: pre;
-  margin-bottom: 1%;
+.total_progress{
+  width:25%;
+  /*background-color: #0c805f;*/
+  float: left;
+  height: 200px;
+  text-align: center;
 }
-
-.el-progress-bar__outer{
-  background-color: white;
-  border-color: #52b69a;
-  border-style: solid;
+.total_description{
+  width: 25%;
+  /*background-color: #409EFF;*/
+  float: left;
+  height: 200px;
+  font-size: larger;
+  font-weight: bolder;
 }
-.el-progress-bar__inner{
-  background-color:#52b69a;
+.progress{
+  width: 25%;
+  /*background-color: rgba(255, 165, 0, 0.7);*/
+  float: left;
+  height: 200px;
 }
-.el-progress-bar__innerText{
-  white-space:pre-wrap;
+.description{
+  width: 25%;
+  /*background-color: rgba(12, 12, 12, 0.63);*/
+  float: left;
+  height: 200px;
+  font-size: larger;
+  font-weight: bolder;
 }
 </style>
 
