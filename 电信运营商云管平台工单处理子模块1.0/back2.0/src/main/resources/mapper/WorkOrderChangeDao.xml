@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.WorkOrderChangeDao">
+
+    <resultMap type="com.example.back2.entity.table.WorkOrderChange" id="WorkOrderChangeMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="changedOldOrder" column="changed_old_order" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WorkOrderChangeMap">
+        select work_order_num,
+               changed_old_order
+        from brccq2.work_order_change
+        where work_order_num = #{workOrderNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="WorkOrderChangeMap">
+        select work_order_num,
+               changed_old_order
+        from brccq2.work_order_change limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="WorkOrderChangeMap">
+        select
+        work_order_num, changed_old_order
+        from brccq2.work_order_change
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="changedOldOrder != null and changedOldOrder != ''">
+                and changed_old_order = #{changedOldOrder}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+
+    <insert id="insert" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq2.work_order_change(work_order_num,changed_old_order)
+        values (#{workOrderNum},#{changedOldOrder});
+    </insert>
+
+    <insert id="insertBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq2.work_order_change(changed_old_order)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.changedOldOrder})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
+        insert into brccq2.work_order_change(changed_old_order)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.changedOldOrder})
+        </foreach>
+        on duplicate key update
+        changed_old_order = values(changed_old_order)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update brccq2.work_order_change
+        <set>
+            <if test="changedOldOrder != null and changedOldOrder != ''">
+                changed_old_order = #{changedOldOrder},
+            </if>
+        </set>
+        where work_order_num = #{workOrderNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from brccq2.work_order_change
+        where work_order_num = #{workOrderNum}
+    </delete>
+
+</mapper>
+
