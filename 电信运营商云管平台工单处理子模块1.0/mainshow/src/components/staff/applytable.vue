@@ -196,7 +196,7 @@
 
     <p></p>
     <div style="border: rgba(82,182,154,0.25) solid 3px">
-      <div class="page_title">虚拟机资源</div>
+      <div class="page_title">附件</div>
       <div class="page_line"></div>
       <div class="page_block">
         <upload_file_new></upload_file_new>
@@ -215,6 +215,7 @@
 <script>
 import upload_file from "./upload_file";
 import Upload_file_new from "./upload_file_new";
+import qs from "qs";
 export default {
   components:{Upload_file_new, upload_file},
   name: "applytable2",
@@ -377,6 +378,8 @@ export default {
        this.multipleChoice_count=0;
        this.lineNumber_count=0;
        this.currentRowIndex_physics.splice(0,this.currentRowIndex_physics.length)
+
+       this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom",{qs:JSON.stringify(this.tabledata_physics)})
      }else{
        this.dialogTableVisible_virtual=false//关闭弹窗
 

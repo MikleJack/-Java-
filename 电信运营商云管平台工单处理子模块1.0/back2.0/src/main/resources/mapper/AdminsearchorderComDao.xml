@@ -81,6 +81,7 @@
             <if test="workOrderNum != null and workOrderNum != ''">
                 and work_order_num = #{workOrderNum}
             </if>
+            and assign = 0
         </where>
     </select>
 
