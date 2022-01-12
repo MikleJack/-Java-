@@ -16,13 +16,22 @@ public class changeTicket {
     @Resource
     private WorkOrderChangeService workOrderChangeService;
 
+//    创建变更工单
     @PostMapping("intsertChangeTicket")
-    public String intsertApplyTicket(String workOrderName, Date expirationTime, String reason, Integer workNum,String workOrderType, String file, Double price){
+    public String intsertApplyTicket( String workOrderName,Date expirationTime,String reason,Integer workNum,String file
+            ,Double price,String workOrderType) {
         applyTicket applyticket = new applyTicket();
-        String workOrderNum = applyticket.intsertApplyTicket(workOrderType,workOrderName,expirationTime,reason,workNum,file,price);
+        String workOrderNum = applyticket.intsertApplyTicket(workOrderName,expirationTime,reason,workNum,file,price,workOrderType);
         return workOrderNum;
     }
+//创建插入已申请资源
+    @PostMapping("insertAllocatedCom")
+    public boolean insertAllocatedCom(String qs,String workOrderNum){
+        applyTicket applyticket = new applyTicket();
+        return applyticket.insertAllocatedCom(qs,workOrderNum);
+    }
 
+//创建已经申请变更工单
     @PostMapping("insertWorkOrderChange")
     public WorkOrderChange insertWorkOrderChange(String workOrderNum,String changedOldOrder){
         System.out.println(workOrderNum);
