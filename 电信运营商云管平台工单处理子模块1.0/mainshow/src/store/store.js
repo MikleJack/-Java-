@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     workOrderDetailVisibleDetail: false,
-
+    staffAllOrder_OfflineDialogVisible:false,
   },
   mutations: {
 

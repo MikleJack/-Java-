@@ -32,10 +32,10 @@ public class searchOrder {
      * 带条件的分页查询
      *
      * @param adminsearchorderTable
-     * @return 查询结果
+     * @return 查询结果+
      */
     @PostMapping("criteriaQueryByPage")
-    public ResponseEntity<Page<AdminsearchorderTable>> criteriaQueryByPage(@RequestBody AdminsearchorderTable adminsearchorderTable) {
+    public ResponseEntity<Page<AdminsearchorderTable>> criteriaQueryByPage(AdminsearchorderTable adminsearchorderTable) {
         PageRequest pageRequest = PageRequest.of(0,8);
         return ResponseEntity.ok(this.adminsearchorderTableService.queryByPage(adminsearchorderTable, pageRequest));
     }
