@@ -114,9 +114,10 @@
           </el-table-column>
         </el-table>
       </div>
-<!--      部门资源利用情况展示-->
+<!--      部门预算利用情况展示-->
       <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">
         <div class="page_title" >部门预算利用情况</div>
+<!--        部门已用预算/部门总预算进度条-->
         <div class="total_progress">
           <br>
           <el-progress type="circle" class="left_progress"
@@ -124,10 +125,12 @@
                        :percentage="total_percentage()"
                        :color="customColorMethod"></el-progress>
         </div>
+<!--        文字描述-->
         <div class="total_description">
           <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
           已使用预算：&nbsp;{{used_budget}}元
         </div>
+<!--        工单预算/部门剩余预算进度条-->
         <div class="progress">
           <br>
           <el-progress type="circle"
@@ -138,21 +141,11 @@
 
           </el-progress>
         </div>
+<!--        文字描述-->
         <div class="description">
           <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
           工单使用预算：&nbsp;{{order_budget}}元
         </div>
-<!--        部门已用预算/部门总预算-->
-
-
-<!--        <p style="margin-left:30%;width:20%">-->
-
-<!--        </p>-->
-<!--&lt;!&ndash;        工单预算/部门剩余预算&ndash;&gt;-->
-
-<!--        <div>-->
-
-<!--        </div>-->
     </div>
 
       <!--显示流转过程-->
@@ -410,39 +403,7 @@ margin-right: -20%;
   margin-left:-10%;
   align:center,
 }
-.el-progress{
-  /*margin-left: 5%;*/
-  /*width: 50%;*/
-  /*white-space: pre;*/
-  margin-bottom: 1%;
-  /*color: black;*/
-}
 
-.el-progress-bar__outer{
-  background-color: white;
-  border-color: #52b69a;
-  border-style: solid;
-}
-.el-progress-bar__inner{
-  background-color:#52b69a;
-  color: black;
-}
-.el-progress-bar__innerText{
-  white-space:pre-wrap;
-  font-size: 5px;
-}
-.el-progress-bar__innerText{
-  color:white;
-}
-.left_progress{
-  margin-left: 5%;
-
-}
-.right_progress{
-
-
-  margin-left:30%
-}
 .total_progress{
   width:25%;
   /*background-color: #0c805f;*/
