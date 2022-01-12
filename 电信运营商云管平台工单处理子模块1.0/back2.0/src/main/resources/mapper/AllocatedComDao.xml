@@ -62,9 +62,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="comNum" useGeneratedKeys="true">
-        insert into brccq2.allocated_com(cpu_core, ram, storage, price)
-        values (#{cpuCore}, #{ram}, #{storage}, #{price})
+    <insert id="insert"  useGeneratedKeys="true">
+        insert into brccq2.allocated_com(com_num,work_order_num,cpu_core, ram, storage, price)
+        values (#{comNum},#{workOrderNum},#{cpuCore}, #{ram}, #{storage}, #{price})
     </insert>
 
     <insert id="insertBatch" keyProperty="comNum" useGeneratedKeys="true">
