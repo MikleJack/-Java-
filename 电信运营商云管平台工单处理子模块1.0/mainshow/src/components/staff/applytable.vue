@@ -221,14 +221,15 @@ export default {
   data(){
     return{
       virtual_price_temp: 0,//暂存虚拟机总价
-
+      storage:0,
+      storage_price:0.5,
       current_time:'',//当前时间
       expire_time:'',//资源到期时间
       diff_time:0,//资源到期时间-当前时间
 
-      physics_price:'',//物理机总价
-      virtual_price:'',//虚拟机总价
-      total_price:'',//资源总价
+      physics_price:0,//物理机总价
+      virtual_price:0,//虚拟机总价
+      total_price:0,//资源总价
       radio: '',//单选
       radioSelect: '',//选中的数据赋值给它
 
@@ -259,11 +260,9 @@ export default {
         reason:''
       }],
       // 已添加的物理机资源信息表数据
-      tabledata_physics:[
-      ],
+      tabledata_physics:[],
       // 已添加的虚拟机资源信息表数据
-      tabledata_virtual:[
-      ],
+      tabledata_virtual:[],
       // 新增物理机弹窗内表格数据
       gridData_physics:[],
       // 新增虚拟机弹窗内表格数据
@@ -278,6 +277,12 @@ export default {
     this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res)=>{
       this.gridData_virtual = res.data;
     });
+    let that = this;
+    //定时器
+    setInterval(()=>{
+      that.getDateFunc();
+      that.calculate_sum();
+    },1000)
   },
  methods: {
    //计算资源总价格
@@ -337,7 +342,7 @@ export default {
      row.row_index = rowIndex;
    },
    onRowClick_physics(row, event, column) {
-     for (var k = 0; k < row.length; k++) {
+     for (let k = 0; k < row.length; k++) {
        this.currentRowIndex_physics.push(row[k].row_index)
      }
    },
@@ -383,7 +388,7 @@ export default {
 
      }
    },
-   // 获取当前时间并赋值给this.tabledata_message.time
+
    getDateFunc(){
      let year = new Date().getFullYear();//年
      let month = new Date().getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
@@ -440,7 +445,7 @@ export default {
      this.virtual_price_temp = 0
      for(let i = 0; i < this.tabledata_virtual.length; ++i){
        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
      }
      console.log(this.virtual_price_temp)
    },
@@ -457,12 +462,31 @@ export default {
 
      for(let i = 0; i < this.tabledata_virtual.length; ++i){
        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
      }
-     this.virtual_price_temp = this.diff_time*this.virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
+     this.virtual_price_temp = this.diff_time*this.virtual_price_temp
 
-     this.total_price = this.virtual_price_temp + this.physics_price
 
+   },
+   calculate_sum(){
+     this.storage=this.tabledata_virtual.storage
+    let storage_sum=this.storage*this.storage_price*this.diff_time
+     if(isNaN(this.virtual_price_temp)){
+       this.virtual_price_temp=0
+     }
+
+     if(isNaN(this.physics_price)){
+       this.physics_price=0
+     }
+     if(isNaN(storage_sum)){
+       storage_sum=0
+     }
+
+     this.total_price = this.virtual_price_temp + this.physics_price+ storage_sum
+
+     if(isNaN(this.total_price)){
+       this.total_price=0
+     }
    },
 
    handleAdd() {
