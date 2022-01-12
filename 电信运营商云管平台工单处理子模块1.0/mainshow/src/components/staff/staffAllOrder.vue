@@ -1,6 +1,6 @@
 <template>
-
   <div>
+    <StaffAllOrderOffline ref="StaffAllOrderOffline"></StaffAllOrderOffline>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
@@ -35,7 +35,7 @@
       element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
         prop="workOrderNum"
-        label="工号"
+        label="工单编号"
         width="auto">
       </el-table-column>
       <el-table-column
@@ -65,7 +65,10 @@
         <templte slot-scope="scope">
           <el-button @click="handleClick_detail(scope.row)" type="text" size="small">详情</el-button>
           <el-button @click="handleClick_delay(scope.row)" type="text" size="small">延期</el-button>
-          <el-button @click="handleClick_offline(scope.row)" type="text" size="small">下线</el-button>
+          <el-button @click="handleClick_offline(scope.row.workOrderNum,scope.row.workOrderState)"
+                     type="text"
+                     size="small"
+                     :disabled="scope.row.workOrderState != '二级审批通过'">下线</el-button>
         </templte>
       </el-table-column>
     </el-table>
@@ -241,39 +244,23 @@
       </span>
     </el-dialog>
 
-    <!--    点击下线后的dialog界面-->
-    <el-dialog
-      title="下线申请"
-      :visible.sync="dialogVisible_offline"
-      width="50%"
-      :before-close="handleClose">
 
-<!--      下线申请原因-->
-      <el-input
-        type="textarea"
-        :autosize="{ minRows: 2, maxRows: 4}"
-        placeholder="请输入下线原因"
-        v-model="offLineTextarea">
-      </el-input>
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_offline = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_offline = false">确 定</el-button>
-              </span>
-    </el-dialog>
   </div>
-
 </template>
 
 <script>
-
+import StaffAllOrderOffline from "./dialogs/StaffAllOrderOffline";
 export default {
-  name: "staffAllOrder",
+  name: "StaffAllOrder",
+  components:{StaffAllOrderOffline},
   data() {
     return {
       dialogVisible_detail: false,
       dialogVisible_delay: false,
-      dialogVisible_offline: false,
       ticketData: [],
+
+      //中间值，用来保存当前工单编号等信息以用于执行下线等操作
+      IntermediateValue:'',
 
       //分页相关
       currentPage:1,
@@ -314,7 +301,8 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=20220003&page=0&size=8').then((res)=>{
+    this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
+                                                  + '&page=0'+ '&size=' + this.pageSize).then((res)=>{
       this.tableData = res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
     })
@@ -357,10 +345,20 @@ export default {
     handleClick_delay() {
       this.dialogVisible_delay = true;
     },
-    //操作的下线dialog函数
-    handleClick_offline() {
-      this.dialogVisible_offline = true;
+    //下线按钮对话框显示
+    handleClick_offline(workOrderNum,workOrderState) {
+      this.$store.state.staffAllOrder_OfflineDialogVisible = true;
+      this.$refs.StaffAllOrderOffline.setWorkOrderNumAndState(workOrderNum,workOrderState);
     },
+    offlineAccess(){
+      this.$axios.get("http://localhost:8084/staffAllTickets/offline?workOrderNum=" + sessionStorage.getItem("work_num") +
+                        '&workOrderState='+  + '&offlineReason=' +this.offLineTextarea )
+    },
+
+    //通过工单是否通过二级审批判断下线按钮是否可用
+    ableToOffline(){
+
+    }
   }
 }
 
