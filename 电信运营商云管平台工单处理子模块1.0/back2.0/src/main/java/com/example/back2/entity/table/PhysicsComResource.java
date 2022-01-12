@@ -13,6 +13,8 @@ public class PhysicsComResource implements Serializable {
 
     private Integer comNum;
 
+    private Integer row_index;
+
     private Integer cpuCore;
 
     private Integer ram;
@@ -23,6 +25,14 @@ public class PhysicsComResource implements Serializable {
 
     private Integer price;
 
+
+    public void setRow_index(Integer row_index){
+        this.row_index = row_index;
+    }
+
+    public Integer getRow_index(){
+        return this.row_index;
+    }
 
     public Integer getComNum() {
         return comNum;
