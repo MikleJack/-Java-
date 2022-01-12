@@ -1,5 +1,7 @@
 package com.example.back2.entity.table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.Serializable;
@@ -19,7 +21,8 @@ public class WorkOrder implements Serializable {
 
     private String workOrderName;
 
-    private String expirationTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date expirationTime;
 
     private Integer workerNum;
 
@@ -58,13 +61,14 @@ public class WorkOrder implements Serializable {
         this.workOrderName = workOrderName;
     }
 
-    public String getExpirationTime() {
+    public Date getExpirationTime() {
         return expirationTime;
     }
 
     public void setExpirationTime(Date expirationTime) {
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
-        this.expirationTime = ft.format(expirationTime);
+//        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+//        this.expirationTime = ft.format(expirationTime);
+        this.expirationTime = expirationTime;
     }
 
     public Integer getWorkerNum() {

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Date;
+
 /**
  * (WorkOrder)表服务接口
  *
@@ -73,5 +75,23 @@ public interface WorkOrderService {
      * @return 是否下线成功
      */
     Boolean offline(String workOrderNum, String offlineReason);
+
+    /**
+     * 通过工单编号进行延期操作
+     *
+     * @param workOrderNum 工单编号
+     * @param delayReason  延期原因
+     * @param delayTime  延期日期
+     * @return 是否发起延期请求成功
+     */
+     Boolean delay(String workOrderNum,String newWorkOrderNum, Date delayTime, String delayReason,Double nowPrice);
+
+    /**
+     * 通过工单编号查询该工单的价格
+     *
+     * @param workOrderNum 主键
+     * @return 该工单总价
+     */
+    Double queryPriceById(String workOrderNum);
 
 }
