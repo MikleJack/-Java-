@@ -1,6 +1,8 @@
 package com.example.back2.controller.staff;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.back2.entity.table.*;
 import com.example.back2.service.table.AllocatedComService;
 import com.example.back2.service.table.PhysicsComResourceService;
@@ -54,7 +56,8 @@ public class applyTicket {
 
     //申请工单接口
     @PostMapping("intsertApplyTicket")
-    public String intsertApplyTicket(String workOrderName,Date expirationTime,String reason,Integer workNum,String file,Double price){
+    public String intsertApplyTicket( String workOrderName,Date expirationTime,String reason,Integer workNum,String file
+            ,Double price,String workOrderType){
 //        生成工单号，并传入
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -75,7 +78,7 @@ public class applyTicket {
 // 传入申请人工号
         workOrder.setWorkerNum(workNum);
 //传入工单类型
-        workOrder.setWorkOrderType("申请工单");
+        workOrder.setWorkOrderType(workOrderType);
 //传入附件
         workOrder.setFile(file);
 //传入工单总价
@@ -84,21 +87,18 @@ public class applyTicket {
         workOrder.setWorkOrderState("待审批");
 //        System.out.println(workOrder.getWorkOrderNum());
         System.out.println(this.workOrderService.insert(workOrder).getWorkOrderNum());
-        return workOrder.getWorkOrderNum();
-
+        System.out.println(workOrderNum);
+        return workOrderNum;
     }
 
     @PostMapping("insertAllocatedCom")
     public boolean insertAllocatedCom(String qs,String workOrderNum){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            List<AllocatedCom> listAllocateCom = mapper.readValue(qs, new TypeReference<List<AllocatedCom>>() {
-            });
-            for (AllocatedCom i:listAllocateCom){
-
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        JSONArray m = JSON.parseArray(qs);
+        for (int i =0;i<m.size();i++){
+            AllocatedCom allocatedCom = m.getObject(i,AllocatedCom.class);
+            allocatedCom.setWorkOrderNum(workOrderNum);
+            System.out.println(workOrderNum);
+            this.allocatedComService.insert(allocatedCom);
         }
         return true;
     }
