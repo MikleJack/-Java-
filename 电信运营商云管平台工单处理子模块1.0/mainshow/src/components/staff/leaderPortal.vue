@@ -1,5 +1,5 @@
 <template>
-  <div class="staffPortalchange">
+  <div class="leaderPortal">
     <!--页面顶部：用户信息-->
     <div class="left-top">
       <!--头像-->
@@ -11,18 +11,18 @@
       <div class="worker_information">
         <!--权限-->
         <div class="powerInf">
-          <el-tag class="power" type="success">{{worker_power}}</el-tag>
+          <el-tag class="power" type="success">{{worker_power}}级领导</el-tag>
         </div>
         <!--姓名及所属部门-->
         <div class="nameInf">
-          <p>{{workerInform.name}}</p>
+          <p>{{worker_name}}</p>
         </div>
         <div class="depInf">
-          <p>{{workerInform.depName}}</p>
+          <p>{{worker_dep}}</p>
         </div>
         <div class="workerInf">
-          <p>工号 ：{{workerInform.workNum}}</p>
-          <p>电话号码：{{workerInform.phone}}</p>
+          <p>工号 ：{{worker_num}}</p>
+          <p>电话号码：{{worker_phone}}</p>
         </div>
       </div>
     </div>
@@ -40,18 +40,6 @@
           <p style="text-align: center" >物理机利用率</p>
         </div>
       </div>
-      <!--预算-->
-      <div class="bud">
-        <!--饼图：预算使用情况饼图-->
-        <div class="budPie">
-          <el-progress :percentage="depBudget" :color="budCustomcolors"
-                       style="margin-left: 26%; margin-top: 20%"
-                       type="dashboard" stroke-width="15" width="120"></el-progress>
-        </div>
-        <div class="budMessage">
-          <p style="text-align: center">部门预算使用情况</p>
-        </div>
-      </div>
       <!--虚拟机-->
       <div class="vir">
         <!--饼图：虚拟机利用率饼图-->
@@ -64,13 +52,33 @@
           <p style="text-align: center">虚拟机利用率</p>
         </div>
       </div>
-      <!--快捷入口具体按钮-->
-      <div class="enter" >
-        <el-row>
-          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle ></el-button>
-          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
-        </el-row>
+      <!--展示栏-->
+      <div class="promptBar">
+        <!--即将到期栏-->
+        <div class="hangPart">
+          <div class="hang">
+            <el-tag type="success" effect="dark" color="#349165"
+                    style="width: 90%;height: 86%;font-size: large;
+                    text-align: center;line-height: 50px;
+                    margin-top: 10%;border-radius: 50%">挂</el-tag>
+          </div>
+          <div class="Message">
+            <p>挂起工单</p>
+            <p>{{hang_order}}</p>
+          </div>
+        </div>
+        <div class="untreatedPart">
+          <div class="untreated">
+            <el-tag type="success" effect="dark" color="#349165"
+                    style="width: 90%;height: 86%;font-size: large;
+                    text-align: center;line-height: 50px;
+                    margin-top: 10%;border-radius: 50%">待</el-tag>
+          </div>
+          <div class="Message">
+            <p>待审工单</p>
+            <p>{{untreated_order}}</p>
+          </div>
+        </div>
       </div>
     </div>
     <!--通知栏-->
@@ -116,7 +124,6 @@
         <div class="message"> 工单202234567891235729审批未通过 </div>
         <div class="message_date">2022.02.12</div>
       </div>
-
       <div class="pagination">
         <el-pagination
           layout="prev, pager, next"
@@ -125,53 +132,25 @@
         </el-pagination>
       </div>
     </div>
+
+
+
+
     <!--右下方-->
     <div class="right-bottom">
       <div class="chart">
-        <!--部门预算折线图-->
-        <div class="budChart" id="budmain"></div>
-        <!--提交工单统计折线图-->
+        <!--审批情况折线图-->
+        <div class="approveChart" id="approvemain"></div>
+        <!--最近工单申请柱状图图-->
         <div class="orderChart" id="order"></div>
       </div>
-      <!--展示栏-->
-      <div class="promptBar">
-        <!--即将到期栏-->
-        <div class="duePart">
-          <div class="due">
-            <el-tag type="success" effect="dark" color="#349165"
-                    style="width: 90%;height: 85%;font-size: large;
-                    text-align: center;line-height: 40px;
-                    margin-top: 10%;border-radius: 50%">期</el-tag>
-          </div>
-          <div class="Message">
-            <p>即将到期</p>
-            <p>{{due_order}}</p>
-          </div>
-        </div>
-        <div class="onlinePart">
-          <div class="online">
-            <el-tag type="success" effect="dark" color="#349165"
-                    style="width: 90%;height: 85%;font-size: large;
-                    text-align: center;line-height: 40px;
-                    margin-top: 10%;border-radius: 50%">在</el-tag>
-          </div>
-          <div class="Message">
-            <p>在线工单</p>
-            <p>{{online_order}}</p>
-          </div>
-        </div>
-        <div class="untreatedPart">
-          <div class="untreated">
-            <el-tag type="success" effect="dark" color="#349165"
-                    style="width: 90%;height: 85%;font-size: large;
-                    text-align: center;line-height: 40px;
-                    margin-top: 10%;border-radius: 50%">待</el-tag>
-          </div>
-          <div class="Message">
-            <p>待审工单</p>
-            <p>{{untreated_order}}</p>
-          </div>
-        </div>
+      <!--快捷入口具体按钮-->
+      <div class="enter" >
+        <el-row>
+          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle ></el-button>
+          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
+          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
+        </el-row>
       </div>
     </div>
   </div>
@@ -182,7 +161,7 @@
 import * as echarts from 'echarts';
 
 export default {
-  name: "staffPortal",
+  name: "leaderPortal",
   components: {},
   methods: {
 
@@ -222,29 +201,23 @@ export default {
       depBudget:'78.90',
       fits: ['cover'],
       url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
-
-      workerInform:{},
-      due_order:'5',
-      online_order:'12',
+      worker_power:'一',
+      worker_name:'梁云',
+      worker_dep:'软件19级',
+      worker_num:'20220001',
+      worker_phone:'13152261676',
+      hang_order:'5',
       untreated_order:'3',
-
-
     }
 
   },
   mounted(){
-    //获取左上角用户信息
-    this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
-      this.workerInform = res.data;
-    });
-
-
-    var chartDom = document.getElementById('budmain');
-    var budChart = echarts.init(chartDom);
-    var budOption;
-    budOption = {
-      // width:'300px',
-      // height:'500px',
+    var chartDom = document.getElementById('approvemain');
+    var approveChart = echarts.init(chartDom);
+    var approveOption;
+    approveOption = {
+      width: '700px',
+      height: '120px',
       color:'#349165',
       title:{
         tooltip: {
@@ -252,7 +225,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'近四年部门预算使用情况',
+        subtext:'工单审批情况',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -264,7 +237,7 @@ export default {
       },
       xAxis: {
         type: 'category',
-        data: ['2019', '2020', '2021', '2022'],
+        data: ['2021.8','2021.9','2021.10', '2021.11', '2021.12', '2022.1'],
         scale: true
       },
       yAxis: {
@@ -273,7 +246,7 @@ export default {
       },
       series: [
         {
-          data: [8.7, 9.6, 7.4, 0.9],
+          data: [12, 12, 14, 11, 13, 4],
           type: 'line',
           label: {
             show: true,	// 是否可见
@@ -287,12 +260,14 @@ export default {
         }
       ]
     };
-    budOption && budChart.setOption(budOption);
+    approveOption && approveChart.setOption(approveOption);
 
     var chartDome = document.getElementById('order');
     var orderCharts = echarts.init(chartDome);
     var orderOption;
     orderOption = {
+      width: '700px',
+      height: '120px',
       color:'rgba(63,152,111,0.9)',
       title:{
         tooltip: {
@@ -312,7 +287,7 @@ export default {
       },
       xAxis: {
         type: 'category',
-        data: ['2021.9','2021.9','2021.10', '2021.11', '2021.12', '2022.1'],
+        data: ['付守宇','付泓菁','朱鹏飞', '陈海涛'],
         scale: true
       },
       yAxis: {
@@ -321,8 +296,9 @@ export default {
       },
       series: [
         {
-          data: [9.8, 8.7, 8.7, 9.6, 7.4, 0.9],
+          data: [6, 4, 5, 3],
           type: 'bar',
+          barwidth: '10%',
           label: {
             show: true,	// 是否可见
             // color:'green',
@@ -350,19 +326,24 @@ export default {
 </script>
 
 <style scoped>
-.staffPortalchange{
+.leaderPortal{
   width: 100%;
   height: 100%;
   position: relative;
   overflow-y: hidden;
 }
 .left-top{
-  width: 37%;
-  height: 38%;
-  float: left;
+  /*width: 37%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #73c8b3;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position:absolute;
+  top:0;
+  left: 0;
+  width: 37%;
+  height: 38%;
 }
 .headPortrait{
   width: 45%;
@@ -425,12 +406,17 @@ export default {
   /*background-color: #19755e;*/
 }
 .right-top{
-  width: 63%;
-  height: 38%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #235c4e;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 63%;
+  height: 38%;
 }
 .phy{
   width: 30%;
@@ -491,37 +477,84 @@ export default {
   font-size: 15px;
   /*background-color: #4cbda3;*/
 }
-.enter{
-  width: 10%;
-  height: 100%;
-  float: left;
-  /*background-color: #36ba99;*/
-}
 .left-bottom{
-  width: 36%;
-  height: 61%;
-  float: left;
+  /*width: 36%;*/
+  /*height: 61%;*/
+  /*float: left;*/
   /*background-color: #33ab8a;*/
-  border:2px solid #53c59e
+  border:2px solid #53c59e;
+  box-sizing: border-box;
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36%;
+  height: 61%;
 }
 .right-bottom{
-  width: 63%;
-  height: 62%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 62%;*/
+  /*float: left;*/
   /*background-color: #50b299;*/
   /*布局线框颜色*/
   /*border:2px solid #53c59e*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 63%;
+  height: 61%;
+}
+.promptBar{
+  width: 30%;
+  height: 100%;
+  float: left;
+  /*background-color: #33ab8a*/
+}
+.hangPart{
+  width: 50%;
+  height: 25%;
+  float: left;
+  margin-top: 15%;
+  margin-left: 30%;
+  border-radius: 20px;
+  border:3px solid #53c59e
+}
+.hang{
+  width: 50%;
+  height: 100%;
+  float: left;
+  border-radius: 20px;
+}
+.untreatedPart{
+  width: 50%;
+  height: 25%;
+  float: left;
+  margin-top: 10%;
+  margin-left: 30%;
+  border-radius: 20px;
+  border:3px solid #53c59e
+}
+.untreated{
+  width: 50%;
+  height: 100%;
+  float: left;
+  border-radius: 20px;
+}
+.Message{
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10%;
 }
 .chart{
-  width: 85%;
+  width: 90%;
   height: 100%;
   float: left;
   /*background-color: #34957a*/
 }
-.budChart{
+.approveChart{
   width: 100%;
   height: 50%;
   float: left;
@@ -533,61 +566,22 @@ export default {
   float: left;
   /*background-color: #37af8e*/
 }
-.promptBar{
-  width: 13%;
-  height: 100%;
-  float: left;
-  /*background-color: #33ab8a*/
-}
-.duePart{
-  width: 95%;
-  height: 13%;
-  float: left;
+.enter{
   margin-top: 30%;
-  margin-left: 8%;
-  border-radius: 20px;
-  border:3px solid #53c59e
-}
-.due{
-  width: 50%;
+  width: 10%;
   height: 100%;
   float: left;
-  border-radius: 20px;
+  /*background-color: #36ba99;*/
 }
-.onlinePart{
-  width: 95%;
-  height: 13%;
-  float: left;
-  margin-top: 25%;
-  margin-left: 8%;
-  border-radius: 20px;
-  border:3px solid #53c59e
-}
-.online{
-  width: 50%;
-  height: 100%;
-  float: left;
-  border-radius: 20px;
-}
-.untreatedPart{
-  width: 95%;
-  height: 13%;
-  float: left;
-  margin-top: 25%;
-  margin-left: 8%;
-  border-radius: 20px;
-  border:3px solid #53c59e
-}
-.untreated{
-  width: 50%;
-  height: 100%;
-  float: left;
-  border-radius: 20px;
-}
-.Message{
-  font-size: 5px;
-  font-weight: bold;
-  text-align: center;
+.icon_div{
+  width: 20%;
+  height: 10%;
+
+  /*font-size: 50px;*/
+/*  color: #0c805f;*/
+/*  width:60px;*/
+/*  float: left;*/
+/*  height:50px;*/
 }
 .size-icon{
   font-size: 50px;
@@ -604,12 +598,16 @@ export default {
   margin-top: 2%;
 }
 .round-i1{
+
+
   height: 10px;
   /*width: 10px;*/
   margin-top: 10%;
   margin-left: 3%;
 }
 .round-i{
+
+
   height: 10px;
   /*width: 10px;*/
   margin-top: 30px;
