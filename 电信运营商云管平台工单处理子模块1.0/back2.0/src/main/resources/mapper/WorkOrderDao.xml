@@ -118,9 +118,10 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="workOrderNum" useGeneratedKeys="true">
-        insert into work_order(work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
-        values (#{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState}, #{reason}, #{price}, #{offlineReason})
+<!--    keyProperty="workOrderNum"-->
+    <insert id="insert" useGeneratedKeys="true">
+        insert into work_order(work_order_num,work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason)
+        values (#{workOrderNum},#{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState}, #{reason}, #{price}, #{offlineReason})
     </insert>
 
     <insert id="insertBatch" keyProperty="workOrderNum" useGeneratedKeys="true">
