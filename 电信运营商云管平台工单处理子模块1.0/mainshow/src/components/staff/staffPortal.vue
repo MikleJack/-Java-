@@ -357,12 +357,17 @@ export default {
   overflow-y: hidden;
 }
 .left-top{
-  width: 37%;
-  height: 38%;
-  float: left;
+  /*width: 37%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #73c8b3;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position:absolute;
+  top:0;
+  left: 0;
+  width: 37%;
+  height: 38%;
 }
 .headPortrait{
   width: 45%;
@@ -425,12 +430,17 @@ export default {
   /*background-color: #19755e;*/
 }
 .right-top{
-  width: 63%;
-  height: 38%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #235c4e;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 63%;
+  height: 38%;
 }
 .phy{
   width: 30%;
@@ -498,22 +508,32 @@ export default {
   /*background-color: #36ba99;*/
 }
 .left-bottom{
-  width: 36%;
-  height: 61%;
-  float: left;
+  /*width: 36%;*/
+  /*height: 61%;*/
+  /*float: left;*/
   /*background-color: #33ab8a;*/
-  border:2px solid #53c59e
+  border:2px solid #53c59e;
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36%;
+  height: 61%;
 }
 .right-bottom{
-  width: 63%;
-  height: 62%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 62%;*/
+  /*float: left;*/
   /*background-color: #50b299;*/
   /*布局线框颜色*/
   /*border:2px solid #53c59e*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 63%;
+  height: 62%;
 }
 .chart{
   width: 85%;
