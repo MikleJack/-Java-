@@ -4,6 +4,7 @@ import com.example.back2.entity.table.WorkOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -63,5 +64,14 @@ public interface WorkOrderService {
      * @return 是否成功
      */
     boolean deleteById(String workOrderNum);
+
+    /**
+     * 通过员工编号分页查询
+     *
+     * @param workOrderNum 工单编号
+     * @param offlineReason  下线原因
+     * @return 是否下线成功
+     */
+    Boolean offline(String workOrderNum, String offlineReason);
 
 }

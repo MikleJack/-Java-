@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
@@ -93,5 +94,17 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     @Override
     public boolean deleteById(String workOrderNum) {
         return this.workOrderDao.deleteById(workOrderNum) > 0;
+    }
+
+    /**
+     * 通过员工编号分页查询
+     *
+     * @param workOrderNum 工单编号
+     * @param offlineReason  下线原因
+     * @return 用户的全部工单
+     */
+    @Override
+    public Boolean offline(String workOrderNum, String offlineReason) {
+        return this.workOrderDao.offline(workOrderNum,offlineReason);
     }
 }
