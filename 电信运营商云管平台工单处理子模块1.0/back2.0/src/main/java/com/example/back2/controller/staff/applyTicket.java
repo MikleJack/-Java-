@@ -5,10 +5,7 @@ import com.example.back2.service.table.AllocatedComService;
 import com.example.back2.service.table.PhysicsComResourceService;
 import com.example.back2.service.table.VmSpecificationsService;
 import com.example.back2.service.table.WorkOrderService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -82,24 +79,20 @@ public class applyTicket {
         workOrder.setWorkOrderState("待审批");
 //
         this.workOrderService.insert(workOrder);
-
+//
         return workOrder.getWorkOrderNum();
     }
 
-//    @PostMapping("insertAllocatedCom")
-//    public List<AllocatedCom> insertAllocatedCom(String workOrderNum,List<AllocatedCom> allocatedCom){
-//        for(AllocatedCom i:allocatedCom){
-//            i.setWorkOrderNum(workOrderNum);
-//        }
-////        this.physicsComResourceService.insert();
-//        return allocatedCom;
-//    }
-//
-//    @PostMapping("insertAllocationVm")
-//    public AllocatedVm insertAllocatedVm(String workOrderNum){
-//
-//
-//
-//
-//    }
+    @PostMapping("insertAllocatedCom")
+    public boolean insertAllocatedCom(String workOrderNum,@RequestBody List<PhysicsComResource> physicsComResources){
+        for (PhysicsComResource i :physicsComResources){
+            System.out.println(i.getComNum() + " " + i.getAssign());
+        }
+        return true;
+    }
+
+    @PostMapping("insertAllocationVm")
+    public boolean insertAllocatedVm(String workOrderNum){
+        return true;
+    }
 }
