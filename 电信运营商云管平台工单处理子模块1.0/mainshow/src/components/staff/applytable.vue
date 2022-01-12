@@ -217,20 +217,20 @@ import upload_file from "./upload_file";
 import Upload_file_new from "./upload_file_new";
 import qs from "qs";
 export default {
-  components:{Upload_file_new, upload_file},
+  components: {Upload_file_new, upload_file},
   name: "applytable2",
-  data(){
-    return{
+  data() {
+    return {
       virtual_price_temp: 0,//暂存虚拟机总价
-      storage:0,
-      storage_price:0.5,
-      current_time:'',//当前时间
-      expire_time:'',//资源到期时间
-      diff_time:0,//资源到期时间-当前时间
+      storage: 0,
+      storage_price: 0.5,
+      current_time: '',//当前时间
+      expire_time: '',//资源到期时间
+      diff_time: 0,//资源到期时间-当前时间
 
-      physics_price:0,//物理机总价
-      virtual_price:0,//虚拟机总价
-      total_price:0,//资源总价
+      physics_price: 0,//物理机总价
+      virtual_price: 0,//虚拟机总价
+      total_price: 0,//资源总价
       radio: '',//单选
       radioSelect: '',//选中的数据赋值给它
 
@@ -242,287 +242,286 @@ export default {
       currentRowIndex_physics: [],//存储选中物理机的行号
       currentRowIndex_virtual: '',//存储选中虚拟机的行号
 
-      list:[],
-      length:'',//选中物理机的个数
+      list: [],
+      length: '',//选中物理机的个数
       // selectRow: [],
       // 多选选择数量循环计数器
-      multipleChoice_count:'0',
+      multipleChoice_count: '0',
       // 多选选择行号循环计数器
-      lineNumber_count:'0',
+      lineNumber_count: '0',
       //物理机虚拟机弹窗
       dialogTableVisible_physics: false,
       dialogTableVisible_virtual: false,
       // 个人信息以及工单信息表单数据
-      tabledata_message:[{
+      tabledata_message: [{
 
         //资源到期时间
         apply_time: '',
-        order_name:'',
-        reason:''
+        order_name: '',
+        reason: ''
       }],
       // 已添加的物理机资源信息表数据
-      tabledata_physics:[],
+      tabledata_physics: [],
       // 已添加的虚拟机资源信息表数据
-      tabledata_virtual:[],
+      tabledata_virtual: [],
       // 新增物理机弹窗内表格数据
-      gridData_physics:[],
+      gridData_physics: [],
       // 新增虚拟机弹窗内表格数据
-      gridData_virtual :[]
+      gridData_virtual: []
     }
   },
   // 获取当前时间的定时器
-  mounted(){
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res)=>{
+  mounted() {
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
       this.gridData_physics = res.data;
     });
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res)=>{
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
       this.gridData_virtual = res.data;
     });
     let that = this;
     //定时器
-    setInterval(()=>{
+    setInterval(() => {
       that.getDateFunc();
       that.calculate_sum();
-    },1000)
+    }, 1000)
     this.scope.row.num = 50;
   },
- methods: {
-   //计算资源总价格
-   // calculate_price(){
-   //   let virtual_price_temp = 0
-   //   for(let i = 0; i < this.tabledata_virtual.length; ++i){
-   //     // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-   //     virtual_price_temp += this.tabledata_virtual[i].unit_price*3
-   //   }
-   //   virtual_price_temp = this.diff_time*virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
-   //   this.total_price = virtual_price_temp + this.physics_price
-   //
-   // },
+  methods: {
+    //计算资源总价格
+    // calculate_price(){
+    //   let virtual_price_temp = 0
+    //   for(let i = 0; i < this.tabledata_virtual.length; ++i){
+    //     // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+    //     virtual_price_temp += this.tabledata_virtual[i].unit_price*3
+    //   }
+    //   virtual_price_temp = this.diff_time*virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
+    //   this.total_price = virtual_price_temp + this.physics_price
+    //
+    // },
 
-   //物理机价钱求和
-   getSum(param) {
+    //物理机价钱求和
+    getSum(param) {
 //此处打印param可以看到有两项，一项是columns，一项是data，最后一列可以通过columns.length获取到。
-     const {columns, data} = param
-     const len = columns.length
-     const sums = []
-     columns.forEach((column, index) => {
-       //如果是第一列，则最后一行展示为“总计”两个字
-       if (index === 0) {
-         sums[index] = '总计/元'
-         //如果是最后一列，索引为列数-1，则显示计算总和
-       } else if (index === 3) {
-         const values = data.map(item => Number(item[column.property]))
-         if (!values.every(value => isNaN(value))) {
-           sums[index] = values.reduce((prev, curr) => {
-             const value = Number(curr)
-             if (!isNaN(value)) {
-               return prev + curr*this.diff_time;
-             } else {
-               return prev
-             }
-           }, 0)
-         } else {
-           sums[index] = 'N/A'
-         }
-         //如果是除了第一列和最后一列的其他列，则显示为空
-       } else {
-         sums[index] = ''
-       }
-     })
-     this.physics_price = sums[3]
-     return sums
+      const {columns, data} = param
+      const len = columns.length
+      const sums = []
+      columns.forEach((column, index) => {
+        //如果是第一列，则最后一行展示为“总计”两个字
+        if (index === 0) {
+          sums[index] = '总计/元'
+          //如果是最后一列，索引为列数-1，则显示计算总和
+        } else if (index === 3) {
+          const values = data.map(item => Number(item[column.property]))
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr) => {
+              const value = Number(curr)
+              if (!isNaN(value)) {
+                return prev + curr * this.diff_time;
+              } else {
+                return prev
+              }
+            }, 0)
+          } else {
+            sums[index] = 'N/A'
+          }
+          //如果是除了第一列和最后一列的其他列，则显示为空
+        } else {
+          sums[index] = ''
+        }
+      })
+      this.physics_price = sums[3]
+      return sums
 
-   },
+    },
 
     //获取单选行的数据
-   radioChange(row, index) {
-     this.radioSelect = row;
-   },
+    radioChange(row, index) {
+      this.radioSelect = row;
+    },
 
     //获取选中数据的行号
-   tableRowClassName_physics({row, rowIndex}) {
-     row.row_index = rowIndex;
-   },
-   onRowClick_physics(row, event, column) {
-     for (let k = 0; k < row.length; k++) {
-       this.currentRowIndex_physics.push(row[k].row_index)
-     }
-   },
+    tableRowClassName_physics({row, rowIndex}) {
+      row.row_index = rowIndex;
+    },
+    onRowClick_physics(row, event, column) {
+      for (let k = 0; k < row.length; k++) {
+        this.currentRowIndex_physics.push(row[k].row_index)
+      }
+    },
 
-   tableRowClassName_virtual({row,rowIndex}){
-     row.row_index = rowIndex
-   },
-   onRowClick_virtual(row, event, column){
-     this.currentRowIndex_virtual = row.row_index;
-   },
-
-
-   // 点击selection多选框
-   handleSelectionChange_physics(data) {
-     this.multipleSelection_physics = data;
-     this.length=this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
-   },
-
-   // 获取点击行的数据
-
-   getSelected(type) {
-     if(type===1){
-       this.dialogTableVisible_physics=false//关闭弹窗
-       while(this.multipleChoice_count<this.length.length){
-         this.tabledata_physics.push(this.multipleSelection_physics[this.multipleChoice_count]);
-         this.gridData_physics.splice(this.currentRowIndex_physics[this.lineNumber_count],1)
-         this.multipleChoice_count++;
-         this.lineNumber_count++;
-
-       }
-       this.$refs.multipleTable_physics.clearSelection()
-       this.multipleChoice_count=0;
-       this.lineNumber_count=0;
-       this.currentRowIndex_physics.splice(0,this.currentRowIndex_physics.length)
-
-       this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom",{qs:JSON.stringify(this.tabledata_physics)})
-     }else{
-       this.dialogTableVisible_virtual=false//关闭弹窗
-
-       this.tabledata_virtual.push(this.radioSelect);
-       this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
-       this.$refs.multipleTable_virtual.clearSelection()
-       this.radioSelect.splice(0,this.radioSelect.length)
-       this.currentRowIndex_virtual.splice(0,this.currentRowIndex_virtual.length)
-
-     }
-   },
-
-   getDateFunc(){
-     let year = new Date().getFullYear();//年
-     let month = new Date().getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
-     let day = new Date().getDate();//日
-
-     let year1 = this.tabledata_message.apply_time.getFullYear();//年
-     let month1 = this.tabledata_message.apply_time.getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
-     let day1 = this.tabledata_message.apply_time.getDate();//日
-     //拼接日期 YYYY-MM-DD HH:mm:ss
-     this.current_time=
-       year +
-       '-' +
-       (month >=10 ? month:'0'+ month) +
-       '-' +
-       (day >=10 ? day:'0' + day);
-
-     this.expire_time=
-       year1 +
-       '-' +
-       (month1 >=10 ? month1:'0'+ month1) +
-       '-' +
-       (day1 >=10 ? day1:'0' + day1);
-
-     let date1 = this.current_time.split('-');
-     let date2 = this.expire_time.split('-');
-     date1 = parseInt(date1[0]*12*30+parseInt(date1[1]*30)+parseInt(date1[2]));
-     date2= parseInt(date2[0]*12*30+parseInt(date2[1]*30)+parseInt(date2[2]));
-     this.diff_time = parseInt(date2-date1)
-     if(this.diff_time%30 !== 0){
-       this.diff_time = parseInt(this.diff_time/30) + 1
-     }else{
-       this.diff_time = parseInt(this.diff_time/30)
-     }
-     console.log(this.diff_time)
-   },
+    tableRowClassName_virtual({row, rowIndex}) {
+      row.row_index = rowIndex
+    },
+    onRowClick_virtual(row, event, column) {
+      this.currentRowIndex_virtual = row.row_index;
+    },
 
 
+    // 点击selection多选框
+    handleSelectionChange_physics(data) {
+      this.multipleSelection_physics = data;
+      this.length = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
+    },
 
-   // 删除选中的物理机资源
-   deleteRow_physics(index, rows) {
-     const data = this.tabledata_physics.slice(index,index+1)
-     console.info(data)
+    // 获取点击行的数据
 
-     this.tabledata_physics.splice(index,1);
-     this.gridData_physics.splice(-1,0,data[0])
-   },
+    getSelected(type) {
+      if (type === 1) {
+        this.dialogTableVisible_physics = false//关闭弹窗
+        while (this.multipleChoice_count < this.length.length) {
+          this.tabledata_physics.push(this.multipleSelection_physics[this.multipleChoice_count]);
+          this.gridData_physics.splice(this.currentRowIndex_physics[this.lineNumber_count], 1)
+          this.multipleChoice_count++;
+          this.lineNumber_count++;
+
+        }
+        this.$refs.multipleTable_physics.clearSelection()
+        this.multipleChoice_count = 0;
+        this.lineNumber_count = 0;
+        this.currentRowIndex_physics.splice(0, this.currentRowIndex_physics.length)
+      } else {
+        this.dialogTableVisible_virtual = false//关闭弹窗
+
+        this.tabledata_virtual.push(this.radioSelect);
+        this.gridData_virtual.splice(this.currentRowIndex_virtual, 1)
+        this.$refs.multipleTable_virtual.clearSelection()
+        this.radioSelect.splice(0, this.radioSelect.length)
+        this.currentRowIndex_virtual.splice(0, this.currentRowIndex_virtual.length)
+
+      }
+    },
+
+    getDateFunc() {
+      let year = new Date().getFullYear();//年
+      let month = new Date().getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
+      let day = new Date().getDate();//日
+
+      let year1 = this.tabledata_message.apply_time.getFullYear();//年
+      let month1 = this.tabledata_message.apply_time.getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
+      let day1 = this.tabledata_message.apply_time.getDate();//日
+      //拼接日期 YYYY-MM-DD HH:mm:ss
+      this.current_time =
+        year +
+        '-' +
+        (month >= 10 ? month : '0' + month) +
+        '-' +
+        (day >= 10 ? day : '0' + day);
+
+      this.expire_time =
+        year1 +
+        '-' +
+        (month1 >= 10 ? month1 : '0' + month1) +
+        '-' +
+        (day1 >= 10 ? day1 : '0' + day1);
+
+      let date1 = this.current_time.split('-');
+      let date2 = this.expire_time.split('-');
+      date1 = parseInt(date1[0] * 12 * 30 + parseInt(date1[1] * 30) + parseInt(date1[2]));
+      date2 = parseInt(date2[0] * 12 * 30 + parseInt(date2[1] * 30) + parseInt(date2[2]));
+      this.diff_time = parseInt(date2 - date1)
+      if (this.diff_time % 30 !== 0) {
+        this.diff_time = parseInt(this.diff_time / 30) + 1
+      } else {
+        this.diff_time = parseInt(this.diff_time / 30)
+      }
+    },
+
+
+    // 删除选中的物理机资源
+    deleteRow_physics(index, rows) {
+      const data = this.tabledata_physics.slice(index, index + 1)
+
+      this.tabledata_physics.splice(index, 1);
+      this.gridData_physics.splice(-1, 0, data[0])
+    },
     //删除选中的虚拟机资源
-   deleteRow_virtual(index,rows) {
-     const data = this.tabledata_virtual.slice(index,index+1)
+    deleteRow_virtual(index, rows) {
+      const data = this.tabledata_virtual.slice(index, index + 1)
 
-     this.tabledata_virtual.splice(index,1);
-     this.gridData_virtual.splice(-1,0,data[0])
+      this.tabledata_virtual.splice(index, 1);
+      this.gridData_virtual.splice(-1, 0, data[0])
 
-     this.virtual_price_temp = 0
-     for(let i = 0; i < this.tabledata_virtual.length; ++i){
-       // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
-     }
-     console.log(this.virtual_price_temp)
-   },
+      this.virtual_price_temp = 0
+      for (let i = 0; i < this.tabledata_virtual.length; ++i) {
+        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+        this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
+      }
+    },
 //设置表头行的样式
-   tableHeaderColor({row,column,rowIndex,columnIndex}){
-     return 'background-color:rgba(82, 182, 154, 0.76);color:#fff;font-wight:500'
+    tableHeaderColor({row, column, rowIndex, columnIndex}) {
+      return 'background-color:rgba(82, 182, 154, 0.76);color:#fff;font-wight:500'
 
-   },
+    },
 
 //虚拟机资源数量改变
-   handleChange_virtual(value,scope){
-     this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
-     this.virtual_price_temp = 0
+    handleChange_virtual(value, scope) {
+      this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
+      this.virtual_price_temp = 0
 
-     for(let i = 0; i < this.tabledata_virtual.length; ++i){
-       // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
-     }
-     this.virtual_price_temp = this.diff_time*this.virtual_price_temp
-
-
-   },
-   calculate_sum(){
-     this.storage=this.tabledata_virtual.storage
-    let storage_sum=this.storage*this.storage_price*this.diff_time
-     if(isNaN(this.virtual_price_temp)){
-       this.virtual_price_temp=0
-     }
-
-     if(isNaN(this.physics_price)){
-       this.physics_price=0
-     }
-     if(isNaN(storage_sum)){
-       storage_sum=0
-     }
-
-     this.total_price = this.virtual_price_temp + this.physics_price+ storage_sum
-
-     if(isNaN(this.total_price)){
-       this.total_price=0
-     }
-   },
-
-   handleAdd() {
-     this.$refs.fileUploadDialog.show()
-   },
-   // getAttachList() {
-   //   this.loading = true
-   //   this.attachQuery.billId = this.form.noticeId
-   //   this.attachQuery.billType = 10
-   //   listAttachment(this.attachQuery).then(response => {
-   //     this.attachList = response.rows
-   //     this.attachList.forEach(el => {
-   //       // 转为kb，取小数点后2位
-   //       el.fileSize = parseFloat(el.fileSize / 1024).toFixed(2)
-   //     })
-   //     this.attachTotal = response.total
-   //     this.loading = false
-   //   }).catch(() => {})
-   // },
-   //提交所有工单数据
-   submit(){
-     this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
-       {workOrderName:this.tabledata_message.order_name,expirationTime:this.tabledata_message.apply_time,
-         reason:this.tabledata_message.reason,workNum:sessionStorage.getItem("work_num"),file:"",price:this.total_price})
-   }
- },
+      for (let i = 0; i < this.tabledata_virtual.length; ++i) {
+        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+        this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
+      }
+      this.virtual_price_temp = this.diff_time * this.virtual_price_temp
 
 
+    },
+    calculate_sum() {
+      this.storage = this.tabledata_virtual.storage
+      let storage_sum = this.storage * this.storage_price * this.diff_time
+      if (isNaN(this.virtual_price_temp)) {
+        this.virtual_price_temp = 0
+      }
 
+      if (isNaN(this.physics_price)) {
+        this.physics_price = 0
+      }
+      if (isNaN(storage_sum)) {
+        storage_sum = 0
+      }
 
+      this.total_price = this.virtual_price_temp + this.physics_price + storage_sum
 
+      if (isNaN(this.total_price)) {
+        this.total_price = 0
+      }
+    },
 
+    handleAdd() {
+      this.$refs.fileUploadDialog.show()
+    },
+    // getAttachList() {
+    //   this.loading = true
+    //   this.attachQuery.billId = this.form.noticeId
+    //   this.attachQuery.billType = 10
+    //   listAttachment(this.attachQuery).then(response => {
+    //     this.attachList = response.rows
+    //     this.attachList.forEach(el => {
+    //       // 转为kb，取小数点后2位
+    //       el.fileSize = parseFloat(el.fileSize / 1024).toFixed(2)
+    //     })
+    //     this.attachTotal = response.total
+    //     this.loading = false
+    //   }).catch(() => {})
+    // },
+
+    //提交所有工单数据
+    submit() {
+      this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
+        {
+          workOrderName: this.tabledata_message.order_name, expirationTime: this.tabledata_message.apply_time,
+          reason: this.tabledata_message.reason, workNum: sessionStorage.getItem("work_num"), file: "",
+          price: this.total_price, workOrderType: "申请工单"
+        }).then((res) => {
+        if (res.data) {
+          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom", {
+            qs: JSON.stringify(this.tabledata_physics),
+            workOrderNum: res.request.response
+          })
+        }
+      })
+    }
+  }
 }
 </script>
 

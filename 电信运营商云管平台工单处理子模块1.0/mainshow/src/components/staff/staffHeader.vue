@@ -12,9 +12,8 @@
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" text-color="black">
         <el-submenu index="2" >
           <template slot="title">个人中心</template>
-          <el-menu-item index="2-1" >选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
+          <el-menu-item index="2-1" @click="changePassword">个人信息修改</el-menu-item>
+
         </el-submenu>
         <el-menu-item index="2" @click="logoutFn">
           退出登录 </el-menu-item>
@@ -82,13 +81,20 @@ export default {
         sessionStorage.removeItem("staff")
       });
     },
+    //跳转修改个人信息页面
+    changePassword(){
+      this.$router.push({path:"/leader/changePassword"})
+    },
     //改变页面
     changePage(page){
+      if(page===0){
+        this.$router.push({path:"/staff/changePassword"});
+      }
       if(page===1){
         this.$router.push({path:"/staff/home"});
       }
       else if(page===2){
-        this.$router.push({path:"/staff/apply"});
+        this.$router.push({path:"/staff/temp"});
       }
       else if(page===3){
         this.$router.push({path:"/staff/change"});

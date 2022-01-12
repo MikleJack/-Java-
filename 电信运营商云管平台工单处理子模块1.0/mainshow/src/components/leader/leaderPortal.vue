@@ -82,7 +82,60 @@
       </div>
     </div>
     <!--通知栏-->
-    <div class="left-bottom"></div>
+    <div class="left-bottom">
+      <div class="size-icon">
+        <i class="el-icon-message-solid" ></i>
+      </div>
+      <div class="message_title">
+        通知中心
+      </div>
+      <div class="round-i1">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729已被审批通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729审批未通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729即将到期 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 您的账号已被解除锁定 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 请尽快完善个人信息 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729已被审批通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="round-i">
+        <i class="round"></i>
+        <div class="message"> 工单202234567891235729审批未通过 </div>
+        <div class="message_date">2022.02.12</div>
+      </div>
+      <div class="pagination">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="1000"
+          style="color: #0c805f">
+        </el-pagination>
+      </div>
+    </div>
+
+
+
+
     <!--右下方-->
     <div class="right-bottom">
       <div class="chart">
@@ -280,12 +333,17 @@ export default {
   overflow-y: hidden;
 }
 .left-top{
-  width: 37%;
-  height: 38%;
-  float: left;
+  /*width: 37%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #73c8b3;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position:absolute;
+  top:0;
+  left: 0;
+  width: 37%;
+  height: 38%;
 }
 .headPortrait{
   width: 45%;
@@ -348,12 +406,17 @@ export default {
   /*background-color: #19755e;*/
 }
 .right-top{
-  width: 63%;
-  height: 38%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 38%;*/
+  /*float: left;*/
   /*background-color: #235c4e;*/
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 63%;
+  height: 38%;
 }
 .phy{
   width: 30%;
@@ -415,22 +478,33 @@ export default {
   /*background-color: #4cbda3;*/
 }
 .left-bottom{
-  width: 36%;
-  height: 61%;
-  float: left;
+  /*width: 36%;*/
+  /*height: 61%;*/
+  /*float: left;*/
   /*background-color: #33ab8a;*/
-  border:2px solid #53c59e
+  border:2px solid #53c59e;
+  box-sizing: border-box;
   /*布局线框颜色*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36%;
+  height: 61%;
 }
 .right-bottom{
-  width: 63%;
-  height: 62%;
-  float: left;
+  /*width: 63%;*/
+  /*height: 62%;*/
+  /*float: left;*/
   /*background-color: #50b299;*/
   /*布局线框颜色*/
   /*border:2px solid #53c59e*/
   /*border-bottom:2px dashed #55c97e*/
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 63%;
+  height: 61%;
 }
 .promptBar{
   width: 30%;
@@ -499,5 +573,75 @@ export default {
   float: left;
   /*background-color: #36ba99;*/
 }
+.icon_div{
+  width: 20%;
+  height: 10%;
 
+  /*font-size: 50px;*/
+/*  color: #0c805f;*/
+/*  width:60px;*/
+/*  float: left;*/
+/*  height:50px;*/
+}
+.size-icon{
+  font-size: 50px;
+  color: #0c805f;
+  width:60px;
+  float: left;
+  height:50px;
+}
+.message_title{
+  font-size: 25px;
+  color: #3e8f76;
+  font-weight: bolder;
+  margin-left: 40%;
+  margin-top: 2%;
+}
+.round-i1{
+
+
+  height: 10px;
+  /*width: 10px;*/
+  margin-top: 10%;
+  margin-left: 3%;
+}
+.round-i{
+
+
+  height: 10px;
+  /*width: 10px;*/
+  margin-top: 30px;
+  margin-left: 3%;
+}
+.round{
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  margin-top: 6px;
+
+  background: rgb(62, 143, 118) !important;
+
+  margin-left: 0;
+}
+.message{
+  display: block;
+  float: left;
+  width: fit-content;
+  color: rgba(12, 12, 12, 0.51);
+  margin-left: 5px;
+}
+.message_date{
+  display: block;
+  float: right;
+  color: rgba(12, 12, 12, 0.51);
+
+  margin-right: 5px;
+}
+.pagination {
+  height: fit-content;
+  margin-bottom: 1px;
+  margin-top: 5%;
+}
 </style>

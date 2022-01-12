@@ -12,9 +12,7 @@
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" text-color="black">
         <el-submenu index="2" >
           <template slot="title">个人中心</template>
-          <el-menu-item index="2-1" >选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
+          <el-menu-item index="2-1" @click="changePassword">修改密码</el-menu-item>
         </el-submenu>
         <el-menu-item index="2" @click="logoutFn">
           退出登录 </el-menu-item>
@@ -90,6 +88,10 @@ export default {
       else if(page===5){
         this.$router.push({path:"/adminMain/logManage"});
       }
+    },
+    //跳转修改个人信息页面
+    changePassword(){
+      this.$router.push({path:"/adminMain/adminChangePassword"})
     },
     //退出
     logoutFn() {
