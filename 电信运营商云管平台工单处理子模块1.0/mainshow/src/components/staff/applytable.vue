@@ -50,10 +50,10 @@
           @selection-change="handleSelectionChange_physics"
           @select = "onRowClick_physics">
           <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>
-          <el-table-column property="cpu" label="CPU(核)" width="150"></el-table-column>
-          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="cpuCore" label="CPU(核)" width="150"></el-table-column>
+          <el-table-column property="ram" label="内存(G)" width="150"></el-table-column>
           <el-table-column property="storage" label="硬盘(G)" width="150"></el-table-column>
-          <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+          <el-table-column property="price" label="单价(/月)" ></el-table-column>
 <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
         </el-table>
         <p></p>
@@ -67,10 +67,10 @@
                 :summary-method="getSum"
                 show-summary
       >
-        <el-table-column property="cpu" label="CPU(核)" ></el-table-column>
-        <el-table-column property="memory" label="内存(G)" ></el-table-column>
+        <el-table-column property="cpuCore" label="CPU(核)" ></el-table-column>
+        <el-table-column property="ram" label="内存(G)" ></el-table-column>
         <el-table-column property="storage" label="硬盘(G)" ></el-table-column>
-        <el-table-column property="unit_price" label="单价(/月)" ></el-table-column>
+        <el-table-column property="price" label="单价(/月)" ></el-table-column>
 <!--        <el-table-column property="ip" label="IP地址"></el-table-column>-->
         <el-table-column
           fixed="right"
@@ -98,7 +98,6 @@
     <div style="border: rgba(82,182,154,0.25) solid 3px">
 
       <div class="page_title">虚拟机资源</div>
-    <!--    <div class="page_title_min">虚拟机资源</div>-->
     <div class="page_line"></div>
 
     <div class="page_block">
@@ -121,12 +120,12 @@
               </el-radio>
             </template>
           </el-table-column>
-          <el-table-column property="spe_family" label="规格族" width="150"></el-table-column>
-          <el-table-column property="cpu" label="VCPu" width="150"></el-table-column>
-          <el-table-column property="memory" label="内存(G)" width="150"></el-table-column>
-          <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="200"></el-table-column>
-          <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
-          <el-table-column property="unit_price" label="单价(/月)"></el-table-column>
+          <el-table-column property="description" label="规格族" width="150"></el-table-column>
+          <el-table-column property="cpuCore" label="VCPu" width="150"></el-table-column>
+          <el-table-column property="ram" label="内存(G)" width="150"></el-table-column>
+          <el-table-column property="processorFrequency" label="处理器主频/睿频" width="200"></el-table-column>
+          <el-table-column property="processorModel" label="处理器型号" width="150"></el-table-column>
+          <el-table-column property="price" label="单价(/月)"></el-table-column>
 
           <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
         </el-table>
@@ -136,12 +135,12 @@
       </el-dialog>
 
       <el-table :data="tabledata_virtual" border >
-        <el-table-column property="spe_family" label="规格族" width="130"></el-table-column>
-        <el-table-column property="cpu" label="VCPu" width="100"></el-table-column>
-        <el-table-column property="memory" label="内存(G)" width="100"></el-table-column>
-        <el-table-column property="cpu_frequency" label="处理器主频/睿频" width="150"></el-table-column>
-        <el-table-column property="cpu_model" label="处理器型号" width="150"></el-table-column>
-        <el-table-column property="unit_price" label="单价(/月)" width="100"></el-table-column>
+        <el-table-column property="description" label="规格族" width="130"></el-table-column>
+        <el-table-column property="cpuCore" label="VCPu" width="100"></el-table-column>
+        <el-table-column property="ram" label="内存(G)" width="100"></el-table-column>
+        <el-table-column property="processorFrequency" label="处理器主频/睿频" width="150"></el-table-column>
+        <el-table-column property="processorModel" label="处理器型号" width="150"></el-table-column>
+        <el-table-column property="price" label="单价(/月)" width="100"></el-table-column>
           <el-table-column property="account_virtual" label="数量" >
             <template slot-scope="scope" >
               <el-input-number v-model="scope.row.num"
@@ -185,12 +184,23 @@
         </el-form-item>
         <el-button type="primary" @click="calculate_price()">主要按钮</el-button>
         <el-input
-          placeholder="请输入内容"
+          placeholder="总价"
           v-model="total_price"
           :disabled="true">
         </el-input>
       </el-form>
+
+
     </div>
+    </div>
+
+    <p></p>
+    <div style="border: rgba(82,182,154,0.25) solid 3px">
+      <div class="page_title">附件</div>
+      <div class="page_line"></div>
+      <div class="page_block">
+        <upload_file_new></upload_file_new>
+      </div>
     </div>
 
     <p></p>
@@ -203,19 +213,24 @@
 </template>
 
 <script>
+import upload_file from "./upload_file";
+import Upload_file_new from "./upload_file_new";
+import qs from "qs";
 export default {
+  components:{Upload_file_new, upload_file},
   name: "applytable2",
   data(){
     return{
       virtual_price_temp: 0,//暂存虚拟机总价
-
+      storage:0,
+      storage_price:0.5,
       current_time:'',//当前时间
       expire_time:'',//资源到期时间
       diff_time:0,//资源到期时间-当前时间
 
-      physics_price:'',//物理机总价
-      virtual_price:'',//虚拟机总价
-      total_price:'',//资源总价
+      physics_price:0,//物理机总价
+      virtual_price:0,//虚拟机总价
+      total_price:0,//资源总价
       radio: '',//单选
       radioSelect: '',//选中的数据赋值给它
 
@@ -246,86 +261,28 @@ export default {
         reason:''
       }],
       // 已添加的物理机资源信息表数据
-      tabledata_physics:[
-      ],
+      tabledata_physics:[],
       // 已添加的虚拟机资源信息表数据
-      tabledata_virtual:[
-      ],
+      tabledata_virtual:[],
       // 新增物理机弹窗内表格数据
-      gridData_physics:[{
-        cpu:'2',
-        memory:'3',
-        storage:'3',
-        unit_price:'1000'
-
-      },
-        {
-          cpu:'1',
-          memory:'3',
-          storage:'3',
-          unit_price:'500'
-        },
-        {
-          cpu:'10',
-          memory:'3',
-          storage:'3',
-          unit_price:'10000'
-        },
-        {
-          cpu:'10',
-          memory:'3',
-          storage:'8',
-          unit_price:'11000'
-        },
-        {
-          cpu:'7',
-          memory:'3',
-          storage:'8',
-          unit_price:'8000'
-        }],
+      gridData_physics:[],
       // 新增虚拟机弹窗内表格数据
-      gridData_virtual :[{
-        spe_family:'共享标准型s6',
-        cpu:'1vCPU',
-        memory:'1',
-        cpu_frequency:'2.5/3.2GHz',
-        cpu_model:'intel1',
-        unit_price:'30',
-        account_virtual:'',
-      },
-        {
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'2',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'60',
-          account_virtual:'',
-        },{
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'3',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'90',
-          account_virtual:'',
-        },{
-          spe_family:'共享标准型s6',
-          cpu:'1vCPU',
-          memory:'4',
-          cpu_frequency:'2.5/3.2GHz',
-          cpu_model:'intel1',
-          unit_price:'120',
-          account_virtual:'',
-        },]
+      gridData_virtual :[]
     }
   },
   // 获取当前时间的定时器
   mounted(){
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res)=>{
+      this.gridData_physics = res.data;
+    });
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res)=>{
+      this.gridData_virtual = res.data;
+    });
     let that = this;
     //定时器
     setInterval(()=>{
       that.getDateFunc();
+      that.calculate_sum();
     },1000)
   },
  methods: {
@@ -386,7 +343,7 @@ export default {
      row.row_index = rowIndex;
    },
    onRowClick_physics(row, event, column) {
-     for (var k = 0; k < row.length; k++) {
+     for (let k = 0; k < row.length; k++) {
        this.currentRowIndex_physics.push(row[k].row_index)
      }
    },
@@ -421,17 +378,20 @@ export default {
        this.multipleChoice_count=0;
        this.lineNumber_count=0;
        this.currentRowIndex_physics.splice(0,this.currentRowIndex_physics.length)
+
+       this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom",{qs:JSON.stringify(this.tabledata_physics)})
      }else{
        this.dialogTableVisible_virtual=false//关闭弹窗
 
-         this.tabledata_virtual.push(this.radioSelect);
-         this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
+       this.tabledata_virtual.push(this.radioSelect);
+       this.gridData_virtual.splice(this.currentRowIndex_virtual,1)
        this.$refs.multipleTable_virtual.clearSelection()
        this.radioSelect.splice(0,this.radioSelect.length)
        this.currentRowIndex_virtual.splice(0,this.currentRowIndex_virtual.length)
+
      }
    },
-   // 获取当前时间并赋值给this.tabledata_message.time
+
    getDateFunc(){
      let year = new Date().getFullYear();//年
      let month = new Date().getMonth() +1;//注意！月份是从0月开始获取的，所以要+1;
@@ -488,7 +448,7 @@ export default {
      this.virtual_price_temp = 0
      for(let i = 0; i < this.tabledata_virtual.length; ++i){
        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
      }
      console.log(this.virtual_price_temp)
    },
@@ -502,26 +462,53 @@ export default {
    handleChange_virtual(value,scope){
      this.tabledata_virtual[scope.$index].account_virtual = scope.row.num
      this.virtual_price_temp = 0
-     // console.log(this.tabledata_virtual[scope.$index].unit_price)
-     // console.log(this.tabledata_virtual[scope.$index].unit_price)
+
      for(let i = 0; i < this.tabledata_virtual.length; ++i){
        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-       this.virtual_price_temp += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+       this.virtual_price_temp += this.tabledata_virtual[i].price*this.tabledata_virtual[i].account_virtual
+     }
+     this.virtual_price_temp = this.diff_time*this.virtual_price_temp
+
+
+   },
+   calculate_sum(){
+     this.storage=this.tabledata_virtual.storage
+    let storage_sum=this.storage*this.storage_price*this.diff_time
+     if(isNaN(this.virtual_price_temp)){
+       this.virtual_price_temp=0
      }
 
-     // this.virtual_price_temp += scope.row.num * scope.row.unit_price
+     if(isNaN(this.physics_price)){
+       this.physics_price=0
+     }
+     if(isNaN(storage_sum)){
+       storage_sum=0
+     }
 
-     console.log(this.virtual_price_temp)
-     this.virtual_price_temp = this.diff_time*this.virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
+     this.total_price = this.virtual_price_temp + this.physics_price+ storage_sum
 
-     this.total_price = this.virtual_price_temp + this.physics_price
-     // console.log(scope.row.num)
-      console.log(scope)
-     console.log(this.total_price)
-     // console.log(value)
-     // console.log(scope.$index)
+     if(isNaN(this.total_price)){
+       this.total_price=0
+     }
+   },
 
-   }
+   handleAdd() {
+     this.$refs.fileUploadDialog.show()
+   },
+   // getAttachList() {
+   //   this.loading = true
+   //   this.attachQuery.billId = this.form.noticeId
+   //   this.attachQuery.billType = 10
+   //   listAttachment(this.attachQuery).then(response => {
+   //     this.attachList = response.rows
+   //     this.attachList.forEach(el => {
+   //       // 转为kb，取小数点后2位
+   //       el.fileSize = parseFloat(el.fileSize / 1024).toFixed(2)
+   //     })
+   //     this.attachTotal = response.total
+   //     this.loading = false
+   //   }).catch(() => {})
+   // },
  },
 
 

@@ -1,38 +1,30 @@
-package com.example.back2.entity.table;
+package com.example.back2.entity.view;
 
 import java.io.Serializable;
 
 /**
- * (PhysicsComResource)实体类
+ * (AdminsearchorderCom)实体类
  *
  * @author makejava
- * @since 2022-01-11 14:23:56
+ * @since 2022-01-11 18:13:47
  */
-public class PhysicsComResource implements Serializable {
-    private static final long serialVersionUID = -26351837738401331L;
-
+public class AdminsearchorderCom implements Serializable {
+    private static final long serialVersionUID = 854145404765353177L;
+    
     private Integer comNum;
-
-    private Integer row_index;
-
+    
+    private String workOrderNum;
+    
     private Integer cpuCore;
-
+    
     private Integer ram;
-
+    
     private Integer storage;
-
+    
+    private Integer price;
+    
     private Boolean assign;
 
-    private Integer price;
-
-
-    public void setRow_index(Integer row_index){
-        this.row_index = row_index;
-    }
-
-    public Integer getRow_index(){
-        return this.row_index;
-    }
 
     public Integer getComNum() {
         return comNum;
@@ -40,6 +32,14 @@ public class PhysicsComResource implements Serializable {
 
     public void setComNum(Integer comNum) {
         this.comNum = comNum;
+    }
+
+    public String getWorkOrderNum() {
+        return workOrderNum;
+    }
+
+    public void setWorkOrderNum(String workOrderNum) {
+        this.workOrderNum = workOrderNum;
     }
 
     public Integer getCpuCore() {
@@ -66,14 +66,6 @@ public class PhysicsComResource implements Serializable {
         this.storage = storage;
     }
 
-    public Boolean getAssign() {
-        return assign;
-    }
-
-    public void setAssign(Boolean assign) {
-        this.assign = assign;
-    }
-
     public Integer getPrice() {
         return price;
     }
@@ -82,4 +74,13 @@ public class PhysicsComResource implements Serializable {
         this.price = price;
     }
 
+    public Boolean getAssign() {
+        return assign;
+    }
+
+    public void setAssign(Boolean assign) {
+        this.assign = assign;
+    }
+
 }
+

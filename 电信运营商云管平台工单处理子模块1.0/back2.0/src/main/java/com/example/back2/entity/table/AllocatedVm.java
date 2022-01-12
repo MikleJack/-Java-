@@ -3,17 +3,17 @@ package com.example.back2.entity.table;
 import java.io.Serializable;
 
 /**
- * (PhysicsComResource)实体类
+ * (AllocatedVm)实体类
  *
  * @author makejava
- * @since 2022-01-11 14:23:56
+ * @since 2022-01-11 19:44:49
  */
-public class PhysicsComResource implements Serializable {
-    private static final long serialVersionUID = -26351837738401331L;
+public class AllocatedVm implements Serializable {
+    private static final long serialVersionUID = 478707250218245776L;
 
     private Integer comNum;
 
-    private Integer row_index;
+    private String workOrderNum;
 
     private Integer cpuCore;
 
@@ -21,18 +21,12 @@ public class PhysicsComResource implements Serializable {
 
     private Integer storage;
 
-    private Boolean assign;
+    private String ip;
 
-    private Integer price;
+    private String os;
 
+    private Double price;
 
-    public void setRow_index(Integer row_index){
-        this.row_index = row_index;
-    }
-
-    public Integer getRow_index(){
-        return this.row_index;
-    }
 
     public Integer getComNum() {
         return comNum;
@@ -40,6 +34,14 @@ public class PhysicsComResource implements Serializable {
 
     public void setComNum(Integer comNum) {
         this.comNum = comNum;
+    }
+
+    public String getWorkOrderNum() {
+        return workOrderNum;
+    }
+
+    public void setWorkOrderNum(String workOrderNum) {
+        this.workOrderNum = workOrderNum;
     }
 
     public Integer getCpuCore() {
@@ -66,19 +68,27 @@ public class PhysicsComResource implements Serializable {
         this.storage = storage;
     }
 
-    public Boolean getAssign() {
-        return assign;
+    public String getIp() {
+        return ip;
     }
 
-    public void setAssign(Boolean assign) {
-        this.assign = assign;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public Integer getPrice() {
+    public String getOs() {
+        return os;
+    }
+
+    public void setOs(String os) {
+        this.os = os;
+    }
+
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

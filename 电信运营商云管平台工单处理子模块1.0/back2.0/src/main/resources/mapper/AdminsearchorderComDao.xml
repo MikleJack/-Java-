@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AdminsearchorderComDao">
+
+    <resultMap type="com.example.back2.entity.view.AdminsearchorderCom" id="AdminsearchorderComMap">
+        <result property="comNum" column="com_num" jdbcType="INTEGER"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="INTEGER"/>
+        <result property="assign" column="assign" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminsearchorderComMap">
+        select
+          com_num, work_order_num, cpu_core, ram, storage, price, assign
+        from adminSearchOrder_Com
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="assign != null">
+                and assign = #{assign}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from adminSearchOrder_Com
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="assign != null">
+                and assign = #{assign}
+            </if>
+        </where>
+    </select>
+
+    <select id="getOrderCom" resultMap="AdminsearchorderComMap">
+        select
+        com_num, work_order_num, cpu_core, ram, storage, price, assign
+        from adminSearchOrder_Com
+        <where>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            and assign = 0
+        </where>
+    </select>
+
+</mapper>
+
