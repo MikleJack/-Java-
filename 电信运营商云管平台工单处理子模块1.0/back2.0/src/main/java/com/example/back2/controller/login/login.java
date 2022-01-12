@@ -68,7 +68,7 @@ public class login {
             {
                 password = SHA_256.getSHA256(password);
                 if(password.equals(staff.getPassword())){
-                    if(staff.getDepNum()==1)
+                    if(staff.getDepNum()==4||staff.getDepNum()==3)
                         return 1;
                     else
                         return 2;
