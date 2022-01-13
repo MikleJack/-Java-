@@ -28,7 +28,7 @@
             <el-descriptions-item label="工单编号">{{singleInformForm.workOrderNum}}</el-descriptions-item>
             <el-descriptions-item label="工单标题">{{singleInformForm.workOrderName}}</el-descriptions-item>
             <el-descriptions-item label="工单类型">{{singleInformForm.workOrderType}}</el-descriptions-item>
-            <el-descriptions-item label="工单申请时间">{{singleInformForm.applyTime}}</el-descriptions-item>
+            <el-descriptions-item label="工单申请时间">{{beginTime}}</el-descriptions-item>
             <el-descriptions-item label="工单到期时间">{{singleInformForm.expirationTime}}</el-descriptions-item>
           </el-descriptions>
           <!--      申请理由-->
@@ -212,20 +212,6 @@
             </el-table>
           </div>
         </div>
-        <div class="note_title" style="margin-top: 4%" v-if="show">批注</div>
-        <div class="note" v-if="show">
-          <el-input
-            type="textarea"
-            :rows="3"
-            placeholder="请输入批注"
-            v-model="note">
-          </el-input>
-        </div>
-        <div class="page_bottom" v-if="show">
-          <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
-          <el-button>挂起</el-button>
-          <el-button>审批不通过</el-button>
-        </div>
       </div>
     </div>
   </el-dialog>
@@ -249,6 +235,9 @@ export default {
       depTotalBudget: '',
       depUsedBudget: '',
       order_budget: '',
+
+      //工单开始时间
+      beginTime: '',
 
       labelPosition: 'left',
     };
@@ -300,6 +289,11 @@ export default {
       //流转过程情况获取
       this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
         this.flowProcess = res.data;
+      });
+
+      //通过工单编号得到开始时间
+      this.$axios.get('http://localhost:8084/staffAllTickets/queryBeginAndEndTime?workOrderNum=' + workOrderNum).then((res)=>{
+        this.beginTime = res.data.dealDate;
       });
     },
     handleClose(){
