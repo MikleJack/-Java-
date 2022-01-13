@@ -4,6 +4,8 @@ import com.example.back2.entity.table.FlowProcess;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Date;
+
 /**
  * (FlowProcess)表服务接口
  *
@@ -52,5 +54,17 @@ public interface FlowProcessService {
      * @return 是否成功
      */
     boolean deleteById(String workOrderNum);
+
+    /**
+     * 插入申请延期的流转过程
+     *
+     * @param workOrderNum 工单编号
+     * @param workerNum 员工编号
+     * @return 是否插入流转过程
+     */
+    Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate);
+
+
+    FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type);
 
 }

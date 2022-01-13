@@ -112,5 +112,15 @@
         where com_num = #{comNum}
     </delete>
 
+    <select id="queryByWorkOrderNum" resultMap="AllocatedComMap">
+        select com_num,
+               work_order_num,
+               cpu_core,
+               ram,
+               storage,
+               price
+        from brccq2.allocated_com
+        where work_order_num = #{workOrderNum}
+    </select>
 </mapper>
 

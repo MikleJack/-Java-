@@ -1,10 +1,14 @@
 package com.example.back2.controller.leader;
 
 import com.example.back2.controller.admin.searchOrder;
+import com.example.back2.entity.table.Leadership;
+import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.service.table.LeadershipService;
+import com.example.back2.service.table.WorkOrderService;
 import com.example.back2.service.view.AdminsearceorderVmService;
 import com.example.back2.service.view.AdminsearchorderComService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
@@ -13,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -72,6 +77,38 @@ public class pendTickets {
     @GetMapping("getOrderVm")
     public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
         return this.adminsearceorderVmService.getOrderVm(workOrderNum);
+    }
+
+
+    @Resource
+    private WorkOrderService workOrderService;
+    @Resource
+    private LeadershipService leadershipService;
+
+    /**
+     *
+     * @param workOrderNum  要审批的工单号
+     * @param workNum       审批人工号
+     * @param state         审批状态
+     * @return
+     */
+    @PostMapping("examine")
+    public Boolean Examine(String workOrderNum, String workNum, String state){
+        WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
+        if(state.equals("审批不通过")){
+            workOrder.setWorkOrderState(state);
+            workOrderService.update(workOrder);
+        }
+        else if(state.equals("审批通过")){
+            //得到申请这个工单人的姓名
+            Integer applyNum = workOrder.getWorkerNum();
+            //得到这个人的所有上级领导
+            List<Leadership> leaderList = leadershipService.getLeaderNum(applyNum);
+            for (Leadership i :leaderList){
+
+            }
+        }
+        return true;
     }
 
 }

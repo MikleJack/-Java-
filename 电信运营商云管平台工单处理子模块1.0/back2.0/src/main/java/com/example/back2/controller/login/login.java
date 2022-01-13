@@ -70,8 +70,10 @@ public class login {
                 if(password.equals(staff.getPassword())){
                     if(staff.getDepNum()==4||staff.getDepNum()==3)
                         return 1;
-                    else
+                    else if(staff.getDepNum()==2)
                         return 2;
+                    else
+                        return 3;
                 }
                 else
                     return 0;

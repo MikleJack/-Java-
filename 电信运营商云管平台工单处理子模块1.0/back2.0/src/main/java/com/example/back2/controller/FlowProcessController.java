@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * (FlowProcess)表控制层
@@ -81,6 +82,17 @@ public class FlowProcessController {
     @DeleteMapping
     public ResponseEntity<Boolean> deleteById(String id) {
         return ResponseEntity.ok(this.flowProcessService.deleteById(id));
+    }
+
+    /**
+     * 插入申请延期的流转过程
+     *
+     * @param workOrderNum 工单编号
+     * @param workerNum 员工编号
+     * @return 是否插入流转过程
+     */
+    public ResponseEntity<Boolean> DelayInsert(String workOrderNum, Integer workerNum, Date DealDate) {
+        return ResponseEntity.ok(this.flowProcessService.DelayInsert(workOrderNum, workerNum, DealDate));
     }
 
 }

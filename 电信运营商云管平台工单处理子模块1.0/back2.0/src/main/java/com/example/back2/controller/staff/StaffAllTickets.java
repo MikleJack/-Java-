@@ -4,8 +4,10 @@ import com.example.back2.entity.table.*;
 import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.OrderBeginEndTimeService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,12 @@ public class StaffAllTickets {
 
     @Resource
     private OrderBeginEndTimeService orderBeginEndTimeService;
+
+    @Resource
+    private FlowProcessService flowProcessService;
+
+    @Resource
+    private AllocatedComService allocatedComService;
 
 
 //----------------首页表单显示-顶部-------------------------------------------------------
@@ -53,7 +61,7 @@ public class StaffAllTickets {
      */
     @GetMapping("delay")
     public ResponseEntity<String> delay(String workOrderNum,
-                                         Date delayTime,
+                                        @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")Date delayTime,
                                          String delayReason) {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
@@ -61,7 +69,8 @@ public class StaffAllTickets {
         Long preDurationTime = ((preEndTime - preBeginTime)/((long)24*60*60*1000*30));
 
         //计算当前工单持续时间： 单位月
-        Long nowBeginTime = (new Date()).getTime();
+        Date nowDate = new Date();
+        Long nowBeginTime = nowDate.getTime();
         Long nowEndTime = delayTime.getTime();
         Long nowDurationTime = ((nowEndTime - nowBeginTime)/(24*60*60*1000));
 
@@ -85,6 +94,8 @@ public class StaffAllTickets {
         }
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
+            Integer workerNum = this.workOrderService.queryById(workOrderNum).getWorkerNum();
+            this.flowProcessService.DelayInsert(newWorkOrderNum, workerNum, nowDate);
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
             return ResponseEntity.ok("false");
@@ -132,6 +143,22 @@ public class StaffAllTickets {
     }
 
 //----------------------------下线按钮-底部----------------------------
+
+
+//----------------详情按钮-顶部-------------------------------------------------------
+    /**
+     * 通过工单编号查询该工单所有物理机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有物理机资源
+     */
+    @GetMapping("allocatedCom")
+    public ResponseEntity<List<AllocatedCom>> allocatedCom(String workOrderNum){
+        return ResponseEntity.ok(this.allocatedComService.queryByWorkOrderNum(workOrderNum));
+    }
+
+//----------------详情按钮-底部-------------------------------------------------------
+
 
 
 }
