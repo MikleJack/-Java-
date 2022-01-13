@@ -12,7 +12,7 @@
           <el-descriptions-item label="所在部门名称">{{depName}}</el-descriptions-item>
           <el-descriptions-item label="电话号码">{{phone}}</el-descriptions-item>
         </el-descriptions>
-      </div>
+    </div>
       <!--      显示工单基础信息-->
       <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px ">
         <div class="page_title">工单信息</div>
@@ -318,18 +318,20 @@ export default {
   position: relative;
   width: 100%;
   height: auto;
-  left: 0;
+  left: 10%;
   top: 0;
+  /*background-color: #409EFF;*/
 }
-/*.page_body{*/
-/*  position: relative;*/
-/*  width: 90%;*/
-/*  height: 100%;*/
-/*  left: 5%;*/
-/*}*/
+.page_body{
+  position: relative;
+  width: 90%;
+  height: 100%;
+  left: 5%;
+}
 .reason_contect{
   width: 80%;
   height: 80px;
+
   margin-left: 10%;
   margin-bottom: 1%;
 
