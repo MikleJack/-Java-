@@ -1,6 +1,13 @@
 package com.example.back2.controller.leader;
 
+import com.example.back2.controller.admin.searchOrder;
+import com.example.back2.entity.view.AdminsearceorderVm;
+import com.example.back2.entity.view.AdminsearchorderCom;
+import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.service.view.AdminsearceorderVmService;
+import com.example.back2.service.view.AdminsearchorderComService;
+import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.LeaderworkorderallService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
-@RequestMapping("leader")
+@RequestMapping("pendtickets")
 public class pendTickets {
     //--------------查询某个领导未审批的工单信息----------------------
     @Resource
@@ -37,4 +45,33 @@ public class pendTickets {
         return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
                 first_leader_num,orderState, pageRequest));
     }
+
+    //    根据工号查询工人信息
+    @Resource
+    AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
+
+    @GetMapping("queryWorkOrderDetailTop")
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum){
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    }
+
+//  根据工单号返回该工单的物理机信息
+
+    @Resource
+    private AdminsearchorderComService adminsearchorderComService;
+
+    @GetMapping("getOrderCom")
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
+        return this.adminsearchorderComService.getOrderCom(workOrderNum);
+    }
+//根据工单号返回该工单的虚拟机信息
+
+    @Resource
+    private AdminsearceorderVmService adminsearceorderVmService;
+
+    @GetMapping("getOrderVm")
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
+        return this.adminsearceorderVmService.getOrderVm(workOrderNum);
+    }
+
 }

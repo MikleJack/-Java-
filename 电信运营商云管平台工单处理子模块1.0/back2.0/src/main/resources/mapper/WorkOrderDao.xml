@@ -206,5 +206,34 @@
         values (#{workOrderNum}, #{workOrderType}, #{workOrderName}, #{expirationTime}, #{workerNum}, #{file}, #{workOrderState}, #{reason}, #{price}, #{offlineReason})
     </insert>
 
+
+    <!--员工全部工单查询界面    查询按钮-顶部-->
+    <!--    统计总行数-->
+    <select id="parameterCount" resultType="java.lang.Long">
+        select count(1)
+        from work_order
+        where work_order_type = #{workOrderType} and worker_num = #{workerNum} and work_order_name LIKE '%${workerTitle}%'
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="parameterQueryAllByLimit" resultMap="WorkOrderMap">
+        select
+        work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason
+        from work_order
+        <where>
+            <if test="workOrderType != null and workOrderType != ''">
+                and work_order_type = #{workOrderType}
+            </if>
+            <if test="workerTitle != null and workerTitle != ''">
+                and work_order_name LIKE '%${workerTitle}%'
+            </if>
+            <if test="workerNum != null">
+                and worker_num = #{workerNum}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+<!--员工全部工单查询界面    查询按钮-底部-->
+
 </mapper>
 

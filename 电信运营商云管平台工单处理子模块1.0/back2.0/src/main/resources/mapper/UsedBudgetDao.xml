@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.UsedBudgetDao">
+
+    <resultMap type="com.example.back2.entity.table.UsedBudget" id="UsedBudgetMap">
+        <result property="depNum" column="dep_num" jdbcType="INTEGER"/>
+        <result property="depUsedBudget" column="dep_used_budget" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UsedBudgetMap">
+        select
+          dep_num, dep_used_budget
+        from used_budget
+        where dep_num = #{depNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UsedBudgetMap">
+        select
+          dep_num, dep_used_budget
+        from used_budget
+        <where>
+            <if test="depNum != null">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depUsedBudget != null">
+                and dep_used_budget = #{depUsedBudget}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from used_budget
+        <where>
+            <if test="depNum != null">
+                and dep_num = #{depNum}
+            </if>
+            <if test="depUsedBudget != null">
+                and dep_used_budget = #{depUsedBudget}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="depNum" useGeneratedKeys="true">
+        insert into used_budget(dep_used_budget)
+        values (#{depUsedBudget})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="depNum" useGeneratedKeys="true">
+        insert into used_budget(dep_used_budget)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.depUsedBudget})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="depNum" useGeneratedKeys="true">
+        insert into used_budget(dep_used_budget)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.depUsedBudget})
+        </foreach>
+        on duplicate key update
+        dep_used_budget = values(dep_used_budget)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update used_budget
+        <set>
+            <if test="depUsedBudget != null">
+                dep_used_budget = #{depUsedBudget},
+            </if>
+        </set>
+        where dep_num = #{depNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from used_budget where dep_num = #{depNum}
+    </delete>
+
+</mapper>
+

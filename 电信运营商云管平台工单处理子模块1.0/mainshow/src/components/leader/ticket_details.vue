@@ -190,8 +190,8 @@
           </el-table>
         </div>
       </div>
-      <div class="note_title" style="margin-top: 4%" >批注</div>
-      <div class="note">
+      <div class="note_title" style="margin-top: 4%" v-if="show">批注</div>
+      <div class="note" v-if="show">
         <el-input
           type="textarea"
           :rows="3"
@@ -199,7 +199,7 @@
           v-model="note">
         </el-input>
       </div>
-      <div class="page_bottom">
+      <div class="page_bottom" v-if="show">
         <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
         <el-button>挂起</el-button>
         <el-button>审批不通过</el-button>
@@ -217,27 +217,27 @@ export default {
       //字体大小
       size: '',
       //workNum工号
-      workNum: '00000001',
+      workNum: '',
       //name人员姓名
-      name: '张大炮',
+      name: '',
       //所在部门编号
-      depNum: '0003',
+      depNum: '',
       //所在部门名称
-      depName: '小组1',
+      depName: '',
       //电话号码
-      phone: '13000000000',
+      phone: '',
       //工单编号
-      workOrderNum: '000000000000000001',
+      workOrderNum: '',
       //工单标题
-      workOrderName: '资源申请工单',
+      workOrderName: '',
       //工单类型
-      workType: '申请工单',
+      workType: '',
       //申请时间
       applyTime: '2023-5-3 00:00:00',
       //到期时间
-      expireTime:'2023-6-30 00:00:00',
+      expireTime:'',
       //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
-      reasonContect: '申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由',
+      reasonContect: '',
       //  输入的批注内容
       note: '',
       //部门总预算利用情况
@@ -295,6 +295,7 @@ export default {
 
     };
   },
+  props:["show"],
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
@@ -332,38 +333,24 @@ export default {
       });
     }
 
+},
+
 }
-  }
 </script>
 
 <style>
 .page{
   position: relative;
-  width: 150%;
+  width: 100%;
   height: auto;
   left: 0;
   top: 0;
-
-  /*background: #ffffff;*/
-}
-.page_top{
-  width: 100%;
-  height: 30px;
-  text-align: center;
-  /*line-height: 60px;*/
-  font-size:x-large;
-  font-weight: bolder;
-  margin-top: 0;
-  color: #0c805f;
 }
 .page_body{
   position: relative;
   width: 90%;
-  /*height: 20px;*/
   height: 100%;
-  /*top: 0;*/
   left: 5%;
-  /*background: #0c805f;*/
 }
 .reason_contect{
   width: 80%;
@@ -377,7 +364,7 @@ export default {
   width: 100%;
   height: auto;
   margin-left: -10%;
-margin-right: -20%;
+  margin-right: -20%;
 }
 .page_bottom{
   width: 100%;
@@ -392,8 +379,6 @@ margin-right: -20%;
   margin-left: 10%;
 }
 .page_title{
-
-
   font-size: large;
   text-align: center;
   margin-bottom:20px;
@@ -401,20 +386,13 @@ margin-right: -20%;
   color: #0c805f;
 }
 .note_title{
-
-
   margin-left: -20%;
   text-align: center;
   margin-bottom:20px;
   font-weight:bolder;
   color: #0c805f;
 }
-.el-table{
-  margin-left: 2%;
-  margin-right: 1%;
-  width: 95%;
-  margin-bottom: 1%;
-}
+
 .frame{
   margin-bottom: 3%;
   margin-right: 10%;
@@ -424,14 +402,12 @@ margin-right: -20%;
 
 .total_progress{
   width:25%;
-  /*background-color: #0c805f;*/
   float: left;
   height: 200px;
   text-align: center;
 }
 .total_description{
   width: 25%;
-  /*background-color: #409EFF;*/
   float: left;
   height: 200px;
   font-size: larger;
@@ -439,13 +415,11 @@ margin-right: -20%;
 }
 .progress{
   width: 25%;
-  /*background-color: rgba(255, 165, 0, 0.7);*/
   float: left;
   height: 200px;
 }
 .description{
   width: 25%;
-  /*background-color: rgba(12, 12, 12, 0.63);*/
   float: left;
   height: 200px;
   font-size: larger;

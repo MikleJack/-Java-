@@ -182,6 +182,7 @@ export default {
 
     },
 
+    //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
     resetPageSituation(){
       this.ifPagination = true,
       this.currentPage = 1;

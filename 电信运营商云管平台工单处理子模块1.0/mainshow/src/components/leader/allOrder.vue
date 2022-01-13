@@ -76,10 +76,13 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog :visible.sync="dialogTableVisible"width="80%">
-          <order_detail ref="order_detail"></order_detail>
+        <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
+          <order_detail :show="false"></order_detail>
         </el-dialog>
       </div>
+
+
+
     <div class="page-tail">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -93,8 +96,8 @@
 </template>
 
 <script>
+// import Ticket_details from "./ticket_details";
 import order_detail from "./order_detail";
-
 
     export default {
         name: "all_work_order",
@@ -147,25 +150,22 @@ import order_detail from "./order_detail";
 <style scoped>
   .page-main{
     position: relative;
+
     width:100%;
     height: 100%;
   }
 
+  /*.page-body{*/
+  /*  position: relative;*/
+  /*  width: 90%;*/
+  /*  height: 100%;*/
+  /*  left: 5%;*/
+  /*}*/
 
-  .page-head{
-    position: relative;
-    width:100%;
-    text-align:center
-  }
 
-
-  .page-body{
-    position: relative;
-  }
 
   .page-tail{
     width:100%;
-    /*height: 60px;*/
     position: relative;
     bottom: 0;
   }

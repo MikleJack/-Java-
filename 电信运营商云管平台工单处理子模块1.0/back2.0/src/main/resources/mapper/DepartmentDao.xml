@@ -6,7 +6,7 @@
         <result property="depNum" column="dep_num" jdbcType="INTEGER"/>
         <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
         <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
-        <result property="depBudget" column="dep_budget" jdbcType="INTEGER"/>
+        <result property="depBudget" column="dep_budget" jdbcType="DOUBLE"/>
     </resultMap>
 
     <!--查询单个-->
