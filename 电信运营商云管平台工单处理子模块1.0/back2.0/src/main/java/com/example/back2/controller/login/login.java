@@ -58,7 +58,7 @@ public class login {
      *  员工及领导登录接口
      *  @param  work_num 工号
      *  @param password 登录密码
-     *  @return 0 登录失败 1 普通员工 2 领导
+     *  @return 0 登录失败 1 普通员工 2 一级领导 3二级领导
      */
     @GetMapping("user")
     public int userLogin(Integer work_num, String password){
