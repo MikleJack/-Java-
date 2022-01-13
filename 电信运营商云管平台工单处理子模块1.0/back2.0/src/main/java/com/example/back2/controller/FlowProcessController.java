@@ -2,7 +2,9 @@ package com.example.back2.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.back2.entity.table.FlowProcess;
+import com.example.back2.entity.view.FlowStaff;
 import com.example.back2.service.table.FlowProcessService;
+import com.example.back2.service.view.FlowStaffService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (FlowProcess)表控制层
@@ -44,7 +47,7 @@ public class FlowProcessController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("{id}")
+    @GetMapping("id")
     public ResponseEntity<FlowProcess> queryById(@PathVariable("id") String id) {
         return ResponseEntity.ok(this.flowProcessService.queryById(id));
     }
@@ -95,5 +98,12 @@ public class FlowProcessController {
         return ResponseEntity.ok(this.flowProcessService.DelayInsert(workOrderNum, workerNum, DealDate));
     }
 
+    @Resource
+    private FlowStaffService flowStaffService;
+
+    @GetMapping("selectByWorkOrderNum")
+    public List<FlowStaff> selectByWorkOrderNum(String workOrederNum){
+        return this.flowStaffService.selectByWorkOrderNum(workOrederNum);
+    }
 }
 

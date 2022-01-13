@@ -163,7 +163,7 @@
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="dealName"
+              prop="name"
               label="处理人姓名"
               width="auto">
             </el-table-column>
@@ -231,18 +231,7 @@ export default {
       phyCom: [],
       virtualCom: [],
       //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum: '00000002',
-        //处理人姓名
-        dealName: '陈大炮',
-        //操作类型
-        operationType: '审批通过',
-        //操作日期
-        dealDate: '2021-12-28 15:30:00',
-        //批注
-        dealComment: '申请合理，建议通过',
-      }],
+      informData: [],
 
     };
   },
@@ -288,7 +277,12 @@ export default {
       this.$axios.get("http://localhost:8084/alltickets/getOrderVm?workOrderNum="
       +workOrderNum).then((res)=>{
         this.virtualCom = res.data;
-      })
+      });
+      //通过工单编号查找流转过程
+      this.$axios.get("http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrederNum="
+        +workOrderNum).then((res)=>{
+        this.informData = res.data;
+      });
     }
   }
 }

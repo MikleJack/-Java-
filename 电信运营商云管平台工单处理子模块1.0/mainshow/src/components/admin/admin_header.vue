@@ -29,23 +29,23 @@
           active-text-color="#ffd04b"
         >
           <el-menu-item index="1" @click="changePage(1)">
-            <i class="el-icon-s-home"></i>
+            <i class="el-icon-s-home" style="color: green"></i>
             <span slot="title">主页</span>
           </el-menu-item>
           <el-menu-item index="2" @click="changePage(2)">
-            <i class="el-icon-search"></i>
+            <i class="el-icon-search" style="color: green"></i>
             <span slot="title">工单查询</span>
           </el-menu-item>
           <el-menu-item index="3" @click="changePage(3)">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-setting" style="color: green"></i>
             <span slot="title">账号管理</span>
           </el-menu-item>
           <el-menu-item index="4" @click="changePage(4)">
-            <i class="el-icon-set-up"></i>
+            <i class="el-icon-set-up" style="color: green"></i>
             <span slot="title">组织机构管理</span>
           </el-menu-item>
           <el-menu-item index="5" @click="changePage(5)">
-            <i class="el-icon-document"></i>
+            <i class="el-icon-document" style="color: green"></i>
             <span slot="title">日志管理</span>
           </el-menu-item>
         </el-menu>
