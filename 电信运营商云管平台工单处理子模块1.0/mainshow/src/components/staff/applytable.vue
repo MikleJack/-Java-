@@ -7,22 +7,22 @@
     <div class="page_block">
 
       <!-- 工单信息填写表单 -->
-      <el-form :inline="true" :model="tabledata_message" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
+      <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
 
         <el-form-item label="工单标题">
-          <el-input v-model="tabledata_message.order_name" placeholder="工单标题"></el-input>
+          <el-input v-model="workorder.workOrderName" placeholder="工单标题"></el-input>
         </el-form-item>
         <span class="demonstration">资源到期时间</span>
         <el-date-picker
-          v-model="tabledata_message.apply_time"
+          v-model="workorder.expirationTime"
           type="date"
           placeholder="选择日期">
         </el-date-picker>
 
       </el-form>
-      <el-form :model="tabledata_message">
+      <el-form :model="workorder">
         <el-form-item label="申请理由">
-          <el-input type="textarea" v-model="tabledata_message.reason" style="width:100%;float:left"></el-input>
+          <el-input type="textarea" v-model="workorder.reason" style="width:100%;float:left"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -254,13 +254,17 @@ export default {
       dialogTableVisible_physics: false,
       dialogTableVisible_virtual: false,
       // 个人信息以及工单信息表单数据
-      tabledata_message: [{
-
-        //资源到期时间
-        apply_time: '',
-        order_name: '',
-        reason: ''
-      }],
+      workorder: {
+        workOrderNum:'',
+        expirationTime: '',
+        workOrderName: '',
+        reason: '',
+        workerNum:'',
+        file:'',
+        price:'',
+        workOrderType:"申请工单",
+        WorkOrderState:"待审批"
+      },
       // 已添加的物理机资源信息表数据
       tabledata_physics: [],
       // 已添加的虚拟机资源信息表数据
@@ -269,7 +273,14 @@ export default {
       gridData_physics: [],
       // 新增虚拟机弹窗内表格数据
       gridData_virtual: [],
-
+      //流转过程需要的数据
+      flowProcess:{
+        workOrderNum:'',
+        dealNum:'',
+        operationType:'申请工单',
+        dealDate:'',
+        dealComment:''
+      }
     }
   },
   // 获取当前时间的定时器
@@ -398,9 +409,9 @@ export default {
       let month = new Date().getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
       let day = new Date().getDate();//日
 
-      let year1 = this.tabledata_message.apply_time.getFullYear();//年
-      let month1 = this.tabledata_message.apply_time.getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
-      let day1 = this.tabledata_message.apply_time.getDate();//日
+      let year1 = this.workorder.expirationTime.getFullYear();//年
+      let month1 = this.workorder.expirationTime.getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
+      let day1 = this.workorder.expirationTime.getDate();//日
       //拼接日期 YYYY-MM-DD HH:mm:ss
       this.current_time =
         year +
@@ -508,28 +519,45 @@ export default {
 
     //提交所有工单数据
     submit() {
-      console.log(this.tabledata_virtual);
+      alert(sessionStorage.getItem("work_num"));
+      this.workorder.workerNum = sessionStorage.getItem("work_num");
+      this.workorder.price= this.total_price;
+      //插入到表单中
       this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
-        {
-          workOrderName: this.tabledata_message.order_name, expirationTime: this.tabledata_message.apply_time,
-          reason: this.tabledata_message.reason, workNum: sessionStorage.getItem("work_num"), file: "",
-          price: this.total_price, workOrderType: "申请工单"
-        }).then((res) => {
+        this.workorder).then((res) => {
         if (res.data) {
+          //插入申请的物理机资源
           this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom", {
             qs: JSON.stringify(this.tabledata_physics),
             workOrderNum: res.request.response
-          })
-            this.$axios.post("http://localhost:8084/applyTickets/insertAllocationVm",{
-              qs:JSON.stringify(this.tabledata_virtual),
-              workOrderNum:res.request.response,
-              storage:this.storage,
-              os:this.os
-            });
-
+          });
+          //插入申请的虚拟机资源
+          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedVm",{
+            qs:JSON.stringify(this.tabledata_virtual),
+            workOrderNum:res.request.response,
+            storage:this.storage,
+            os:this.os
+          });
+          //插入流转过程
+          this.flowProcess.workOrderNum=res.request.response;
+          this.flowProcess.dealComment=this.workorder.reason;
+          this.flowProcess.dealDate=this.current_time;
+          this.flowProcess.dealNum=sessionStorage.getItem("work_num");
+          this.flowProcess.operationType="申请工单";
+          this.$axios.post("http://localhost:8084/flowProcess/insert",{
+            flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+            if(res.data===true){
+              this.$message({
+                message: '申请成功',
+                type: 'success',
+                center: true
+              });
+            }
+          });
 
         }
-      })
+      });
+
     }
   }
 }
