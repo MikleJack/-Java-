@@ -146,7 +146,7 @@ export default {
         this.$cookies.set(this.ruleForm.work_num,0);
         if(this.code===res.data){
           this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data===1||res.data===2) {
+            if (res.data!==0) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
@@ -163,6 +163,7 @@ export default {
               else if(res.data===2){
                 sessionStorage.setItem("type", "leader");
                 sessionStorage.setItem("leader", 'true');
+                sessionStorage.setItem("level", res.data);
                 this.$router.push('/leader');
               }
 
