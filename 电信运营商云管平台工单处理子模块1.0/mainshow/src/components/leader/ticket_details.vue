@@ -314,7 +314,25 @@ export default {
         return 'rgba(239,125,10,0.7)';
       }
     },
-  }
+    autoGetAllDetail(workOrderNum) {
+      this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
+        +workOrderNum).then((res)=>{
+          //个人信息
+          this.workNum = res.data.workerNum;
+          this.name = res.data.name;
+          this.depNum = res.data.depNum;
+          this.depName = res.data.depName;
+          this.phone = res.data.phone;
+          //工单信息
+          this.workOrderNum = workOrderNum;
+          this.workOrderName  = res.data.workOrderName;
+          this.workType = res.data.workOrderType;
+          this.expireTime = res.data.expireTime;
+          this.reasonContect = res.data.reason;
+      });
+    }
+
+}
   }
 </script>
 
