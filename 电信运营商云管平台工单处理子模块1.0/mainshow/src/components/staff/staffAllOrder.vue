@@ -2,6 +2,7 @@
   <div>
     <StaffAllOrderOffline ref="StaffAllOrderOffline"></StaffAllOrderOffline>
     <StaffAllOrderDelay ref="StaffAllOrderDelay"></StaffAllOrderDelay>
+    <StaffAllOrderDetail ref="StaffAllOrderDetail"></StaffAllOrderDetail>
     <el-form :inline="true" :model="criteriaQueryByPage" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
@@ -63,7 +64,7 @@
         label="操作"
         width="250">
         <templte slot-scope="scope">
-          <el-button @click="handleClick_detail(scope.row)" type="text" size="small">详情</el-button>
+          <el-button @click="handleClick_detail(scope.row.workOrderNum)" type="text" size="small">详情</el-button>
           <el-button @click="handleClick_delay(scope.row.workOrderNum)"
                      type="text"
                      size="small"
@@ -85,144 +86,16 @@
         :total="totalSize">
       </el-pagination>
     </div>
-    <!--    点击详情后的dialog界面-->
-    <el-dialog
-      title="详情"
-      :visible.sync="dialogVisible_detail"
-      width="80%"
-      :before-close="handleClose"
-      center>
-      <div class="page">
-        <!-- -->
-        <!--        <div class="page_top">工单详情</div>-->
-        <div class="page_body">
-          <!--      审批工单时显示申请人信息的无框表格-->
-          <el-descriptions class="margin-top" title="申请人信息" :column="3" :size="size" border></el-descriptions>
-          <el-descriptions class="margin-top":column="3" :size="size">
-            <el-descriptions-item label="申请人姓名">{{name}}</el-descriptions-item>
-            <el-descriptions-item label="工号">{{workNum}}</el-descriptions-item>
-            <el-descriptions-item label="所在部门编号">{{depNum}}</el-descriptions-item>
-            <el-descriptions-item label="所在部门名称">{{depName}}</el-descriptions-item>
-            <el-descriptions-item label="电话号码">{{phone}}</el-descriptions-item>
-          </el-descriptions>
-
-          <!--      显示工单基础信息-->
-          <el-descriptions class="margin-top" title="工单信息信息" :column="3" :size="size" border></el-descriptions>
-          <el-descriptions class="margin-top" :column="3" :size="size">
-            <el-descriptions-item label="工单编号">{{workOrderNum}}</el-descriptions-item>
-            <el-descriptions-item label="工单标题">{{workOrderName}}</el-descriptions-item>
-            <el-descriptions-item label="工单类型">{{workType}}</el-descriptions-item>
-            <el-descriptions-item label="工单申请时间">{{applyTime}}</el-descriptions-item>
-          </el-descriptions>
-          <el-descriptions class="margin-top" :title="reason" :column="3" :size="size" border></el-descriptions>
-          <div class="reason_contect">{{reasonContect}}</div>
-
-          <el-descriptions class="margin-top" title="资源" :column="3" :size="size" border></el-descriptions>
-          <el-table
-            :data="allocatedCom"
-            border
-            style="width: 100%">
-            <el-table-column
-              type="index"
-              width="50">
-            </el-table-column>
-
-            <el-table-column
-              prop="comType"
-              label="计算机类型"
-              width="auto">
-            </el-table-column>
-            <el-table-column
-              prop="cpuCore"
-              label="CPU核数"
-              width="auto">
-            </el-table-column>
-            <el-table-column
-              prop="ram"
-              label="内存">
-            </el-table-column>
-            <el-table-column
-              prop="strange"
-              label="存储大小">
-            </el-table-column>
-            <el-table-column
-              prop="ip"
-              label="ip地址">
-            </el-table-column>
-            <el-table-column
-              prop="os"
-              label="操作系统">
-            </el-table-column>
-          </el-table>
-
-          <!--      <el-descriptions class="margin-top" title="虚拟机资源" :column="3" :size="size" border></el-descriptions>-->
-
-          <!--显示流转过程-->
-          <el-descriptions class="margin-top" title="流转过程" :column="3" :size="size" border></el-descriptions>
-
-          <div class="resoure_usage">
-            <el-table
-              :data="informData"
-              border
-              style="width: 100%">
-              <el-table-column
-                prop="dealNum"
-                label="处理人工号"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealName"
-                label="处理人姓名"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="operationType"
-                label="操作类型"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealDate"
-                label="处理日期"
-                width="auto">
-              </el-table-column>
-              <el-table-column
-                prop="dealComment"
-                label="批注"
-                width="auto">
-              </el-table-column>
-            </el-table>
-          </div>
-          <el-descriptions class="margin-top" title="批注" :column="3" :size="size" border></el-descriptions>
-          <div class="resoure_usage">
-            <el-input
-              type="textarea"
-              :rows="3"
-              :disabled="true"
-              placeholder="请输入内容"
-              v-model="textarea">
-            </el-input>
-
-            <span slot="footer" class="dialog-footer">
-              <div>
-                <el-button @click="dialogVisible_detail = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_detail = false">确 定</el-button>
-              </div>
-          </span>
-          </div>
-
-        </div>
-
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import StaffAllOrderOffline from "./dialogs/StaffAllOrderOffline";
 import StaffAllOrderDelay from "./dialogs/StaffAllOrderDelay";
+import StaffAllOrderDetail from "./dialogs/StaffAllOrderDetail";
 export default {
   name: "StaffAllOrder",
-  components:{StaffAllOrderOffline,StaffAllOrderDelay},
+  components:{StaffAllOrderOffline,StaffAllOrderDelay,StaffAllOrderDetail},
   data() {
     return {
       dialogVisible_detail: false,
@@ -291,7 +164,6 @@ export default {
       this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
         + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
-        console.log(res.data);
         this.totalSize = res.data.totalPages*this.pageSize;})
     },
 
@@ -316,8 +188,9 @@ export default {
       }
     },
     //操作的详情dialog函数
-    handleClick_detail() {
-      this.dialogVisible_detail = true;
+    handleClick_detail(workOrderNum) {
+      this.$refs.StaffAllOrderDetail.autoGetAllDetail(workOrderNum);
+      this.$store.state.staffAllOrder_DetailDialogVisible = true;
     },
     //延期按钮对话框显示
     handleClick_delay(workOrderNum) {

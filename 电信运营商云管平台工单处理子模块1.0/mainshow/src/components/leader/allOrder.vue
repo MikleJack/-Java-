@@ -77,7 +77,7 @@
           </el-table-column>
         </el-table>
         <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
-          <order_detail :show="false"></order_detail>
+          <order_detail ref="order_detail" :show="false"></order_detail>
         </el-dialog>
       </div>
 
@@ -100,16 +100,26 @@
 import order_detail from "./order_detail";
 
     export default {
-        name: "all_work_order",
+      name: "all_work_order",
       components: {order_detail},
       mounted() {
-        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
+        if(sessionStorage.getItem("level")==="3"){
+          this.second=sessionStorage.getItem("work_num");
+        }
+        else {
+          this.first=sessionStorage.getItem("work_num");
+        }
+        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num="+this.second+
+          "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
       },
       data() {
         return {
+          //领导人编号
+          first:"",
+          second:"",
           formInline: {
             work_order_type: ''
           },
@@ -130,8 +140,8 @@ import order_detail from "./order_detail";
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page="+page+"&size="
-            +this.pageSize).then((res)=>{
+          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num="+this.second+
+            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
           })
@@ -154,13 +164,6 @@ import order_detail from "./order_detail";
     width:100%;
     height: 100%;
   }
-
-  /*.page-body{*/
-  /*  position: relative;*/
-  /*  width: 90%;*/
-  /*  height: 100%;*/
-  /*  left: 5%;*/
-  /*}*/
 
 
 

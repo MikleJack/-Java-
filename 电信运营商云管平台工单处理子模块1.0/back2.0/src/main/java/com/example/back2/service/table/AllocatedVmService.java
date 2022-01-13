@@ -1,6 +1,9 @@
 package com.example.back2.service.table;
 
+import com.example.back2.entity.table.AllocatedCom;
 import com.example.back2.entity.table.AllocatedVm;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -52,5 +55,13 @@ public interface AllocatedVmService {
      * @return 是否成功
      */
     boolean deleteById(Integer comNum);
+
+    /**
+     * 通过工单编号查询该工单所有虚拟机机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有虚拟机资源
+     */
+    List<AllocatedVm> queryByWorkOrderNum(String workOrderNum);
 
 }

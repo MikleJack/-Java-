@@ -1,47 +1,47 @@
 <template>
-  <div class="background">
-    <div class="title">
-      <!--        <div style="position:relative;float: left;top: 18px;">-->
-      <!--          <img src="../../assets/white.png" height="64" width="64"/>-->
-      <!--        </div>-->
-      <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
-        电信运营商云管平台工单处理子模块
+    <div class="background">
+      <div class="title">
+<!--        <div style="position:relative;float: left;top: 18px;">-->
+<!--          <img src="../../assets/white.png" height="64" width="64"/>-->
+<!--        </div>-->
+        <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
+          电信运营商云管平台工单处理子模块
+        </div>
+      </div>
+      <!--登录界面-->
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+      <div class="warp">
+        <!-- 管理员与用户切换按钮-->
+        <div class="warp-form">
+            <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
+          <h2>用户登录</h2>
+          <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
+          <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
+            <el-form-item  prop="work_num">
+              <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item  prop="password">
+              <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <div class="code_input">
+                <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
+              </div>
+              <div style="float: right">
+                <img @click="getVertifyCode" id="verifyCode" />
+              </div>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button style="margin-left: 40%" type="primary" @click="logging">登录</el-button>
+            </el-form-item>
+
+          </el-form>
+
+        </div>
       </div>
     </div>
-    <!--登录界面-->
-    <img :src="imgSrc" width="100%" height="100%" alt="" />
-    <div class="warp">
-      <!-- 管理员与用户切换按钮-->
-      <div class="warp-form">
-        <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
-        <h2>用户登录</h2>
-        <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
-          <el-form-item  prop="work_num">
-            <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item  prop="password">
-            <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <div class="code_input">
-              <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
-            </div>
-            <div style="float: right">
-              <img @click="getVertifyCode" id="verifyCode" />
-            </div>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button style="margin-left: 40%" type="primary" @click="logging">登录</el-button>
-          </el-form-item>
-
-        </el-form>
-
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -153,7 +153,7 @@ export default {
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
           this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data!==0) {
+            if (res.data===1||res.data===2) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
@@ -167,9 +167,8 @@ export default {
                 sessionStorage.setItem("staff", 'true');
                 this.$router.push('/staff');
               }
-              else {
+              else if(res.data===2){
                 sessionStorage.setItem("type", "leader");
-                sessionStorage.setItem("level", res.data);
                 sessionStorage.setItem("leader", 'true');
                 this.$router.push('/leader');
               }

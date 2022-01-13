@@ -16,7 +16,6 @@ public interface LeaderworkorderallService {
     /**
      * 分页查询
      *
-     * @param leader_num 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
@@ -24,6 +23,8 @@ public interface LeaderworkorderallService {
                                          Integer first_leader_num,
                                          String orderState,
                                          PageRequest pageRequest);
+
+    Integer getSecondNum(String workOrderNum);
 
 
 }

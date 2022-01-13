@@ -53,4 +53,12 @@ public interface AllocatedComService {
      */
     boolean deleteById(Integer comNum);
 
+    /**
+     * 通过工单编号查询该工单所有物理机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有物理机资源
+     */
+    List<AllocatedCom> queryByWorkOrderNum(String workOrderNum);
+
 }

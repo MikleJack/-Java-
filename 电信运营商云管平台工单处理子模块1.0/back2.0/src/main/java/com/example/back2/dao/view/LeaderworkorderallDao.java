@@ -37,5 +37,6 @@ public interface LeaderworkorderallDao {
                String orderState);
 
 
+    Integer getSecondNum(String workOrderNum);
 }
 

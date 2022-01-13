@@ -38,4 +38,9 @@ public class LeaderworkorderallServiceImpl implements LeaderworkorderallService 
                 first_leader_num, orderState, pageRequest), pageRequest, total);
     }
 
+    @Override
+    public  Integer getSecondNum(String workOrderNum){
+        return this.leaderworkorderallDao.getSecondNum(workOrderNum);
+    }
+
 }

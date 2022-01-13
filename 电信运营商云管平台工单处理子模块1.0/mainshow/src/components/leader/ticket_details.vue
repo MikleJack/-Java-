@@ -47,20 +47,20 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="phy_cpuCore"
+            prop="cpuCore"
             label="CPU核数/个"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="phy_ram"
+            prop="ram"
             label="内存/G">
           </el-table-column>
           <el-table-column
-            prop="phy_mem"
+            prop="storage"
             label="存储大小/G">
           </el-table-column>
           <el-table-column
-            prop="phy_price"
+            prop="price"
             label="单价 元/月">
           </el-table-column>
         </el-table>
@@ -74,42 +74,42 @@
           :data="virtualCom"
           border
         ><el-table-column
-          prop="vir_require"
+          prop="description"
           label="规格族"
           width="auto">
         </el-table-column>
           <el-table-column
-            prop="vir_cpuCore"
+            prop="cpuCore"
             label="CPU核数/个"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="vir_ram"
+            prop="ram"
             label="内存/G">
           </el-table-column>
           <el-table-column
-            prop="vir_frequency"
+            prop="processorFrequency"
             label="处理机主频/GHz"
           width="150px">
           </el-table-column>
           <el-table-column
-            prop="vir_model"
+            prop="processormodel"
             label="处理器型号">
           </el-table-column>
           <el-table-column
-          prop="vir_os"
+          prop="os"
           label="操作系统">
         </el-table-column>
           <el-table-column
-            prop="vir_price"
+            prop="perprice"
             label="单价 元/月">
           </el-table-column>
           <el-table-column
-            prop="hardDisk"
+            prop="storage"
             label="硬盘大小/G">
           </el-table-column>
           <el-table-column
-            prop="vir_totalPrice"
+            prop="allprice"
             label="总价/元">
           </el-table-column>
         </el-table>
@@ -168,7 +168,7 @@
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="dealName"
+              prop="name"
               label="处理人姓名"
               width="auto">
             </el-table-column>
@@ -201,7 +201,7 @@
       </div>
       <div class="page_bottom" v-if="show">
         <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
-        <el-button>挂起</el-button>
+        <el-button v-if="hasHangup">挂起</el-button>
         <el-button>审批不通过</el-button>
       </div>
     </div>
@@ -213,6 +213,8 @@ export default {
   name: "ticket_details",
   data() {
     return {
+      //是否显示挂起按钮
+      hasHangup:false,
       labelPosition: 'left',
       //字体大小
       size: '',
@@ -240,73 +242,47 @@ export default {
       reasonContect: '',
       //  输入的批注内容
       note: '',
+
+
       //部门总预算利用情况
-      used_budget:'1800',
+      used_budget:'',
       //部门总预算
-      total_budget:'2000',
+      total_budget:'',
       //部门剩余预算
       surplus_budget:'',
       //工单预算
-      order_budget:'190',
+      order_budget:'',
+
+
       //物理机资源数据
-      phyCom: [{
-        //物理机cpu核数
-        phy_cpuCore: '8',
-        //物理机内存
-        phy_ram: '16',
-        //物理机存储
-        phy_mem: '256',
-        //物理机单价
-        phy_price: '2000'
-      }],
-      virtualCom: [{
-        //虚拟机规格族
-        vir_require:'共享标准型',
-        //虚拟机cpu核数
-        vir_cpuCore: '2',
-        //虚拟机内存
-        vir_ram: '32',
-        //虚拟机处理器主频
-        vir_frequency: '2.5',
-        //虚拟机处理器型号
-        vir_model: '型号',
-        //虚拟机操作系统
-        vir_os: 'windows',
-        //虚拟机单价
-        vir_price:'100',
-        //硬盘
-        hardDisk:'256',
-        //总价
-        vir_totalPrice: '200'
-      }],
+      phyCom: [],
+      virtualCom: [],
       //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum: '00000002',
-        //处理人姓名
-        dealName: '陈大炮',
-        //操作类型
-        operationType: '审批通过',
-        //操作日期
-        dealDate: '2021-12-28 15:30:00',
-        //批注
-        dealComment: '申请合理，建议通过',
-      }],
+      informData: [],
 
     };
   },
+  mounted() {
+    if(sessionStorage.getItem("level")==="3"){
+      this.hasHangup=true;
+    }
+    },
   props:["show"],
   methods: {
+
     //部门已用预算/部门总预算进度条
     total_percentage(){
       return 100*this.used_budget/this.total_budget;
     },
+
     //工单预算/部门剩余预算进度条
     percentage(){
       this.surplus_budget=this.total_budget-this.used_budget;
-      let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
-      return 100*temp_per;
-    },
+      // let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
+      // return 100*temp_per;
+      return (100*this.order_budget/this.surplus_budget).toFixed(2);
+      },
+
     customColorMethod(percentage) {
       if (percentage < 90) {
         return '#52b69a';
@@ -316,8 +292,9 @@ export default {
       }
     },
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
+      this.$axios.get("http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum="
         +workOrderNum).then((res)=>{
+          // console.log(res.data);
           //个人信息
           this.workNum = res.data.workerNum;
           this.name = res.data.name;
@@ -328,9 +305,34 @@ export default {
           this.workOrderNum = workOrderNum;
           this.workOrderName  = res.data.workOrderName;
           this.workType = res.data.workOrderType;
-          this.expireTime = res.data.expireTime;
+          this.expireTime = res.data.expirationTime;
           this.reasonContect = res.data.reason;
+          //获取工单使用预算
+          this.order_budget = res.data.depBudget;
+          //获取部门总预算
+          this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
+            this.total_budget = res.data;
+          });
+          //获取部门已使用预算
+          this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + this.depNum).then((res)=>{
+            this.used_budget = res.data.depUsedBudget;
+          });
       });
+      //查找工单申请的物理机资源
+      this.$axios.get("http://localhost:8084/pendtickets/getOrderCom?workOrderNum="
+      +workOrderNum).then((res)=>{
+        this.phyCom = res.data;
+      });
+      //查找工单申请的虚拟机资源
+      this.$axios.get("http://localhost:8084/pendtickets/getOrderVm"
+        +workOrderNum).then((res)=>{
+          this.virtualCom = res.data;
+      });
+    //通过工单编号查找流转过程
+      this.$axios.get("http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrederNum="
+      +workOrderNum).then((res)=>{
+        this.informData = res.data;
+      })
     }
 
 },
@@ -341,9 +343,9 @@ export default {
 <style>
 .page{
   position: relative;
-  width: 100%;
+  width: 90%;
   height: auto;
-  left: 0;
+  left: 10%;
   top: 0;
 }
 .page_body{

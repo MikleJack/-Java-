@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.FlowStaffDao">
+
+    <resultMap type="com.example.back2.entity.view.FlowStaff" id="FlowStaffMap">
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="dealNum" column="deal_num" jdbcType="INTEGER"/>
+        <result property="operationType" column="operation_type" jdbcType="VARCHAR"/>
+        <result property="dealDate" column="deal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealComment" column="deal_comment" jdbcType="VARCHAR"/>
+    </resultMap>
+
+<!--    通过工单号查询相应的流转过程-->
+    <select id="selectByWorkOrderNum" resultMap="FlowStaffMap">
+        select
+            name,
+            work_order_num,
+            deal_num,
+            operation_type,
+            deal_date,
+            deal_comment
+        from brccq2.flow_staff
+        where work_order_num = #{workOrderNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="FlowStaffMap">
+        select name,
+               work_order_num,
+               deal_num,
+               operation_type,
+               deal_date,
+               deal_comment
+        from brccq2.flow_staff limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FlowStaffMap">
+        select
+        name, work_order_num, deal_num, operation_type, deal_date, deal_comment
+        from brccq2.flow_staff
+        <where>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="dealNum != null">
+                and deal_num = #{dealNum}
+            </if>
+            <if test="operationType != null and operationType != ''">
+                and operation_type = #{operationType}
+            </if>
+            <if test="dealDate != null">
+                and deal_date = #{dealDate}
+            </if>
+            <if test="dealComment != null and dealComment != ''">
+                and deal_comment = #{dealComment}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into brccq2.flow_staff(name, work_order_num, deal_num, operation_type, deal_date, deal_comment)
+        values (#{name}, #{workOrderNum}, #{dealNum}, #{operationType}, #{dealDate}, #{dealComment})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into brccq2.flow_staff(name, work_order_num, deal_num, operation_type, deal_date, deal_comment)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.workOrderNum}, #{entity.dealNum}, #{entity.operationType}, #{entity.dealDate},
+            #{entity.dealComment})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="" useGeneratedKeys="true">
+        insert into brccq2.flow_staff(name, work_order_num, deal_num, operation_type, deal_date, deal_comment)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.workOrderNum}, #{entity.dealNum}, #{entity.operationType}, #{entity.dealDate},
+            #{entity.dealComment})
+        </foreach>
+        on duplicate key update
+        name = values(name) , work_order_num = values(work_order_num) , deal_num = values(deal_num) , operation_type =
+        values(operation_type) , deal_date = values(deal_date) , deal_comment = values(deal_comment)
+    </insert>
+
+
+</mapper>
+

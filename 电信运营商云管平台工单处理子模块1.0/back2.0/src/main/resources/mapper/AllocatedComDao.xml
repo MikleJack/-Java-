@@ -112,5 +112,16 @@
         where com_num = #{comNum}
     </delete>
 
+<!--    通过工单编号查询已经分配的物理机资源-->
+    <select id="queryByWorkOrderNum" resultMap="AllocatedComMap">
+        select com_num,
+               work_order_num,
+               cpu_core,
+               ram,
+               storage,
+               price
+        from brccq2.allocated_com
+        where work_order_num = #{workOrderNum}
+    </select>
 </mapper>
 

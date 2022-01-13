@@ -1,21 +1,24 @@
 <template>
   <div class="background">
     <div class="title">
-      <!--        <div style="position:relative;float: left;top: 18px;">-->
-      <!--          <img src="../../assets/white.png" height="64" width="64"/>-->
-      <!--        </div>-->
+<!--      <div style="position:relative;float: left;top: 18px;">-->
+<!--        <img src="../../assets/white.png" height="64" width="64"/>-->
+<!--      </div>-->
       <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
         电信运营商云管平台工单处理子模块
       </div>
     </div>
-    <!--登录界面-->
+
+    <!--    登录界面-->
     <img :src="imgSrc" width="100%" height="100%" alt="" />
     <div class="warp">
-      <!-- 管理员与用户切换按钮-->
+      <!--      <div class="warp-line">-->
+      <!--        <img src="../../assets/man.png" width="50px">-->
+      <!--      </div>-->
       <div class="warp-form">
         <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
-        <h2>用户登录</h2>
-        <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
+        <h2>管理员登录</h2>
+        <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
           <el-form-item  prop="work_num">
             <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
@@ -46,7 +49,7 @@
 
 <script>
 export default {
-  name: "admin",
+  name: "adminChange",
   mounted(){
     this.getIP();
     this.getVertifyCode();
@@ -73,7 +76,7 @@ export default {
 
     return {
       // 背景图片
-      imgSrc: require('../../assets/72f082025aafa40fa627f806aa64034f79f01903.jpg'),
+      imgSrc: require('../../assets/0131055c989225a801208f8be5608b.gif'),
 
       ruleForm: {
         work_num:'',
@@ -99,12 +102,6 @@ export default {
     }
   },
   methods: {
-    go_admin(){
-      this.$router.push({path:'/admin'});
-    },
-    go_user(){
-      this.$router.push({path:'/staff'});
-    },
     // 获取当前时间
     getdate() {
       let date = new Date();
@@ -152,35 +149,24 @@ export default {
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
-          this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data!==0) {
+          this.$axios.get("http://localhost:8084/login/admin?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+            if (res.data) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
                 type: 'success',
                 center: true
               });
-              sessionStorage.setItem("work_num",this.ruleForm.work_num);
-              //设置登录类型为员工
-              if(res.data===1){
-                sessionStorage.setItem("type", "staff");
-                sessionStorage.setItem("staff", 'true');
-                this.$router.push('/staff');
-              }
-              else {
-                sessionStorage.setItem("type", "leader");
-                sessionStorage.setItem("level", res.data);
-                sessionStorage.setItem("leader", 'true');
-                this.$router.push('/leader');
-              }
-
+              //设置token以及路由
+              sessionStorage.setItem("type", "root");
+              sessionStorage.setItem("root", 'true');
+              this.$router.push('/adminMain');
             } else {
               this.$message({
                 message: '用户名或密码错误',
                 type: 'error',
                 center: true
               });
-              this.getVertifyCode();
             }
           })
         }
@@ -195,9 +181,7 @@ export default {
           })
         }
       })
-
-      //增加登录日志
-      this.$axios.post("http://localhost:8084/login/addLog", this.ruleForm);
+      // this.$axios.post("http://localhost:8084/operationLog/add", this.ruleForm);
 
     }
   }
