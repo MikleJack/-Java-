@@ -2,15 +2,15 @@
   <div>
     <StaffAllOrderOffline ref="StaffAllOrderOffline"></StaffAllOrderOffline>
     <StaffAllOrderDelay ref="StaffAllOrderDelay"></StaffAllOrderDelay>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form :inline="true" :model="criteriaQueryByPage" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
-        <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
+        <el-select v-model="criteriaQueryByPage.workOrderTypeSelector" placeholder="请选择工单类型">
           <el-option
-            v-for="item in tableData"
-            :key="item.workOrderType"
-            :label="item.workOrderType"
-            :value="item.workOrderType">
+            v-for="item in criteriaQueryByPage.orderType"
+            :key="item"
+            :label="item"
+            :value="item">
           </el-option>
         </el-select>
       </el-form-item>
@@ -18,13 +18,12 @@
         <!--          通过项目名称搜索项目-->
         <el-input
           placeholder="输入工单标题搜索"
-          v-model="search"
-
+          v-model="criteriaQueryByPage.searchOrderWorkerName"
           clearable>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="handleClick_search">查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -233,6 +232,13 @@ export default {
       //中间值，用来保存当前工单编号等信息以用于执行下线等操作
       IntermediateValue:'',
 
+      //条件查询
+      criteriaQueryByPage:{
+        orderType: ['申请工单','延期工单'],
+        workOrderTypeSelector: '',
+        searchOrderWorkerName: '',
+      },
+
       //分页相关
       currentPage:1,
       pageSize:9,
@@ -241,7 +247,6 @@ export default {
 
       search:'',
 
-      workOrderTypeSelector:'',
       tableData: [],
       pickerOptions: {
         shortcuts: [{
@@ -280,34 +285,36 @@ export default {
 
   },
   methods: {
-    // //条件并分页查询
-    // handleClick_search(){
-    //   this.resetPageSituation();
-    //   this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?' + this.workOrderTypeSelector
-    //     + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
-    //     this.tableData = res.data.content;
-    //     this.totalSize = res.data.totalPages*this.pageSize;})
-    // },
-    //
-    // //分页按钮操作
-    // handleCurrentChange(val){
-    //   if(!this.ifPagination){
-    //     this.currentPage=parseInt(val);
-    //     let page = this.currentPage-1;
-    //     this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
-    //       this.tableData= res.data.content;
-    //       this.totalSize = res.data.totalPages*this.pageSize;
-    //     })
-    //   }else{
-    //     this.currentPage=parseInt(val);
-    //     let page = this.currentPage-1;
-    //     this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
-    //       + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
-    //       this.tableData= res.data.content;
-    //       this.totalSize = res.data.totalPages*this.pageSize;
-    //     })
-    //   }
-    // },
+    //条件并分页查询
+    handleClick_search(){
+      this.resetPageSituation();
+      this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+        + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
+        console.log(res.data);
+        this.totalSize = res.data.totalPages*this.pageSize;})
+    },
+
+    //分页按钮操作
+    handleCurrentChange(val){
+      if(!this.ifPagination){
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get("http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=" + sessionStorage.getItem("work_num")
+                          + '&page=' +page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }else{
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+          + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+    },
     //操作的详情dialog函数
     handleClick_detail() {
       this.dialogVisible_detail = true;
@@ -322,10 +329,14 @@ export default {
       this.$store.state.staffAllOrder_OfflineDialogVisible = true;
       this.$refs.StaffAllOrderOffline.setWorkOrderNumAndState(workOrderNum,workOrderState);
     },
-    offlineAccess(){
-      this.$axios.get("http://localhost:8084/staffAllTickets/offline?workOrderNum=" + sessionStorage.getItem("work_num") +
-                        '&workOrderState='+  + '&offlineReason=' +this.offLineTextarea )
-    },
+
+    //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
+    resetPageSituation(){
+      this.ifPagination = true,
+        this.currentPage = 1;
+      this.pageSize = 9;
+      this.totalSize = 0;
+    }
   }
 }
 

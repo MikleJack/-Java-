@@ -104,6 +104,9 @@ public class StaffAllTickets {
      */
     @GetMapping("parameterQueryByPage")
     public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) {
+        System.out.println(workOrderType);
+        System.out.println(workOrderTile);
+        System.out.println(workerNum);
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest));
     }
