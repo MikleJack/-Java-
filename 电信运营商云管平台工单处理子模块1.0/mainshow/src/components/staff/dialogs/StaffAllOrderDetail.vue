@@ -149,8 +149,8 @@
           </div>
           <!--        文字描述-->
           <div class="total_description">
-            <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
-            已使用预算：&nbsp;{{used_budget}}元
+            <br><br>部门总预算：&nbsp;{{depTotalBudget}}元<br><br>
+            已使用预算：{{depUsedBudget}}元
           </div>
           <!--        工单预算/部门剩余预算进度条-->
           <div class="progress">
@@ -236,23 +236,32 @@ export default {
   name: "StaffAllOrderDetail",
   data() {
     return {
+      //上部分个人信息和部门信息
       singleInformForm: [],
+      //分配的物理机资源
       allocatedCom: [],
+      //分配的虚拟机资源
       allocatedVm: [],
-      labelPosition: 'left',
+      //流转过程
       flowProcess: [],
 
+      //部门预算使用情况
+      depTotalBudget: '',
+      depUsedBudget: '',
+      order_budget: '',
+
+      labelPosition: 'left',
     };
   },
   props:["show"],
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
-      return 100*this.used_budget/this.total_budget;
+      return 100*this.depUsedBudget/this.depTotalBudget;
     },
     //工单预算/部门剩余预算进度条
     percentage(){
-      this.surplus_budget=this.total_budget-this.used_budget;
+      this.surplus_budget = this.depTotalBudget-this.depUsedBudget;
       let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
       return 100*temp_per;
     },
@@ -268,33 +277,30 @@ export default {
       //上半部分个人信息和工单获取
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.singleInformForm = res.data;
+        this.order_budget = res.data.price;
+        //部门预算使用情况获取
+        this.$axios.get('http://localhost:8084/depart/getDepBudget?depNum=' + res.data.depNum).then((res)=>{
+          this.depTotalBudget = res.data;
+        });
+        this.$axios.get('http://localhost:8084/usedBudget/getUsedBudget?id=' + res.data.depNum).then((res)=>{
+          this.depUsedBudget = res.data.depUsedBudget;
+        });
       });
+
+      //物理机使用情况获取
       this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedCom = res.data;
       });
+
+      //虚拟机使用情况获取
       this.$axios.get('http://localhost:8084/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedVm = res.data;
       });
+
+      //流转过程情况获取
       this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
         this.flowProcess = res.data;
       });
-
-
-      // this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
-      //   +workOrderNum).then((res)=>{
-      //   //个人信息
-      //   this.workNum = res.data.workerNum;
-      //   this.name = res.data.name;
-      //   this.depNum = res.data.depNum;
-      //   this.depName = res.data.depName;
-      //   this.phone = res.data.phone;
-      //   //工单信息
-      //   this.workOrderNum = workOrderNum;
-      //   this.workOrderName  = res.data.workOrderName;
-      //   this.workType = res.data.workOrderType;
-      //   this.expireTime = res.data.expireTime;
-      //   this.reasonContect = res.data.reason;
-      // });
     },
     handleClose(){
       this.$store.state.staffAllOrder_DetailDialogVisible = false;
