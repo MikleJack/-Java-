@@ -3,6 +3,9 @@ package com.example.back2.dao.table;
 import com.example.back2.entity.table.WorkOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
@@ -122,6 +125,30 @@ public interface WorkOrderDao {
     Double queryPriceById(String workOrderNum);
 
 //----------------------------延期按钮-底部----------------------------
+
+
+    //-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 统计总行数
+     *
+     * @param workerTitle 工单名
+     * @param workerNum  员工编号
+     * @param workOrderType 工单类型
+     * @return 总行数
+     */
+    long parameterCount(String workOrderType, String workerTitle,Integer workerNum);
+
+    /**
+     * 查询指定行数据
+     *
+     * @param workerTitle 工单名
+     * @param workerNum  员工编号
+     * @param workOrderType 工单类型
+     * @return 对象列表
+     */
+    List<WorkOrder> parameterQueryAllByLimit(String workOrderType, String workerTitle,Integer workerNum, @Param("pageable") Pageable pageable);
+
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
 }
 
