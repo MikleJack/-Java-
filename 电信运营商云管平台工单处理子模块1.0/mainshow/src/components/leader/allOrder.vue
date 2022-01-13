@@ -71,13 +71,13 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <el-button @click="dialogTableVisible = true" type="text" size="small">查看</el-button>
+              <el-button @click=handleClick_detail(scope.row.workOrderNum) type="text" size="small">查看</el-button>
 
             </template>
           </el-table-column>
         </el-table>
         <el-dialog :visible.sync="dialogTableVisible"width="80%">
-          <order_detail></order_detail>
+          <order_detail ref="order_detail"></order_detail>
         </el-dialog>
       </div>
     <div class="page-tail">
@@ -133,6 +133,10 @@ import order_detail from "./order_detail";
             this.totalSize = res.data.totalPages*this.pageSize;
           })
         },
+        handleClick_detail( workOrderNum ) {
+          this.dialogTableVisible = true;
+          this.$refs.order_detail.autoGetAllDetail(workOrderNum);
+        }
 
       }
     }

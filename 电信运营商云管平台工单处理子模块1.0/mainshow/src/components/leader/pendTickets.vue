@@ -83,7 +83,7 @@ export default {
   name: "pending_ticket",
   components: {Ticket_details},
   mounted() {
-    this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+0+"&size="
+    this.$axios.get("http://localhost:8084/pendtickets/selectTicketsByState?first_leader_num="+sessionStorage.getItem("work_num")+"&page="+0+"&size="
       +this.pageSize+"&orderState=待审批").then((res)=>{
       this.tableData= res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
@@ -94,7 +94,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+page+"&size="
+      this.$axios.get("http://localhost:8084/pendtickets/selectTicketsByState?first_leader_num=" +sessionStorage.getItem("work_num")+ "&page="+page+"&size="
         +this.pageSize+"&orderState=待审批").then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
