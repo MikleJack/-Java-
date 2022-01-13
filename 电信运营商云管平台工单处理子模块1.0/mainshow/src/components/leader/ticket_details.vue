@@ -217,27 +217,27 @@ export default {
       //字体大小
       size: '',
       //workNum工号
-      workNum: '00000001',
+      workNum: '',
       //name人员姓名
-      name: '张大炮',
+      name: '',
       //所在部门编号
-      depNum: '0003',
+      depNum: '',
       //所在部门名称
-      depName: '小组1',
+      depName: '',
       //电话号码
-      phone: '13000000000',
+      phone: '',
       //工单编号
-      workOrderNum: '000000000000000001',
+      workOrderNum: '',
       //工单标题
-      workOrderName: '资源申请工单',
+      workOrderName: '',
       //工单类型
-      workType: '申请工单',
+      workType: '',
       //申请时间
       applyTime: '2023-5-3 00:00:00',
       //到期时间
-      expireTime:'2023-6-30 00:00:00',
+      expireTime:'',
       //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
-      reasonContect: '申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由申请理由',
+      reasonContect: '',
       //  输入的批注内容
       note: '',
       //部门总预算利用情况
