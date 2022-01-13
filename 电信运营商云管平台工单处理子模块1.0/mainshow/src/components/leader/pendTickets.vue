@@ -122,8 +122,7 @@ export default {
 .page {
   position: relative;
   left:10%;
-  /*left:130px;*/
-  width: 100%;
+  width: 90%;
   height: 100%;
 }
 
