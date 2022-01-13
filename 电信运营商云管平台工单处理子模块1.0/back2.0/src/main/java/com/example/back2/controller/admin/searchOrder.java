@@ -84,7 +84,9 @@ public class searchOrder {
      */
     @GetMapping("queryWorkOrderDetailTop")
     public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) {
+
         return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+
     }
 
     @Resource
