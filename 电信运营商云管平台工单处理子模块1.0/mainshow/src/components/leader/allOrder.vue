@@ -77,7 +77,7 @@
           </el-table-column>
         </el-table>
         <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
-          <order_detail :show="false"></order_detail>
+          <order_detail ref="order_detail" :show="false"></order_detail>
         </el-dialog>
       </div>
 
@@ -103,7 +103,7 @@ import order_detail from "./order_detail";
         name: "all_work_order",
       components: {order_detail},
       mounted() {
-        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
+        this.$axios.get("http://localhost:8084/alltickets/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -130,7 +130,7 @@ import order_detail from "./order_detail";
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page="+page+"&size="
+          this.$axios.get("http://localhost:8084/alltickets/selectTicketsByNum?second_leader_num=20220013&page="+page+"&size="
             +this.pageSize).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
