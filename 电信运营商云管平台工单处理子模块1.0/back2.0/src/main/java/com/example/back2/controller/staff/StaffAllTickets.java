@@ -1,6 +1,7 @@
 package com.example.back2.controller.staff;
 
 import com.example.back2.entity.table.*;
+import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.OrderBeginEndTimeService;
 import org.springframework.data.domain.Page;
@@ -91,6 +92,22 @@ public class StaffAllTickets {
     }
 
 //----------------------------延期按钮-底部----------------------------
+
+
+//----------------------------查询按钮-顶部----------------------------
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workOrderType 工单类型
+     * @param workerNum 工人编号
+     * @return 查询结果
+     */
+    @GetMapping("parameterQueryByPage")
+    public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest));
+    }
+//----------------------------查询按钮-底部----------------------------
 
 
 //----------------------------下线按钮-顶部----------------------------
