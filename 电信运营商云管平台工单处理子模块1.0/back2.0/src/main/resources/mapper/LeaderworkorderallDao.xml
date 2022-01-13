@@ -64,5 +64,10 @@
     </select>
 
 
+    <select id="getSecondNum" resultMap="LeaderworkorderallMap">
+        select second_leader_num
+        from leaderWorkOrderAll
+        where work_order_num = #{workOrderNum}
+    </select>
 </mapper>
 
