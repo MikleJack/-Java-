@@ -63,7 +63,7 @@ public class StaffAllTickets {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
         Long preEndTime = this.orderBeginEndTimeService.queryEndTimeByOrderNum(workOrderNum).getTime();
-        Long preDurationTime = ((preEndTime - preBeginTime)/(24*60*60*30*1000));
+        Long preDurationTime = ((preEndTime - preBeginTime)/((long)24*60*60*1000*30));
 
         //计算当前工单持续时间： 单位月
         Long nowBeginTime = (new Date()).getTime();
@@ -73,6 +73,7 @@ public class StaffAllTickets {
         //通过 原工单总价/持续时间 * 当前工单持续时间 得到当前工单的总价
         Double prePrice = this.workOrderService.queryPriceById(workOrderNum);
         Double nowPrice = (prePrice / preDurationTime) * nowDurationTime;
+        Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice ));
 
         //        通过时间和随机数生成工单号，并传入
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -88,15 +89,7 @@ public class StaffAllTickets {
             newWorkOrderNum += t2+ "";
         }
 
-        return ResponseEntity.ok(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPrice));
-    }
-
-    /**
-     * 测试接口
-     */
-    @GetMapping("test")
-    public Double test(String workOrderNum) {
-        return this.workOrderService.queryPriceById(workOrderNum);
+        return ResponseEntity.ok(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision));
     }
 
 //----------------------------延期按钮-底部----------------------------
