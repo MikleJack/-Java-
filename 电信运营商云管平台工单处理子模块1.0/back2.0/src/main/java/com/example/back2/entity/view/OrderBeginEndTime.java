@@ -1,5 +1,8 @@
 package com.example.back2.entity.view;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -14,8 +17,10 @@ public class OrderBeginEndTime implements Serializable {
 
     private String workOrderNum;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date dealDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date expirationTime;
 
 

@@ -28,7 +28,7 @@
             <el-descriptions-item label="工单编号">{{singleInformForm.workOrderNum}}</el-descriptions-item>
             <el-descriptions-item label="工单标题">{{singleInformForm.workOrderName}}</el-descriptions-item>
             <el-descriptions-item label="工单类型">{{singleInformForm.workOrderType}}</el-descriptions-item>
-            <el-descriptions-item label="工单申请时间">{{singleInformForm.applyTime}}</el-descriptions-item>
+            <el-descriptions-item label="工单申请时间">{{beginTime}}</el-descriptions-item>
             <el-descriptions-item label="工单到期时间">{{singleInformForm.expirationTime}}</el-descriptions-item>
           </el-descriptions>
           <!--      申请理由-->
@@ -83,47 +83,57 @@
           <div class="page_title">虚拟机资源信息</div>
           <el-descriptions class="margin-top" title="" :column="3" :size="size" border></el-descriptions>
           <el-table
-            :data="virtualCom"
+            :data="allocatedVm"
             border
           ><el-table-column
-            prop="vir_require"
+            type="index"
+            label="序号"
+            width="auto">
+          </el-table-column>
+            <el-table-column
+            prop="workOrderNum"
+            label="虚拟机编号"
+            width="auto">
+          </el-table-column>
+            <el-table-column
+            prop="description"
             label="规格族"
             width="auto">
           </el-table-column>
             <el-table-column
-              prop="vir_cpuCore"
+              prop="cpuCore"
               label="CPU核数/个"
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="vir_ram"
+              prop="ram"
               label="内存/G">
             </el-table-column>
             <el-table-column
-              prop="vir_frequency"
+              prop="processorFrequency"
               label="处理机主频/GHz"
-              width="150px">
+              width="auto">
             </el-table-column>
             <el-table-column
-              prop="vir_model"
+              prop="processorModel"
               label="处理器型号">
             </el-table-column>
             <el-table-column
-              prop="vir_os"
+              prop="os"
               label="操作系统">
             </el-table-column>
             <el-table-column
-              prop="vir_price"
+              prop="price"
               label="单价 元/月">
             </el-table-column>
             <el-table-column
-              prop="hardDisk"
+              prop="storage"
               label="硬盘大小/G">
             </el-table-column>
-            <el-table-column
-              prop="vir_totalPrice"
-              label="总价/元">
-            </el-table-column>
+<!--            <el-table-column-->
+<!--              prop="vir_totalPrice"-->
+<!--              label="总价/元">-->
+<!--            </el-table-column>-->
           </el-table>
         </div>
         <!--      部门预算利用情况展示-->
@@ -139,8 +149,8 @@
           </div>
           <!--        文字描述-->
           <div class="total_description">
-            <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
-            已使用预算：&nbsp;{{used_budget}}元
+            <br><br>部门总预算：&nbsp;{{depTotalBudget}}元<br><br>
+            已使用预算：{{depUsedBudget}}元
           </div>
           <!--        工单预算/部门剩余预算进度条-->
           <div class="progress">
@@ -167,7 +177,7 @@
 
           <div class="resoure_usage">
             <el-table
-              :data="informData"
+              :data="flowProcess"
               border>
               <el-table-column
                 type="index"
@@ -180,7 +190,7 @@
                 width="auto">
               </el-table-column>
               <el-table-column
-                prop="dealName"
+                prop="name"
                 label="处理人姓名"
                 width="auto">
               </el-table-column>
@@ -202,20 +212,6 @@
             </el-table>
           </div>
         </div>
-        <div class="note_title" style="margin-top: 4%" v-if="show">批注</div>
-        <div class="note" v-if="show">
-          <el-input
-            type="textarea"
-            :rows="3"
-            placeholder="请输入批注"
-            v-model="note">
-          </el-input>
-        </div>
-        <div class="page_bottom" v-if="show">
-          <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
-          <el-button>挂起</el-button>
-          <el-button>审批不通过</el-button>
-        </div>
       </div>
     </div>
   </el-dialog>
@@ -226,35 +222,35 @@ export default {
   name: "StaffAllOrderDetail",
   data() {
     return {
+      //上部分个人信息和部门信息
       singleInformForm: [],
+      //分配的物理机资源
       allocatedCom: [],
-      allocatedVir: [],
-      labelPosition: 'left',
-      //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum: '00000002',
-        //处理人姓名
-        dealName: '陈大炮',
-        //操作类型
-        operationType: '审批通过',
-        //操作日期
-        dealDate: '2021-12-28 15:30:00',
-        //批注
-        dealComment: '申请合理，建议通过',
-      }],
+      //分配的虚拟机资源
+      allocatedVm: [],
+      //流转过程
+      flowProcess: [],
 
+      //部门预算使用情况
+      depTotalBudget: '',
+      depUsedBudget: '',
+      order_budget: '',
+
+      //工单开始时间
+      beginTime: '',
+
+      labelPosition: 'left',
     };
   },
   props:["show"],
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
-      return 100*this.used_budget/this.total_budget;
+      return 100*this.depUsedBudget/this.depTotalBudget;
     },
     //工单预算/部门剩余预算进度条
     percentage(){
-      this.surplus_budget=this.total_budget-this.used_budget;
+      this.surplus_budget = this.depTotalBudget-this.depUsedBudget;
       let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
       return 100*temp_per;
     },
@@ -270,28 +266,35 @@ export default {
       //上半部分个人信息和工单获取
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.singleInformForm = res.data;
+        this.order_budget = res.data.price;
+        //部门预算使用情况获取
+        this.$axios.get('http://localhost:8084/depart/getDepBudget?depNum=' + res.data.depNum).then((res)=>{
+          this.depTotalBudget = res.data;
+        });
+        this.$axios.get('http://localhost:8084/usedBudget/getUsedBudget?id=' + res.data.depNum).then((res)=>{
+          this.depUsedBudget = res.data.depUsedBudget;
+        });
       });
-      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=202201081534000048').then((res)=>{
+
+      //物理机使用情况获取
+      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedCom = res.data;
       });
 
+      //虚拟机使用情况获取
+      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
+        this.allocatedVm = res.data;
+      });
 
+      //流转过程情况获取
+      this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
+        this.flowProcess = res.data;
+      });
 
-      // this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
-      //   +workOrderNum).then((res)=>{
-      //   //个人信息
-      //   this.workNum = res.data.workerNum;
-      //   this.name = res.data.name;
-      //   this.depNum = res.data.depNum;
-      //   this.depName = res.data.depName;
-      //   this.phone = res.data.phone;
-      //   //工单信息
-      //   this.workOrderNum = workOrderNum;
-      //   this.workOrderName  = res.data.workOrderName;
-      //   this.workType = res.data.workOrderType;
-      //   this.expireTime = res.data.expireTime;
-      //   this.reasonContect = res.data.reason;
-      // });
+      //通过工单编号得到开始时间
+      this.$axios.get('http://localhost:8084/staffAllTickets/queryBeginAndEndTime?workOrderNum=' + workOrderNum).then((res)=>{
+        this.beginTime = res.data.dealDate;
+      });
     },
     handleClose(){
       this.$store.state.staffAllOrder_DetailDialogVisible = false;

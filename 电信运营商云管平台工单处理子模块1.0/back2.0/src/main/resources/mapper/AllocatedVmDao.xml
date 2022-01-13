@@ -132,5 +132,19 @@
         where com_num = #{comNum}
     </delete>
 
+    <!--    通过工单编号查询已经分配的虚拟机资源-->
+    <select id="queryByWorkOrderNum" resultMap="AllocatedVmMap">
+        select com_num,
+               work_order_num,
+               cpu_core,
+               ram,
+               storage,
+               ip,
+               os,
+               price
+        from brccq2.allocated_vm
+        where work_order_num = #{workOrderNum}
+    </select>
+
 </mapper>
 
