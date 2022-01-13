@@ -4,6 +4,8 @@ import com.example.back2.entity.table.FlowProcess;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,5 +85,13 @@ public interface FlowProcessDao {
 
     FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type);
 
+    /**
+     * 插入申请延期的流转过程
+     *
+     * @param workOrderNum 工单编号
+     * @param workerNum 员工编号
+     * @return 是否插入流转过程
+     */
+    Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate);
 }
 
