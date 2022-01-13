@@ -3,7 +3,12 @@ package com.example.back2.dao.table;
 import com.example.back2.entity.table.WorkOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,7 +103,52 @@ public interface WorkOrderDao {
      * @param offlineReason  下线原因
      * @return 用户的全部工单
      */
-    Boolean offline(@Param("workOrderNum")String workOrderNum,@Param("offlineReason") String offlineReason);
+    Boolean offline(String workOrderNum, String offlineReason);
+
+
+//----------------------------延期按钮-顶部----------------------------
+
+    /**
+     * 通过工单编号进行延期操作
+     *
+     * @param workOrder  延期工单
+     * @return 是否发起延期请求成功
+     */
+    Boolean insertDelayWorkOrder(WorkOrder workOrder);
+
+    /**
+     * 通过工单编号查询该工单的价格
+     *
+     * @param workOrderNum 主键
+     * @return 该工单总价
+     */
+    Double queryPriceById(String workOrderNum);
+
+//----------------------------延期按钮-底部----------------------------
+
+
+    //-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 统计总行数
+     *
+     * @param workerTitle 工单名
+     * @param workerNum  员工编号
+     * @param workOrderType 工单类型
+     * @return 总行数
+     */
+    long parameterCount(String workOrderType, String workerTitle,Integer workerNum);
+
+    /**
+     * 查询指定行数据
+     *
+     * @param workerTitle 工单名
+     * @param workerNum  员工编号
+     * @param workOrderType 工单类型
+     * @return 对象列表
+     */
+    List<WorkOrder> parameterQueryAllByLimit(String workOrderType, String workerTitle,Integer workerNum, @Param("pageable") Pageable pageable);
+
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
 }
 

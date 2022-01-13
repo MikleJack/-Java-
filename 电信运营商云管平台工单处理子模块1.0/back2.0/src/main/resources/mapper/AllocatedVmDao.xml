@@ -11,6 +11,7 @@
         <result property="ip" column="ip" jdbcType="VARCHAR"/>
         <result property="os" column="os" jdbcType="VARCHAR"/>
         <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="quantity" column="quantity" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
@@ -75,8 +76,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="comNum" useGeneratedKeys="true">
-        insert into brccq2.allocated_vm(cpu_core, ram, storage, ip, os, price)
-        values (#{cpuCore}, #{ram}, #{storage}, #{ip}, #{os}, #{price})
+        insert into brccq2.allocated_vm(com_num,work_order_num,cpu_core, ram, storage, ip, os, price,quantity)
+        values (#{comNum},#{workOrderNum},#{cpuCore}, #{ram}, #{storage}, #{ip}, #{os}, #{price},#{quantity})
     </insert>
 
     <insert id="insertBatch" keyProperty="comNum" useGeneratedKeys="true">

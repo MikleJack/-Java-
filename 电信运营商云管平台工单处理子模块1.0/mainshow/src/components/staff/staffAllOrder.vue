@@ -1,15 +1,16 @@
 <template>
   <div>
     <StaffAllOrderOffline ref="StaffAllOrderOffline"></StaffAllOrderOffline>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <StaffAllOrderDelay ref="StaffAllOrderDelay"></StaffAllOrderDelay>
+    <el-form :inline="true" :model="criteriaQueryByPage" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
-        <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
+        <el-select v-model="criteriaQueryByPage.workOrderTypeSelector" placeholder="请选择工单类型">
           <el-option
-            v-for="item in tableData"
-            :key="item.workOrderType"
-            :label="item.workOrderType"
-            :value="item.workOrderType">
+            v-for="item in criteriaQueryByPage.orderType"
+            :key="item"
+            :label="item"
+            :value="item">
           </el-option>
         </el-select>
       </el-form-item>
@@ -17,13 +18,12 @@
         <!--          通过项目名称搜索项目-->
         <el-input
           placeholder="输入工单标题搜索"
-          v-model="search"
-
+          v-model="criteriaQueryByPage.searchOrderWorkerName"
           clearable>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="handleClick_search">查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -64,7 +64,10 @@
         width="250">
         <templte slot-scope="scope">
           <el-button @click="handleClick_detail(scope.row)" type="text" size="small">详情</el-button>
-          <el-button @click="handleClick_delay(scope.row)" type="text" size="small">延期</el-button>
+          <el-button @click="handleClick_delay(scope.row.workOrderNum)"
+                     type="text"
+                     size="small"
+                     :disabled="scope.row.workOrderState != '二级审批通过'">延期</el-button>
           <el-button @click="handleClick_offline(scope.row.workOrderNum,scope.row.workOrderState)"
                      type="text"
                      size="small"
@@ -211,48 +214,15 @@
 
       </div>
     </el-dialog>
-
-      <!--    点击延期后的dialog界面-->
-      <el-dialog
-        title="延期申请"
-        :visible.sync="dialogVisible_delay"
-        width="50%"
-        :before-close="handleClose">
-<!--        延期日期选择-->
-        <div class="block">
-          <el-date-picker
-            v-model="value1"
-            type="datetime"
-            placeholder="选择延期时间">
-          </el-date-picker>
-        </div>
-
-<!--        空格占位，美观-->
-        <div style="margin: 20px 0;"></div>
-
-<!--        延期原因-->
-        <el-input
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入延期原因"
-          v-model="delayTextarea">
-        </el-input>
-
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_delay = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible_delay = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
-
   </div>
 </template>
 
 <script>
 import StaffAllOrderOffline from "./dialogs/StaffAllOrderOffline";
+import StaffAllOrderDelay from "./dialogs/StaffAllOrderDelay";
 export default {
   name: "StaffAllOrder",
-  components:{StaffAllOrderOffline},
+  components:{StaffAllOrderOffline,StaffAllOrderDelay},
   data() {
     return {
       dialogVisible_detail: false,
@@ -262,6 +232,13 @@ export default {
       //中间值，用来保存当前工单编号等信息以用于执行下线等操作
       IntermediateValue:'',
 
+      //条件查询
+      criteriaQueryByPage:{
+        orderType: ['申请工单','延期工单'],
+        workOrderTypeSelector: '',
+        searchOrderWorkerName: '',
+      },
+
       //分页相关
       currentPage:1,
       pageSize:9,
@@ -270,7 +247,6 @@ export default {
 
       search:'',
 
-      workOrderTypeSelector:'',
       tableData: [],
       pickerOptions: {
         shortcuts: [{
@@ -309,55 +285,57 @@ export default {
 
   },
   methods: {
-    // //条件并分页查询
-    // handleClick_search(){
-    //   this.resetPageSituation();
-    //   this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?' + this.workOrderTypeSelector
-    //     + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
-    //     this.tableData = res.data.content;
-    //     this.totalSize = res.data.totalPages*this.pageSize;})
-    // },
-    //
-    // //分页按钮操作
-    // handleCurrentChange(val){
-    //   if(!this.ifPagination){
-    //     this.currentPage=parseInt(val);
-    //     let page = this.currentPage-1;
-    //     this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
-    //       this.tableData= res.data.content;
-    //       this.totalSize = res.data.totalPages*this.pageSize;
-    //     })
-    //   }else{
-    //     this.currentPage=parseInt(val);
-    //     let page = this.currentPage-1;
-    //     this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
-    //       + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
-    //       this.tableData= res.data.content;
-    //       this.totalSize = res.data.totalPages*this.pageSize;
-    //     })
-    //   }
-    // },
+    //条件并分页查询
+    handleClick_search(){
+      this.resetPageSituation();
+      this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+        + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
+        console.log(res.data);
+        this.totalSize = res.data.totalPages*this.pageSize;})
+    },
+
+    //分页按钮操作
+    handleCurrentChange(val){
+      if(!this.ifPagination){
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get("http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=" + sessionStorage.getItem("work_num")
+                          + '&page=' +page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }else{
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+          + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+    },
     //操作的详情dialog函数
     handleClick_detail() {
       this.dialogVisible_detail = true;
     },
-    //操作的延期dialog函数
-    handleClick_delay() {
-      this.dialogVisible_delay = true;
+    //延期按钮对话框显示
+    handleClick_delay(workOrderNum) {
+      this.$store.state.staffAllOrder_DelayDialogVisible = true;
+      this.$refs.StaffAllOrderDelay.setWorkOrderNum(workOrderNum);
     },
     //下线按钮对话框显示
     handleClick_offline(workOrderNum,workOrderState) {
       this.$store.state.staffAllOrder_OfflineDialogVisible = true;
       this.$refs.StaffAllOrderOffline.setWorkOrderNumAndState(workOrderNum,workOrderState);
     },
-    offlineAccess(){
-      this.$axios.get("http://localhost:8084/staffAllTickets/offline?workOrderNum=" + sessionStorage.getItem("work_num") +
-                        '&workOrderState='+  + '&offlineReason=' +this.offLineTextarea )
-    },
 
-    //通过工单是否通过二级审批判断下线按钮是否可用
-    ableToOffline(){
-
+    //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
+    resetPageSituation(){
+      this.ifPagination = true,
+        this.currentPage = 1;
+      this.pageSize = 9;
+      this.totalSize = 0;
     }
   }
 }

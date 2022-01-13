@@ -60,8 +60,8 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
-        <ticket_details></ticket_details>
+      <el-dialog title="工单详情" :visible.sync="dialogTableVisible" width="80%">
+        <ticket_details :show="true"></ticket_details>
       </el-dialog>
     </div>
     <div class="page-tail">
@@ -83,7 +83,7 @@ export default {
   name: "pending_ticket",
   components: {Ticket_details},
   mounted() {
-    this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+0+"&size="
+    this.$axios.get("http://localhost:8084/pendtickets/selectTicketsByState?first_leader_num="+sessionStorage.getItem("work_num")+"&page="+0+"&size="
       +this.pageSize+"&orderState=待审批").then((res)=>{
       this.tableData= res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
@@ -94,7 +94,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/leader/selectTicketsByState?first_leader_num=20220002&page="+page+"&size="
+      this.$axios.get("http://localhost:8084/pendtickets/selectTicketsByState?first_leader_num=" +sessionStorage.getItem("work_num")+ "&page="+page+"&size="
         +this.pageSize+"&orderState=待审批").then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
@@ -121,8 +121,8 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
-  left:130px;
-  width: 100%;
+  left:10%;
+  width: 90%;
   height: 100%;
 }
 

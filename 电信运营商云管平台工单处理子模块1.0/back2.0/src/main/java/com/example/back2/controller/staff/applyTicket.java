@@ -1,11 +1,11 @@
 package com.example.back2.controller.staff;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.back2.entity.table.*;
-import com.example.back2.service.table.AllocatedComService;
-import com.example.back2.service.table.PhysicsComResourceService;
-import com.example.back2.service.table.VmSpecificationsService;
-import com.example.back2.service.table.WorkOrderService;
+import com.example.back2.service.table.*;
+import com.example.back2.utils.GenerateIP;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +33,8 @@ public class applyTicket {
     private WorkOrderService workOrderService;
     @Resource
     private AllocatedComService allocatedComService;
+    @Resource
+    private AllocatedVmService allocatedVmService;
 
     /**
      * 查询所有未分配的物理机
@@ -54,57 +56,43 @@ public class applyTicket {
 
     //申请工单接口
     @PostMapping("intsertApplyTicket")
-    public String intsertApplyTicket(String workOrderName,Date expirationTime,String reason,Integer workNum,String file,Double price){
+    public String intsertApplyTicket(WorkOrder workorder){
 //        生成工单号，并传入
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String workOrderNum = df.format(d);
         int randomNum = (int) ((Math.random() * 9 + 1) * 1000);
         workOrderNum += randomNum+ "";
-
-        WorkOrder workOrder = new WorkOrder();
 //        修改工单号
-        workOrder.setWorkOrderNum(workOrderNum);
-
-//传入时间
-        workOrder.setExpirationTime(expirationTime);
-//传入工单标题
-        workOrder.setWorkOrderName(workOrderName);
-//  传入理由描述
-        workOrder.setReason(reason);
-// 传入申请人工号
-        workOrder.setWorkerNum(workNum);
-//传入工单类型
-        workOrder.setWorkOrderType("申请工单");
-//传入附件
-        workOrder.setFile(file);
-//传入工单总价
-        workOrder.setPrice(price);
-// 修改工单状态
-        workOrder.setWorkOrderState("待审批");
+        workorder.setWorkOrderNum(workOrderNum);
 //        System.out.println(workOrder.getWorkOrderNum());
-        System.out.println(this.workOrderService.insert(workOrder).getWorkOrderNum());
-        return workOrder.getWorkOrderNum();
+        return this.workOrderService.insert(workorder).getWorkOrderNum();
 
     }
 
     @PostMapping("insertAllocatedCom")
     public boolean insertAllocatedCom(String qs,String workOrderNum){
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            List<AllocatedCom> listAllocateCom = mapper.readValue(qs, new TypeReference<List<AllocatedCom>>() {
-            });
-            for (AllocatedCom i:listAllocateCom){
-
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        JSONArray m = JSON.parseArray(qs);
+        for (int i =0;i<m.size();i++){
+            AllocatedCom allocatedCom = m.getObject(i,AllocatedCom.class);
+            allocatedCom.setWorkOrderNum(workOrderNum);
+            this.allocatedComService.insert(allocatedCom);
         }
         return true;
     }
 
-    @PostMapping("insertAllocationVm")
-    public boolean insertAllocatedVm(String workOrderNum){
+    @PostMapping("insertAllocatedVm")
+    public boolean insertAllocatedVm(String qs, String workOrderNum, Integer storage,String os){
+        JSONArray m = JSON.parseArray(qs);
+        for (int i =0;i<m.size();i++){
+            GenerateIP generateIP = new GenerateIP();
+            AllocatedVm allocatedVm = m.getObject(i,AllocatedVm.class);
+            allocatedVm.setWorkOrderNum(workOrderNum);
+            allocatedVm.setStorage(storage);
+            allocatedVm.setOs(os);
+            allocatedVm.setIp(generateIP.createip());
+            this.allocatedVmService.insert(allocatedVm);
+        }
         return true;
     }
 

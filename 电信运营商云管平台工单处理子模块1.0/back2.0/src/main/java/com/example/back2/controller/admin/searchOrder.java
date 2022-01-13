@@ -84,7 +84,9 @@ public class searchOrder {
      */
     @GetMapping("queryWorkOrderDetailTop")
     public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) {
+
         return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+
     }
 
     @Resource
@@ -123,7 +125,7 @@ public class searchOrder {
      * @return 返回该部门预算
      */
     @GetMapping("getDepBudget")
-    public int getDepBudget(Integer depNum){
+    public Double getDepBudget(Integer depNum){
         return departmentService.queryById(depNum).getDepBudget();
     }
 

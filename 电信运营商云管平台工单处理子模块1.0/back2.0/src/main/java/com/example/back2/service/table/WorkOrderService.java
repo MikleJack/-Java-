@@ -1,11 +1,14 @@
 package com.example.back2.service.table;
 
 import com.example.back2.entity.table.WorkOrder;
+import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Date;
 
 /**
  * (WorkOrder)表服务接口
@@ -73,5 +76,35 @@ public interface WorkOrderService {
      * @return 是否下线成功
      */
     Boolean offline(String workOrderNum, String offlineReason);
+
+    /**
+     * 通过工单编号进行延期操作
+     *
+     * @param workOrderNum 工单编号
+     * @param delayReason  延期原因
+     * @param delayTime  延期日期
+     * @return 是否发起延期请求成功
+     */
+     Boolean delay(String workOrderNum,String newWorkOrderNum, Date delayTime, String delayReason,Double nowPrice);
+
+    /**
+     * 通过工单编号查询该工单的价格
+     *
+     * @param workOrderNum 主键
+     * @return 该工单总价
+     */
+    Double queryPriceById(String workOrderNum);
+
+//-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workerTitle 工单名
+     * @param workOrderType 工单类型
+     * @param workerNum 工人编号
+     * @return 查询结果
+     */
+    Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest);
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
 }

@@ -11,6 +11,18 @@ import java.io.Serializable;
 public class AllocatedVm implements Serializable {
     private static final long serialVersionUID = 478707250218245776L;
 
+    private Integer account_virtual;
+
+    private Double diskPrice;
+
+    private String description;
+
+    private String processorFrequency;
+
+    private String processorModel;
+
+    private Integer row_index;
+
     private Integer comNum;
 
     private String workOrderNum;
@@ -27,6 +39,15 @@ public class AllocatedVm implements Serializable {
 
     private Double price;
 
+    private Integer quantity;
+
+    public void setQuantity(Integer quantity){
+        this.quantity = quantity;
+    }
+
+    public Integer getQuantity(){
+        return this.quantity;
+    }
 
     public Integer getComNum() {
         return comNum;

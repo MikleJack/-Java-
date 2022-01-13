@@ -71,12 +71,18 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+              <el-button @click=handleClick_detail(scope.row.workOrderNum) type="text" size="small">查看</el-button>
+
             </template>
           </el-table-column>
         </el-table>
-
+        <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
+          <order_detail :show="false"></order_detail>
+        </el-dialog>
       </div>
+
+
+
     <div class="page-tail">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -90,8 +96,12 @@
 </template>
 
 <script>
+// import Ticket_details from "./ticket_details";
+import order_detail from "./order_detail";
+
     export default {
         name: "all_work_order",
+      components: {order_detail},
       mounted() {
         this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
@@ -103,6 +113,8 @@
           formInline: {
             work_order_type: ''
           },
+          //工单详情弹窗
+          dialogTableVisible: false,
           tableData: [],
           //分页相关
           currentPage:1,
@@ -123,7 +135,12 @@
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
           })
+        },
+        handleClick_detail( workOrderNum ) {
+          this.dialogTableVisible = true;
+          this.$refs.order_detail.autoGetAllDetail(workOrderNum);
         }
+
       }
     }
 </script>
@@ -133,25 +150,22 @@
 <style scoped>
   .page-main{
     position: relative;
+
     width:100%;
     height: 100%;
   }
 
+  /*.page-body{*/
+  /*  position: relative;*/
+  /*  width: 90%;*/
+  /*  height: 100%;*/
+  /*  left: 5%;*/
+  /*}*/
 
-  .page-head{
-    position: relative;
-    width:100%;
-    text-align:center
-  }
 
-
-  .page-body{
-    position: relative;
-  }
 
   .page-tail{
     width:100%;
-    /*height: 60px;*/
     position: relative;
     bottom: 0;
   }

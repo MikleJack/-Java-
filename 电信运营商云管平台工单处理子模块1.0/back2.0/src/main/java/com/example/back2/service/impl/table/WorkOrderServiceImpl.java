@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * (WorkOrder)表服务实现类
@@ -107,4 +109,51 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public Boolean offline(String workOrderNum, String offlineReason) {
         return this.workOrderDao.offline(workOrderNum,offlineReason);
     }
+
+    /**
+     * 通过工单编号进行延期操作
+     *
+     * @param newWorkOrderNum 新工单编号
+     * @param workOrderNum 工单编号
+     * @param delayReason  延期原因
+     * @param delayTime  延期日期
+     * @return 是否发起延期请求成功
+     */
+    @Override
+    public Boolean delay(String workOrderNum,String newWorkOrderNum, Date delayTime, String delayReason,Double nowPrice) {
+        WorkOrder preWorkOrder = this.workOrderDao.queryById(workOrderNum);
+        preWorkOrder.setExpirationTime(delayTime);
+        preWorkOrder.setPrice(nowPrice);
+        preWorkOrder.setWorkOrderNum(newWorkOrderNum);
+        preWorkOrder.setReason(delayReason);
+        preWorkOrder.setWorkOrderType("延期工单");
+        return this.workOrderDao.insertDelayWorkOrder(preWorkOrder);
+    }
+
+    /**
+     * 通过工单编号查询该工单的价格
+     *
+     * @param workOrderNum 主键
+     * @return 该工单总价
+     */
+    @Override
+    public Double queryPriceById(String workOrderNum){
+        return this.workOrderDao.queryById(workOrderNum).getPrice();
+    }
+
+//-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workerTitle 工单名
+     * @param workOrderType 工单类型
+     * @param workerNum 工人编号
+     * @return 查询结果
+     */
+    @Override
+    public Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest){
+        long total = this.workOrderDao.parameterCount(workOrderType, workerTitle, workerNum);
+        return new PageImpl<>(this.workOrderDao.parameterQueryAllByLimit(workOrderType, workerTitle, workerNum, pageRequest), pageRequest, total);
+    }
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 }
