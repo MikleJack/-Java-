@@ -1,5 +1,6 @@
 package com.example.back2.service.impl.table;
 
+import com.example.back2.entity.table.AllocatedCom;
 import com.example.back2.entity.table.AllocatedVm;
 import com.example.back2.dao.table.AllocatedVmDao;
 import com.example.back2.service.table.AllocatedVmService;
@@ -75,5 +76,16 @@ public class AllocatedVmServiceImpl implements AllocatedVmService {
     @Override
     public boolean deleteById(Integer comNum) {
         return this.allocatedVmDao.deleteById(comNum) > 0;
+    }
+
+    /**
+     * 通过工单编号查询该工单所有虚拟机机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有虚拟机资源
+     */
+    @Override
+    public List<AllocatedVm> queryByWorkOrderNum(String workOrderNum){
+        return this.allocatedVmDao.queryByWorkOrderNum(workOrderNum);
     }
 }

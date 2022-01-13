@@ -201,7 +201,7 @@
       </div>
       <div class="page_bottom" v-if="show">
         <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
-        <el-button>挂起</el-button>
+        <el-button v-if="hasHangup">挂起</el-button>
         <el-button>审批不通过</el-button>
       </div>
     </div>
@@ -213,6 +213,8 @@ export default {
   name: "ticket_details",
   data() {
     return {
+      //是否显示挂起按钮
+      hasHangup:false,
       labelPosition: 'left',
       //字体大小
       size: '',
@@ -260,6 +262,11 @@ export default {
 
     };
   },
+  mounted() {
+    if(sessionStorage.getItem("level")==="3"){
+      this.hasHangup=true;
+    }
+    },
   props:["show"],
   methods: {
 

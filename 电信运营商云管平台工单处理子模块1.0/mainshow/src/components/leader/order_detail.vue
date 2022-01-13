@@ -254,7 +254,7 @@ export default {
       }
     },
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get("http://localhost:8084/alltickets/queryWorkOrderDetailTop?workOrderNum="
+      this.$axios.get("http://localhost:8084/leader/queryWorkOrderDetailTop?workOrderNum="
         + workOrderNum).then((res)=>{
         //个人信息
         this.workNum = res.data.workerNum;
@@ -270,11 +270,11 @@ export default {
         this.expireTime = res.data.expirationTime;
         this.reasonContect = res.data.reason;
       });
-      this.$axios.get("http://localhost:8084/alltickets/getOrderCom?workOrderNum="
+      this.$axios.get("http://localhost:8084/leader/getOrderCom?workOrderNum="
       +workOrderNum).then((res)=>{
         this.phyCom = res.data;
       });
-      this.$axios.get("http://localhost:8084/alltickets/getOrderVm?workOrderNum="
+      this.$axios.get("http://localhost:8084/leader/getOrderVm?workOrderNum="
       +workOrderNum).then((res)=>{
         this.virtualCom = res.data;
       });

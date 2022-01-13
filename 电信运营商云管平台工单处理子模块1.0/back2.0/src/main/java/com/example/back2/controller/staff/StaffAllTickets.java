@@ -1,8 +1,13 @@
 package com.example.back2.controller.staff;
 
+import com.example.back2.controller.FlowProcessController;
 import com.example.back2.entity.table.*;
 import com.example.back2.entity.view.AdminsearchorderTable;
+import com.example.back2.entity.view.AllocatedVmSpecifications;
+import com.example.back2.entity.view.FlowStaff;
+import com.example.back2.entity.view.OrderBeginEndTime;
 import com.example.back2.service.table.*;
+import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.domain.Page;
@@ -30,7 +35,8 @@ public class StaffAllTickets {
 
     @Resource
     private AllocatedComService allocatedComService;
-
+    @Resource
+    private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -155,6 +161,28 @@ public class StaffAllTickets {
     @GetMapping("allocatedCom")
     public ResponseEntity<List<AllocatedCom>> allocatedCom(String workOrderNum){
         return ResponseEntity.ok(this.allocatedComService.queryByWorkOrderNum(workOrderNum));
+    }
+
+    /**
+     * 通过工单编号查询该工单所有虚拟机机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有虚拟机资源
+     */
+    @GetMapping("allocatedVir")
+    public ResponseEntity<List<AllocatedVmSpecifications>> allocatedVir(String workOrderNum){
+        return ResponseEntity.ok(this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum));
+    }
+
+    /**
+     * 通过工单编号查询该工单所有虚拟机机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有虚拟机资源
+     */
+    @GetMapping("queryBeginAndEndTime")
+    public ResponseEntity<OrderBeginEndTime> queryBeginTime(String workOrderNum){
+        return ResponseEntity.ok(this.orderBeginEndTimeService.queryById(workOrderNum));
     }
 
 //----------------详情按钮-底部-------------------------------------------------------

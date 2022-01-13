@@ -1,21 +1,23 @@
 <template>
-  <div class="max">
+  <div class="background">
     <div class="title">
-      <div style="position:relative;float: left;top: 18px;">
-        <img src="../../assets/white.png" height="64" width="64"/>
-      </div>
-      <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 15px;">
+      <!--      <div style="position:relative;float: left;top: 18px;">-->
+      <!--        <img src="../../assets/white.png" height="64" width="64"/>-->
+      <!--      </div>-->
+      <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
         电信运营商云管平台工单处理子模块
       </div>
-
     </div>
 
     <!--    登录界面-->
+    <img :src="imgSrc" width="100%" height="100%" alt="" />
     <div class="warp">
-<!--      <div class="warp-line">-->
-<!--        <img src="../../assets/man.png" width="50px">-->
-<!--      </div>-->
+      <!--      <div class="warp-line">-->
+      <!--        <img src="../../assets/man.png" width="50px">-->
+      <!--      </div>-->
       <div class="warp-form">
+        <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
+        <h2>管理员登录</h2>
         <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
           <el-form-item  prop="work_num">
@@ -35,7 +37,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="logging">登录</el-button>
+            <el-button style="margin-left: 40%" type="primary" @click="logging">登录</el-button>
           </el-form-item>
 
         </el-form>
@@ -47,9 +49,8 @@
 
 <script>
 export default {
-  name: "admin",
+  name: "adminChange",
   mounted(){
-
     this.getIP();
     this.getVertifyCode();
   },
@@ -74,6 +75,9 @@ export default {
     };
 
     return {
+      // 背景图片
+      imgSrc: require('../../assets/0131055c989225a801208f8be5608b.gif'),
+
       ruleForm: {
         work_num:'',
         password:'',
@@ -154,8 +158,8 @@ export default {
                 center: true
               });
               //设置token以及路由
-              sessionStorage.setItem("type", "admin");
-              sessionStorage.setItem("admin", 'true');
+              sessionStorage.setItem("type", "root");
+              sessionStorage.setItem("root", 'true');
               this.$router.push('/adminMain');
             } else {
               this.$message({
@@ -185,52 +189,113 @@ export default {
 </script>
 
 <style scoped>
+/*.max{*/
+/*  position: absolute;*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*}*/
 
-.max{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
+/*.warp{*/
+/*  border-radius: 20px;*/
+/*  position: absolute;*/
+/*  left: 61.8%;*/
+/*  top: 35%;*/
+/*  width: 400px;*/
+/*  height: 400px;*/
+/*  background: #42be95;*/
+/*  box-shadow: 0px 0px 10px #888888;*/
+/*}*/
+/*.warp-line{*/
+/*  position: relative;*/
+/*  width: 80%;*/
+/*  margin-top: 40px;*/
+/*  left: 45%;*/
+/*}*/
 .warp{
-  border-radius: 20px;
-  position: absolute;
-  left: 61.8%;
-  top: 35%;
-  width: 400px;
-  height: 400px;
-  background: rgb(255, 255, 255);
-  box-shadow: 0px 0px 10px #888888;
-}
-.warp-line{
-  position: relative;
-  width: 80%;
-  margin-top: 40px;
-  left: 45%;
+  position:absolute;
+  /*定位方式绝对定位absolute*/
+  top:50%;
+  left:50%;
+  /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
+  transform:translate(-50%,-50%);
+  /*实现块元素百分比下居中*/
+  width:450px;
+  padding:50px;
+  background: rgba(0,0,0,.5);
+  /*背景颜色为黑色，透明度为0.8*/
+  box-sizing:border-box;
+  /*box-sizing设置盒子模型的解析模式为怪异盒模型，
+  将border和padding划归到width范围内*/
+  box-shadow: 0px 15px 25px rgba(0,0,0,.5);
+  /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
+  border-radius:15px;
+  /*边框圆角，四个角均为15px*/
 }
 .title{
-  position: relative;
+  position: absolute;
   top:0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 13.45%;
+  /*height: 100px;*/
   text-align: left;
   padding-left: 10px;
   font-size: 30px;
   line-height: 70px;
-  float: left;
+  /*float: left;*/
   color: #ffffff;
-  background: #409EFF;
+  /*background: #409EFF;*/
 }
-.warp-form{
-  position: relative;
-  width: 80%;
-  text-align: center;
-  margin-top: 80px;
-  left: 40px;
+.background{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #1a674e;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
+/*.warp-form{*/
+/*  position: absolute;*/
+/*  width: 80%;*/
+/*  text-align: center;*/
+/*  margin-top: 80px;*/
+/*  left: 40px;*/
+/*  !*background-color: #53c59e;*!*/
+/*}*/
 
 .code_input{
   width: 200px;
   float: left;
 }
+
+.warp-form h2{
+  margin:0 0 30px;
+  padding:0;
+  color: #fff;
+  text-align:center;
+  /*文字居中*/
+}
+/*.warp-form{*/
+/*  position:relative;*/
+/*}*/
+.warp-form{
+  position:relative;
+  width: 100%;
+  padding:10px 0;
+  font-size:16px;
+  color:#fff;
+  letter-spacing: 1px;
+  /*字符间的间距1px*/
+  margin-bottom: 30px;
+  border:none;
+  border-bottom: 1px solid #fff;
+  outline:none;
+  /*outline用于绘制元素周围的线
+  outline：none在这里用途是将输入框的边框的线条使其消失*/
+  background: transparent;
+  /*背景颜色为透明*/
+}
+
 </style>
