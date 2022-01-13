@@ -110,5 +110,11 @@
         delete from flow_process where work_order_num = #{workOrderNum}
     </delete>
 
+    <!--插入申请延期的流转过程-->
+    <insert id="DelayInsert">
+        insert into flow_process(operation_type, deal_comment,work_order_num,deal_num,deal_date)
+        values "申请", "提出申请" , #{workOrderNum},#{workerNum}, #{dealDate})
+    </insert>
+
 </mapper>
 

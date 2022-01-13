@@ -3,12 +3,15 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.FlowProcess;
 import com.example.back2.dao.table.FlowProcessDao;
 import com.example.back2.service.table.FlowProcessService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * (FlowProcess)表服务实现类
@@ -78,5 +81,17 @@ public class FlowProcessServiceImpl implements FlowProcessService {
     @Override
     public boolean deleteById(String workOrderNum) {
         return this.flowProcessDao.deleteById(workOrderNum) > 0;
+    }
+
+    /**
+     * 插入申请延期的流转过程
+     *
+     * @param workOrderNum 工单编号
+     * @param workerNum 员工编号
+     * @return 是否插入流转过程
+     */
+    @Override
+    public Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate) {
+        return this.flowProcessDao.DelayInsert(workOrderNum, workerNum, DealDate);
     }
 }
