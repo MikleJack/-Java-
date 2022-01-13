@@ -101,9 +101,16 @@ public class FlowProcessController {
     @Resource
     private FlowStaffService flowStaffService;
 
+
+    /**
+     * 通过工单编号查询流转过程
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单的所有流转过程
+     */
     @GetMapping("selectByWorkOrderNum")
-    public List<FlowStaff> selectByWorkOrderNum(String workOrederNum){
-        return this.flowStaffService.selectByWorkOrderNum(workOrederNum);
+    public List<FlowStaff> selectByWorkOrderNum(String workOrderNum){
+        return this.flowStaffService.selectByWorkOrderNum(workOrderNum);
     }
 }
 

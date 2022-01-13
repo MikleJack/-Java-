@@ -177,7 +177,7 @@
 
           <div class="resoure_usage">
             <el-table
-              :data="informData"
+              :data="flowProcess"
               border>
               <el-table-column
                 type="index"
@@ -190,7 +190,7 @@
                 width="auto">
               </el-table-column>
               <el-table-column
-                prop="dealName"
+                prop="name"
                 label="处理人姓名"
                 width="auto">
               </el-table-column>
@@ -240,19 +240,7 @@ export default {
       allocatedCom: [],
       allocatedVm: [],
       labelPosition: 'left',
-      //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum: '00000002',
-        //处理人姓名
-        dealName: '陈大炮',
-        //操作类型
-        operationType: '审批通过',
-        //操作日期
-        dealDate: '2021-12-28 15:30:00',
-        //批注
-        dealComment: '申请合理，建议通过',
-      }],
+      flowProcess: [],
 
     };
   },
@@ -286,6 +274,9 @@ export default {
       });
       this.$axios.get('http://localhost:8084/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedVm = res.data;
+      });
+      this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
+        this.flowProcess = res.data;
       });
 
 
