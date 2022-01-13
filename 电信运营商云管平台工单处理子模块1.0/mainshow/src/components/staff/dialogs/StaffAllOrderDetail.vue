@@ -83,47 +83,57 @@
           <div class="page_title">虚拟机资源信息</div>
           <el-descriptions class="margin-top" title="" :column="3" :size="size" border></el-descriptions>
           <el-table
-            :data="virtualCom"
+            :data="allocatedVm"
             border
           ><el-table-column
-            prop="vir_require"
+            type="index"
+            label="序号"
+            width="auto">
+          </el-table-column>
+            <el-table-column
+            prop="workOrderNum"
+            label="虚拟机编号"
+            width="auto">
+          </el-table-column>
+            <el-table-column
+            prop="description"
             label="规格族"
             width="auto">
           </el-table-column>
             <el-table-column
-              prop="vir_cpuCore"
+              prop="cpuCore"
               label="CPU核数/个"
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="vir_ram"
+              prop="ram"
               label="内存/G">
             </el-table-column>
             <el-table-column
-              prop="vir_frequency"
+              prop="processorFrequency"
               label="处理机主频/GHz"
-              width="150px">
+              width="auto">
             </el-table-column>
             <el-table-column
-              prop="vir_model"
+              prop="processorModel"
               label="处理器型号">
             </el-table-column>
             <el-table-column
-              prop="vir_os"
+              prop="os"
               label="操作系统">
             </el-table-column>
             <el-table-column
-              prop="vir_price"
+              prop="price"
               label="单价 元/月">
             </el-table-column>
             <el-table-column
-              prop="hardDisk"
+              prop="storage"
               label="硬盘大小/G">
             </el-table-column>
-            <el-table-column
-              prop="vir_totalPrice"
-              label="总价/元">
-            </el-table-column>
+<!--            <el-table-column-->
+<!--              prop="vir_totalPrice"-->
+<!--              label="总价/元">-->
+<!--            </el-table-column>-->
           </el-table>
         </div>
         <!--      部门预算利用情况展示-->
@@ -228,7 +238,7 @@ export default {
     return {
       singleInformForm: [],
       allocatedCom: [],
-      allocatedVir: [],
+      allocatedVm: [],
       labelPosition: 'left',
       //流传过程数据
       informData: [{
@@ -271,10 +281,12 @@ export default {
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.singleInformForm = res.data;
       });
-      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=202201081534000048').then((res)=>{
+      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedCom = res.data;
       });
-
+      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
+        this.allocatedVm = res.data;
+      });
 
 
       // this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='

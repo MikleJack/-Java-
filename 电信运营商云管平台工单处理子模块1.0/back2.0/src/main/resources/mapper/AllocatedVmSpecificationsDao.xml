@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AllocatedVmSpecificationsDao">
+
+    <resultMap type="com.example.back2.entity.view.AllocatedVmSpecifications" id="AllocatedVmSpecificationsMap">
+        <result property="comNum" column="com_num" jdbcType="INTEGER"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="processorModel" column="processor_model" jdbcType="VARCHAR"/>
+        <result property="processorFrequency" column="processor_frequency" jdbcType="NUMERIC"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="diskPrice" column="disk_price" jdbcType="NUMERIC"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+        <result property="os" column="os" jdbcType="VARCHAR"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AllocatedVmSpecificationsMap">
+        select
+          com_num, work_order_num, cpu_core, ram, processor_model, processor_frequency, price, disk_price, description, quantity, os, ip, storage
+        from allocated_vm_specifications
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="processorModel != null and processorModel != ''">
+                and processor_model = #{processorModel}
+            </if>
+            <if test="processorFrequency != null">
+                and processor_frequency = #{processorFrequency}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="diskPrice != null">
+                and disk_price = #{diskPrice}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="quantity != null">
+                and quantity = #{quantity}
+            </if>
+            <if test="os != null and os != ''">
+                and os = #{os}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from allocated_vm_specifications
+        <where>
+            <if test="comNum != null">
+                and com_num = #{comNum}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="processorModel != null and processorModel != ''">
+                and processor_model = #{processorModel}
+            </if>
+            <if test="processorFrequency != null">
+                and processor_frequency = #{processorFrequency}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="diskPrice != null">
+                and disk_price = #{diskPrice}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="quantity != null">
+                and quantity = #{quantity}
+            </if>
+            <if test="os != null and os != ''">
+                and os = #{os}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into allocated_vm_specifications(com_num, work_order_num, cpu_core, ram, processor_model, processor_frequency, price, disk_price, description, quantity, os, ip, storage)
+        values (#{comNum}, #{workOrderNum}, #{cpuCore}, #{ram}, #{processorModel}, #{processorFrequency}, #{price}, #{diskPrice}, #{description}, #{quantity}, #{os}, #{ip}, #{storage})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into allocated_vm_specifications(com_num, work_order_num, cpu_core, ram, processor_model, processor_frequency, price, disk_price, description, quantity, os, ip, storage)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.comNum}, #{entity.workOrderNum}, #{entity.cpuCore}, #{entity.ram}, #{entity.processorModel}, #{entity.processorFrequency}, #{entity.price}, #{entity.diskPrice}, #{entity.description}, #{entity.quantity}, #{entity.os}, #{entity.ip}, #{entity.storage})
+        </foreach>
+    </insert>
+
+    <!--通过工单编号查询该工单所有虚拟机机资源-->
+    <select id="queryVmByWorkOrderNum" resultMap="AllocatedVmSpecificationsMap">
+        select
+            com_num, work_order_num, cpu_core, ram, processor_model, processor_frequency, price, disk_price, description, quantity, os, ip, storage
+        from allocated_vm_specifications
+        where work_order_num = #{workOrderNum}
+    </select>
+
+</mapper>
+

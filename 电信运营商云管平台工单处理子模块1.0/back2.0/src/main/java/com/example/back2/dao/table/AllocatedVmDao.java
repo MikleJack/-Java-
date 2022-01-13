@@ -1,5 +1,6 @@
 package com.example.back2.dao.table;
 
+import com.example.back2.entity.table.AllocatedCom;
 import com.example.back2.entity.table.AllocatedVm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -80,6 +81,14 @@ public interface AllocatedVmDao {
      * @return 影响行数
      */
     int deleteById(Integer comNum);
+
+    /**
+     * 通过工单编号查询该工单所有虚拟机机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有虚拟机资源
+     */
+    List<AllocatedVm> queryByWorkOrderNum(String workOrderNum);
 
 }
 
