@@ -28,6 +28,9 @@ public class StaffAllTickets {
     @Resource
     private FlowProcessService flowProcessService;
 
+    @Resource
+    private AllocatedComService allocatedComService;
+
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -140,6 +143,22 @@ public class StaffAllTickets {
     }
 
 //----------------------------下线按钮-底部----------------------------
+
+
+//----------------详情按钮-顶部-------------------------------------------------------
+    /**
+     * 通过工单编号查询该工单所有物理机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有物理机资源
+     */
+    @GetMapping("allocatedCom")
+    public ResponseEntity<List<AllocatedCom>> allocatedCom(String workOrderNum){
+        return ResponseEntity.ok(this.allocatedComService.queryByWorkOrderNum(workOrderNum));
+    }
+
+//----------------详情按钮-底部-------------------------------------------------------
+
 
 
 }

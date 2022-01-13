@@ -7,6 +7,7 @@ import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.service.table.FlowProcessService;
 import com.example.back2.service.table.LeadershipService;
 import com.example.back2.service.table.WorkOrderService;
 import com.example.back2.service.view.AdminsearceorderVmService;
@@ -84,6 +85,8 @@ public class pendTickets {
     private WorkOrderService workOrderService;
     @Resource
     private LeadershipService leadershipService;
+    @Resource
+    private FlowProcessService flowProcessService;
 
     /**
      *
@@ -92,7 +95,7 @@ public class pendTickets {
      * @param state         审批状态
      * @return
      */
-    @PostMapping("examine")
+    @PostMapping("oneExamine")
     public Boolean Examine(String workOrderNum, String workNum, String state){
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批不通过")){
@@ -104,11 +107,35 @@ public class pendTickets {
             Integer applyNum = workOrder.getWorkerNum();
             //得到这个人的所有上级领导
             List<Leadership> leaderList = leadershipService.getLeaderNum(applyNum);
+            Boolean success=true;
+            //查询申请工单的员工的所有领导有无全部通过这个工单
             for (Leadership i :leaderList){
-
+                if(flowProcessService.selectByOrderNumLeaderNum(workOrderNum,
+                        i.getLederNum(),"审批通过")==null)
+                    success=false;
             }
+            if(success){
+                workOrder.setWorkOrderState("一级审批通过");
+                workOrderService.update(workOrder);
+            }
+
         }
         return true;
     }
 
+    @PostMapping("towExamine")
+    public Boolean towExamine(String workOrderNum, String workNum, String state){
+        WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
+        if(state.equals("审批通过")){
+            workOrder.setWorkOrderState("二级审批通过");
+            workOrderService.update(workOrder);
+        }
+        else if(state.equals("挂起")||state.equals("审批不通过")){
+            workOrder.setWorkOrderState(state);
+            workOrderService.update(workOrder);
+        }
+        else
+            return false;
+        return true;
+    }
 }

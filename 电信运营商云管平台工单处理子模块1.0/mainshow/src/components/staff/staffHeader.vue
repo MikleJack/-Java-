@@ -30,22 +30,22 @@
           active-text-color="#ffd04b"
         >
           <el-menu-item index="1" @click="changePage(1)">
-              <i class="el-icon-s-home"></i>
+              <i class="el-icon-s-home" style="color: green"></i>
               <span>首页</span>
           </el-menu-item>
 
           <el-menu-item index="2" @click="changePage(2)">
-              <i class="el-icon-edit"></i>
+              <i class="el-icon-edit" style="color: green"></i>
               <span>申请工单</span>
           </el-menu-item>
 
           <el-menu-item index="3"@click="changePage(3)">
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-edit-outline" style="color: green"></i>
               <span>变更工单</span>
           </el-menu-item>
 
           <el-menu-item index="4"@click="changePage(4)">
-              <i class="el-icon-tickets"></i>
+              <i class="el-icon-tickets" style="color: green"></i>
               <span>全部工单列表</span>
           </el-menu-item>
         </el-menu>
