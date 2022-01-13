@@ -3,10 +3,6 @@ package com.example.back2.service.table;
 import com.example.back2.entity.table.FlowProcess;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-
-import java.util.Date;
 
 /**
  * (FlowProcess)表服务接口
@@ -65,5 +61,8 @@ public interface FlowProcessService {
      * @return 是否插入流转过程
      */
     Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate);
+
+
+    FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type);
 
 }

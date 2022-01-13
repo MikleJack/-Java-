@@ -3,15 +3,12 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.FlowProcess;
 import com.example.back2.dao.table.FlowProcessDao;
 import com.example.back2.service.table.FlowProcessService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * (FlowProcess)表服务实现类
@@ -93,5 +90,10 @@ public class FlowProcessServiceImpl implements FlowProcessService {
     @Override
     public Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate) {
         return this.flowProcessDao.DelayInsert(workOrderNum, workerNum, DealDate);
+    }
+
+    @Override
+    public FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type){
+        return this.flowProcessDao.selectByOrderNumLeaderNum(workOrderNum, leaderNum, operation_type);
     }
 }

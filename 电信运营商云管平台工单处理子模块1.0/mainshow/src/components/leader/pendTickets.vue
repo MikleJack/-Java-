@@ -60,7 +60,7 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
+      <el-dialog title="工单详情" :visible.sync="dialogTableVisible" width="80%">
         <ticket_details :show="true"></ticket_details>
       </el-dialog>
     </div>
@@ -121,8 +121,8 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
-  left:130px;
-  width: 100%;
+  left:10%;
+  width: 90%;
   height: 100%;
 }
 
