@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * (FlowProcess)表服务接口
@@ -67,4 +68,5 @@ public interface FlowProcessService {
 
     FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type);
 
+    List<FlowProcess> selectApplyTime(String workOrderNum);
 }

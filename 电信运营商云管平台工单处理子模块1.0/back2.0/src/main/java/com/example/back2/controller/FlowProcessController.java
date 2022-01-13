@@ -100,10 +100,22 @@ public class FlowProcessController {
 
     @Resource
     private FlowStaffService flowStaffService;
-
+//  查询对应工单号的所有流转过程
     @GetMapping("selectByWorkOrderNum")
     public List<FlowStaff> selectByWorkOrderNum(String workOrederNum){
         return this.flowStaffService.selectByWorkOrderNum(workOrederNum);
+    }
+
+//  通过工单号查找申请时间
+    @GetMapping("selectApplyTime")
+    public List<FlowProcess> selectApplyTime(String workOrderNum){
+        System.out.println(workOrderNum);
+        List<FlowProcess> ans = this.flowProcessService.selectApplyTime(workOrderNum);
+        for (FlowProcess i:ans){
+            System.out.println(i.getDealDate());
+        }
+//        System.out.println(ans);
+        return ans;
     }
 }
 

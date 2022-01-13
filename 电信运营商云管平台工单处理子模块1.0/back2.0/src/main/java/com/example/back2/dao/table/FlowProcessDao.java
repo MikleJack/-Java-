@@ -93,5 +93,8 @@ public interface FlowProcessDao {
      * @return 是否插入流转过程
      */
     Boolean DelayInsert(String workOrderNum, Integer workerNum, Date DealDate);
+
+//    通过工单号查找申请时间
+    List<FlowProcess> selectApplyTime(String workOrderNum);
 }
 

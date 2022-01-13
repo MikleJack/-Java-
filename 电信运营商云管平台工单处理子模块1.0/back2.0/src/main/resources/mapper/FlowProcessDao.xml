@@ -6,9 +6,17 @@
         <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
         <result property="dealNum" column="deal_num" jdbcType="INTEGER"/>
         <result property="operationType" column="operation_type" jdbcType="VARCHAR"/>
-        <result property="dealDate" column="deal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealDate" column="deal_date" jdbcType="DATE"/>
         <result property="dealComment" column="deal_comment" jdbcType="VARCHAR"/>
     </resultMap>
+
+<!--    通过工单号查询申请时间-->
+    <select id="selectApplyTime" resultMap="FlowProcessMap">
+        select
+            deal_date
+        from flow_process
+        where work_order_num = #{workOrderNum};
+    </select>
 
     <!--查询单个-->
     <select id="queryById" resultMap="FlowProcessMap">
