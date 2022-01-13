@@ -76,8 +76,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog :visible.sync="dialogTableVisible"width="80%">
-          <order_detail ref="order_detail"></order_detail>
+        <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
+          <ticket_details :show="false"></ticket_details>
         </el-dialog>
       </div>
     <div class="page-tail">
@@ -93,12 +93,12 @@
 </template>
 
 <script>
-import order_detail from "./order_detail";
+import Ticket_details from "./ticket_details";
 
 
     export default {
         name: "all_work_order",
-      components: {order_detail},
+      components: {Ticket_details},
       mounted() {
         this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num=20220013&page=0&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
@@ -147,25 +147,17 @@ import order_detail from "./order_detail";
 <style scoped>
   .page-main{
     position: relative;
+
     width:100%;
     height: 100%;
   }
 
 
-  .page-head{
-    position: relative;
-    width:100%;
-    text-align:center
-  }
 
 
-  .page-body{
-    position: relative;
-  }
 
   .page-tail{
     width:100%;
-    /*height: 60px;*/
     position: relative;
     bottom: 0;
   }

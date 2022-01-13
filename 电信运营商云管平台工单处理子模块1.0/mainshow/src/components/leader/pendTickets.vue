@@ -61,7 +61,7 @@
       </el-table>
 
       <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
-        <ticket_details></ticket_details>
+        <ticket_details :show="true"></ticket_details>
       </el-dialog>
     </div>
     <div class="page-tail">
