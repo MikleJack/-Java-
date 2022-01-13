@@ -79,4 +79,9 @@ public class FlowProcessServiceImpl implements FlowProcessService {
     public boolean deleteById(String workOrderNum) {
         return this.flowProcessDao.deleteById(workOrderNum) > 0;
     }
+
+    @Override
+    public FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type){
+        return this.flowProcessDao.selectByOrderNumLeaderNum(workOrderNum, leaderNum, operation_type);
+    }
 }

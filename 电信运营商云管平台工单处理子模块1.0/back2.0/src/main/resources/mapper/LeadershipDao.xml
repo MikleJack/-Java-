@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.LeadershipDao">
+
+    <resultMap type="com.example.back2.entity.table.Leadership" id="LeadershipMap">
+        <result property="lederNum" column="leder_num" jdbcType="INTEGER"/>
+        <result property="underNum" column="under_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LeadershipMap">
+        select
+          leder_num, under_num
+        from leadership
+        where leder_num = #{lederNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LeadershipMap">
+        select
+          leder_num, under_num
+        from leadership
+        <where>
+            <if test="lederNum != null">
+                and leder_num = #{lederNum}
+            </if>
+            <if test="underNum != null">
+                and under_num = #{underNum}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from leadership
+        <where>
+            <if test="lederNum != null">
+                and leder_num = #{lederNum}
+            </if>
+            <if test="underNum != null">
+                and under_num = #{underNum}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="lederNum" useGeneratedKeys="true">
+        insert into leadership()
+        values ()
+    </insert>
+
+    <insert id="insertBatch" keyProperty="lederNum" useGeneratedKeys="true">
+        insert into leadership()
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        ()
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="lederNum" useGeneratedKeys="true">
+        insert into leadership()
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            ()
+        </foreach>
+        on duplicate key update
+        
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update leadership
+        <set>
+        </set>
+        where leder_num = #{lederNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from leadership where leder_num = #{lederNum}
+    </delete>
+
+    <select id="getLeaderNum"  resultMap="LeadershipMap">
+        select leder_num,under_num
+        from leadership
+        where under_num = #{underNum}
+    </select>
+</mapper>
+

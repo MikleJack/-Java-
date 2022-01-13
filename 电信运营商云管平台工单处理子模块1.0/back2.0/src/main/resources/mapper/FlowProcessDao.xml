@@ -110,5 +110,11 @@
         delete from flow_process where work_order_num = #{workOrderNum}
     </delete>
 
+    <select id="selectByOrderNumLeaderNum" resultMap="FlowProcessMap">
+        select work_order_num,deal_num,operation_type,deal_date,deal_comment
+        from flow_process
+        where work_order_num=#{ workOrderNum} and deal_num = #{leaderNum} and operation_type=#{operation_type}
+    </select>
+
 </mapper>
 

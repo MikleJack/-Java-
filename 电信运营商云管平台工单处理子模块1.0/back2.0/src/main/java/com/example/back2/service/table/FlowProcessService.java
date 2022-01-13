@@ -53,4 +53,7 @@ public interface FlowProcessService {
      */
     boolean deleteById(String workOrderNum);
 
+
+    FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type);
+
 }
