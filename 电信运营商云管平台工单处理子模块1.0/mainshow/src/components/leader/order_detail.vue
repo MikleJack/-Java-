@@ -321,6 +321,12 @@ export default {
   left: 0;
   top: 0;
 }
+/*.page_body{*/
+/*  position: relative;*/
+/*  width: 90%;*/
+/*  height: 100%;*/
+/*  left: 5%;*/
+/*}*/
 .reason_contect{
   width: 80%;
   height: 80px;

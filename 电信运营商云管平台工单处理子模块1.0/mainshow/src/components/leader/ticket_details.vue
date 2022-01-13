@@ -190,8 +190,8 @@
           </el-table>
         </div>
       </div>
-      <div class="note_title" style="margin-top: 4%" >批注</div>
-      <div class="note">
+      <div class="note_title" style="margin-top: 4%" v-if="show">批注</div>
+      <div class="note" v-if="show">
         <el-input
           type="textarea"
           :rows="3"
@@ -199,7 +199,7 @@
           v-model="note">
         </el-input>
       </div>
-      <div class="page_bottom">
+      <div class="page_bottom" v-if="show">
         <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
         <el-button>挂起</el-button>
         <el-button>审批不通过</el-button>
@@ -295,6 +295,7 @@ export default {
 
     };
   },
+  props:["show"],
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
@@ -332,27 +333,24 @@ export default {
       });
     }
 
+},
+
 }
-  }
 </script>
 
 <style>
 .page{
   position: relative;
-  width: 150%;
+  width: 100%;
   height: auto;
   left: 0;
   top: 0;
-
-  /*background: #ffffff;*/
 }
 .page_body{
   position: relative;
   width: 90%;
-  /*height: 20px;*/
   height: 100%;
-  /*top: 0;*/
-  /*background: #0c805f;*/
+  left: 5%;
 }
 .reason_contect{
   width: 80%;
@@ -366,7 +364,7 @@ export default {
   width: 100%;
   height: auto;
   margin-left: -10%;
-margin-right: -20%;
+  margin-right: -20%;
 }
 .page_bottom{
   width: 100%;

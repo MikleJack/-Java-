@@ -27,7 +27,7 @@
       </el-input>
 
       <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_delay = false">取 消</el-button>
+                <el-button @click="cancelDelay">取 消</el-button>
                 <el-button type="primary" @click="requireToDelay">确 定</el-button>
       </span>
     </el-dialog>
@@ -59,10 +59,19 @@ export default {
           alert("延期失败");
         }
       })
+      this.refresh();
+      this.$store.state.staffAllOrder_DelayDialogVisible = false;
     },
 
     handleClose(){
       this.refresh();
+      this.$store.state.staffAllOrder_DelayDialogVisible = false;
+    },
+
+    //取消延期
+    cancelDelay(){
+      this.refresh();
+      this.$store.state.staffAllOrder_DelayDialogVisible = false;
     },
 
     //退出刷新数据
