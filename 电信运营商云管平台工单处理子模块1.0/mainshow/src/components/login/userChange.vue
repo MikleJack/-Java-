@@ -1,46 +1,47 @@
 <template>
-  <div class="max">
-    <div class="title">
-      <div style="position:relative;float: left;top: 18px;">
-        <img src="../../assets/white.png" height="64" width="64"/>
+    <div class="background">
+      <div class="title">
+<!--        <div style="position:relative;float: left;top: 18px;">-->
+<!--          <img src="../../assets/white.png" height="64" width="64"/>-->
+<!--        </div>-->
+        <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
+          电信运营商云管平台工单处理子模块
+        </div>
       </div>
-      <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 15px;">
-        电信运营商云管平台工单处理子模块
-      </div>
+      <!--登录界面-->
+      <img :src="imgSrc" width="100%" height="100%" alt="" />
+      <div class="warp">
+        <!-- 管理员与用户切换按钮-->
+        <div class="warp-form">
+            <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
+          <h2>用户登录</h2>
+          <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
+          <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
+            <el-form-item  prop="work_num">
+              <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item  prop="password">
+              <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
+            </el-form-item>
 
+            <el-form-item>
+              <div class="code_input">
+                <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
+              </div>
+              <div style="float: right">
+                <img @click="getVertifyCode" id="verifyCode" />
+              </div>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button style="margin-left: 40%" type="primary" @click="logging">登录</el-button>
+            </el-form-item>
+
+          </el-form>
+
+        </div>
+      </div>
     </div>
-
-    <!--    登录界面-->
-    <div class="warp">
-      <!-- 管理员与用户切换按钮     -->
-      <div class="warp-form">
-        <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
-          <el-form-item  prop="work_num">
-            <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item  prop="password">
-            <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <div class="code_input">
-              <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
-            </div>
-            <div style="float: right">
-              <img @click="getVertifyCode" id="verifyCode" />
-            </div>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="logging">登录</el-button>
-          </el-form-item>
-
-        </el-form>
-
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -49,8 +50,6 @@ export default {
   mounted(){
     this.getIP();
     this.getVertifyCode();
-    //设置cookie过期时间
-    // this.$cookies.config('1d');
   },
   data(){
 
@@ -73,6 +72,9 @@ export default {
     };
 
     return {
+      // 背景图片
+      imgSrc: require('../../assets/72f082025aafa40fa627f806aa64034f79f01903.jpg'),
+
       ruleForm: {
         work_num:'',
         password:'',
@@ -97,6 +99,12 @@ export default {
     }
   },
   methods: {
+    go_admin(){
+      this.$router.push({path:'/admin'});
+    },
+    go_user(){
+      this.$router.push({path:'/staff'});
+    },
     // 获取当前时间
     getdate() {
       let date = new Date();
@@ -143,10 +151,9 @@ export default {
     logging() {
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
-        this.$cookies.set(this.ruleForm.work_num,0);
         if(this.code===res.data){
           this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data!==0) {
+            if (res.data===1||res.data===2) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
@@ -163,7 +170,6 @@ export default {
               else if(res.data===2){
                 sessionStorage.setItem("type", "leader");
                 sessionStorage.setItem("leader", 'true');
-                sessionStorage.setItem("level", res.data);
                 this.$router.push('/leader');
               }
 
@@ -174,8 +180,6 @@ export default {
                 center: true
               });
               this.getVertifyCode();
-              // this.$cookies.set(this.ruleForm.work_num,this.$cookies.get(this.ruleForm.work_num)+1);
-              // alert(this.$cookies.get(this.ruleForm.work_num))
             }
           })
         }
@@ -200,51 +204,113 @@ export default {
 </script>
 
 <style scoped>
-.max{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
+/*.max{*/
+/*  position: absolute;*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*}*/
+
+/*.warp{*/
+/*  border-radius: 20px;*/
+/*  position: absolute;*/
+/*  left: 61.8%;*/
+/*  top: 35%;*/
+/*  width: 400px;*/
+/*  height: 400px;*/
+/*  background: #42be95;*/
+/*  box-shadow: 0px 0px 10px #888888;*/
+/*}*/
+/*.warp-line{*/
+/*  position: relative;*/
+/*  width: 80%;*/
+/*  margin-top: 40px;*/
+/*  left: 45%;*/
+/*}*/
 .warp{
-  border-radius: 20px;
-  position: absolute;
-  left: 61.8%;
-  top: 35%;
-  width: 400px;
-  height: 400px;
-  background: rgb(255, 255, 255);
-  box-shadow: 0px 0px 10px #888888;
-}
-.warp-line{
-  position: relative;
-  width: 80%;
-  margin-top: 40px;
-  left: 45%;
+  position:absolute;
+  /*定位方式绝对定位absolute*/
+  top:50%;
+  left:50%;
+  /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
+  transform:translate(-50%,-50%);
+  /*实现块元素百分比下居中*/
+  width:450px;
+  padding:50px;
+  background: rgba(0,0,0,.5);
+  /*背景颜色为黑色，透明度为0.8*/
+  box-sizing:border-box;
+  /*box-sizing设置盒子模型的解析模式为怪异盒模型，
+  将border和padding划归到width范围内*/
+  box-shadow: 0px 15px 25px rgba(0,0,0,.5);
+  /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
+  border-radius:15px;
+  /*边框圆角，四个角均为15px*/
 }
 .title{
-  position: relative;
+  position: absolute;
   top:0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 13.45%;
+  /*height: 100px;*/
   text-align: left;
   padding-left: 10px;
   font-size: 30px;
   line-height: 70px;
-  float: left;
+  /*float: left;*/
   color: #ffffff;
-  background: #409EFF;
+  /*background: #409EFF;*/
 }
-.warp-form{
-  position: relative;
-  width: 80%;
-  text-align: center;
-  margin-top: 80px;
-  left: 40px;
+.background{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #1a674e;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
+/*.warp-form{*/
+/*  position: absolute;*/
+/*  width: 80%;*/
+/*  text-align: center;*/
+/*  margin-top: 80px;*/
+/*  left: 40px;*/
+/*  !*background-color: #53c59e;*!*/
+/*}*/
 
 .code_input{
   width: 200px;
   float: left;
 }
+
+.warp-form h2{
+  margin:0 0 30px;
+  padding:0;
+  color: #fff;
+  text-align:center;
+  /*文字居中*/
+}
+/*.warp-form{*/
+/*  position:relative;*/
+/*}*/
+.warp-form{
+  position:relative;
+  width: 100%;
+  padding:10px 0;
+  font-size:16px;
+  color:#fff;
+  letter-spacing: 1px;
+  /*字符间的间距1px*/
+  margin-bottom: 30px;
+  border:none;
+  border-bottom: 1px solid #fff;
+  outline:none;
+  /*outline用于绘制元素周围的线
+  outline：none在这里用途是将输入框的边框的线条使其消失*/
+  background: transparent;
+  /*背景颜色为透明*/
+}
+
 </style>

@@ -17,7 +17,7 @@ public class Department implements Serializable {
     
     private Integer depLevel;
     
-    private Integer depBudget;
+    private Double depBudget;
 
 
     public Integer getDepNum() {
@@ -44,11 +44,11 @@ public class Department implements Serializable {
         this.depLevel = depLevel;
     }
 
-    public Integer getDepBudget() {
+    public Double getDepBudget() {
         return depBudget;
     }
 
-    public void setDepBudget(Integer depBudget) {
+    public void setDepBudget(Double depBudget) {
         this.depBudget = depBudget;
     }
 
