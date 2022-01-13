@@ -346,23 +346,12 @@ export default {
 
   /*background: #ffffff;*/
 }
-.page_top{
-  width: 100%;
-  height: 30px;
-  text-align: center;
-  /*line-height: 60px;*/
-  font-size:x-large;
-  font-weight: bolder;
-  margin-top: 0;
-  color: #0c805f;
-}
 .page_body{
   position: relative;
   width: 90%;
   /*height: 20px;*/
   height: 100%;
   /*top: 0;*/
-  left: 5%;
   /*background: #0c805f;*/
 }
 .reason_contect{
@@ -392,8 +381,6 @@ margin-right: -20%;
   margin-left: 10%;
 }
 .page_title{
-
-
   font-size: large;
   text-align: center;
   margin-bottom:20px;
@@ -401,20 +388,13 @@ margin-right: -20%;
   color: #0c805f;
 }
 .note_title{
-
-
   margin-left: -20%;
   text-align: center;
   margin-bottom:20px;
   font-weight:bolder;
   color: #0c805f;
 }
-.el-table{
-  margin-left: 2%;
-  margin-right: 1%;
-  width: 95%;
-  margin-bottom: 1%;
-}
+
 .frame{
   margin-bottom: 3%;
   margin-right: 10%;
@@ -424,14 +404,12 @@ margin-right: -20%;
 
 .total_progress{
   width:25%;
-  /*background-color: #0c805f;*/
   float: left;
   height: 200px;
   text-align: center;
 }
 .total_description{
   width: 25%;
-  /*background-color: #409EFF;*/
   float: left;
   height: 200px;
   font-size: larger;
@@ -439,13 +417,11 @@ margin-right: -20%;
 }
 .progress{
   width: 25%;
-  /*background-color: rgba(255, 165, 0, 0.7);*/
   float: left;
   height: 200px;
 }
 .description{
   width: 25%;
-  /*background-color: rgba(12, 12, 12, 0.63);*/
   float: left;
   height: 200px;
   font-size: larger;

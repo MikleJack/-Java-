@@ -320,31 +320,10 @@ export default {
   height: auto;
   left: 0;
   top: 0;
-  /*background: #ffffff;*/
-}
-.page_top{
-  width: 100%;
-  height: 30px;
-  text-align: center;
-  /*line-height: 60px;*/
-  font-size:x-large;
-  font-weight: bolder;
-  margin-top: 0;
-  color: #0c805f;
-}
-.page_body{
-  position: relative;
-  width: 90%;
-  /*height: 20px;*/
-  height: 100%;
-  /*top: 0;*/
-  left: 5%;
-  /*background: #0c805f;*/
 }
 .reason_contect{
   width: 80%;
   height: 80px;
-  /*background: #409EFF;*/
   margin-left: 10%;
   margin-bottom: 1%;
 
@@ -354,45 +333,26 @@ export default {
   height: auto;
 
 }
-.page_bottom{
-  width: 100%;
-  height: 100px;
-  bottom: 0;
-  /*background: #888888;*/
-  text-align: center;
-  line-height: 100px;
-}
 .margin-top{
   margin-left: 10%;
 }
 .page_title{
-
-
-
   text-align: center;
   margin-bottom:20px;
   font-weight:bolder;
   color: #0c805f;
-}
-.el-table{
-  margin-left: 2%;
-  margin-right: 1%;
-  width: 95%;
-  margin-bottom: 1%;
 }
 .frame{
   margin-bottom: 3%;
 }
 .total_progress{
   width:25%;
-  /*background-color: #0c805f;*/
   float: left;
   height: 200px;
   text-align: center;
 }
 .total_description{
   width: 25%;
-  /*background-color: #409EFF;*/
   float: left;
   height: 200px;
   font-size: larger;
@@ -400,13 +360,11 @@ export default {
 }
 .progress{
   width: 25%;
-  /*background-color: rgba(255, 165, 0, 0.7);*/
   float: left;
   height: 200px;
 }
 .description{
   width: 25%;
-  /*background-color: rgba(12, 12, 12, 0.63);*/
   float: left;
   height: 200px;
   font-size: larger;
