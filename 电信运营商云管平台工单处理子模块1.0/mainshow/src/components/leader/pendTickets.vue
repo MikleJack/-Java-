@@ -55,13 +55,13 @@
           width="100"
           align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click="dialogTableVisible = true">查看详情</el-button>
+            <el-button type="text" @click=handleClick_detail(scope.row.workOrderNum)>查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <el-dialog title="工单详情" :visible.sync="dialogTableVisible" width="80%">
-        <ticket_details :show="true"></ticket_details>
+        <ticket_details ref="Ticket_details" :show="true"></ticket_details>
       </el-dialog>
     </div>
     <div class="page-tail">
@@ -99,7 +99,12 @@ export default {
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
+    },
+    handleClick_detail( workOrderNum ) {
+      this.dialogTableVisible = true;
+      this.$refs.Ticket_details.autoGetAllDetail(workOrderNum);
     }
+
   },
 
   data() {
@@ -123,7 +128,7 @@ export default {
   position: relative;
   left:10%;
   /*left:130px;*/
-  width: 100%;
+  width: 90%;
   height: 100%;
 }
 

@@ -47,20 +47,20 @@
             width="100">
           </el-table-column>
           <el-table-column
-            prop="phy_cpuCore"
+            prop="cpuCore"
             label="CPU核数/个"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="phy_ram"
+            prop="ram"
             label="内存/G">
           </el-table-column>
           <el-table-column
-            prop="phy_mem"
+            prop="storage"
             label="存储大小/G">
           </el-table-column>
           <el-table-column
-            prop="phy_price"
+            prop="price"
             label="单价 元/月">
           </el-table-column>
         </el-table>
@@ -74,42 +74,42 @@
           :data="virtualCom"
           border
         ><el-table-column
-          prop="vir_require"
+          prop="description"
           label="规格族"
           width="auto">
         </el-table-column>
           <el-table-column
-            prop="vir_cpuCore"
+            prop="cpuCore"
             label="CPU核数/个"
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="vir_ram"
+            prop="ram"
             label="内存/G">
           </el-table-column>
           <el-table-column
-            prop="vir_frequency"
+            prop="processorFrequency"
             label="处理机主频/GHz"
           width="150px">
           </el-table-column>
           <el-table-column
-            prop="vir_model"
+            prop="processormodel"
             label="处理器型号">
           </el-table-column>
           <el-table-column
-          prop="vir_os"
+          prop="os"
           label="操作系统">
         </el-table-column>
           <el-table-column
-            prop="vir_price"
+            prop="perprice"
             label="单价 元/月">
           </el-table-column>
           <el-table-column
-            prop="hardDisk"
+            prop="storage"
             label="硬盘大小/G">
           </el-table-column>
           <el-table-column
-            prop="vir_totalPrice"
+            prop="allprice"
             label="总价/元">
           </el-table-column>
         </el-table>
@@ -249,36 +249,8 @@ export default {
       //工单预算
       order_budget:'190',
       //物理机资源数据
-      phyCom: [{
-        //物理机cpu核数
-        phy_cpuCore: '8',
-        //物理机内存
-        phy_ram: '16',
-        //物理机存储
-        phy_mem: '256',
-        //物理机单价
-        phy_price: '2000'
-      }],
-      virtualCom: [{
-        //虚拟机规格族
-        vir_require:'共享标准型',
-        //虚拟机cpu核数
-        vir_cpuCore: '2',
-        //虚拟机内存
-        vir_ram: '32',
-        //虚拟机处理器主频
-        vir_frequency: '2.5',
-        //虚拟机处理器型号
-        vir_model: '型号',
-        //虚拟机操作系统
-        vir_os: 'windows',
-        //虚拟机单价
-        vir_price:'100',
-        //硬盘
-        hardDisk:'256',
-        //总价
-        vir_totalPrice: '200'
-      }],
+      phyCom: [],
+      virtualCom: [],
       //流传过程数据
       informData: [{
         //处理人工号
@@ -316,8 +288,9 @@ export default {
       }
     },
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
+      this.$axios.get("http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum="
         +workOrderNum).then((res)=>{
+          // console.log(res.data);
           //个人信息
           this.workNum = res.data.workerNum;
           this.name = res.data.name;
@@ -328,9 +301,17 @@ export default {
           this.workOrderNum = workOrderNum;
           this.workOrderName  = res.data.workOrderName;
           this.workType = res.data.workOrderType;
-          this.expireTime = res.data.expireTime;
+          this.expireTime = res.data.expirationTime;
           this.reasonContect = res.data.reason;
       });
+      this.$axios.get("http://localhost:8084/pendtickets/getOrderCom?workOrderNum="
+      +workOrderNum).then((res)=>{
+        this.phyCom = res.data;
+      });
+      this.$axios.get("http://localhost:8084/pendtickets/getOrderVm"
+        +workOrderNum).then((res)=>{
+          this.virtualCom = res.data;
+      })
     }
 
 },
@@ -341,9 +322,9 @@ export default {
 <style>
 .page{
   position: relative;
-  width: 100%;
+  width: 90%;
   height: auto;
-  left: 0;
+  left: 10%;
   top: 0;
 }
 .page_body{
