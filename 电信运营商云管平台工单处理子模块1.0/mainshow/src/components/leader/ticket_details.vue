@@ -240,14 +240,18 @@ export default {
       reasonContect: '',
       //  输入的批注内容
       note: '',
+
+
       //部门总预算利用情况
-      used_budget:'1800',
+      used_budget:'',
       //部门总预算
-      total_budget:'2000',
+      total_budget:'',
       //部门剩余预算
       surplus_budget:'',
       //工单预算
-      order_budget:'190',
+      order_budget:'',
+
+
       //物理机资源数据
       phyCom: [],
       virtualCom: [],
@@ -269,16 +273,20 @@ export default {
   },
   props:["show"],
   methods: {
+
     //部门已用预算/部门总预算进度条
     total_percentage(){
       return 100*this.used_budget/this.total_budget;
     },
+
     //工单预算/部门剩余预算进度条
     percentage(){
       this.surplus_budget=this.total_budget-this.used_budget;
-      let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
-      return 100*temp_per;
-    },
+      // let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
+      // return 100*temp_per;
+      return (100*this.order_budget/this.surplus_budget).toFixed(2);
+      },
+
     customColorMethod(percentage) {
       if (percentage < 90) {
         return '#52b69a';
@@ -303,6 +311,16 @@ export default {
           this.workType = res.data.workOrderType;
           this.expireTime = res.data.expirationTime;
           this.reasonContect = res.data.reason;
+          //获取工单使用预算
+          this.order_budget = res.data.depBudget;
+          //获取部门总预算
+          this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
+            this.total_budget = res.data;
+          });
+          //获取部门已使用预算
+          this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + this.depNum).then((res)=>{
+            this.used_budget = res.data.depUsedBudget;
+          });
       });
       this.$axios.get("http://localhost:8084/pendtickets/getOrderCom?workOrderNum="
       +workOrderNum).then((res)=>{
