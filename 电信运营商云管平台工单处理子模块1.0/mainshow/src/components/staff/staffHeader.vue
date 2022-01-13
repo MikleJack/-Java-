@@ -87,14 +87,11 @@ export default {
     },
     //改变页面
     changePage(page){
-      if(page===0){
-        this.$router.push({path:"/staff/changePassword"});
-      }
       if(page===1){
         this.$router.push({path:"/staff/home"});
       }
       else if(page===2){
-        this.$router.push({path:"/staff/temp"});
+        this.$router.push({path:"/staff/apply"});
       }
       else if(page===3){
         this.$router.push({path:"/staff/change"});

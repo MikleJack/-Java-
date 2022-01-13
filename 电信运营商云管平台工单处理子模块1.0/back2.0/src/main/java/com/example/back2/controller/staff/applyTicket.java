@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.back2.entity.table.*;
 import com.example.back2.service.table.*;
+import com.example.back2.utils.GenerateIP;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,10 +105,12 @@ public class applyTicket {
     public boolean insertAllocatedVm(String qs, String workOrderNum, Integer storage,String os){
         JSONArray m = JSON.parseArray(qs);
         for (int i =0;i<m.size();i++){
+            GenerateIP generateIP = new GenerateIP();
             AllocatedVm allocatedVm = m.getObject(i,AllocatedVm.class);
             allocatedVm.setWorkOrderNum(workOrderNum);
             allocatedVm.setStorage(storage);
             allocatedVm.setOs(os);
+            allocatedVm.setIp(generateIP.createip());
             this.allocatedVmService.insert(allocatedVm);
         }
         return true;
