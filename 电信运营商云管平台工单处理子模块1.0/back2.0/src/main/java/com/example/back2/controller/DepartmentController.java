@@ -21,7 +21,7 @@ public class DepartmentController {
      * @return 获取该部门预算
      */
     @GetMapping("getDepBudget")
-    public Integer getDepBudget(Integer depNum){
+    public Double getDepBudget(Integer depNum){
         Department department = departmentService.queryById(depNum);
         return department.getDepBudget();
     }
