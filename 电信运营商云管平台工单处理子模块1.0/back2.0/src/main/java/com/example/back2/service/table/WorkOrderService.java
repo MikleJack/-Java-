@@ -1,6 +1,7 @@
 package com.example.back2.service.table;
 
 import com.example.back2.entity.table.WorkOrder;
+import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -93,5 +94,17 @@ public interface WorkOrderService {
      * @return 该工单总价
      */
     Double queryPriceById(String workOrderNum);
+
+//-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workerTitle 工单名
+     * @param workOrderType 工单类型
+     * @param workerNum 工人编号
+     * @return 查询结果
+     */
+    Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest);
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
 }

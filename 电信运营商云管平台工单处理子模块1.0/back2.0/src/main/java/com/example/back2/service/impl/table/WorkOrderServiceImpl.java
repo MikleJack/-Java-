@@ -140,4 +140,20 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public Double queryPriceById(String workOrderNum){
         return this.workOrderDao.queryById(workOrderNum).getPrice();
     }
+
+//-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
+    /**
+     * 带条件的分页查询：只传参数
+     *
+     * @param workerTitle 工单名
+     * @param workOrderType 工单类型
+     * @param workerNum 工人编号
+     * @return 查询结果
+     */
+    @Override
+    public Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest){
+        long total = this.workOrderDao.parameterCount(workOrderType, workerTitle, workerNum);
+        return new PageImpl<>(this.workOrderDao.parameterQueryAllByLimit(workOrderType, workerTitle, workerNum, pageRequest), pageRequest, total);
+    }
+//------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 }
