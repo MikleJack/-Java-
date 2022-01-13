@@ -1,22 +1,16 @@
 package com.example.back2.controller.staff;
 
-import com.example.back2.entity.table.WorkOrder;
-import com.example.back2.entity.view.OrderBeginEndTime;
-import com.example.back2.service.table.WorkOrderService;
+import com.example.back2.entity.table.*;
+import com.example.back2.service.table.*;
 import com.example.back2.service.view.OrderBeginEndTimeService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 @RestController
 @RequestMapping("staffAllTickets")
@@ -57,8 +51,8 @@ public class StaffAllTickets {
      * @return 是否发起延期请求成功
      */
     @GetMapping("delay")
-    public ResponseEntity<Boolean> delay(String workOrderNum,
-                                         @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")Date delayTime,
+    public ResponseEntity<String> delay(String workOrderNum,
+                                         Date delayTime,
                                          String delayReason) {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
@@ -89,7 +83,11 @@ public class StaffAllTickets {
             newWorkOrderNum += t2+ "";
         }
 
-        return ResponseEntity.ok(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision));
+        if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
+            return ResponseEntity.ok(newWorkOrderNum);
+        }else{
+            return ResponseEntity.ok("false");
+        }
     }
 
 //----------------------------延期按钮-底部----------------------------
