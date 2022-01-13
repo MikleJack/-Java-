@@ -37,36 +37,42 @@
           </el-descriptions>
           <div class="reason_contect" style="border: rgba(0,0,0,0.25) solid 1px" >{{singleInformForm.reason}}</div>
         </div>
+
+
         <!--      物理机资源信息展示-->
         <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px ">
           <div class="page_title">物理机资源信息</div>
 
           <el-table
-            :data="phyCom"
+            :data="allocatedCom"
             border>
             <!--          :summary-method="getSum"-->
             <!--          show-summary-->
-
             <el-table-column
               type="index"
               label="序号"
-              width="100">
+              width="auto">
             </el-table-column>
             <el-table-column
-              prop="phy_cpuCore"
+              prop="comNum"
+              label="物理机编号"
+              width="auto">
+            </el-table-column>
+            <el-table-column
+              prop="cpuCore"
               label="CPU核数/个"
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="phy_ram"
+              prop="ram"
               label="内存/G">
             </el-table-column>
             <el-table-column
-              prop="phy_mem"
+              prop="storage"
               label="存储大小/G">
             </el-table-column>
             <el-table-column
-              prop="phy_price"
+              prop="price"
               label="单价 元/月">
             </el-table-column>
           </el-table>
@@ -221,27 +227,9 @@ export default {
   data() {
     return {
       singleInformForm: [],
+      allocatedCom: [],
+      allocatedVir: [],
       labelPosition: 'left',
-      virtualCom: [{
-        //虚拟机规格族
-        vir_require:'共享标准型',
-        //虚拟机cpu核数
-        vir_cpuCore: '2',
-        //虚拟机内存
-        vir_ram: '32',
-        //虚拟机处理器主频
-        vir_frequency: '2.5',
-        //虚拟机处理器型号
-        vir_model: '型号',
-        //虚拟机操作系统
-        vir_os: 'windows',
-        //虚拟机单价
-        vir_price:'100',
-        //硬盘
-        hardDisk:'256',
-        //总价
-        vir_totalPrice: '200'
-      }],
       //流传过程数据
       informData: [{
         //处理人工号
@@ -283,6 +271,11 @@ export default {
       this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.singleInformForm = res.data;
       });
+      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=202201081534000048').then((res)=>{
+        this.allocatedCom = res.data;
+      });
+
+
 
       // this.$axios.get('http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum='
       //   +workOrderNum).then((res)=>{

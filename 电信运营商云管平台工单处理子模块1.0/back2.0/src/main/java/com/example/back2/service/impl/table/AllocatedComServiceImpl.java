@@ -76,4 +76,15 @@ public class AllocatedComServiceImpl implements AllocatedComService {
     public boolean deleteById(Integer comNum) {
         return this.allocatedComDao.deleteById(comNum) > 0;
     }
+
+    /**
+     * 通过工单编号查询该工单所有物理机资源
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单所有物理机资源
+     */
+    @Override
+    public List<AllocatedCom> queryByWorkOrderNum(String workOrderNum){
+        return this.allocatedComDao.queryByWorkOrderNum(workOrderNum);
+    }
 }
