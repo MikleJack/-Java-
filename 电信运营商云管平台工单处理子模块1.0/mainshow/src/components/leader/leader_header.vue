@@ -3,7 +3,7 @@
     <!-- 上方导航栏 -->
     <el-header class="header">
       <div style="position:relative;float: left;top: 5px;">
-        <img src="../../assets/logo.png" height="40" width="40"/>
+        <img src="../../assets/white.png" height="40" width="40"/>
       </div>
       <div style="position:relative;float: left;top: 13px; width:400px;font-size:20px;">
         电信运营商云管平台工单处理子模块_领导版
