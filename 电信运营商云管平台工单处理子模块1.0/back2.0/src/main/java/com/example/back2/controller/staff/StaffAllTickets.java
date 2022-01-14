@@ -69,9 +69,9 @@ public class StaffAllTickets {
      * @param delayTime  延期日期
      * @return 是否发起延期请求成功
      */
-    @GetMapping("delay")
+    @PostMapping("delay")
     public ResponseEntity<String> delay(String workOrderNum,
-                                        @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")Date delayTime,
+                                        Date delayTime,
                                          String delayReason) {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
@@ -146,11 +146,11 @@ public class StaffAllTickets {
 
             //批量下线物理机资源
             List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
-            List<Integer> comNum = new ArrayList<Integer>();
+            List<Integer> comNums = new ArrayList<Integer>();
             for(int i = 0; i <allocatedComs.size();i++) {
-                comNum.add(allocatedComs.get(i).getComNum());
+                comNums.add(allocatedComs.get(i).getComNum());
             }
-            this.physicsComResourceService.offlineCom(comNum,true);
+            this.physicsComResourceService.setComAssign(comNums,true);
 
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{

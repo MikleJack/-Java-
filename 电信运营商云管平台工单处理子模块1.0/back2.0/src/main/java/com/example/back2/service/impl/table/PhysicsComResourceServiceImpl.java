@@ -86,13 +86,19 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     /**
      * 改变物理机分配状态
      *
-     * @param comNum  即将下线的物理机编号
+     * @param comNums  即将下线的物理机编号列表
      * @param assign  选择分配状态
      * @return 是否修改成功
      */
     @Override
-    public boolean offlineCom(List<Integer> comNum,boolean assign){
-        return this.physicsComResourceDao.offlineCom(comNum,assign);
+    public boolean setComAssign(List<Integer> comNums,boolean assign){
+        boolean ifAssigned = true;
+        for(int i =0 ;i < comNums.size(); i++){
+            if(!this.physicsComResourceDao.setComAssign(comNums.get(i),assign)){
+                ifAssigned = false;
+            }
+        }
+        return ifAssigned;
     }
 
 

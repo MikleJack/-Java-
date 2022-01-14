@@ -91,7 +91,7 @@ public interface PhysicsComResourceDao {
      * @param assign  选择分配状态
      * @return 是否修改成功
      */
-    boolean offlineCom(List<Integer> comNum,boolean assign);
+    boolean setComAssign(Integer comNum,boolean assign);
 
 }
 
