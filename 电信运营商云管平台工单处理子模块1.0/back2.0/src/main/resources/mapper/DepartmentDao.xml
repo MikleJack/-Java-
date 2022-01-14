@@ -119,7 +119,7 @@
         select
             dep_num, dep_name, dep_level, dep_budget
         from department
-        where dep_budget != 0;
+        where dep_num!=1 and dep_num!=2
     </select>
 </mapper>
 

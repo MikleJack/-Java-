@@ -87,8 +87,18 @@ public class AdminHome {
     @Resource
     private DepartmentService departmentService;
 
+    /**
+     * 得到部门预算
+     * @return
+     */
     @GetMapping("getDepBudget")
     public List<Department> getDepBudget(){
         return this.departmentService.getDepBudget();
+    }
+
+
+    @PutMapping("setDiskPrice")
+    public Boolean setDiskPrice(Double diskPrice){
+        return this.vmSpecificationsService.updateDiskPrice(diskPrice);
     }
 }

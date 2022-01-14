@@ -165,10 +165,10 @@
         :cell-style="{textAlign:'center'}">
           <el-table-column prop="depName" label="部门名称" width="180" align="center">
           </el-table-column>
-          <el-table-column prop="depBudget" label="预算(万元)" width="278.5" align="center">
+          <el-table-column prop="depBudget" label="预算(元)" width="278.5" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.depBudget/10000" controls-position="right" @change="handleChange_bud"
-                               :precision="2" :step="1" :min="0" :max="9999"
+              <el-input-number v-model="scope.row.depBudget" controls-position="right" @change="handleChange_bud"
+                               :precision="2" :step="1" :min="0" :max="999999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
           </el-table-column>
@@ -284,7 +284,7 @@
         <el-collapse-item title="虚拟机总资源配置" name="2">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="虚拟机每G存储价格(元)">
-              <el-input v-model="formInline.storage_price" placeholder="输入每G的虚拟机存储价格"></el-input>
+              <el-input v-model="formInline.diskPrice" placeholder="输入每G的虚拟机存储价格"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit_storagePrice">确定</el-button>
@@ -468,8 +468,7 @@ export default {
         cpuCore: 0,
         ram: 0,
         storage:0,
-        storage_virtual:0,
-        storage_price:0.5
+        diskPrice:0.5
       },
 
       tableData_bud: [],
@@ -603,6 +602,7 @@ export default {
     setVm(){
       this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
         this.tableData_vir = res.data;
+        this.formInline.diskPrice = this.tableData_vir[0].diskPrice;
       });
       this.$axios.get("http://localhost:8084/adminHome/getVm").then((res)=>{
         if(res.data){
@@ -610,7 +610,7 @@ export default {
           this.formInline.storage=res.data.storage;
           this.formInline.ram =res.data.ram;
         }
-      })
+      });
       this.dialogVisible_vir=true;
     },
     //物理机资源配置
@@ -777,7 +777,14 @@ export default {
       }else if(this.which_page_confirm === 3){
 
         if(this.password_confirm === true){
-
+          this.$axios.put("http://localhost:8084/adminHome/setDiskPrice?diskPrice="+this.formInline.diskPrice).then((res)=>{
+            if(res.data===true){
+              this.$message({
+                message: 'success，密码验证成功，成功修改硬盘价格',
+                type: 'success'
+              });
+            }
+          })
         }else{
 
         }

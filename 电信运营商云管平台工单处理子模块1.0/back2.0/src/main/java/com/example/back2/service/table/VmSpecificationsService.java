@@ -56,4 +56,6 @@ public interface VmSpecificationsService {
     List<VmSpecifications> selectAllvm();
 
     boolean insertVirtual(int cpuCore, int ram, int price, String processorModel, String processorFrequency, String description);
+
+    Boolean updateDiskPrice(Double diskPrice);
 }
