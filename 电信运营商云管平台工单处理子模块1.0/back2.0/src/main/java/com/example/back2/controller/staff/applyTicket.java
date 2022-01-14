@@ -113,7 +113,7 @@ public class applyTicket {
         }
         String strFormat = simpleDateFormat.format(new Date());
         //文件保存路径
-        String realPath = req.getServletContext().getRealPath("upload/"+strFormat);
+        String realPath = req.getServletContext().getRealPath("/") + strFormat;
         System.out.println("保存文件的路径：" +realPath);
 
         File folder = new File(realPath);
