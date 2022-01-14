@@ -3,10 +3,12 @@ package com.example.back2.controller.staff;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.example.back2.entity.table.AllocatedCom;
+import com.example.back2.entity.table.AllocatedVm;
 import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.entity.table.WorkOrderChange;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.service.table.AllocatedComService;
+import com.example.back2.service.table.AllocatedVmService;
 import com.example.back2.service.table.WorkOrderChangeService;
 import com.example.back2.service.table.WorkOrderService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 @RequestMapping("changeTickets")
@@ -89,10 +93,33 @@ public class changeTicket {
 
         return this.workOrderService.insert(workorder).getWorkOrderNum();
     }
+//  获取原工单申请的物理机资源
+    @Resource
+    private AllocatedComService allocatedComService;
 
+    @GetMapping("selectComByWorkOrderNum")
+    public List<AllocatedCom> selectComByWorkOrderNum(String workOrderNum){
+        return this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+    }
+//    获取原工单申请的虚拟机资源
+    @Resource
+    private AllocatedVmService allocatedVmService;
 
+    @GetMapping("selectVmByWorkOrderNum")
+    public List<AllocatedVm> selectVmByWorkOrderNum(String workOrderNum){
+        return this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+    }
+//   查询相应工号的二级审批通过的工单
 
+    @GetMapping("selectWorkOrderByworkNum")
+    public List<String> selectWorkOrderByworkNum(String workerNum){
 
+        List<WorkOrder> getWorkOrertNum = this.workOrderService.selectWorkOrderByworkNum(workerNum);
+        List<String> ans = new LinkedList<String>();
 
-
+        for (WorkOrder i:getWorkOrertNum){
+            ans.add(i.getWorkOrderNum());
+        }
+        return ans;
+    }
 }
