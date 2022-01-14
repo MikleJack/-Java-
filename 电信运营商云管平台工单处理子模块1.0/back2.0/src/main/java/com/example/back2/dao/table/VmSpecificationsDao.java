@@ -82,5 +82,9 @@ public interface VmSpecificationsDao {
     int deleteById(Integer comNum);
 
     List<VmSpecifications> selectAllvm();
+
+    boolean insertVirtual(int cpuCore, int ram, int price,String processorModel,String processorFrequency,String description);
+
+    boolean updateDiskPrice(Double diskPrice);
 }
 

@@ -60,4 +60,9 @@ public class VirtualComResourceServiceImpl implements VirtualComResourceService 
         return this.virtualComResourceDao.updateVmResource(cpuCore, ram, storage, upOrDown);
     }
 
+
+    @Override
+    public VirtualComResource selectOne(){
+        return this.virtualComResourceDao.selectOne();
+    }
 }

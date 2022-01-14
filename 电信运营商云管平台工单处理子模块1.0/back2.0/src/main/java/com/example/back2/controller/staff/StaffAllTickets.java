@@ -40,6 +40,8 @@ public class StaffAllTickets {
     private PhysicsComResourceService physicsComResourceService;
     @Resource
     private VirtualComResourceService virtualComResourceService;
+    @Resource
+    private HisResourceUsageService hisResourceUsageService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -86,7 +88,7 @@ public class StaffAllTickets {
         //通过 原工单总价/持续时间 * 当前工单持续时间 得到当前工单的总价
         Double prePrice = this.workOrderService.queryPriceById(workOrderNum);
         Double nowPrice = (prePrice / preDurationTime) * nowDurationTime;
-        Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice ));
+        Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice));
 
         //        通过时间和随机数生成工单号，并传入
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -169,19 +171,24 @@ public class StaffAllTickets {
             }
             this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
 
+            HisResourceUsage hisResourceUsage = new HisResourceUsage();
+            hisResourceUsage.setResUtilization(Double.valueOf(String.format("%.2f", Math.random() * 100)));
+            hisResourceUsage.setWorkOrderNum(workOrderNum);
+            hisResourceUsageService.insert(hisResourceUsage);
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);
         }
     }
 
-    /**
-     * 测试
-     */
-    @GetMapping("test")
-    public long parameterQueryByPage(String workOrderNum) {
-        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
-    }
+//    /**
+//     * 测试
+//     */
+//    @GetMapping("test")
+//    public long parameterQueryByPage(String workOrderNum) {
+//        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
+//    }
 
 //----------------------------下线按钮-底部----------------------------
 
@@ -218,6 +225,17 @@ public class StaffAllTickets {
     @GetMapping("queryBeginAndEndTime")
     public ResponseEntity<OrderBeginEndTime> queryBeginTime(String workOrderNum){
         return ResponseEntity.ok(this.orderBeginEndTimeService.queryById(workOrderNum));
+    }
+
+    /**
+     * 通过工单编号查询该工单的资源利用率
+     *
+     * @param workOrderNum 工单编号
+     * @return 该工单的资源利用率
+     */
+    @GetMapping("queryResourceUsage")
+    public ResponseEntity<HisResourceUsage> queryResourceUsage(String workOrderNum){
+        return ResponseEntity.ok(this.hisResourceUsageService.queryById(workOrderNum));
     }
 
 //----------------详情按钮-底部-------------------------------------------------------

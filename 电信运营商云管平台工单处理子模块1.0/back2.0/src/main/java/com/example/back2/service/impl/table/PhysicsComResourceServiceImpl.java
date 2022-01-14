@@ -3,7 +3,6 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.PhysicsComResource;
 import com.example.back2.dao.table.PhysicsComResourceDao;
 import com.example.back2.service.table.PhysicsComResourceService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -82,6 +81,12 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     public List<PhysicsComResource> selectAllpc(){
         return this.physicsComResourceDao.selectAllpc();
     }
+
+    public boolean insertPhysics(int cpuCore, int ram, int storage, int price){
+        this.physicsComResourceDao.insertPhysics(cpuCore,ram,storage,price);
+        return true;
+    }
+
 
     /**
      * 改变物理机分配状态

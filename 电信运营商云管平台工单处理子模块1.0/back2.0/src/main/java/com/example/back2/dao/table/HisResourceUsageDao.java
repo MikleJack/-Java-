@@ -1,88 +1,85 @@
 package com.example.back2.dao.table;
 
-import com.example.back2.entity.table.Department;
+import com.example.back2.entity.table.HisResourceUsage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * (Department)表数据库访问层
+ * (HisResourceUsage)表数据库访问层
  *
  * @author makejava
- * @since 2022-01-11 15:19:28
+ * @since 2022-01-14 15:35:14
  */
 @Mapper
-public interface DepartmentDao {
+public interface HisResourceUsageDao {
 
     /**
      * 通过ID查询单条数据
      *
-     * @param depNum 主键
+     * @param workOrderNum 主键
      * @return 实例对象
      */
-    Department queryById(Integer depNum);
+    HisResourceUsage queryById(String workOrderNum);
 
     /**
      * 查询指定行数据
      *
-     * @param department 查询条件
+     * @param hisResourceUsage 查询条件
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Department> queryAllByLimit(Department department, @Param("pageable") Pageable pageable);
+    List<HisResourceUsage> queryAllByLimit(HisResourceUsage hisResourceUsage, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
-     * @param department 查询条件
+     * @param hisResourceUsage 查询条件
      * @return 总行数
      */
-    long count(Department department);
+    long count(HisResourceUsage hisResourceUsage);
 
     /**
      * 新增数据
      *
-     * @param department 实例对象
+     * @param hisResourceUsage 实例对象
      * @return 影响行数
      */
-    int insert(Department department);
+    int insert(HisResourceUsage hisResourceUsage);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<Department> 实例对象列表
+     * @param entities List<HisResourceUsage> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<Department> entities);
+    int insertBatch(@Param("entities") List<HisResourceUsage> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<Department> 实例对象列表
+     * @param entities List<HisResourceUsage> 实例对象列表
      * @return 影响行数
      * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
      */
-    int insertOrUpdateBatch(@Param("entities") List<Department> entities);
+    int insertOrUpdateBatch(@Param("entities") List<HisResourceUsage> entities);
 
     /**
      * 修改数据
      *
-     * @param department 实例对象
+     * @param hisResourceUsage 实例对象
      * @return 影响行数
      */
-    int update(Department department);
+    int update(HisResourceUsage hisResourceUsage);
 
     /**
      * 通过主键删除数据
      *
-     * @param depNum 主键
+     * @param workOrderNum 主键
      * @return 影响行数
      */
-    int deleteById(Integer depNum);
+    int deleteById(String workOrderNum);
 
-    List<Department> AllDep();
-
-    List<Department> getDepBudget();
 }
 

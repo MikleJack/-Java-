@@ -323,6 +323,7 @@ export default {
     unlock(row){
       this.dialogVisible_unlock = true;
       this.row=row;
+      this.init();
     },
     handleClick_unlock() {
       this.$axios.get("http://localhost:8084/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -344,11 +345,13 @@ export default {
       })
       this.password_confirm='';
       this.dialogVisible_unlock = false;
+      this.init();
     },
     //删除用户函数
     delect(row){
       this.dialogVisible_delete=true;
       this.row=row;
+      this.init();
     },
     handleClick_delect() {
       this.$axios.get("http://localhost:8084/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -370,9 +373,9 @@ export default {
       })
       this.password_confirm='';
       this.dialogVisible_delete = false;
+      this.init();
     },
     //dialog弹窗关闭提示函数
-
     handleClose(done) {
           done();
     },

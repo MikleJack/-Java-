@@ -1,6 +1,7 @@
 package com.example.back2.controller.leader;
 
 import com.example.back2.controller.admin.searchOrder;
+import com.example.back2.entity.VirtualComResource;
 import com.example.back2.entity.table.*;
 import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
@@ -129,6 +130,10 @@ public class pendTickets {
     private UsedBudgetService usedBudgetService;
     @Resource
     private StaffService staffService;
+    @Resource
+    private AllocatedVmService allocatedVmService;
+    @Resource
+    private VirtualComResourceService virtualComResourceService;
 
     @PostMapping("towExamine")
     public Boolean towExamine(String workOrderNum, String workNum, String state){
@@ -144,6 +149,16 @@ public class pendTickets {
             }
             this.physicsComResourceService.setComAssign(comNums,false);
             //分配虚拟机资源
+
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            Integer ram = 0,storage = 0 ,cpuCore = 0;
+            for (int i = 0; i < allocatedVms.size(); i++){
+                AllocatedVm tempVm = allocatedVms.get(i);
+                ram += tempVm.getRam();
+                storage += tempVm.getStorage();
+                cpuCore += tempVm.getCpuCore();
+            }
+            this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"down");
 
             //更新部门使用预算
             Staff staff=staffService.queryById(workOrder.getWorkerNum());

@@ -93,5 +93,8 @@ public interface PhysicsComResourceDao {
      */
     boolean setComAssign(Integer comNum,boolean assign);
 
+
+    boolean insertPhysics(int cpuCore, int ram, int storage, int price);
+
 }
 
