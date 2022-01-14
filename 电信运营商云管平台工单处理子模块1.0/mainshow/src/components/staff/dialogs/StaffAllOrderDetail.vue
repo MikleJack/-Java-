@@ -110,6 +110,10 @@
               label="内存/G">
             </el-table-column>
             <el-table-column
+              prop="storage"
+              label="硬盘大小/G">
+            </el-table-column>
+            <el-table-column
               prop="processorFrequency"
               label="处理机主频/GHz"
               width="auto">
@@ -126,48 +130,65 @@
               prop="price"
               label="单价 元/月">
             </el-table-column>
-            <el-table-column
-              prop="storage"
-              label="硬盘大小/G">
-            </el-table-column>
-<!--            <el-table-column-->
-<!--              prop="vir_totalPrice"-->
-<!--              label="总价/元">-->
-<!--            </el-table-column>-->
           </el-table>
         </div>
-        <!--      部门预算利用情况展示-->
-        <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">
-          <div class="page_title" >部门预算利用情况</div>
-          <!--        部门已用预算/部门总预算进度条-->
-          <div class="total_progress">
-            <br>
-            <el-progress type="circle" class="left_progress"
-                         :stroke-width="15"
-                         :percentage="total_percentage()"
-                         :color="customColorMethod"></el-progress>
-          </div>
-          <!--        文字描述-->
-          <div class="total_description">
-            <br><br>部门总预算：&nbsp;{{depTotalBudget}}元<br><br>
-            已使用预算：{{depUsedBudget}}元
-          </div>
-          <!--        工单预算/部门剩余预算进度条-->
-          <div class="progress">
-            <br>
-            <el-progress type="circle"
-                         class="right_progress"
-                         :stroke-width="15"
-                         :percentage="percentage()"
-                         :color="customColorMethod">
 
-            </el-progress>
-          </div>
-          <!--        文字描述-->
-          <div class="description">
-            <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
-            工单使用预算：&nbsp;{{order_budget}}元
-          </div>
+        <!--      部门预算利用情况展示-->
+        <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px;text-align: center">
+          <div class="page_title">预算使用情况</div>
+          <el-row :gutter="50">
+
+<!--              部门已使用预算/部门总预算情况展示-->
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                <div class="processColumn">
+                  <el-progress type="circle" class="left_progress"
+                               :stroke-width="15"
+                               :percentage="depUsedDivisionDepTotal()"
+                               :color="customColorMethod">
+                  </el-progress>
+                  <el-descriptions :column="1">
+                    <el-descriptions-item label="部门总预算">{{ depTotalBudget }}</el-descriptions-item>
+                    <el-descriptions-item label="部门已用预算">{{ depUsedBudget }}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </div>
+            </el-col>
+
+<!--        工单使用预算/部门剩余预算-->
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                <div class="processColumn">
+                  <el-progress type="circle" class="left_progress"
+                               :stroke-width="15"
+                               :percentage="OrderBudgetDivisionDepSurplus()"
+                               :color="customColorMethod">
+                  </el-progress>
+                  <el-descriptions :column="1">
+                    <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
+                    <el-descriptions-item label="部门剩余预算">{{ surplus_budget }}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </div>
+            </el-col>
+
+<!--        工单使用预算 和 工单资源利用率-->
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                <div class="processColumn">
+                  <el-progress type="circle" class="left_progress"
+                               :stroke-width="15"
+                               :percentage="resourceUsage"
+                               :color="customColorMethod">
+                  </el-progress>
+                  <el-descriptions :column="1">
+                    <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
+                    <el-descriptions-item label="工单资源利用率">{{ resourceUsage }}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
 
         <!--显示流转过程-->
@@ -236,6 +257,9 @@ export default {
       depUsedBudget: '',
       order_budget: '',
 
+      //工单资源利用率
+      resourceUsage: '',
+
       //工单开始时间
       beginTime: '',
 
@@ -245,13 +269,13 @@ export default {
   props:["show"],
   methods: {
     //部门已用预算/部门总预算进度条
-    total_percentage(){
-      return 100*this.depUsedBudget/this.depTotalBudget;
+    depUsedDivisionDepTotal(){
+      return parseFloat(100*this.depUsedBudget/this.depTotalBudget).toFixed(2);
     },
     //工单预算/部门剩余预算进度条
-    percentage(){
+    OrderBudgetDivisionDepSurplus(){
       this.surplus_budget = this.depTotalBudget-this.depUsedBudget;
-      let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
+      let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2);
       return 100*temp_per;
     },
     customColorMethod(percentage) {
@@ -295,9 +319,28 @@ export default {
       this.$axios.get('http://localhost:8084/staffAllTickets/queryBeginAndEndTime?workOrderNum=' + workOrderNum).then((res)=>{
         this.beginTime = res.data.dealDate;
       });
+
+      //通过工单编号得到资源利用情况
+      this.$axios.get('http://localhost:8084/staffAllTickets/queryResourceUsage?workOrderNum=' + workOrderNum).then((res)=>{
+        this.resourceUsage = res.data.resUtilization;
+      });
     },
+
     handleClose(){
       this.$store.state.staffAllOrder_DetailDialogVisible = false;
+      this.refresh();
+    },
+    //刷新页面数据
+    refresh(){
+      this.singleInformForm = [];
+      this.allocatedCom = [];
+      this.allocatedVm = [];
+      this.flowProcess = [];
+      this.depUsedBudget = '';
+      this.order_budget = '';
+      this.depTotalBudget = '';
+      this.resourceUsage = '';
+      this.beginTime = '';
     }
 
   },
@@ -322,38 +365,16 @@ export default {
 .reason_contect{
   width: 80%;
   height: 80px;
-  /*background: #409EFF;*/
   margin-left: 10%;
   margin-bottom: 1%;
 
 }
-.note{
-  width: 100%;
-  height: auto;
-  margin-left: -10%;
-  margin-right: -20%;
-}
-.page_bottom{
-  width: 100%;
-  height: 100px;
-  bottom: 0;
-  /*background: #888888;*/
-  text-align: center;
-  line-height: 100px;
-  margin-left: -10%;
-}
+
 .margin-top{
   margin-left: 10%;
 }
 .page_title{
   font-size: large;
-  text-align: center;
-  margin-bottom:20px;
-  font-weight:bolder;
-  color: #0c805f;
-}
-.note_title{
-  margin-left: -20%;
   text-align: center;
   margin-bottom:20px;
   font-weight:bolder;
@@ -367,29 +388,11 @@ export default {
   align:center,
 }
 
-.total_progress{
-  width:25%;
+/*资源使用情况，圆形进度条*/
+.processColumn{
+  position: relative;
+  margin-left: 20%;
   float: left;
-  height: 200px;
-  text-align: center;
 }
-.total_description{
-  width: 25%;
-  float: left;
-  height: 200px;
-  font-size: larger;
-  font-weight: bolder;
-}
-.progress{
-  width: 25%;
-  float: left;
-  height: 200px;
-}
-.description{
-  width: 25%;
-  float: left;
-  height: 200px;
-  font-size: larger;
-  font-weight: bolder;
-}
+
 </style>
