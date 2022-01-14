@@ -110,16 +110,19 @@
           highlight-current-row
           :row-class-name="tableRowClassName_virtual"
           @row-click = "onRowClick_virtual"
+          @selection-change="handleSelectionChange_virtual"
+          @select = "onRowClick_virtual">
           >
-<!--          <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>-->
-          <el-table-column label="选择" width="100">
-            <template slot-scope="scope">
-              <el-radio v-model="radio" :label="scope.$index"
-                        @change.native="radioChange(scope.row, scope.$index)"
-                        >
-              </el-radio>
-            </template>
-          </el-table-column>
+          <!--          <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>-->
+          <!--          <el-table-column label="选择" width="100">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              <el-radio v-model="radio" :label="scope.$index"-->
+          <!--                        @change.native="radioChange(scope.row, scope.$index)"-->
+          <!--                        >-->
+          <!--              </el-radio>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
+          <el-table-column  class="el-tableColumn" type="selection" width="55" :reserve-selection="true"></el-table-column>
           <el-table-column property="description" label="规格族" width="150"></el-table-column>
           <el-table-column property="cpuCore" label="VCPu" width="150"></el-table-column>
           <el-table-column property="ram" label="内存(G)" width="150"></el-table-column>
@@ -182,12 +185,7 @@
             <el-option label="linux" value="linux"></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" @click="calculate_price()">主要按钮</el-button>
-        <el-input
-          placeholder="总价"
-          v-model="total_price"
-          :disabled="true">
-        </el-input>
+
       </el-form>
 
 
@@ -195,6 +193,45 @@
     </div>
 
     <p></p>
+    <!--    //部门预算使用情况 进度条-->
+    <div style="border: rgba(82,182,154,0.25) solid 3px;height: 250px;margin-bottom: 1%">
+      <div class="budget_title" >部门预算利用情况</div>
+      <!--        部门已用预算/部门总预算进度条-->
+      <div class="total_progress">
+        <br>
+        <el-progress type="circle" class="left_progress"
+                     :stroke-width="15"
+                     :percentage="total_percentage()"
+                     :color="customColorMethod"></el-progress>
+      </div>
+      <!--        文字描述-->
+      <div class="total_description">
+        <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
+        已使用预算：&nbsp;{{used_budget}}元
+      </div>
+      <!--        工单预算/部门剩余预算进度条-->
+      <div class="progress">
+        <br>
+        <el-progress type="circle"
+                     class="right_progress"
+                     :stroke-width="15"
+                     :percentage="percentage()"
+                     :color="customColorMethod">
+
+        </el-progress>
+      </div>
+      <!--        文字描述-->
+      <div class="description">
+        <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
+        工单使用预算：&nbsp;{{order_budget}}元
+      </div>
+    </div>
+
+
+
+
+
+  <p></p>
     <div style="border: rgba(82,182,154,0.25) solid 3px">
       <div class="page_title">附件</div>
       <div class="page_line"></div>
@@ -244,7 +281,9 @@ export default {
       currentRowIndex_virtual: '',//存储选中虚拟机的行号
 
       list: [],
-      length: '',//选中物理机的个数
+      length_physics: '',//选中物理机的个数
+      length_virtual:'',//选中虚拟机的个数
+
       // selectRow: [],
       // 多选选择数量循环计数器
       multipleChoice_count: '0',
@@ -253,6 +292,14 @@ export default {
       //物理机虚拟机弹窗
       dialogTableVisible_physics: false,
       dialogTableVisible_virtual: false,
+      //部门总预算利用情况
+      used_budget:'5000',
+      //部门总预算
+      total_budget:'20000',
+      //部门剩余预算
+      surplus_budget:'',
+      //工单预算
+      order_budget:0,
       // 个人信息以及工单信息表单数据
       workorder: {
         workOrderNum:'',
@@ -300,18 +347,6 @@ export default {
     this.scope.row.quantity = 50;
   },
   methods: {
-    //计算资源总价格
-    // calculate_price(){
-    //   let virtual_price_temp = 0
-    //   for(let i = 0; i < this.tabledata_virtual.length; ++i){
-    //     // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-    //     virtual_price_temp += this.tabledata_virtual[i].unit_price*3
-    //   }
-    //   virtual_price_temp = this.diff_time*virtual_price_temp + this.tabledata_virtual.storage*0.5*this.diff_time
-    //   this.total_price = virtual_price_temp + this.physics_price
-    //
-    // },
-
     //物理机价钱求和
     getSum(param) {
 //此处打印param可以看到有两项，一项是columns，一项是data，最后一列可以通过columns.length获取到。
@@ -346,13 +381,7 @@ export default {
       return sums
 
     },
-
-    //获取单选行的数据
-    radioChange(row, index) {
-      this.radioSelect = row;
-    },
-
-    //获取选中数据的行号
+  //物理机获取选中数据的行号
     tableRowClassName_physics({row, rowIndex}) {
       row.row_index = rowIndex;
     },
@@ -361,27 +390,63 @@ export default {
         this.currentRowIndex_physics.push(row[k].row_index)
       }
     },
-
+    //虚拟机获取选中数据的行号
     tableRowClassName_virtual({row, rowIndex}) {
       row.row_index = rowIndex
     },
     onRowClick_virtual(row, event, column) {
-      this.currentRowIndex_virtual = row.row_index;
+      for (let k = 0; k < row.length; k++) {
+        this.currentRowIndex_virtual.push(row[k].row_index)
+      }
     },
-
-
     // 点击selection多选框
     handleSelectionChange_physics(data) {
       this.multipleSelection_physics = data;
-      this.length = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
+      console.log(data)
+      this.length_physics = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
+    },
+    handleSelectionChange_virtual(data) {
+      this.multipleSelection_virtual = data;
+      this.length_virtual = this.$refs.multipleTable_virtual.selection;//获取当前选中数据的行数
+    },
+    //获取单选行的数据
+    // radioChange(row, index) {
+    //   this.radioSelect = row;
+    // },
+    // 删除选中的物理机资源
+    deleteRow_physics(index, rows) {
+      const data = this.tabledata_physics.slice(index, index + 1)
+
+      this.tabledata_physics.splice(index, 1);
+      this.gridData_physics.splice(-1, 0, data[0])
+    },
+    //删除选中的虚拟机资源
+    deleteRow_virtual(index, rows) {
+      const data = this.tabledata_virtual.slice(index, index + 1)
+
+      this.tabledata_virtual.splice(index, 1);
+      this.gridData_virtual.splice(-1, 0, data[0])
+
+      this.virtual_price_temp = 0
+      for (let i = 0; i < this.tabledata_virtual.length; ++i) {
+        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
+        this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
+      }
     },
 
-    // 获取点击行的数据
+
+
+
+
+
+
+
+    // 虚拟机获取点击行的数据
 
     getSelected(type) {
       if (type === 1) {
         this.dialogTableVisible_physics = false//关闭弹窗
-        while (this.multipleChoice_count < this.length.length) {
+        while (this.multipleChoice_count < this.length_physics.length) {
           this.tabledata_physics.push(this.multipleSelection_physics[this.multipleChoice_count]);
           this.gridData_physics.splice(this.currentRowIndex_physics[this.lineNumber_count], 1)
           this.multipleChoice_count++;
@@ -394,16 +459,27 @@ export default {
         this.currentRowIndex_physics.splice(0, this.currentRowIndex_physics.length)
       } else {
         this.dialogTableVisible_virtual = false//关闭弹窗
+        while (this.multipleChoice_count < this.length_virtual.length) {
+          this.tabledata_virtual.push(this.multipleSelection_virtual[this.multipleChoice_count]);
+          this.gridData_virtual.splice(this.currentRowIndex_virtual[this.lineNumber_count], 1)
+          this.multipleChoice_count++;
+          this.lineNumber_count++;
 
-        this.tabledata_virtual.push(this.radioSelect);
-        this.gridData_virtual.splice(this.currentRowIndex_virtual, 1)
+        }
         this.$refs.multipleTable_virtual.clearSelection()
-        this.radioSelect.splice(0, this.radioSelect.length)
+        this.multipleChoice_count = 0;
+        this.lineNumber_count = 0;
         this.currentRowIndex_virtual.splice(0, this.currentRowIndex_virtual.length)
+        // this.dialogTableVisible_virtual = false//关闭弹窗
+        //
+        // this.tabledata_virtual.push(this.radioSelect);
+        // this.gridData_virtual.splice(this.currentRowIndex_virtual, 1)
+        // this.$refs.multipleTable_virtual.clearSelection()
+        // this.radioSelect.splice(0, this.radioSelect.length)
+        // this.currentRowIndex_virtual.splice(0, this.currentRowIndex_virtual.length)
 
       }
     },
-
     getDateFunc() {
       let year = new Date().getFullYear();//年
       let month = new Date().getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
@@ -440,26 +516,7 @@ export default {
     },
 
 
-    // 删除选中的物理机资源
-    deleteRow_physics(index, rows) {
-      const data = this.tabledata_physics.slice(index, index + 1)
 
-      this.tabledata_physics.splice(index, 1);
-      this.gridData_physics.splice(-1, 0, data[0])
-    },
-    //删除选中的虚拟机资源
-    deleteRow_virtual(index, rows) {
-      const data = this.tabledata_virtual.slice(index, index + 1)
-
-      this.tabledata_virtual.splice(index, 1);
-      this.gridData_virtual.splice(-1, 0, data[0])
-
-      this.virtual_price_temp = 0
-      for (let i = 0; i < this.tabledata_virtual.length; ++i) {
-        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
-        this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
-      }
-    },
 //设置表头行的样式
     tableHeaderColor({row, column, rowIndex, columnIndex}) {
       return 'background-color:rgba(82, 182, 154, 0.76);color:#fff;font-wight:500'
@@ -557,7 +614,26 @@ export default {
         }
       });
 
-    }
+    },
+    //部门已用预算/部门总预算进度条
+    total_percentage(){
+      return (100*this.used_budget/this.total_budget).toFixed(2);
+    },
+    //工单预算/部门剩余预算进度条
+    percentage(){
+      this.surplus_budget=this.total_budget-this.used_budget;
+      this.order_budget=this.total_price;
+      let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(4)
+      return (100*temp_per).toFixed(2);
+    },
+    customColorMethod(percentage) {
+      if (percentage < 90) {
+        return '#52b69a';
+
+      } else {
+        return 'rgba(239,125,10,0.7)';
+      }
+    },
   }
 }
 </script>
@@ -619,4 +695,43 @@ export default {
   background-color: #52b69a;
   border-color: #52b69a;
 }
+.total_progress{
+  width:25%;
+  /*background-color: #0c805f;*/
+  float: left;
+  height: 200px;
+  text-align: center;
+}
+.total_description{
+  width: 25%;
+  /*background-color: #409EFF;*/
+  float: left;
+  height: 200px;
+  font-size: larger;
+  font-weight: bolder;
+}
+.progress{
+  width: 25%;
+  /*background-color: rgba(255, 165, 0, 0.7);*/
+  float: left;
+  height: 200px;
+}
+.description{
+  width: 25%;
+  /*background-color: rgba(12, 12, 12, 0.63);*/
+  float: left;
+  height: 200px;
+  font-size: larger;
+  font-weight: bolder;
+}
+.budget_title{
+  font-size: large;
+  /*text-align: center;*/
+  margin-left: 47%;
+  margin-bottom:20px;
+  font-weight:bolder;
+  color: #0c805f;
+  /*background-color: aqua;*/
+}
+
 </style>
