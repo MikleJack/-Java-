@@ -1,6 +1,7 @@
 package com.example.back2.service.table;
 
 import com.example.back2.entity.table.PhysicsComResource;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -55,5 +56,14 @@ public interface PhysicsComResourceService {
 
 
     List<PhysicsComResource> selectAllpc();
+
+    /**
+     * 改变物理机分配状态
+     *
+     * @param comNum  即将下线的物理机编号
+     * @param assign  选择分配状态
+     * @return 是否修改成功
+     */
+    boolean offlineCom(List<Integer> comNum,boolean assign);
 
 }

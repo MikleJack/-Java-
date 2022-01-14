@@ -10,6 +10,7 @@ import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.data.annotation.Reference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,6 +38,9 @@ public class StaffAllTickets {
     private AllocatedComService allocatedComService;
     @Resource
     private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
+
+    @Resource
+    private PhysicsComResourceService physicsComResourceService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -121,9 +125,6 @@ public class StaffAllTickets {
      */
     @GetMapping("parameterQueryByPage")
     public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) {
-        System.out.println(workOrderType);
-        System.out.println(workOrderTile);
-        System.out.println(workerNum);
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest));
     }
@@ -132,7 +133,7 @@ public class StaffAllTickets {
 
 //----------------------------下线按钮-顶部----------------------------
     /**
-     * 通过员工编号分页查询
+     * 通过工单编号分页查询
      *
      * @param workOrderNum 工单编号
      * @param offlineReason  下线原因
@@ -142,6 +143,15 @@ public class StaffAllTickets {
     @GetMapping("offline")
     public ResponseEntity<Boolean> offline(String workOrderNum,String workOrderState, String offlineReason) {
         if(workOrderState.equals("二级审批通过")) {
+
+            //批量下线物理机资源
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<Integer> comNum = new ArrayList<Integer>();
+            for(int i = 0; i <allocatedComs.size();i++) {
+                comNum.add(allocatedComs.get(i).getComNum());
+            }
+            this.physicsComResourceService.offlineCom(comNum,true);
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);

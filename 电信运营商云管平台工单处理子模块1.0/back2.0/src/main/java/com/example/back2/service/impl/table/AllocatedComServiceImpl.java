@@ -87,4 +87,5 @@ public class AllocatedComServiceImpl implements AllocatedComService {
     public List<AllocatedCom> queryByWorkOrderNum(String workOrderNum){
         return this.allocatedComDao.queryByWorkOrderNum(workOrderNum);
     }
+
 }

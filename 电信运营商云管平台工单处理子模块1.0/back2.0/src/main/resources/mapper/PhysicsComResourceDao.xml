@@ -128,5 +128,16 @@
         where com_num = #{comNum}
     </delete>
 
+    <!--批量下线物理机资源，将状态改为未分配-->
+    <update id="offlineCom" >
+        update brccq2.physics_com_resource
+        <set>
+            <if test="assign != null">
+                assign = true,
+            </if>
+        </set>
+        where com_num = #{comNum}
+    </update>
+
 </mapper>
 

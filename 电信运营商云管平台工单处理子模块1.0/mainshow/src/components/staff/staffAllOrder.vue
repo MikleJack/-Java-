@@ -181,7 +181,7 @@ export default {
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
         this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
-          + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+          + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ page +'&size=' + this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })

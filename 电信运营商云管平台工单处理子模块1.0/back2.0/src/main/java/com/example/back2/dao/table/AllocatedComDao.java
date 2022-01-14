@@ -88,5 +88,6 @@ public interface AllocatedComDao {
      * @return 该工单所有物理机资源
      */
     List<AllocatedCom> queryByWorkOrderNum(String workOrderNum);
+
 }
 
