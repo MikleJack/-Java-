@@ -123,5 +123,6 @@
         from brccq2.allocated_com
         where work_order_num = #{workOrderNum}
     </select>
+
 </mapper>
 

@@ -3,6 +3,7 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.PhysicsComResource;
 import com.example.back2.dao.table.PhysicsComResourceDao;
 import com.example.back2.service.table.PhysicsComResourceService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -81,4 +82,24 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     public List<PhysicsComResource> selectAllpc(){
         return this.physicsComResourceDao.selectAllpc();
     }
+
+    /**
+     * 改变物理机分配状态
+     *
+     * @param comNums  即将下线的物理机编号列表
+     * @param assign  选择分配状态
+     * @return 是否修改成功
+     */
+    @Override
+    public boolean setComAssign(List<Integer> comNums,boolean assign){
+        boolean ifAssigned = true;
+        for(int i =0 ;i < comNums.size(); i++){
+            if(!this.physicsComResourceDao.setComAssign(comNums.get(i),assign)){
+                ifAssigned = false;
+            }
+        }
+        return ifAssigned;
+    }
+
+
 }
