@@ -1,19 +1,14 @@
 package com.example.back2.controller.staff;
 
-import com.example.back2.controller.FlowProcessController;
+import com.example.back2.entity.table.WorkOrderDelay;
 import com.example.back2.entity.table.*;
-import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.entity.view.AllocatedVmSpecifications;
-import com.example.back2.entity.view.FlowStaff;
 import com.example.back2.entity.view.OrderBeginEndTime;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.data.annotation.Reference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +33,13 @@ public class StaffAllTickets {
     private AllocatedComService allocatedComService;
     @Resource
     private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
+    @Resource
+    private AllocatedVmService allocatedVmService;
 
     @Resource
     private PhysicsComResourceService physicsComResourceService;
+    @Resource
+    private VirtualComResourceService virtualComResourceService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -104,8 +103,15 @@ public class StaffAllTickets {
         }
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
+            //插入流转过程
             Integer workerNum = this.workOrderService.queryById(workOrderNum).getWorkerNum();
             this.flowProcessService.DelayInsert(newWorkOrderNum, workerNum, nowDate);
+
+            //记录延期工单和原工单的关系
+            WorkOrderDelay workOrderDelay = new WorkOrderDelay();
+            workOrderDelay.setOldOrder(workOrderNum);
+            workOrderDelay.setWorkOrderNum(newWorkOrderNum);
+
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
             return ResponseEntity.ok("false");
@@ -152,10 +158,29 @@ public class StaffAllTickets {
             }
             this.physicsComResourceService.setComAssign(comNums,true);
 
+            //批量下线虚拟机资源
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            Integer ram = 0,storage = 0 ,cpuCore = 0;
+            for (int i = 0; i < allocatedVms.size(); i++){
+                AllocatedVm tempVm = allocatedVms.get(i);
+                ram += tempVm.getRam();
+                storage += tempVm.getStorage();
+                cpuCore += tempVm.getCpuCore();
+            }
+            this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);
         }
+    }
+
+    /**
+     * 测试
+     */
+    @GetMapping("test")
+    public long parameterQueryByPage(String workOrderNum) {
+        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
     }
 
 //----------------------------下线按钮-底部----------------------------
