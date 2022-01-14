@@ -1,15 +1,12 @@
 package com.example.back2.controller.leader;
 
 import com.example.back2.controller.admin.searchOrder;
-import com.example.back2.entity.table.Leadership;
-import com.example.back2.entity.table.WorkOrder;
+import com.example.back2.entity.table.*;
 import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.Leaderworkorderall;
-import com.example.back2.service.table.FlowProcessService;
-import com.example.back2.service.table.LeadershipService;
-import com.example.back2.service.table.WorkOrderService;
+import com.example.back2.service.table.*;
 import com.example.back2.service.view.AdminsearceorderVmService;
 import com.example.back2.service.view.AdminsearchorderComService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -123,12 +121,36 @@ public class pendTickets {
         return true;
     }
 
+    @Resource
+    private AllocatedComService allocatedComService;
+    @Resource
+    private PhysicsComResourceService physicsComResourceService;
+    @Resource
+    private UsedBudgetService usedBudgetService;
+    @Resource
+    private StaffService staffService;
+
     @PostMapping("towExamine")
     public Boolean towExamine(String workOrderNum, String workNum, String state){
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
             workOrder.setWorkOrderState("二级审批通过");
             workOrderService.update(workOrder);
+            //分配物理机资源
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<Integer> comNums = new ArrayList<Integer>();
+            for(int i = 0; i <allocatedComs.size();i++) {
+                comNums.add(allocatedComs.get(i).getComNum());
+            }
+            this.physicsComResourceService.setComAssign(comNums,false);
+            //分配虚拟机资源
+
+            //更新部门使用预算
+            Staff staff=staffService.queryById(workOrder.getWorkerNum());
+            UsedBudget usedBudget = usedBudgetService.queryById(staff.getDepNum());
+            usedBudget.setDepUsedBudget(usedBudget.getDepUsedBudget()+workOrder.getPrice());
+            usedBudgetService.update(usedBudget);
+
         }
         else if(state.equals("挂起")||state.equals("审批不通过")){
             workOrder.setWorkOrderState(state);
