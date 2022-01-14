@@ -11,7 +11,7 @@
       <div class="worker_information">
         <!--权限-->
         <div class="powerInf">
-          <el-tag class="power" type="success">{{worker_power}}</el-tag>
+          <el-tag class="power" type="success">普通员工</el-tag>
         </div>
         <!--姓名及所属部门-->
         <div class="nameInf">

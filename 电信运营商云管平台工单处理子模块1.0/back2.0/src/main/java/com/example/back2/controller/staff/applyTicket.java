@@ -99,7 +99,7 @@ public class applyTicket {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("/yyyy/MM/dd/");
 
     @PostMapping("/upload")
-    public Map<String, Object> fileUpload(MultipartFile file, HttpServletRequest req) {
+    public Map<String, Object> fileUpload(MultipartFile file, HttpServletRequest req) throws IOException{
         Map<String, Object> resultMap = new HashMap<>();
 
         // 得到上传时的文件名
@@ -111,11 +111,11 @@ public class applyTicket {
 
             return resultMap;
         }
-
         String strFormat = simpleDateFormat.format(new Date());
         //文件保存路径
-        String realPath = "" + strFormat;
-        System.out.println(realPath);
+        String realPath = req.getServletContext().getRealPath("upload/"+strFormat);
+        System.out.println("保存文件的路径：" +realPath);
+
         File folder = new File(realPath);
         if (!folder.exists()) {
             folder.mkdirs();
