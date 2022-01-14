@@ -38,9 +38,13 @@ public class StaffAllTickets {
     private AllocatedComService allocatedComService;
     @Resource
     private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
+    @Resource
+    private AllocatedVmService allocatedVmService;
 
     @Resource
     private PhysicsComResourceService physicsComResourceService;
+    @Resource
+    private VirtualComResourceService virtualComResourceService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -152,11 +156,30 @@ public class StaffAllTickets {
             }
             this.physicsComResourceService.setComAssign(comNums,true);
 
+            //批量下线虚拟机资源
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            Integer ram = 0,storage = 0 ,cpuCore = 0;
+            for (int i = 0; i < allocatedVms.size(); i++){
+                AllocatedVm tempVm = allocatedVms.get(i);
+                ram += tempVm.getRam();
+                storage += tempVm.getStorage();
+                cpuCore += tempVm.getCpuCore();
+            }
+            this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);
         }
     }
+
+//    /**
+//     * 测试
+//     */
+//    @GetMapping("test")
+//    public boolean parameterQueryByPage(Integer cpuCore ,Integer ram,Integer storage, String upOrDown) {
+//        return this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,upOrDown);
+//    }
 
 //----------------------------下线按钮-底部----------------------------
 

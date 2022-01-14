@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.VirtualComResourceDao">
+
+    <resultMap type="com.example.back2.entity.VirtualComResource" id="VirtualComResourceMap">
+        <result property="cpuCore" column="cpu_core" jdbcType="INTEGER"/>
+        <result property="ram" column="ram" jdbcType="INTEGER"/>
+        <result property="storage" column="storage" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="VirtualComResourceMap">
+        select
+          cpu_core, ram, storage
+        from virtual_com_resource
+        <where>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from virtual_com_resource
+        <where>
+            <if test="cpuCore != null">
+                and cpu_core = #{cpuCore}
+            </if>
+            <if test="ram != null">
+                and ram = #{ram}
+            </if>
+            <if test="storage != null">
+                and storage = #{storage}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="" useGeneratedKeys="true">
+        insert into virtual_com_resource(cpu_core, ram, storage)
+        values (#{cpuCore}, #{ram}, #{storage})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+        insert into virtual_com_resource(cpu_core, ram, storage)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.cpuCore}, #{entity.ram}, #{entity.storage})
+        </foreach>
+    </insert>
+
+    <!--更新虚拟机资源-->
+    <update id="updateVmResource">
+        <if test="upOrDown = 'up'">
+            update virtual_com_resource
+            set cpu_core = ((select cpu_core) + #{cpuCore});
+            update virtual_com_resource
+            set ram = ((select ram) + #{ram});
+            update virtual_com_resource
+            set storage = ((select storage) + #{storage});
+        </if>
+        <if test="upOrDown = 'down'">
+            update virtual_com_resource
+            set cpu_core = ((select cpu_core) - #{cpuCore});
+            update virtual_com_resource
+            set ram = ((select ram) - #{ram});
+            update virtual_com_resource
+            set storage = ((select storage) - #{storage});
+        </if>
+    </update>
+
+</mapper>
+
