@@ -7,17 +7,17 @@ import com.example.back2.entity.table.AllocatedVm;
 import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.entity.table.WorkOrderChange;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
+import com.example.back2.entity.view.AllocatedVmSpecifications;
 import com.example.back2.service.table.AllocatedComService;
 import com.example.back2.service.table.AllocatedVmService;
 import com.example.back2.service.table.WorkOrderChangeService;
 import com.example.back2.service.table.WorkOrderService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.AdminsearchorderTableService;
+import com.example.back2.service.view.AllocatedVmSpecificationsService;
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -32,14 +32,6 @@ public class changeTicket {
     @Resource
     private WorkOrderChangeService workOrderChangeService;
 
-//    创建变更工单
-//    @PostMapping("intsertChangeTicket")
-//    public String intsertApplyTicket( String workOrderName,Date expirationTime,String reason,Integer workNum,String file
-//            ,Double price,String workOrderType) {
-//        applyTicket applyticket = new applyTicket();
-//        String workOrderNum = applyticket.intsertApplyTicket(workOrderName,expirationTime,reason,workNum,file,price,workOrderType);
-//        return workOrderNum;
-//    }
 
 //创建插入已申请物理机资源
     @PostMapping("insertAllocatedCom")
@@ -54,7 +46,7 @@ public class changeTicket {
         return applyticket.insertAllocatedVm(qs,workOrderNum,storage,os);
     }
 
-//创建已经申请变更工单
+//创建原工单和变更工单的关联
     @PostMapping("insertWorkOrderChange")
     public WorkOrderChange insertWorkOrderChange(String workOrderNum,String changedOldOrder){
         System.out.println(workOrderNum);
@@ -64,6 +56,7 @@ public class changeTicket {
         workOrderChange.setChangedOldOrder(changedOldOrder);
         return this.workOrderChangeService.insert(workOrderChange);
     }
+
 //通过原工单号查找工单内容
 
     @Resource
@@ -93,6 +86,8 @@ public class changeTicket {
 
         return this.workOrderService.insert(workorder).getWorkOrderNum();
     }
+
+
 //  获取原工单申请的物理机资源
     @Resource
     private AllocatedComService allocatedComService;
@@ -101,14 +96,18 @@ public class changeTicket {
     public List<AllocatedCom> selectComByWorkOrderNum(String workOrderNum){
         return this.allocatedComService.queryByWorkOrderNum(workOrderNum);
     }
+
 //    获取原工单申请的虚拟机资源
     @Resource
-    private AllocatedVmService allocatedVmService;
+    private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
 
     @GetMapping("selectVmByWorkOrderNum")
-    public List<AllocatedVm> selectVmByWorkOrderNum(String workOrderNum){
-        return this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+    public List<AllocatedVmSpecifications> selectVmByWorkOrderNum(String workOrderNum){
+
+        return this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum);
     }
+
+
 //   查询相应工号的二级审批通过的工单
 
     @GetMapping("selectWorkOrderByworkNum")
@@ -121,5 +120,17 @@ public class changeTicket {
             ans.add(i.getWorkOrderNum());
         }
         return ans;
+    }
+
+    @PutMapping("OrderStateChange")
+    public Boolean OrderStateChange(String workOrderNum,String state){
+        WorkOrder workOrder  = this.workOrderService.queryById(workOrderNum);
+        if(state.equals("已变更")){
+            workOrder.setWorkOrderState(state);
+            this.workOrderService.update(workOrder);
+            return true;
+        }
+        else
+            return false;
     }
 }

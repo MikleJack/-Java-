@@ -7,7 +7,8 @@
       <div class="page_block">
 
         <!-- 工单信息填写表单 -->
-        <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
+        <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" >
+<!--          :label-position="labelPosition">-->
 
           <el-form-item label="工单标题">
             <el-input v-model="workorder.workOrderName" placeholder="工单标题"></el-input>
@@ -19,13 +20,13 @@
             placeholder="选择日期">
           </el-date-picker>
           <span  style="color: black" >原工单编号</span>
-          <el-select v-model="value" :change= "checkOldOrderNum()" placeholder="请选择">
+          <el-select v-model="value"  placeholder="请选择" @change="checkOldOrderNum">
             <el-option
               v-for="item in options"
               :key="item"
               :value="item"
             >
-<!--           @click=checkOldOrderNum(item)                  "-->
+
             </el-option>
           </el-select>
         </el-form>
@@ -37,7 +38,7 @@
       </div>
     </div>
 
-    <p></p>
+<!--    <p></p>-->
     <div style="border: rgba(82,182,154,0.25) solid 3px">
       <div class="page_title">物理机资源</div>
       <div class="page_line"></div>
@@ -62,7 +63,7 @@
             <el-table-column property="price" label="单价(/月)" ></el-table-column>
             <!--          <el-table-column property="ip" label="IP地址" width="150"></el-table-column>-->
           </el-table>
-          <p></p>
+<!--          <p></p>-->
           <el-button class="add_type" type="primary" @click="getSelected(1)">添加选中结果</el-button>
 
         </el-dialog>
@@ -81,8 +82,9 @@
             label="操作"
             width="120">
             <template slot-scope="scope">
+<!--              , tabledata_physics-->
               <el-button
-                @click.native.prevent="deleteRow_physics(scope.$index, tabledata_physics)"
+                @click.native.prevent="deleteRow_physics(scope.$index)"
                 type="text"
                 size="small"
                 style="color: #52b69a"
@@ -141,12 +143,14 @@
           <el-table-column property="processorModel" label="处理器型号" width="150"></el-table-column>
           <el-table-column property="price" label="单价(/月)" width="100"></el-table-column>
           <el-table-column property="account_virtual" label="数量" >
+
             <template slot-scope="scope" >
               <el-input-number v-model="scope.row.quantity"
                                controls-position="right"
                                :min="1"
-                               @change="(value) => handleChange_virtual(value, scope)"
-              ></el-input-number>
+                               @change="handleChange_virtual(value, scope)"
+              >
+              </el-input-number>
             </template>
 
           </el-table-column>
@@ -156,8 +160,9 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
+<!--              , tabledata_virtual-->
               <el-button
-                @click.native.prevent="deleteRow_virtual(scope.$index, tabledata_virtual)"
+                @click.native.prevent="deleteRow_virtual(scope.$index)"
                 type="text"
                 size="small"
                 style="color: #52b69a"
@@ -170,7 +175,7 @@
 
 
 
-        <P></P>
+<!--        <P></P>-->
         <el-form :inline="true"  class="demo-form-inline">
           <el-form-item label="存储(G)">
             <el-input v-model="storage" placeholder="存储(G)"></el-input>
@@ -187,7 +192,7 @@
       </div>
     </div>
 
-    <p></p>
+<!--    <p></p>-->
 
 <!--    附件-->
     <div style="border: rgba(82,182,154,0.25) solid 3px">
@@ -198,11 +203,11 @@
       </div>
     </div>
 
-    <p></p>
+<!--    <p></p>-->
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" @click="submit">提交</el-button>
+      <el-button class="add_type" @click="submit()">提交</el-button>
     </div>
   </div>
 </template>
@@ -210,7 +215,7 @@
 <script>
 import upload_file from "./upload_file";
 import Upload_file_new from "./upload_file_new";
-import qs from "qs";
+// import qs from "qs";
 export default {
   components: {Upload_file_new, upload_file},
   name: "applytable2",
@@ -222,9 +227,10 @@ export default {
       value: '',//原工单编号初始化数据
 
       storage:'',
-      os:"",
+      os:'',
+
       expire_time: '',//资源到期时间
-      labelPosition: 'left',
+      // labelPosition: 'left',
       multipleSelection_physics: [],//存储选中物理机的数据
       multipleSelection_virtual: [],//存储选中虚拟机的数据
       currentRowIndex_physics: [],//存储选中物理机的行号
@@ -259,11 +265,11 @@ export default {
       gridData_physics: [],
       // 新增虚拟机弹窗内表格数据
       gridData_virtual: [],
-      //流转过程需要的数据
+      // 流转过程需要的数据
       flowProcess:{
         workOrderNum:'',
         dealNum:'',
-        operationType:'申请工单',
+        operationType:'',
         dealDate:'',
         dealComment:''
       }
@@ -271,33 +277,56 @@ export default {
   },
   // 获取当前时间的定时器
   mounted() {
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
-      this.gridData_physics = res.data;
-    });
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
-      this.gridData_virtual = res.data;
-    });
-    //获得当前工号人申请二级通过的工单号
-    this.$axios.get("http://localhost:8084/changeTickets/selectWorkOrderByworkNum?workerNum="
-    +sessionStorage.getItem("work_num")).then((res)=>{
-      this.options = res.data;
-    });
+    this.getreasources();
+    // let that = this;
+    // // 定时器
+    // setInterval(() => {
+    //   that.getDateFunc();
+    //   that.calculate_sum();
+    // }, 1000)
+    // this.scope.row.quantity = 50;
 
 
-    let that = this;
-    //定时器
-    setInterval(() => {
-      that.getDateFunc();
-      that.calculate_sum();
-    }, 1000)
-    this.scope.row.quantity = 50;
+
+
   },
   methods: {
+    getDateFunc() {
+      var date = new Date();
+      var seperator1 = "-";
+      var seperator2 = ":";
+      //以下代码依次是获取当前时间的年月日时分秒
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      var minute = date.getMinutes();
+      var hour = date.getHours();
+      var second = date.getSeconds();
+      //固定时间格式
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      if (hour >= 0 && hour <= 9) {
+        hour = "0" + hour;
+      }
+      if (minute >= 0 && minute <= 9) {
+        minute = "0" + minute;
+      }
+      if (second >= 0 && second <= 9) {
+        second = "0" + second;
+      }
+      this.flowProcess.dealDate =  year + seperator1 + month + seperator1 + strDate
+        + " " + hour + seperator2 + minute + seperator2 + second;
+    },
     //物理机获取选中数据的行号
     tableRowClassName_physics({row, rowIndex}) {
       row.row_index = rowIndex;
     },
-    onRowClick_physics(row, event, column) {
+  // , event, column
+    onRowClick_physics(row) {
       for (let k = 0; k < row.length; k++) {
         this.currentRowIndex_physics.push(row[k].row_index)
       }
@@ -306,7 +335,8 @@ export default {
     tableRowClassName_virtual({row, rowIndex}) {
       row.row_index = rowIndex
     },
-    onRowClick_virtual(row, event, column) {
+  // , event, column
+    onRowClick_virtual(row) {
       for (let k = 0; k < row.length; k++) {
         this.currentRowIndex_virtual.push(row[k].row_index)
       }
@@ -324,14 +354,16 @@ export default {
     },
 
     // 删除选中的物理机资源
-    deleteRow_physics(index, rows) {
+    // , rows
+    deleteRow_physics(index) {
       const data = this.tabledata_physics.slice(index, index + 1)
 
       this.tabledata_physics.splice(index, 1);
       this.gridData_physics.splice(-1, 0, data[0])
     },
     //删除选中的虚拟机资源
-    deleteRow_virtual(index, rows) {
+    //, rows
+    deleteRow_virtual(index) {
       const data = this.tabledata_virtual.slice(index, index + 1)
 
       this.tabledata_virtual.splice(index, 1);
@@ -399,13 +431,15 @@ export default {
     },
     //提交所有工单数据
     submit() {
-      alert(sessionStorage.getItem("work_num"));
       this.workorder.workerNum = sessionStorage.getItem("work_num");
-      this.workorder.price= this.total_price;
+      // this.workorder.price= this.workorder.price;
       //插入到表单中
       this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
         this.workorder).then((res) => {
+
         if (res.data) {
+          //将原工单状态变为已变更
+          this.$axios.put("http://localhost:8084/changeTickets/OrderStateChange?workOrderNum="+this.value+"&state=已变更");
           //插入申请的物理机资源
           this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom", {
             qs: JSON.stringify(this.tabledata_physics),
@@ -421,9 +455,9 @@ export default {
           //插入流转过程
           this.flowProcess.workOrderNum=res.request.response;
           this.flowProcess.dealComment=this.workorder.reason;
-          this.flowProcess.dealDate=this.current_time;
+          this.getDateFunc();
           this.flowProcess.dealNum=sessionStorage.getItem("work_num");
-          this.flowProcess.operationType="申请工单";
+          this.flowProcess.operationType="变更工单";
           this.$axios.post("http://localhost:8084/flowProcess/insert",{
             flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
             if(res.data===true){
@@ -434,13 +468,17 @@ export default {
               });
             }
           });
-
+          this.$axios.post("http://localhost:8084/changeTickets/insertWorkOrderChange?workOrderNum=" +
+            this.value + "&changedOldOrder=" + res.request.response
+          ).then((res)=>{
+            alert("申请成功,工单编号为"+res.request.response);
+          });
         }
       });
 
     },
+    //改变原工单号填入数据
     checkOldOrderNum(){
-
       //通过原工单号填入数据
       this.$axios.get("http://localhost:8084/changeTickets/selectByWorkOrderNum?workOrderNum="
         +this.value).then((res)=>{
@@ -449,16 +487,32 @@ export default {
         // this.workorder.reason = res.data.reason;
 
         this.workorder.workerNum = sessionStorage.getItem("work_num");
-        this.workorder.file = res.data.reason;
+        this.workorder.reason = res.data.reason;
         this.workorder.price = res.data.price;
       });
       this.$axios.get("http://localhost:8084/changeTickets/selectComByWorkOrderNum?workOrderNum=" +
         this.value).then((res)=>{
-         this.tabledata_physics = res.data;
+        this.tabledata_physics = res.data;
       });
+
       this.$axios.get("http://localhost:8084/changeTickets/selectVmByWorkOrderNum?workOrderNum=" +
         this.value).then((res)=>{
-          this.tabledata_virtual = res.data;
+        this.tabledata_virtual = res.data;
+        this.storage = res.data[0].storage;
+        this.os = res.data[0].os;
+      });
+    },
+    getreasources(){
+      this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+        this.gridData_physics = res.data;
+      });
+      this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+        this.gridData_virtual = res.data;
+      });
+      //获得当前工号人申请二级通过的工单号
+      this.$axios.get("http://localhost:8084/changeTickets/selectWorkOrderByworkNum?workerNum="
+        +sessionStorage.getItem("work_num")).then((res)=>{
+        this.options = res.data;
       });
     }
   }
