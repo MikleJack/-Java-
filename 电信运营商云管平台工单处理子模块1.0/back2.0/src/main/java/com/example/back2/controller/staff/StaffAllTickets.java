@@ -1,19 +1,14 @@
 package com.example.back2.controller.staff;
 
-import com.example.back2.controller.FlowProcessController;
+import com.example.back2.entity.table.WorkOrderDelay;
 import com.example.back2.entity.table.*;
-import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.entity.view.AllocatedVmSpecifications;
-import com.example.back2.entity.view.FlowStaff;
 import com.example.back2.entity.view.OrderBeginEndTime;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.data.annotation.Reference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,8 +103,15 @@ public class StaffAllTickets {
         }
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
+            //插入流转过程
             Integer workerNum = this.workOrderService.queryById(workOrderNum).getWorkerNum();
             this.flowProcessService.DelayInsert(newWorkOrderNum, workerNum, nowDate);
+
+            //记录延期工单和原工单的关系
+            WorkOrderDelay workOrderDelay = new WorkOrderDelay();
+            workOrderDelay.setOldOrder(workOrderNum);
+            workOrderDelay.setWorkOrderNum(newWorkOrderNum);
+
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
             return ResponseEntity.ok("false");
@@ -173,13 +175,13 @@ public class StaffAllTickets {
         }
     }
 
-//    /**
-//     * 测试
-//     */
-//    @GetMapping("test")
-//    public boolean parameterQueryByPage(Integer cpuCore ,Integer ram,Integer storage, String upOrDown) {
-//        return this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,upOrDown);
-//    }
+    /**
+     * 测试
+     */
+    @GetMapping("test")
+    public long parameterQueryByPage(String workOrderNum) {
+        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
+    }
 
 //----------------------------下线按钮-底部----------------------------
 
