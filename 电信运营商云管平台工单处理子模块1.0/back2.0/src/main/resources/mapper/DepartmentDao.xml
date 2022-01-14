@@ -114,5 +114,12 @@
         dep_num, dep_name, dep_level, dep_budget
         from department
     </select>
+
+    <select id="getDepBudget" resultMap="DepartmentMap">
+        select
+            dep_num, dep_name, dep_level, dep_budget
+        from department
+        where dep_budget != 0;
+    </select>
 </mapper>
 

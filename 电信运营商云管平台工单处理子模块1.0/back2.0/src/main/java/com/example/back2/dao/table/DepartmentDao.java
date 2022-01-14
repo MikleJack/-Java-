@@ -82,5 +82,7 @@ public interface DepartmentDao {
     int deleteById(Integer depNum);
 
     List<Department> AllDep();
+
+    List<Department> getDepBudget();
 }
 

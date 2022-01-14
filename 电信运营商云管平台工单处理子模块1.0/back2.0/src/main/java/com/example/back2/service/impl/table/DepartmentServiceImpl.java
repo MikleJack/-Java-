@@ -85,4 +85,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<Department> AllDep(){
         return this.departmentDao.AllDep();
     }
+
+    @Override
+    public List<Department> getDepBudget(){
+        return this.departmentDao.getDepBudget();
+    }
 }
