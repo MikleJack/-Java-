@@ -6,9 +6,17 @@
         <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
         <result property="dealNum" column="deal_num" jdbcType="INTEGER"/>
         <result property="operationType" column="operation_type" jdbcType="VARCHAR"/>
-        <result property="dealDate" column="deal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealDate" column="deal_date" jdbcType="DATE"/>
         <result property="dealComment" column="deal_comment" jdbcType="VARCHAR"/>
     </resultMap>
+
+<!--    通过工单号查询申请时间-->
+    <select id="selectApplyTime" resultMap="FlowProcessMap">
+        select
+            deal_date
+        from flow_process
+        where work_order_num = #{workOrderNum};
+    </select>
 
     <!--查询单个-->
     <select id="queryById" resultMap="FlowProcessMap">
@@ -119,7 +127,7 @@
     <!--插入申请延期的流转过程-->
     <insert id="DelayInsert">
         insert into flow_process(operation_type, deal_comment,work_order_num,deal_num,deal_date)
-        values "申请", "提出申请" , #{workOrderNum},#{workerNum}, #{dealDate})
+        values  ("申请工单", "提出申请" , #{workOrderNum}, #{workerNum}, #{dealDate})
     </insert>
 
 </mapper>

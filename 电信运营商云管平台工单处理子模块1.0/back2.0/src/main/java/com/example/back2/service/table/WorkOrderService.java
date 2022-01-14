@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * (WorkOrder)表服务接口
@@ -107,4 +108,6 @@ public interface WorkOrderService {
     Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest);
 //------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
+//------------------------员工变更工单界面
+    List<WorkOrder> selectWorkOrderByworkNum(String workerNum);
 }

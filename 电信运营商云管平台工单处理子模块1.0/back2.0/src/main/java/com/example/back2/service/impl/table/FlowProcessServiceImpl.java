@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (FlowProcess)表服务实现类
@@ -96,5 +97,10 @@ public class FlowProcessServiceImpl implements FlowProcessService {
     @Override
     public FlowProcess selectByOrderNumLeaderNum(String workOrderNum, Integer leaderNum, String operation_type){
         return this.flowProcessDao.selectByOrderNumLeaderNum(workOrderNum, leaderNum, operation_type);
+    }
+
+    @Override
+    public List<FlowProcess> selectApplyTime(String workOrderNum){
+        return this.flowProcessDao.selectApplyTime(workOrderNum);
     }
 }

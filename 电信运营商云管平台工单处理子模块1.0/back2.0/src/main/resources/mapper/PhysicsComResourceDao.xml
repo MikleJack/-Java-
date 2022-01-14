@@ -135,5 +135,16 @@
         where com_num = #{comNum}
     </delete>
 
+    <!--批量下修改物理机资源状态-->
+    <update id="setComAssign" >
+        update brccq2.physics_com_resource
+        <set>
+            <if test="assign != null">
+                assign = #{assign},
+            </if>
+        </set>
+        where com_num = #{comNum}
+    </update>
+
 </mapper>
 

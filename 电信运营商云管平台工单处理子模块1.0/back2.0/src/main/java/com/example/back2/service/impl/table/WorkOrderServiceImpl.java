@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (WorkOrder)表服务实现类
@@ -156,4 +157,10 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         return new PageImpl<>(this.workOrderDao.parameterQueryAllByLimit(workOrderType, workerTitle, workerNum, pageRequest), pageRequest, total);
     }
 //------------------------员工全部工单查询界面----查询按钮-底部----------------------------
+
+//-----------------------员工变更工单界面
+    @Override
+    public List<WorkOrder> selectWorkOrderByworkNum(String workerNum){
+        return this.workOrderDao.selectWorkOrderByworkNum(workerNum);
+    }
 }

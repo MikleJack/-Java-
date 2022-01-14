@@ -317,7 +317,7 @@ export default {
   position: relative;
   width: 90%;
   height: 100%;
-  left: 5%;
+  left: 10%;
 }
 .reason_contect{
   width: 80%;

@@ -11,18 +11,19 @@
       <div class="worker_information">
         <!--权限-->
         <div class="powerInf">
-          <el-tag class="power" type="success">{{worker_power}}级领导</el-tag>
+          <el-tag class="power" type="success" v-if="workInfo.depLevel===2">一级领导</el-tag>
+          <el-tag class="power" type="success" v-if="workInfo.depLevel===3">二级领导</el-tag>
         </div>
         <!--姓名及所属部门-->
         <div class="nameInf">
-          <p>{{worker_name}}</p>
+          <p>{{workInfo.name}}</p>
         </div>
         <div class="depInf">
-          <p>{{worker_dep}}</p>
+          <p>{{workInfo.depName}}</p>
         </div>
         <div class="workerInf">
-          <p>工号 ：{{worker_num}}</p>
-          <p>电话号码：{{worker_phone}}</p>
+          <p>工号 ：{{workInfo.workNum}}</p>
+          <p>电话号码：{{workInfo.phone}}</p>
         </div>
       </div>
     </div>
@@ -164,7 +165,6 @@ export default {
   name: "leaderPortal",
   components: {},
   methods: {
-
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
         return 'rgb(255,186,39)';
@@ -172,13 +172,11 @@ export default {
         return 'rgb(226,131,22)';
       } else return '#41c6a2'
     },
-
     budCustomcolors(depBudget){
       if (depBudget <= 90){
         return '#41c6a2';
       } else return '#f56c6c';
     },
-
     tableRowClassName({row, rowIndex}) {
       if (rowIndex === 1) {
         return 'warning-row';
@@ -187,7 +185,13 @@ export default {
       }
       return '';
     },
-
+    init(){
+      this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum="+
+        sessionStorage.getItem("work_num")).then((res)=>{
+          this.workInfo=res.data;
+          console.log(this.workInfo);
+      })
+    }
   },
 
 // 表格数据
@@ -201,17 +205,16 @@ export default {
       depBudget:'78.90',
       fits: ['cover'],
       url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
-      worker_power:'一',
-      worker_name:'梁云',
-      worker_dep:'软件19级',
-      worker_num:'20220001',
-      worker_phone:'13152261676',
+      workInfo:{
+
+      },
       hang_order:'5',
       untreated_order:'3',
     }
 
   },
   mounted(){
+    this.init();
     var chartDom = document.getElementById('approvemain');
     var approveChart = echarts.init(chartDom);
     var approveOption;

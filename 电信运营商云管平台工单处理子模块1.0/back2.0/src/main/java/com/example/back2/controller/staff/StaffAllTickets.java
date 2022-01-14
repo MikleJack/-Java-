@@ -1,18 +1,14 @@
 package com.example.back2.controller.staff;
 
-import com.example.back2.controller.FlowProcessController;
+import com.example.back2.entity.table.WorkOrderDelay;
 import com.example.back2.entity.table.*;
-import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.entity.view.AllocatedVmSpecifications;
-import com.example.back2.entity.view.FlowStaff;
 import com.example.back2.entity.view.OrderBeginEndTime;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +33,15 @@ public class StaffAllTickets {
     private AllocatedComService allocatedComService;
     @Resource
     private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
+    @Resource
+    private AllocatedVmService allocatedVmService;
+
+    @Resource
+    private PhysicsComResourceService physicsComResourceService;
+    @Resource
+    private VirtualComResourceService virtualComResourceService;
+    @Resource
+    private HisResourceUsageService hisResourceUsageService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -65,9 +70,9 @@ public class StaffAllTickets {
      * @param delayTime  延期日期
      * @return 是否发起延期请求成功
      */
-    @GetMapping("delay")
+    @PostMapping("delay")
     public ResponseEntity<String> delay(String workOrderNum,
-                                        @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")Date delayTime,
+                                        Date delayTime,
                                          String delayReason) {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
@@ -100,8 +105,15 @@ public class StaffAllTickets {
         }
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
+            //插入流转过程
             Integer workerNum = this.workOrderService.queryById(workOrderNum).getWorkerNum();
             this.flowProcessService.DelayInsert(newWorkOrderNum, workerNum, nowDate);
+
+            //记录延期工单和原工单的关系
+            WorkOrderDelay workOrderDelay = new WorkOrderDelay();
+            workOrderDelay.setOldOrder(workOrderNum);
+            workOrderDelay.setWorkOrderNum(newWorkOrderNum);
+
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
             return ResponseEntity.ok("false");
@@ -121,9 +133,6 @@ public class StaffAllTickets {
      */
     @GetMapping("parameterQueryByPage")
     public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) {
-        System.out.println(workOrderType);
-        System.out.println(workOrderTile);
-        System.out.println(workerNum);
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest));
     }
@@ -132,7 +141,7 @@ public class StaffAllTickets {
 
 //----------------------------下线按钮-顶部----------------------------
     /**
-     * 通过员工编号分页查询
+     * 通过工单编号分页查询
      *
      * @param workOrderNum 工单编号
      * @param offlineReason  下线原因
@@ -142,11 +151,44 @@ public class StaffAllTickets {
     @GetMapping("offline")
     public ResponseEntity<Boolean> offline(String workOrderNum,String workOrderState, String offlineReason) {
         if(workOrderState.equals("二级审批通过")) {
+
+            //批量下线物理机资源
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<Integer> comNums = new ArrayList<Integer>();
+            for(int i = 0; i <allocatedComs.size();i++) {
+                comNums.add(allocatedComs.get(i).getComNum());
+            }
+            this.physicsComResourceService.setComAssign(comNums,true);
+
+            //批量下线虚拟机资源
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            Integer ram = 0,storage = 0 ,cpuCore = 0;
+            for (int i = 0; i < allocatedVms.size(); i++){
+                AllocatedVm tempVm = allocatedVms.get(i);
+                ram += tempVm.getRam();
+                storage += tempVm.getStorage();
+                cpuCore += tempVm.getCpuCore();
+            }
+            this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
+
+            HisResourceUsage hisResourceUsage = new HisResourceUsage();
+            hisResourceUsage.setResUtilization(Math.random() * 100);
+            hisResourceUsage.setWorkOrderNum(workOrderNum);
+            hisResourceUsageService.insert(hisResourceUsage);
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);
         }
     }
+
+//    /**
+//     * 测试
+//     */
+//    @GetMapping("test")
+//    public long parameterQueryByPage(String workOrderNum) {
+//        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
+//    }
 
 //----------------------------下线按钮-底部----------------------------
 

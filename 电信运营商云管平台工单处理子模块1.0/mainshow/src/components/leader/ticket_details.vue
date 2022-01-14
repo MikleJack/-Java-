@@ -200,9 +200,9 @@
         </el-input>
       </div>
       <div class="page_bottom" v-if="show">
-        <el-button style="color:white;background-color: #52b69a " >审批通过</el-button>
-        <el-button v-if="hasHangup">挂起</el-button>
-        <el-button>审批不通过</el-button>
+        <el-button style="color:white;background-color: #52b69a " @click="pass">审批通过</el-button>
+        <el-button v-if="hasHangup" @click="hangup">挂起</el-button>
+        <el-button @click="nopass">审批不通过</el-button>
       </div>
     </div>
   </div>
@@ -260,6 +260,14 @@ export default {
       //流传过程数据
       informData: [],
 
+      flowProcess:{
+        workOrderNum:'',
+        dealNum:'',
+        operationType:'申请工单',
+        dealDate:'',
+        dealComment:''
+      }
+
     };
   },
   mounted() {
@@ -269,6 +277,88 @@ export default {
     },
   props:["show"],
   methods: {
+    setFlow(){
+      this.flowProcess.workOrderNum=this.workOrderNum;
+      this.flowProcess.dealComment=this.note;
+      this.getDateFunc();
+      this.flowProcess.dealNum=sessionStorage.getItem("work_num");
+    },
+    pass(){
+      this.setFlow();
+      this.flowProcess.operationType="审批通过";
+      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+        flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+          if(res.data===true){
+            if(sessionStorage.getItem("level")!=="3"){
+              this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+                workOrderNum:this.workOrderNum,
+                state:"审批通过"
+              })
+            }
+            else {
+              this.$axios.post("http://localhost:8084/pendtickets/towExamine",{
+                workOrderNum:this.workOrderNum,
+                state:"审批通过"
+              })
+            }
+          }
+      })
+
+
+    },
+    nopass(){
+      this.setFlow();
+      this.flowProcess.operationType="审批不通过";
+      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+        flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+            this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+              workOrderNum:this.workOrderNum,
+              state:"审批不通过"
+            })
+      })
+    },
+    hangup(){
+      this.setFlow();
+      this.flowProcess.operationType="挂起";
+      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+        flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+        this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+          workOrderNum:this.workOrderNum,
+          state:"挂起"
+        })
+      })
+    },
+
+    getDateFunc() {
+      var date = new Date();
+      var seperator1 = "-";
+      var seperator2 = ":";
+      //以下代码依次是获取当前时间的年月日时分秒
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      var minute = date.getMinutes();
+      var hour = date.getHours();
+      var second = date.getSeconds();
+      //固定时间格式
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      if (hour >= 0 && hour <= 9) {
+        hour = "0" + hour;
+      }
+      if (minute >= 0 && minute <= 9) {
+        minute = "0" + minute;
+      }
+      if (second >= 0 && second <= 9) {
+        second = "0" + second;
+      }
+      this.flowProcess.dealDate =  year + seperator1 + month + seperator1 + strDate
+        + " " + hour + seperator2 + minute + seperator2 + second;
+    },
 
     //部门已用预算/部门总预算进度条
     total_percentage(){
