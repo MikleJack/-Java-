@@ -293,9 +293,9 @@ export default {
       dialogTableVisible_physics: false,
       dialogTableVisible_virtual: false,
       //部门总预算利用情况
-      used_budget:'5000',
+      used_budget:'',
       //部门总预算
-      total_budget:'20000',
+      total_budget:'',
       //部门剩余预算
       surplus_budget:'',
       //工单预算
@@ -338,6 +338,18 @@ export default {
     this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
       this.gridData_virtual = res.data;
     });
+    this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
+      let depNum = res.data.depNum;
+      //获取部门总预算
+      this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + depNum).then((res)=>{
+        this.total_budget = res.data;
+      });
+      //获取部门已使用预算
+      this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
+        this.used_budget = res.data.depUsedBudget;
+      });
+    });
+
     let that = this;
     //定时器
     setInterval(() => {
@@ -433,14 +445,6 @@ export default {
         this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
       }
     },
-
-
-
-
-
-
-
-
     // 虚拟机获取点击行的数据
 
     getSelected(type) {
