@@ -5,10 +5,10 @@
       <!--界面头部分-->
       <div style="width:100%;text-align:center">
         <!--设置居中-->
-        <el-form :inline="true" :model="formInline.work_order_num" class="demo-form-inline">
+        <el-form :inline="true" :model="applyName" class="demo-form-inline">
 
-          <el-form-item label="输入工单号查询">
-            <el-input v-model="formInline.work_order_num" placeholder="工单号"></el-input>
+          <el-form-item label="输入申请人姓名">
+            <el-input v-model="applyName" placeholder="申请人姓名"></el-input>
           </el-form-item>
 
           <!--输入查询框-->
@@ -21,7 +21,7 @@
       <div class="page-body">
         <!--界面体部分-->
         <el-table
-          :data="tableData.filter(data => !formInline.work_order_num || data.work_order_num.toLowerCase().includes(formInline.work_order_num.toLowerCase()))"
+          :data="tableData"
           border
          >
           <el-table-column
@@ -36,7 +36,7 @@
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="applyTime"
+            prop="expirationTime"
             label="资源到期时间"
             sortable
             width="auto">
@@ -52,11 +52,11 @@
             width="auto">
           </el-table-column>
           <el-table-column
-            prop="deal_date"
+            prop="dealDate"
             label="处理时间">
           </el-table-column>
           <el-table-column
-            prop="deal_comment"
+            prop="dealComment"
             label="处理批注">
           </el-table-column>
         </el-table>
@@ -85,11 +85,7 @@
     export default {
         name: "examine",
       mounted() {
-        this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+0+"&size="
-          +this.pageSize+"&orderState=待审批").then((res)=>{
-          this.tableData= res.data.content;
-          this.totalSize = res.data.totalPages*this.pageSize;
-        })
+        this.init();
       },
       data() {
         return {
@@ -97,11 +93,8 @@
           currentPage:1,
           pageSize:9,
           totalSize:0,
-          //给后端一个工单号
-          formInline:
-            {
-            work_order_num: '',
-          },
+          //给后端一个申请人姓名
+          applyName:'',
 
 
         //  表格数据，需要后端传递工单号、工单名、审批人号、审批人名、处理时间、处理批注这些信息
@@ -110,15 +103,23 @@
         }
       },
       methods: {
+        //初始化数据
+        init(){
+          this.$axios.get("http://localhost:8084/flowWorkOrder/getLog?page=0&size="+this.pageSize+
+            "&dealNum="+sessionStorage.getItem("work_num")+"&applyName="+this.applyName).then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
+        },
         onSubmit() {
-          console.log('submit!');
+          this.init();
         },
         //进行查询，后端给前端工单号对应的工单审批日志,包括工单号、工单名、审批人号、审批人名、处理时间、处理批注这些信息
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/leaderOrder/selectByLeader?leader_num=20220001&page="+page+"&size="
-            +this.pageSize+"&orderState=待审批").then((res)=>{
+          this.$axios.get("http://localhost:8084/flowWorkOrder/getLog?page="+page+"&size="+this.pageSize
+            +"&dealNum="+sessionStorage.getItem("work_num")+"&applyName="+this.applyName).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
           })
