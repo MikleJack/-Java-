@@ -40,6 +40,8 @@ public class StaffAllTickets {
     private PhysicsComResourceService physicsComResourceService;
     @Resource
     private VirtualComResourceService virtualComResourceService;
+    @Resource
+    private HisResourceUsageService hisResourceUsageService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -169,19 +171,24 @@ public class StaffAllTickets {
             }
             this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
 
+            HisResourceUsage hisResourceUsage = new HisResourceUsage();
+            hisResourceUsage.setResUtilization(Math.random() * 100);
+            hisResourceUsage.setWorkOrderNum(workOrderNum);
+            hisResourceUsageService.insert(hisResourceUsage);
+
             return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
         }else{
             return ResponseEntity.ok(false);
         }
     }
 
-    /**
-     * 测试
-     */
-    @GetMapping("test")
-    public long parameterQueryByPage(String workOrderNum) {
-        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
-    }
+//    /**
+//     * 测试
+//     */
+//    @GetMapping("test")
+//    public long parameterQueryByPage(String workOrderNum) {
+//        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
+//    }
 
 //----------------------------下线按钮-底部----------------------------
 

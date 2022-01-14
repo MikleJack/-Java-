@@ -150,5 +150,9 @@ public interface WorkOrderDao {
 
 //------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
+
+//------------------------员工变更工单界面
+    List<WorkOrder> selectWorkOrderByworkNum(String workerNum);
+
 }
 

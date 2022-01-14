@@ -15,6 +15,13 @@
         <result property="offlineReason" column="offline_reason" jdbcType="VARCHAR"/>
     </resultMap>
 
+<!--    通过工号查询通过了二级审批通过的工单号-->
+    <select id="selectWorkOrderByworkNum" resultMap="WorkOrderMap">
+        select
+            work_order_num
+        from work_order
+        where worker_num = #{workerNum} and work_order_state = '二级审批通过'
+    </select>
     <!--查询单个-->
     <select id="queryById" resultMap="WorkOrderMap">
         select

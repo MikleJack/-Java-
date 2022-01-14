@@ -19,12 +19,13 @@
             placeholder="选择日期">
           </el-date-picker>
           <span  style="color: black" >原工单编号</span>
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value" :change= "checkOldOrderNum()" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item"
-
-              :value="item ">
+              :value="item"
+            >
+<!--           @click=checkOldOrderNum(item)                  "-->
             </el-option>
           </el-select>
         </el-form>
@@ -216,13 +217,10 @@ export default {
   data() {
     return {
       //原工单编号下拉框内部数据
-      options: [
-        20202020020202,
-        20202020020202,
-        20202020020202,
-        20202020020202,
-      ],
+      options: [],
+
       value: '',//原工单编号初始化数据
+
       storage:'',
       os:"",
       expire_time: '',//资源到期时间
@@ -250,7 +248,7 @@ export default {
         workerNum:'',
         file:'',
         price:'',
-        workOrderType:"申请工单",
+        workOrderType:"变更工单",
         WorkOrderState:"待审批"
       },
       // 已添加的物理机资源信息表数据
@@ -279,6 +277,13 @@ export default {
     this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
       this.gridData_virtual = res.data;
     });
+    //获得当前工号人申请二级通过的工单号
+    this.$axios.get("http://localhost:8084/changeTickets/selectWorkOrderByworkNum?workerNum="
+    +sessionStorage.getItem("work_num")).then((res)=>{
+      this.options = res.data;
+    });
+
+
     let that = this;
     //定时器
     setInterval(() => {
@@ -433,6 +438,28 @@ export default {
         }
       });
 
+    },
+    checkOldOrderNum(){
+
+      //通过原工单号填入数据
+      this.$axios.get("http://localhost:8084/changeTickets/selectByWorkOrderNum?workOrderNum="
+        +this.value).then((res)=>{
+        this.workorder.workOrderName = res.data.workOrderName;
+        this.workorder.expirationTime = res.data.expirationTime;
+        // this.workorder.reason = res.data.reason;
+
+        this.workorder.workerNum = sessionStorage.getItem("work_num");
+        this.workorder.file = res.data.reason;
+        this.workorder.price = res.data.price;
+      });
+      this.$axios.get("http://localhost:8084/changeTickets/selectComByWorkOrderNum?workOrderNum=" +
+        this.value).then((res)=>{
+         this.tabledata_physics = res.data;
+      });
+      this.$axios.get("http://localhost:8084/changeTickets/selectVmByWorkOrderNum?workOrderNum=" +
+        this.value).then((res)=>{
+          this.tabledata_virtual = res.data;
+      });
     }
   }
 }
