@@ -147,7 +147,7 @@
                                :percentage="depUsedDivisionDepTotal()"
                                :color="customColorMethod">
                   </el-progress>
-                  <el-descriptions :column="1">
+                  <el-descriptions label-style style="margin-left: 40px" :column="1">
                     <el-descriptions-item label="部门总预算">{{ depTotalBudget }}</el-descriptions-item>
                     <el-descriptions-item label="部门已用预算">{{ depUsedBudget }}</el-descriptions-item>
                   </el-descriptions>
@@ -164,7 +164,7 @@
                                :percentage="OrderBudgetDivisionDepSurplus()"
                                :color="customColorMethod">
                   </el-progress>
-                  <el-descriptions :column="1">
+                  <el-descriptions label-style style="margin-left: 40px" :column="1">
                     <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
                     <el-descriptions-item label="部门剩余预算">{{ surplus_budget }}</el-descriptions-item>
                   </el-descriptions>
@@ -181,7 +181,7 @@
                                :percentage="resourceUsage"
                                :color="customColorMethod">
                   </el-progress>
-                  <el-descriptions :column="1">
+                  <el-descriptions label-style style="margin-left: 40px" :column="1">
                     <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
                     <el-descriptions-item label="工单资源利用率">{{ resourceUsage }}</el-descriptions-item>
                   </el-descriptions>
