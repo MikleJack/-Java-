@@ -519,7 +519,6 @@ export default {
 
     //提交所有工单数据
     submit() {
-      alert(sessionStorage.getItem("work_num"));
       this.workorder.workerNum = sessionStorage.getItem("work_num");
       this.workorder.price= this.total_price;
       //插入到表单中
