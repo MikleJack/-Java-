@@ -81,4 +81,10 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     public List<PhysicsComResource> selectAllpc(){
         return this.physicsComResourceDao.selectAllpc();
     }
+
+    public boolean insertPhysics(int cpuCore, int ram, int storage, int price){
+        this.physicsComResourceDao.insertPhysics(cpuCore,ram,storage,price);
+        return true;
+    }
+
 }

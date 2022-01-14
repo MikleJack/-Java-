@@ -83,5 +83,8 @@ public interface PhysicsComResourceDao {
 
 
     List<PhysicsComResource> selectAllpc();
+
+    boolean insertPhysics(int cpuCore, int ram, int storage, int price);
+
 }
 

@@ -196,8 +196,8 @@
       <el-collapse v-model="activeNames" @change="handleChange_collapse">
         <el-collapse-item title="新增物理机" name="0">
             <el-form :model="ruleForm_physics" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
-              <el-form-item label="CPU(核)" prop="cpu_core">
-                <el-input v-model="ruleForm_physics.cpu_core"></el-input>
+              <el-form-item label="CPU(核)" prop="cpuCore">
+                <el-input v-model="ruleForm_physics.cpuCore"></el-input>
               </el-form-item>
 
               <el-form-item label="内存(G)" prop="ram">
@@ -232,13 +232,13 @@
 <!--            type="selection"-->
 <!--            width="55">-->
 <!--          </el-table-column>-->
-          <el-table-column prop="phyNum" label="物理机编号" width="120" align="center"></el-table-column>
-          <el-table-column prop="cpu_core" label="CPU(核)" width="120" align="center"></el-table-column>
+          <el-table-column prop="comNum" label="物理机编号" width="120" align="center"></el-table-column>
+          <el-table-column prop="cpuCore" label="CPU(核)" width="120" align="center"></el-table-column>
           <el-table-column prop="ram" label="内存(G)" width="120" align="center"></el-table-column>
           <el-table-column prop="storage" label="存储(G)" width="120" align="center"></el-table-column>
           <el-table-column prop="price" label="价格(元/月)" width="240" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.index" controls-position="right" @change="handleChange_phy"
+              <el-input-number v-model="scope.row.price" controls-position="right" @change="handleChange_phy"
                                 :step="50" :min="0" :max="9999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
@@ -296,7 +296,7 @@
         <el-collapse-item title="虚拟机总资源配置" name="0">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="总CPU核数">
-              <el-input v-model="formInline.cpu_core" placeholder="输入总cup核数"></el-input>
+              <el-input v-model="formInline.cpuCore" placeholder="输入总cup核数"></el-input>
             </el-form-item>
             <el-form-item label="总内存数(G)">
               <el-input v-model="formInline.ram" placeholder="输入总内存数"></el-input>
@@ -316,12 +316,12 @@
               <el-input v-model="ruleForm_virtual.description"></el-input>
             </el-form-item>
 
-            <el-form-item label="处理器型号" prop="processor_model">
-              <el-input v-model="ruleForm_virtual.processor_model"></el-input>
+            <el-form-item label="处理器型号" prop="processorModel">
+              <el-input v-model="ruleForm_virtual.processorModel"></el-input>
             </el-form-item>
 
-            <el-form-item label="VCPu(核)" prop="cpu_core">
-              <el-input v-model="ruleForm_virtual.cpu_core"></el-input>
+            <el-form-item label="VCPu(核)" prop="cpuCore">
+              <el-input v-model="ruleForm_virtual.cpuCore"></el-input>
             </el-form-item>
           </el-form>
 
@@ -330,8 +330,8 @@
               <el-input v-model="ruleForm_virtual.ram"></el-input>
             </el-form-item>
 
-            <el-form-item label="处理器频率" prop="processor_frequency">
-              <el-input v-model="ruleForm_virtual.processor_frequency"></el-input>
+            <el-form-item label="处理器频率" prop="processorFrequency">
+              <el-input v-model="ruleForm_virtual.processorFrequency"></el-input>
             </el-form-item>
 
             <el-form-item label="单价(元)" prop="price">
@@ -354,15 +354,15 @@
                   border
                   style="width: 100%"
                   :cell-style="{textAlign:'center'}">
-          <el-table-column prop="virNum" label="虚拟机编号" width="120" align="center"></el-table-column>
+          <el-table-column prop="comNum" label="虚拟机编号" width="120" align="center"></el-table-column>
           <el-table-column prop="description" label="规格族" width="150" align="center"></el-table-column>
-          <el-table-column prop="processor_model" label="处理机型号" width="150" align="center"></el-table-column>
-          <el-table-column prop="cpu_core" label="VCPu(核)" width="120" align="center"></el-table-column>
+          <el-table-column prop="processorModel" label="处理机型号" width="150" align="center"></el-table-column>
+          <el-table-column prop="cpuCore" label="VCPu(核)" width="120" align="center"></el-table-column>
           <el-table-column prop="ram" label="内存(G)" width="120" align="center"></el-table-column>
-          <el-table-column prop="processor_frequency" label="处理器频率(GHz)" width="160" align="center"></el-table-column>
-          <el-table-column label="价格(元/月)" width="220" align="center">
+          <el-table-column prop="processorFrequency" label="处理器频率(GHz)" width="160" align="center"></el-table-column>
+          <el-table-column prop="price" label="价格(元/月)" width="220" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.index" controls-position="right" @change="handleChange_vir"
+              <el-input-number v-model="scope.row.price" controls-position="right" @change="handleChange_vir"
                                :step="50" :min="0" :max="9999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
@@ -465,7 +465,7 @@ export default {
       dialogVisible_vir: false,
 
       formInline: {
-        cpu_core: 0,
+        cpuCore: 0,
         ram: 0,
         storage:0,
         storage_virtual:0,
@@ -481,82 +481,41 @@ export default {
       }
       ],
 
-      tableData_phy:[{
-        phyNum: 1,
-        cpu_core: 1,
-        ram: 100,
-        storage: 100,
-        price:100
-      },{
-        phyNum: 2,
-        cpu_core: 2,
-        ram: 100,
-        storage: 100,
-        price:100
-      },{
-        phyNum: 3,
-        cpu_core: 3,
-        ram: 100,
-        storage: 100,
-        price:100
-      },
+      tableData_phy:[
       ],
       num: '',
 
-      tableData_vir:[{
-        virNum:1,
-        description:'s6',
-        processor_model: 'intel 1',
-        cpu_core: 1,
-        ram:8,
-        processor_frequency: 2.4,
-        price: 100,
-      },{
-        virNum:2,
-        description:'s6',
-        processor_model: 'intel 1',
-        cpu_core: 3,
-        ram:8,
-        processor_frequency: 2.4,
-        price: 200,
-      },{
-        virNum:3,
-        description:'s6',
-        processor_model: 'intel 1',
-        cpu_core: 5,
-        ram:8,
-        processor_frequency: 2.4,
-        price: 300,
-      }],
+      tableData_vir:[
+      ],
 
 
       ruleForm_physics: {
-        phyNum:1,
-        cpu_core: 1,
+        comNum:1,
+        cpuCore: 1,
         ram:1,
         storage:1,
         price:0
       },
       ruleForm_virtual: {
-        virNum:1,
+        comNum:1,
         description:'',
-        processor_model: '',
-        cpu_core: 1,
+        processorModel: '',
+        cpuCore: 1,
         ram:1,
-        processor_frequency: 0,
+        processorFrequency: 0,
         price: 0,
       },
       rules: {
         description: [
           { required: true, message: '请输入规格族', trigger: 'blur' },
         ],
-        processor_model: [
+        processorModel: [
           { required: true, message: '请输入处理器型号', trigger: 'blur' },
         ],
-        processor_frequency: [
+        processorFrequency: [
           { required: true, message: '请输入处理器频率', trigger: 'blur'},
         ],
-        cpu_core: [
+        cpuCore: [
           { required: true, message: '请输入cpu核数', trigger: 'blur' },
         ],
         ram: [
@@ -643,6 +602,12 @@ export default {
     };
     budOption && budChart.setOption(budOption);
 
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+      this.tableData_phy = res.data;
+    });
+    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+      this.tableData_vir = res.data;
+    });
   },
   methods: {
     //折叠面板
@@ -694,16 +659,31 @@ export default {
 
     //增加物理机函数
     add_physics() {
-      this.$message({
-        message: 'success，成功添加虚拟机',
-        type: 'success'
-      });
-      this.tableData_phy.push(this.ruleForm_physics)
+      this.$axios.post("http://localhost:8084/adminHome/insertPhysics",{
+        cpuCore : this.ruleForm_physics.cpuCore,
+        ram: this.ruleForm_physics.ram,
+        storage: this.ruleForm_physics.storage,
+        price: this.ruleForm_physics.price
+      }).then((res)=>{
+        if (res.data===true)
+        {
+          this.$message({
+            message:'添加成功',
+            type:'success'
+          })
+          this.tableData_phy.push(this.ruleForm_physics);
+        }else
+          this.$message({
+            message: '添加失败',
+            type: 'error'
+          });
+
+      })
     },
     //重置新增物理机填写的值
     reset_physics(){
       this.ruleForm_physics.price=0
-      this.ruleForm_physics.cpu_core=1
+      this.ruleForm_physics.cpuCore=1
       this.ruleForm_physics.storage=1
       this.ruleForm_physics.ram=1
     },
@@ -714,25 +694,31 @@ export default {
 
     //增加虚拟机函数
     add_virtual(){
-      if (this.ruleForm_virtual.processor_model === '' || this.ruleForm_virtual.description === ''){
+      if (this.ruleForm_virtual.processorModel === '' || this.ruleForm_virtual.description === ''){
         this.$message.error('error，请将信息填写完整');
       }else{
-        this.$message({
-          message: 'success，成功添加虚拟机',
-          type: 'success'
-        });
-        this.tableData_vir.push(this.ruleForm_virtual)
+        this.$axios.post("http://localhost:8084/adminHome/insertVirtual",this.ruleForm_virtual).then(
+          (res)=>{
+          if(res.data===true){
+            this.$message({
+              message: 'success，成功添加虚拟机',
+              type: 'success'
+            });
+            this.tableData_vir.push(this.ruleForm_virtual)
+          }
+        })
+
       }
     },
 
     //重置新增虚拟机填写的值
     reset_virtual(){
       this.ruleForm_virtual.price=0
-      this.ruleForm_virtual.cpu_core=1
-      this.ruleForm_virtual.processor_frequency=0
+      this.ruleForm_virtual.cpuCore=1
+      this.ruleForm_virtual.processorFrequency=0
       this.ruleForm_virtual.ram=1
       this.ruleForm_virtual.description=''
-      this.ruleForm_virtual.processor_model=''
+      this.ruleForm_virtual.processorModel=''
     },
 
     //删除所点击行的虚拟机

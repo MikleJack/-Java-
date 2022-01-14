@@ -1,6 +1,7 @@
 package com.example.back2.service.table;
 
 import com.example.back2.entity.table.PhysicsComResource;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -55,5 +56,7 @@ public interface PhysicsComResourceService {
 
 
     List<PhysicsComResource> selectAllpc();
+
+    boolean insertPhysics(int cpuCore, int ram, int storage, int price);
 
 }
