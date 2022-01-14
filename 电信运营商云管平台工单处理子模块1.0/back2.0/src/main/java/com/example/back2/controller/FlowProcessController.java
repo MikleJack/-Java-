@@ -5,14 +5,20 @@ import com.example.back2.entity.table.FlowProcess;
 import com.example.back2.entity.view.FlowStaff;
 import com.example.back2.service.table.FlowProcessService;
 import com.example.back2.service.view.FlowStaffService;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 /**
  * (FlowProcess)表控制层
@@ -110,20 +116,29 @@ public class FlowProcessController {
      */
 //  查询对应工单号的所有流转过程
     @GetMapping("selectByWorkOrderNum")
-    public List<FlowStaff> selectByWorkOrderNum(String workOrederNum){
-        return this.flowStaffService.selectByWorkOrderNum(workOrederNum);
+    public List<FlowStaff> selectByWorkOrderNum(String workOrderNum){
+        return this.flowStaffService.selectByWorkOrderNum(workOrderNum);
     }
 
 //  通过工单号查找申请时间
     @GetMapping("selectApplyTime")
-    public List<FlowProcess> selectApplyTime(String workOrderNum){
-        System.out.println(workOrderNum);
+    public String selectApplyTime(String workOrderNum){
+//        System.out.println(workOrderNum);
         List<FlowProcess> ans = this.flowProcessService.selectApplyTime(workOrderNum);
+        List<Date> d = new LinkedList<Date>();
         for (FlowProcess i:ans){
-            System.out.println(i.getDealDate());
+            d.add(i.getDealDate());
         }
-//        System.out.println(ans);
-        return ans;
+        Date min = d.get(0);
+        for(Date i:d){
+            int t = i.compareTo(min);
+            if(t == -1){
+                min = i;
+            }
+        }
+        String mintime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(min);
+
+        return mintime;
     }
 }
 
