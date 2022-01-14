@@ -139,7 +139,7 @@
           <el-row :gutter="50">
 
 <!--              部门已使用预算/部门总预算情况展示-->
-            <el-col :span="7">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <div class="processColumn">
                   <el-progress type="circle" class="left_progress"
@@ -156,7 +156,7 @@
             </el-col>
 
 <!--        工单使用预算/部门剩余预算-->
-            <el-col :span="7">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <div class="processColumn">
                   <el-progress type="circle" class="left_progress"
@@ -173,7 +173,7 @@
             </el-col>
 
 <!--        工单使用预算 和 工单资源利用率-->
-            <el-col :span="7">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
                 <div class="processColumn">
                   <el-progress type="circle" class="left_progress"
@@ -391,7 +391,7 @@ export default {
 /*资源使用情况，圆形进度条*/
 .processColumn{
   position: relative;
-  margin-left: 40%;
+  margin-left: 20%;
   float: left;
 }
 
