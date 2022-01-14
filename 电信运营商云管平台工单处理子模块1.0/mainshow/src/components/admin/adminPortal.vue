@@ -127,7 +127,7 @@
         <el-row class="adminButton1" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="部门预算设置" placement="left">
           <el-button style="margin-top: 20%; color: white;background-color: #52b69a;font-size: 30px"
-                     @click="dialogVisible_budget=true" size="mini"
+                     @click="setbudget" size="mini"
                      icon="el-icon-odometer" circle
                      ></el-button>
           </el-tooltip>
@@ -135,14 +135,14 @@
         <el-row class="adminButton2" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="物理机资源及价格配置" placement="left">
           <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
-                     @click="dialogVisible_phy=true" size="mini"
+                     @click="setphy" size="mini"
                      icon="el-icon-monitor" circle></el-button>
           </el-tooltip>
         </el-row>
         <el-row class="adminButton2" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="虚拟机资源及价格配置" placement="left">
             <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
-                       @click="dialogVisible_vir=true" size="mini"
+                       @click="setVm" size="mini"
                        icon="el-icon-connection" circle></el-button>
           </el-tooltip>
         </el-row>
@@ -163,11 +163,11 @@
           border
           style="width: 100%"
         :cell-style="{textAlign:'center'}">
-          <el-table-column prop="department_name" label="部门名称" width="180" align="center">
+          <el-table-column prop="depName" label="部门名称" width="180" align="center">
           </el-table-column>
-          <el-table-column prop="budget" label="预算(万元)" width="278.5" align="center">
+          <el-table-column prop="depBudget" label="预算(万元)" width="278.5" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.budget" controls-position="right" @change="handleChange_bud"
+              <el-input-number v-model="scope.row.depBudget/10000" controls-position="right" @change="handleChange_bud"
                                :precision="2" :step="1" :min="0" :max="9999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
@@ -472,14 +472,7 @@ export default {
         storage_price:0.5
       },
 
-      tableData_bud: [{
-        department_name: '小组1',
-        budget: '10',
-      },{
-        department_name: '小组2',
-        budget: '10',
-      }
-      ],
+      tableData_bud: [],
 
       tableData_phy:[
       ],
@@ -602,14 +595,40 @@ export default {
     };
     budOption && budChart.setOption(budOption);
 
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
-      this.tableData_phy = res.data;
-    });
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
-      this.tableData_vir = res.data;
-    });
+
+
   },
   methods: {
+    //虚拟机资源配置
+    setVm(){
+      this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+        this.tableData_vir = res.data;
+      });
+      this.$axios.get("http://localhost:8084/adminHome/getVm").then((res)=>{
+        if(res.data){
+          this.formInline.cpuCore=res.data.cpuCore;
+          this.formInline.storage=res.data.storage;
+          this.formInline.ram =res.data.ram;
+        }
+      })
+      this.dialogVisible_vir=true;
+    },
+    //物理机资源配置
+    setphy(){
+      this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+        this.tableData_phy = res.data;
+      });
+      this.dialogVisible_phy=true;
+    },
+    //部门预算初始化
+    setbudget(){
+      this.$axios.get("http://localhost:8084/adminHome/getDepBudget").then((res)=>{
+        if(res.data!==null){
+          this.tableData_bud = res.data;
+        }
+      })
+      this.dialogVisible_budget=true;
+    },
     //折叠面板
     handleChange_collapse(val) {
       console.log(val);
@@ -736,9 +755,11 @@ export default {
     },
     //密码验证确认
     complete_confirm(){
-      this.password_confirm = true
-      if (this.which_page_confirm === 1){
+      this.$axios.post("http://localhost:8084/adminHome/confirmPassword?password="+this.confirm_password).then((res)=>{
+        this.password_confirm = res.data === true;
+      })
 
+      if (this.which_page_confirm === 1){
         if(this.password_confirm === true){
 
         }else{
@@ -762,9 +783,16 @@ export default {
         }
 
       }else if(this.which_page_confirm === 4){
-
         if(this.password_confirm === true){
-
+          this.$axios.put("http://localhost:8084/adminHome/updateVm?cpuCore="+this.formInline.cpuCore+
+            "&ram="+this.formInline.ram+"&storage="+this.formInline.storage).then((res)=>{
+            if(res.data===true){
+              this.$message({
+                message: 'success，密码验证成功，成功修改虚拟机总资源',
+                type: 'success'
+              });
+            }
+          })
         }else{
 
         }
@@ -780,10 +808,7 @@ export default {
       }else{
         this.dialogVisible_modify = false
       }
-      this.$message({
-        message: 'success，密码验证成功，成功修改虚拟机总资源',
-        type: 'success'
-      });
+
 
     },
 
