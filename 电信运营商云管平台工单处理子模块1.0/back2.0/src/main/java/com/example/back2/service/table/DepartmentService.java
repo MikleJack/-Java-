@@ -58,4 +58,6 @@ public interface DepartmentService {
 
     List<Department> AllDep();
 
+    List<Department> getDepBudget();
+
 }

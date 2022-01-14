@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("staffHome")
-public class home {
+public class StaffHome {
 
 //----------------左上角员工信息界面-顶部-------------------------------
     @Resource

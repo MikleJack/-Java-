@@ -2,6 +2,7 @@ package com.example.back2.service.table;
 
 import com.example.back2.entity.table.PhysicsComResource;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -65,5 +66,7 @@ public interface PhysicsComResourceService {
      * @return 是否修改成功
      */
     boolean setComAssign(List<Integer> comNum,boolean assign);
+
+    boolean insertPhysics(int cpuCore, int ram, int storage, int price);
 
 }

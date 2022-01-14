@@ -277,11 +277,14 @@ export default {
     },
   props:["show"],
   methods: {
-    pass(){
+    setFlow(){
       this.flowProcess.workOrderNum=this.workOrderNum;
       this.flowProcess.dealComment=this.note;
       this.getDateFunc();
       this.flowProcess.dealNum=sessionStorage.getItem("work_num");
+    },
+    pass(){
+      this.setFlow();
       this.flowProcess.operationType="审批通过";
       this.$axios.post("http://localhost:8084/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
@@ -304,10 +307,26 @@ export default {
 
     },
     nopass(){
-
+      this.setFlow();
+      this.flowProcess.operationType="审批不通过";
+      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+        flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+            this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+              workOrderNum:this.workOrderNum,
+              state:"审批不通过"
+            })
+      })
     },
     hangup(){
-
+      this.setFlow();
+      this.flowProcess.operationType="挂起";
+      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+        flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+        this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+          workOrderNum:this.workOrderNum,
+          state:"挂起"
+        })
+      })
     },
 
     getDateFunc() {

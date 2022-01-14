@@ -76,7 +76,21 @@
             update virtual_com_resource
             set storage = ((select storage) - #{storage});
         </if>
+        <if test="upOrDown = 'update'" >
+            update virtual_com_resource
+            set cpu_core = #{cpuCore};
+            update virtual_com_resource
+            set ram =  #{ram};
+            update virtual_com_resource
+            set storage = #{storage};
+        </if>
     </update>
 
+
+    <select id="selectOne" resultMap="VirtualComResourceMap">
+        select
+            cpu_core, ram, storage
+        from virtual_com_resource
+    </select>
 </mapper>
 

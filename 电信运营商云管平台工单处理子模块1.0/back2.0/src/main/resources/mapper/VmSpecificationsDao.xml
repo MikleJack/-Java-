@@ -117,6 +117,10 @@
         description = values(description)
     </insert>
 
+    <insert id="insertVirtual">
+
+    </insert>
+
     <!--通过主键修改数据-->
     <update id="update">
         update brccq2.vm_specifications

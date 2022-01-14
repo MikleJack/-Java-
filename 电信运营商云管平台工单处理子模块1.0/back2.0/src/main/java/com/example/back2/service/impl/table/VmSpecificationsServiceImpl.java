@@ -81,4 +81,9 @@ public class VmSpecificationsServiceImpl implements VmSpecificationsService {
     public List<VmSpecifications> selectAllvm(){
         return this.vmSpecificationsDao.selectAllvm();
     }
+
+    public boolean insertVirtual(int cpuCore, int ram, int price,String processorModel,String processorFrequency,String description){
+        this.vmSpecificationsDao.insertVirtual(cpuCore,ram,price,processorModel,processorFrequency,description);
+        return true;
+    }
 }

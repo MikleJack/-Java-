@@ -39,4 +39,7 @@ public interface VirtualComResourceService {
      * @return 实例对象
      */
     boolean updateVmResource(Integer cpuCore ,Integer ram,Integer storage, String upOrDown);
+
+    VirtualComResource selectOne();
+
 }

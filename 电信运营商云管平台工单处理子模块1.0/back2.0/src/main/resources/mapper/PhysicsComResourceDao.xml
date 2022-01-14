@@ -46,6 +46,7 @@
         where assign = true
     </select>
 
+
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="PhysicsComResourceMap">
         select
@@ -97,6 +98,12 @@
         cpu_core = values(cpu_core) , ram = values(ram) , storage = values(storage) , assign = values(assign) , price =
         values(price)
     </insert>
+
+    <insert id="insertPhysics">
+        insert into physics_com_resource(cpu_core,ram,storage,assign,price)
+        values (#{cpuCore}, #{ram}, #{storage}, true, #{price})
+    </insert>
+
 
     <!--通过主键修改数据-->
     <update id="update">
