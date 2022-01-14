@@ -117,9 +117,10 @@
         description = values(description)
     </insert>
 
-    <insert id="insertVirtual">
-
-    </insert>
+    <update id="updateDiskPrice" >
+        update brccq2.vm_specifications
+        set disk_price = #{diskPrice}
+    </update>
 
     <!--通过主键修改数据-->
     <update id="update">
