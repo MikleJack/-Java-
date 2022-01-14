@@ -59,10 +59,8 @@
           </template>
         </el-table-column>
       </el-table>
+      <ticket_details ref="ticket_details" :show="true"></ticket_details>
 
-      <el-dialog title="工单详情" :visible.sync="dialogTableVisible" width="80%">
-        <ticket_details ref="ticket_details" :show="true"></ticket_details>
-      </el-dialog>
     </div>
     <div class="page-tail">
       <!--放置分页部分-->
@@ -112,7 +110,8 @@ export default {
       })
     },
     handleClick_detail(workOrderNum){
-      this.dialogTableVisible = true;
+      // this.dialogTableVisible = true;
+      this.$store.state.pendtickets_dialogTableVisible = true;
       this.$refs.ticket_details.autoGetAllDetail(workOrderNum);
     }
   },
@@ -128,10 +127,9 @@ export default {
       tableData: [],
       //分页相关
       currentPage:1,
-      pageSize:9,
-      totalSize:0,
-
-      dialogTableVisible:false
+      pageSize:8,
+      totalSize:0
+      // dialogTableVisible:false
     }
   }
 }

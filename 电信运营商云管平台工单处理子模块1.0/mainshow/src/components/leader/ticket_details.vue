@@ -1,4 +1,6 @@
 <template>
+  <el-dialog title="工单详情" :visible.sync="this.$store.state.pendtickets_dialogTableVisible" width="80%" :before-close="handleClose">
+
   <div class="page">
     <div class="page_body">
       <!--      申请人信息展示-->
@@ -206,6 +208,7 @@
       </div>
     </div>
   </div>
+  </el-dialog>
 </template>
 
 <script>
@@ -293,12 +296,28 @@ export default {
               this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
                 workOrderNum:this.workOrderNum,
                 state:"审批通过"
+              }).then((res)=>{
+                this.$store.state.pendtickets_dialogTableVisible = false;
+                //   审批通过提示框
+                this.$message({
+                  message: '审批通过',
+                  type: 'success',
+                  center: true
+                });
               })
             }
             else {
               this.$axios.post("http://localhost:8084/pendtickets/towExamine",{
                 workOrderNum:this.workOrderNum,
-                state:"审批通过"
+                state:"审批通过",
+              }).then((res)=>{
+                this.$store.state.pendtickets_dialogTableVisible = false;
+                //   审批通过提示框
+                this.$message({
+                  message: '审批通过',
+                  type: 'success',
+                  center: true
+                });
               })
             }
           }
@@ -314,6 +333,14 @@ export default {
             this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
               workOrderNum:this.workOrderNum,
               state:"审批不通过"
+            }).then((res)=>{
+              this.$store.state.pendtickets_dialogTableVisible = false;
+              //   审批不通过提示框
+              this.$message({
+                message: '审批不通过',
+                type: 'error',
+                center: true
+              });
             })
       })
     },
@@ -327,6 +354,12 @@ export default {
           state:"挂起"
         })
       })
+    },
+
+    //关闭详情页
+    handleClose(){
+      this.$store.state.pendtickets_dialogTableVisible = false;
+      this.refresh();
     },
 
     getDateFunc() {
@@ -362,7 +395,7 @@ export default {
 
     //部门已用预算/部门总预算进度条
     total_percentage(){
-      return 100*this.used_budget/this.total_budget;
+      return (100*this.used_budget/this.total_budget).toFixed(2);
     },
 
     //工单预算/部门剩余预算进度条

@@ -1,4 +1,6 @@
 <template>
+  <el-dialog title="工单详情" :visible.sync="$store.state.order_detail_dialogTableVisible"width="80%" :before-close="handleClose">
+
   <div class="page">
     <div class="page_body">
       <!--      申请人信息展示-->
@@ -187,6 +189,7 @@
       </div>
     </div>
   </div>
+  </el-dialog>
 </template>
 
 <script>
@@ -238,12 +241,12 @@ export default {
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
-      return 100*this.used_budget/this.total_budget;
+      return (100*this.used_budget/this.total_budget).toFixed(2);
     },
     //工单预算/部门剩余预算进度条
     percentage(){
       this.surplus_budget=this.total_budget-this.used_budget;
-      return 100*this.order_budget/this.surplus_budget;
+      return (100*this.order_budget/this.surplus_budget).toFixed(2);
     },
     customColorMethod(percentage) {
       if (percentage < 90) {
@@ -253,6 +256,12 @@ export default {
         return 'rgba(250,116,14,0.55)';
       }
     },
+    //关闭详情页
+    handleClose(){
+      this.$store.state.order_detail_dialogTableVisible = false;
+      this.refresh();
+    },
+
     autoGetAllDetail(workOrderNum) {
       this.$axios.get("http://localhost:8084/leader/queryWorkOrderDetailTop?workOrderNum="
         + workOrderNum).then((res)=>{
@@ -279,9 +288,22 @@ export default {
         this.virtualCom = res.data;
       });
       //通过工单编号查找流转过程
-      this.$axios.get("http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrederNum="
+      this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum='
         +workOrderNum).then((res)=>{
+          console.log(workOrderNum);
+          console.log(res.data);
         this.informData = res.data;
+      });
+
+    //  通过工单编号查找物理机资源
+      this.$axios.get("http://localhost:8084/leader/getOrderCom?workOrderNum=" +
+        workOrderNum).then((res)=>{
+          this.phyCom = res.data;
+      });
+    //  通过同单编号查找虚拟机资源
+      this.$axios.get("http://localhost:8084/leader/getOrderVm?workOrderNum=" +
+        workOrderNum).then((res)=>{
+         this.virtualCom = res.data;
       });
     }
   }

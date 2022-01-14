@@ -76,9 +76,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-dialog title="工单详情" :visible.sync="dialogTableVisible"width="80%">
-          <order_detail ref="order_detail" :show="false"></order_detail>
-        </el-dialog>
+        <order_detail ref="order_detail"></order_detail>
+
       </div>
 
 
@@ -124,7 +123,7 @@ import order_detail from "./order_detail";
             work_order_type: ''
           },
           //工单详情弹窗
-          dialogTableVisible: false,
+          // dialogTableVisible: false,
           tableData: [],
           //分页相关
           currentPage:1,
@@ -147,8 +146,10 @@ import order_detail from "./order_detail";
           })
         },
         handleClick_detail( workOrderNum ) {
-          this.dialogTableVisible = true;
           this.$refs.order_detail.autoGetAllDetail(workOrderNum);
+          this.$store.state.order_detail_dialogTableVisible = true;
+
+
         }
 
       }
