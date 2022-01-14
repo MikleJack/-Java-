@@ -83,5 +83,15 @@ public interface PhysicsComResourceDao {
 
 
     List<PhysicsComResource> selectAllpc();
+
+    /**
+     * 改变物理机分配状态
+     *
+     * @param comNum  即将下线的物理机编号
+     * @param assign  选择分配状态
+     * @return 是否修改成功
+     */
+    boolean setComAssign(Integer comNum,boolean assign);
+
 }
 

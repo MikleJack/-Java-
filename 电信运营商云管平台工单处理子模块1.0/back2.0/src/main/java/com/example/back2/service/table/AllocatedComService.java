@@ -61,4 +61,5 @@ public interface AllocatedComService {
      */
     List<AllocatedCom> queryByWorkOrderNum(String workOrderNum);
 
+
 }

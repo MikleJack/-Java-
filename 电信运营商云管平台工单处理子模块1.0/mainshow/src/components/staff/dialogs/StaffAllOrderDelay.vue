@@ -81,8 +81,12 @@ export default {
     //确认延期
     requireToDelay(){
       let newTime = this.dateFormat(this.delayTime ,"yyyy-MM-dd HH:mm:ss")
-      this.$axios.get('http://localhost:8084/staffAllTickets/delay?workOrderNum=202201081138000001' + '&delayTimeString='+ newTime +
-      '&delayReason=' + this.delayReason).then((res)=>{
+
+      this.$axios.post("http://localhost:8084/staffAllTickets/delay",{
+        workOrderNum:202201081138000001,
+        delayTime:this.delayTime,
+        delayReason: this.delayReason
+      }).then((res)=>{
         if(res.data != "false"){
           alert("发起延期成功，创建的延期工单号为" + res.data);
         }else{
