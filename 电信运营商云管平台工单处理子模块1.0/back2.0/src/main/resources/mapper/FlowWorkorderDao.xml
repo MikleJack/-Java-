@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.FlowWorkorderDao">
+
+    <resultMap type="com.example.back2.entity.view.FlowWorkorder" id="FlowWorkorderMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="workOrderName" column="work_order_name" jdbcType="VARCHAR"/>
+        <result property="expirationTime" column="expiration_time" jdbcType="TIMESTAMP"/>
+        <result property="workerNum" column="worker_num" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="dealDate" column="deal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealComment" column="deal_comment" jdbcType="VARCHAR"/>
+        <result property="dealNum" column="deal_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="FlowWorkorderMap">
+        select
+          work_order_num, work_order_name, expiration_time, worker_num, name, deal_date, deal_comment, deal_num
+        from flow_workOrder
+        <where>
+            <if test="dealNum != null">
+                and deal_num = #{dealNum}
+            </if>
+            <if test="applyName!=null and applyName != ''">
+                and name = #{applyName}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from flow_workOrder
+        <where>
+            <if test="dealNum != null">
+                and deal_num = #{dealNum}
+            </if>
+            <if test="applyName!=null and applyName != ''">
+                and name = #{applyName}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+

@@ -23,7 +23,7 @@
     <el-container>
       <el-aside class="aside" width=150px>
         <el-menu
-          default-active="this.$route.path"
+          default-active="1"
           class="el-menu-vertical-demo"
           background-color="#52b69a"
           text-color="#fff"
