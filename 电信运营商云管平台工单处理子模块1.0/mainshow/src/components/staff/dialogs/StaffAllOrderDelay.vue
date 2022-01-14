@@ -58,12 +58,12 @@ export default {
       }).then((res)=>{
         if(res.data != "false"){
           alert("发起延期成功，创建的延期工单号为" + res.data);
+          this.$store.state.staffAllOrder_DelayDialogVisible = false;
+          this.refresh();
         }else{
           alert("延期失败");
         }
       })
-      this.refresh();
-      this.$store.state.staffAllOrder_DelayDialogVisible = false;
     },
 
     handleClose(){
