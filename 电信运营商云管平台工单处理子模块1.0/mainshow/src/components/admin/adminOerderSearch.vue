@@ -24,6 +24,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button @click="handleClick_clean">清空</el-button>
       </el-form-item>
     </el-form>
 
@@ -139,6 +140,7 @@ export default {
 
     //条件并分页查询
     handleClick_search(){
+      this.ifPagination = true;
       this.resetPageSituation();
       this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
                       + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
@@ -159,6 +161,17 @@ export default {
       //   //逻辑代码
       //   console.log(res);
       // });
+    },
+
+    //重置查询
+    handleClick_clean(){
+      this.ifPagination = false;
+      this.resetPageSituation();
+      this.workOrderTypeSelector = '';
+      this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
     },
 
     //分页按钮操作
