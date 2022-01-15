@@ -12,6 +12,7 @@
           <!--输入查询框-->
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button @click="handleClick_clean">清空</el-button>
           </el-form-item>
           <!--查询按钮-->
         </el-form>
@@ -98,6 +99,14 @@
       onSubmit() {
         console.log('submit!');
       },
+
+      handleClick_clean(){
+        this.$axios.get("http://localhost:8084/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      },
+
       //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
       handleCurrentChange(val){
         this.currentPage=parseInt(val);

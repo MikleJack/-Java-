@@ -25,6 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button @click="handleClick_clean">清空</el-button>
       </el-form-item>
     </el-form>
 
@@ -160,11 +161,24 @@ export default {
   methods: {
     //条件并分页查询
     handleClick_search(){
+      this.ifPagination = true;
       this.resetPageSituation();
       this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
         + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;})
+    },
+
+    //重置查询
+    handleClick_clean(){
+      this.ifPagination = false;
+      this.resetPageSituation();
+      this.criteriaQueryByPage.workOrderTypeSelector = '';
+      this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
+        + '&page=0'+ '&size=' + this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
     },
 
     //分页按钮操作
@@ -205,8 +219,7 @@ export default {
 
     //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
     resetPageSituation(){
-      this.ifPagination = true,
-        this.currentPage = 1;
+      this.currentPage = 1;
       this.pageSize = 9;
       this.totalSize = 0;
     }
