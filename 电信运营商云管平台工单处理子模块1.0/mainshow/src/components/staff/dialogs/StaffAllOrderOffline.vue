@@ -38,7 +38,7 @@ export default {
     },
     //确认下线
     offlineAccess(){
-      this.$axios.get("http://localhost:8084/staffAllTickets/offline?workOrderNum=" + this.workOrderNum + "&workOrderState="+
+      this.$axios.get(this.$store.state.url+"/staffAllTickets/offline?workOrderNum=" + this.workOrderNum + "&workOrderState="+
                                                                   this.workOrderState + '&offlineReason=' + this.offlineReason).then((res)=>{
           if(res.data){
             this.$store.state.staffAllOrder_OfflineDialogVisible = false;

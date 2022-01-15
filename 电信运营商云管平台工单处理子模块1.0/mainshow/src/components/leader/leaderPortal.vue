@@ -186,7 +186,7 @@ export default {
       return '';
     },
     init(){
-      this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum="+
+      this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum="+
         sessionStorage.getItem("work_num")).then((res)=>{
           this.workInfo=res.data;
           console.log(this.workInfo);

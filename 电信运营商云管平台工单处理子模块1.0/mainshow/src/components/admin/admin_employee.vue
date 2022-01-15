@@ -228,11 +228,11 @@ export default {
   methods: {
     //页面初始化
     init(){
-      this.$axios.get("http://localhost:8084/account/all?page="+0+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/account/all?page="+0+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       });
-      this.$axios.get("http://localhost:8084/account/getDep").then((res)=>{
+      this.$axios.get(this.$store.state.url+"/account/getDep").then((res)=>{
         this.options = res.data;
       })
     },
@@ -246,7 +246,7 @@ export default {
     },
     //增加账户函数
     add_AccountNumber() {
-      this.$axios.get("http://localhost:8084/account/addAccount?root_num=root&admin_password="+
+      this.$axios.get(this.$store.state.url+"/account/addAccount?root_num=root&admin_password="+
         this.password_confirm+"&name="+this.ruleForm.name+"&depNum="+this.ruleForm.department+"&phone="+"&work_password=brccq123456").then((res)=>{
           if (res.data===true)
           {
@@ -273,7 +273,7 @@ export default {
       this.dialogVisible_reset=true;
     },
     handleClick_reset() {
-      this.$axios.get("http://localhost:8084/account/reset?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get(this.$store.state.url+"/account/reset?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -300,7 +300,7 @@ export default {
       this.row=row;
     },
     handleClick_lock() {
-      this.$axios.get("http://localhost:8084/account/lockAccount?work_num="+this.row.workNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/account/lockAccount?work_num="+this.row.workNum).then((res)=>{
         if (res.data===true)
         {
           this.$message({
@@ -326,7 +326,7 @@ export default {
       this.init();
     },
     handleClick_unlock() {
-      this.$axios.get("http://localhost:8084/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get(this.$store.state.url+"/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -354,7 +354,7 @@ export default {
       this.init();
     },
     handleClick_delect() {
-      this.$axios.get("http://localhost:8084/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
+      this.$axios.get(this.$store.state.url+"/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
         this.password_confirm).then((res)=>{
         if (res.data===true)
         {
@@ -383,7 +383,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get("http://localhost:8084/account/all?page="+page+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/account/all?page="+page+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })

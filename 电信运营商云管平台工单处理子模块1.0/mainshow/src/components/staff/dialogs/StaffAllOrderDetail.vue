@@ -288,40 +288,40 @@ export default {
     },
     autoGetAllDetail(workOrderNum) {
       //上半部分个人信息和工单获取
-      this.$axios.get('http://localhost:8084/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/adminSearchOrder/queryWorkOrderDetailTop?workOrderNum=' + workOrderNum).then((res)=>{
         this.singleInformForm = res.data;
         this.order_budget = res.data.price;
         //部门预算使用情况获取
-        this.$axios.get('http://localhost:8084/depart/getDepBudget?depNum=' + res.data.depNum).then((res)=>{
+        this.$axios.get(this.$store.state.url+'/depart/getDepBudget?depNum=' + res.data.depNum).then((res)=>{
           this.depTotalBudget = res.data;
         });
-        this.$axios.get('http://localhost:8084/usedBudget/getUsedBudget?id=' + res.data.depNum).then((res)=>{
+        this.$axios.get(this.$store.state.url+'/usedBudget/getUsedBudget?id=' + res.data.depNum).then((res)=>{
           this.depUsedBudget = res.data.depUsedBudget;
         });
       });
 
       //物理机使用情况获取
-      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedCom?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/allocatedCom?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedCom = res.data;
       });
 
       //虚拟机使用情况获取
-      this.$axios.get('http://localhost:8084/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/allocatedVir?workOrderNum=' + workOrderNum).then((res)=>{
         this.allocatedVm = res.data;
       });
 
       //流转过程情况获取
-      this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/flowProcess/selectByWorkOrderNum?workOrderNum=' + workOrderNum).then((res)=>{
         this.flowProcess = res.data;
       });
 
       //通过工单编号得到开始时间
-      this.$axios.get('http://localhost:8084/staffAllTickets/queryBeginAndEndTime?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/queryBeginAndEndTime?workOrderNum=' + workOrderNum).then((res)=>{
         this.beginTime = res.data.dealDate;
       });
 
       //通过工单编号得到资源利用情况
-      this.$axios.get('http://localhost:8084/staffAllTickets/queryResourceUsage?workOrderNum=' + workOrderNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/queryResourceUsage?workOrderNum=' + workOrderNum).then((res)=>{
         this.resourceUsage = res.data.resUtilization;
       });
     },

@@ -151,7 +151,7 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
+    this.$axios.get(this.$store.state.url+'/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
                                                   + '&page=0'+ '&size=' + this.pageSize).then((res)=>{
       this.tableData = res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
@@ -163,7 +163,7 @@ export default {
     handleClick_search(){
       this.ifPagination = true;
       this.resetPageSituation();
-      this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
         + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;})
@@ -174,7 +174,7 @@ export default {
       this.ifPagination = false;
       this.resetPageSituation();
       this.criteriaQueryByPage.workOrderTypeSelector = '';
-      this.$axios.get('http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
+      this.$axios.get(this.$store.state.url+'/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
         + '&page=0'+ '&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
@@ -186,7 +186,7 @@ export default {
       if(!this.ifPagination){
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get("http://localhost:8084/staffAllTickets/criteriaQueryByPage?workerNum=" + sessionStorage.getItem("work_num")
+        this.$axios.get(this.$store.state.url+"/staffAllTickets/criteriaQueryByPage?workerNum=" + sessionStorage.getItem("work_num")
                           + '&page=' +page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
@@ -194,7 +194,7 @@ export default {
       }else{
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get('http://localhost:8084/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
+        this.$axios.get(this.$store.state.url+'/staffAllTickets/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector+ '&workOrderTile='
           + this.criteriaQueryByPage.searchOrderWorkerName +'&workerNum=' +  sessionStorage.getItem('work_num') + '&page='+ page +'&size=' + this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
@@ -229,14 +229,7 @@ export default {
 </script>
 
 <style scoped>
-.dialog-footer{
-  width: 100%;
-  height: 100px;
-  bottom: 0;
-  /*background: #888888;*/
-  text-align: center;
-  line-height: 100px;
-}
+
 .page-tail{
   bottom: 0;
   position: absolute;

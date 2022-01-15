@@ -236,14 +236,14 @@ export default {
   },
   mounted(){
     //获取左上角用户信息
-    this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
+    this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
       this.workerInform = res.data;
       let depNum = res.data.depNum;
       //获取部门总预算
-      this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + depNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/depart/getDepBudget?depNum=" + depNum).then((res)=>{
         this.total_budget = res.data;
         //获取部门已使用预算
-        this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
           this.used_budget = res.data.depUsedBudget;
           this.depBudget=parseFloat(100*this.used_budget/this.total_budget).toFixed(2);
         });
@@ -371,12 +371,6 @@ export default {
   overflow-y: hidden;
 }
 .left-top{
-  /*width: 37%;*/
-  /*height: 38%;*/
-  /*float: left;*/
-  /*background-color: #73c8b3;*/
-  /*布局线框颜色*/
-  /*border-bottom:2px dashed #55c97e*/
   position:absolute;
   top:0;
   left: 0;
@@ -387,9 +381,6 @@ export default {
   width: 45%;
   height: 100%;
   float: left;
-  /*background-color: #55cfb0;*/
-  /*布局线框颜色*/
-  /*border:3px solid #000*/
 }
 .head{
   width: 90%;
@@ -406,15 +397,11 @@ export default {
   width: 55%;
   height: 100%;
   float: left;
-  /*background-color: #1caf8a;*/
-  /*布局线框颜色*/
-  /*border-bottom:2px dashed #55c97e*/
 }
 .powerInf{
   width: 100%;
   height: 15%;
   float: left;
-  /*background-color: #147960;*/
 }
 .power{
   margin-left: 70%;
@@ -425,14 +412,12 @@ export default {
   height: 20%;
   font-size: 35px;
   margin-left: 10%;
-  /*background-color: #55cfb0;*/
 }
 .depInf{
   width: 100%;
   height: 15%;
   font-size: 25px;
   margin-left: 10%;
-  /*background-color: #52b69a;*/
 }
 .workerInf{
   width: 100%;
@@ -441,15 +426,8 @@ export default {
   color: rgba(0, 0, 0, 0.55);
   margin-top: 5%;
   margin-left: 10%;
-  /*background-color: #19755e;*/
 }
 .right-top{
-  /*width: 63%;*/
-  /*height: 38%;*/
-  /*float: left;*/
-  /*background-color: #235c4e;*/
-  /*布局线框颜色*/
-  /*border-bottom:2px dashed #55c97e*/
   position: absolute;
   top: 0;
   right: 0;
@@ -460,75 +438,57 @@ export default {
   width: 30%;
   height: 100%;
   float: left;
-  /*background-color: #73c8b3;*/
 }
 .phyPie{
   width: 100%;
   height: 75%;
   float: left;
-
-  /*background-color: #73c8b3;*/
 }
 .phyMessage{
   width: 100%;
   height: 25%;
   float: left;
   font-size: 15px;
-  /*margin-left: 14%;*/
-  /*background-color: #73c8b3;*/
 }
 .bud{
   width: 30%;
   height: 100%;
   float: left;
-  /*background-color: #3eb698;*/
 }
 .budPie{
   width: 100%;
   height: 75%;
   float: left;
-  /*background-color: #3eb698;*/
 }
 .budMessage{
   width: 100%;
   height: 25%;
   float: left;
   font-size: 15px;
-  /*background-color: #36ba99;*/
 }
 .vir{
   width: 30%;
   height: 100%;
   float: left;
-  /*background-color: #1e4d42;*/
 }
 .virPie{
   width: 100%;
   height: 75%;
   float: left;
-  /*background-color: #1e4d42;*/
 }
 .virMessage{
   width: 100%;
   height: 25%;
   float: left;
   font-size: 15px;
-  /*background-color: #4cbda3;*/
 }
 .enter{
   width: 10%;
   height: 100%;
   float: left;
-  /*background-color: #36ba99;*/
 }
 .left-bottom{
-  /*width: 36%;*/
-  /*height: 61%;*/
-  /*float: left;*/
-  /*background-color: #33ab8a;*/
   border:2px solid #53c59e;
-  /*布局线框颜色*/
-  /*border-bottom:2px dashed #55c97e*/
   position: absolute;
   bottom: 0;
   left: 0;
@@ -536,13 +496,6 @@ export default {
   height: 61%;
 }
 .right-bottom{
-  /*width: 63%;*/
-  /*height: 62%;*/
-  /*float: left;*/
-  /*background-color: #50b299;*/
-  /*布局线框颜色*/
-  /*border:2px solid #53c59e*/
-  /*border-bottom:2px dashed #55c97e*/
   position: absolute;
   bottom: 0;
   right: 0;
@@ -553,25 +506,21 @@ export default {
   width: 85%;
   height: 100%;
   float: left;
-  /*background-color: #34957a*/
 }
 .budChart{
   width: 100%;
   height: 50%;
   float: left;
-  /*background-color: #34957a*/
 }
 .orderChart{
   width: 100%;
   height: 50%;
   float: left;
-  /*background-color: #37af8e*/
 }
 .promptBar{
   width: 13%;
   height: 100%;
   float: left;
-  /*background-color: #33ab8a*/
 }
 .duePart{
   width: 95%;
@@ -639,13 +588,11 @@ export default {
 }
 .round-i1{
   height: 10px;
-  /*width: 10px;*/
   margin-top: 10%;
   margin-left: 3%;
 }
 .round-i{
   height: 10px;
-  /*width: 10px;*/
   margin-top: 30px;
   margin-left: 3%;
 }

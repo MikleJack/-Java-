@@ -153,15 +153,6 @@ export default {
 
       // 判断图片类型来筛选图片格式上传
       let _type = file.type
-      // if (
-      //   _type.indexOf('png') == -1 &&
-      //   _type.indexOf('jpg') == -1 &&
-      //   _type.indexOf('jpeg') == -1
-      // ) {
-      //   this.$message.error('上传图片格式不正确，请重新上传!')
-      //   return false
-      // }
-      // return
     },
     /**
      * 删除文件时触发的函数，若返回 false 或者返回 Promise 且被 reject,停止删除

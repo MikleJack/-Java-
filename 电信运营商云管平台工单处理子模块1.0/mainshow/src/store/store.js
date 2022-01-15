@@ -11,9 +11,11 @@ export default new Vuex.Store({
     staffAllOrder_DelayDialogVisible:false,
     staffAllOrder_DetailDialogVisible:false,
     order_detail_dialogTableVisible:false,
-    pendtickets_dialogTableVisible:false
+    pendtickets_dialogTableVisible:false,
+    url:"https://localhost:8084"
   },
   mutations: {
 
-  }
+  },
+
 })

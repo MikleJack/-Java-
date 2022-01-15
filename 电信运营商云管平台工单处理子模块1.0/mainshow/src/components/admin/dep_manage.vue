@@ -117,7 +117,7 @@ export default {
       }
     },
     mounted() {
-      this.axios.get('http://localhost:8084/depTree/cateList').then((res)=>{
+      this.axios.get(this.$store.state.url+'/depTree/cateList').then((res)=>{
       })
     },
     methods: {

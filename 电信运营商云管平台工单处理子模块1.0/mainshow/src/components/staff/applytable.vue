@@ -333,20 +333,20 @@ export default {
   },
   // 获取当前时间的定时器
   mounted() {
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+    this.$axios.get(this.$store.state.url+"/applyTickets/selectAllPc").then((res) => {
       this.gridData_physics = res.data;
     });
-    this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+    this.$axios.get(this.$store.state.url+"/applyTickets/selectAllVm").then((res) => {
       this.gridData_virtual = res.data;
     });
-    this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
+    this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
       let depNum = res.data.depNum;
       //获取部门总预算
-      this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + depNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/depart/getDepBudget?depNum=" + depNum).then((res)=>{
         this.total_budget = res.data;
       });
       //获取部门已使用预算
-      this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
         this.used_budget = res.data.depUsedBudget;
       });
     });
@@ -423,11 +423,6 @@ export default {
       this.multipleSelection_virtual = data;
       this.length_virtual = this.$refs.multipleTable_virtual.selection;//获取当前选中数据的行数
     },
-    //获取单选行的数据
-    // radioChange(row, index) {
-    //   this.radioSelect = row;
-    // },
-    // 删除选中的物理机资源
     deleteRow_physics(index, rows) {
       const data = this.tabledata_physics.slice(index, index + 1)
 
@@ -476,14 +471,6 @@ export default {
         this.multipleChoice_count = 0;
         this.lineNumber_count = 0;
         this.currentRowIndex_virtual.splice(0, this.currentRowIndex_virtual.length)
-        // this.dialogTableVisible_virtual = false//关闭弹窗
-        //
-        // this.tabledata_virtual.push(this.radioSelect);
-        // this.gridData_virtual.splice(this.currentRowIndex_virtual, 1)
-        // this.$refs.multipleTable_virtual.clearSelection()
-        // this.radioSelect.splice(0, this.radioSelect.length)
-        // this.currentRowIndex_virtual.splice(0, this.currentRowIndex_virtual.length)
-
       }
     },
     getDateFunc() {
@@ -568,36 +555,22 @@ export default {
     handleAdd() {
       this.$refs.fileUploadDialog.show()
     },
-    // getAttachList() {
-    //   this.loading = true
-    //   this.attachQuery.billId = this.form.noticeId
-    //   this.attachQuery.billType = 10
-    //   listAttachment(this.attachQuery).then(response => {
-    //     this.attachList = response.rows
-    //     this.attachList.forEach(el => {
-    //       // 转为kb，取小数点后2位
-    //       el.fileSize = parseFloat(el.fileSize / 1024).toFixed(2)
-    //     })
-    //     this.attachTotal = response.total
-    //     this.loading = false
-    //   }).catch(() => {})
-    // },
 
     //提交所有工单数据
     submit() {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
       this.workorder.price= this.total_price;
       //插入到表单中
-      this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
+      this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
         this.workorder).then((res) => {
         if (res.data) {
           //插入申请的物理机资源
-          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom", {
+          this.$axios.post(this.$store.state.url+"/applyTickets/insertAllocatedCom", {
             qs: JSON.stringify(this.tabledata_physics),
             workOrderNum: res.request.response
           });
           //插入申请的虚拟机资源
-          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedVm",{
+          this.$axios.post(this.$store.state.url+"/applyTickets/insertAllocatedVm",{
             qs:JSON.stringify(this.tabledata_virtual),
             workOrderNum:res.request.response,
             storage:this.storage,
@@ -609,7 +582,7 @@ export default {
           this.flowProcess.dealDate=this.current_time;
           this.flowProcess.dealNum=sessionStorage.getItem("work_num");
           this.flowProcess.operationType="申请工单";
-          this.$axios.post("http://localhost:8084/flowProcess/insert",{
+          this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
             flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
             if(res.data===true){
               this.$message({
@@ -700,12 +673,10 @@ export default {
   height: auto;
   left: 0;
   top: 0;
-  /*background-color: #409EFF;*/
 }
 .page_title{
   width:80px;
   margin-left:50%;
-  /*text-align: center;*/
   margin-bottom:10px;
   font-weight:bolder;
   color: #0c805f;
@@ -728,12 +699,6 @@ export default {
 
 }
 
-.page_title_min{
-  width:80px;
-  margin-left:0%;
-  /*text-align: center;*/
-  margin-bottom:10px;
-}
 .el-icon-plus {
   color: #fff;
   background-color: rgba(82, 182, 154, 0.76);
@@ -751,14 +716,12 @@ export default {
 }
 .total_progress{
   width:25%;
-  /*background-color: #0c805f;*/
   float: left;
   height: 200px;
   text-align: center;
 }
 .total_description{
   width: 25%;
-  /*background-color: #409EFF;*/
   float: left;
   height: 200px;
   font-size: larger;
@@ -766,13 +729,11 @@ export default {
 }
 .progress{
   width: 25%;
-  /*background-color: rgba(255, 165, 0, 0.7);*/
   float: left;
   height: 200px;
 }
 .description{
   width: 25%;
-  /*background-color: rgba(12, 12, 12, 0.63);*/
   float: left;
   height: 200px;
   font-size: larger;
@@ -780,12 +741,10 @@ export default {
 }
 .budget_title{
   font-size: large;
-  /*text-align: center;*/
   margin-left: 47%;
   margin-bottom:20px;
   font-weight:bolder;
   color: #0c805f;
-  /*background-color: aqua;*/
 }
 
 </style>

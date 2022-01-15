@@ -263,7 +263,7 @@ export default {
     },
 
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get("http://localhost:8084/leader/queryWorkOrderDetailTop?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/leader/queryWorkOrderDetailTop?workOrderNum="
         + workOrderNum).then((res)=>{
         //个人信息
         this.workNum = res.data.workerNum;
@@ -279,16 +279,16 @@ export default {
         this.expireTime = res.data.expirationTime;
         this.reasonContect = res.data.reason;
       });
-      this.$axios.get("http://localhost:8084/leader/getOrderCom?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/leader/getOrderCom?workOrderNum="
       +workOrderNum).then((res)=>{
         this.phyCom = res.data;
       });
-      this.$axios.get("http://localhost:8084/leader/getOrderVm?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/leader/getOrderVm?workOrderNum="
       +workOrderNum).then((res)=>{
         this.virtualCom = res.data;
       });
       //通过工单编号查找流转过程
-      this.$axios.get('http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrderNum='
+      this.$axios.get(this.$store.state.url+'/flowProcess/selectByWorkOrderNum?workOrderNum='
         +workOrderNum).then((res)=>{
           console.log(workOrderNum);
           console.log(res.data);
@@ -296,12 +296,12 @@ export default {
       });
 
     //  通过工单编号查找物理机资源
-      this.$axios.get("http://localhost:8084/leader/getOrderCom?workOrderNum=" +
+      this.$axios.get(this.$store.state.url+"/leader/getOrderCom?workOrderNum=" +
         workOrderNum).then((res)=>{
           this.phyCom = res.data;
       });
     //  通过同单编号查找虚拟机资源
-      this.$axios.get("http://localhost:8084/leader/getOrderVm?workOrderNum=" +
+      this.$axios.get(this.$store.state.url+"/leader/getOrderVm?workOrderNum=" +
         workOrderNum).then((res)=>{
          this.virtualCom = res.data;
       });

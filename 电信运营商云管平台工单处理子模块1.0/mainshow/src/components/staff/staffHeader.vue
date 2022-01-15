@@ -113,13 +113,6 @@ export default {
   color: #fff;
 }
 
-.page-title{
-  width:200px;
-}
-
-.logo{
-  width: 40px;
-}
 .el-menu-demo{
   background-color: transparent;
   float: right;
@@ -130,19 +123,9 @@ export default {
 .aside {
   background: #52b69a;
   color: #fff;
-  /* height: 100%; */
-
 }
 .main {
-  /* height: 100%; */
   color: #52b69a;
 }
-.headerlogo {
-  /* line-height: 60px; */
-  margin-top: 10px;
-}
-.rightsection {
-  line-height: 60px;
-  text-align: center;
-}
+
 </style>

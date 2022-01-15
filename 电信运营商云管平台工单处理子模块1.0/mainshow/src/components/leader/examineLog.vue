@@ -105,7 +105,7 @@
       methods: {
         //初始化数据
         init(){
-          this.$axios.get("http://localhost:8084/flowWorkOrder/getLog?page=0&size="+this.pageSize+
+          this.$axios.get(this.$store.state.url+"/flowWorkOrder/getLog?page=0&size="+this.pageSize+
             "&dealNum="+sessionStorage.getItem("work_num")+"&applyName="+this.applyName).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
@@ -118,7 +118,7 @@
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/flowWorkOrder/getLog?page="+page+"&size="+this.pageSize
+          this.$axios.get(this.$store.state.url+"/flowWorkOrder/getLog?page="+page+"&size="+this.pageSize
             +"&dealNum="+sessionStorage.getItem("work_num")+"&applyName="+this.applyName).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;

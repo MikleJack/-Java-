@@ -74,7 +74,7 @@
   export default {
     name: "admin_operation_log",
     mounted() {
-      this.$axios.get("http://localhost:8084/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -101,7 +101,7 @@
       },
 
       handleClick_clean(){
-        this.$axios.get("http://localhost:8084/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -111,7 +111,7 @@
       handleCurrentChange(val){
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get("http://localhost:8084/Log/query?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/Log/query?page="+page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })

@@ -289,11 +289,11 @@ export default {
     pass(){
       this.setFlow();
       this.flowProcess.operationType="审批通过";
-      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+      this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
           if(res.data===true){
             if(sessionStorage.getItem("level")!=="3"){
-              this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+              this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
                 workOrderNum:this.workOrderNum,
                 state:"审批通过"
               }).then((res)=>{
@@ -307,7 +307,7 @@ export default {
               })
             }
             else {
-              this.$axios.post("http://localhost:8084/pendtickets/towExamine",{
+              this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
                 workOrderNum:this.workOrderNum,
                 state:"审批通过",
               }).then((res)=>{
@@ -328,9 +328,9 @@ export default {
     nopass(){
       this.setFlow();
       this.flowProcess.operationType="审批不通过";
-      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+      this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-            this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+            this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
               workOrderNum:this.workOrderNum,
               state:"审批不通过"
             }).then((res)=>{
@@ -347,9 +347,9 @@ export default {
     hangup(){
       this.setFlow();
       this.flowProcess.operationType="挂起";
-      this.$axios.post("http://localhost:8084/flowProcess/insert",{
+      this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-        this.$axios.post("http://localhost:8084/pendtickets/oneExamine",{
+        this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
           workOrderNum:this.workOrderNum,
           state:"挂起"
         })
@@ -415,7 +415,7 @@ export default {
       }
     },
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get("http://localhost:8084/pendtickets/queryWorkOrderDetailTop?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/pendtickets/queryWorkOrderDetailTop?workOrderNum="
         +workOrderNum).then((res)=>{
           // console.log(res.data);
           //个人信息
@@ -433,26 +433,26 @@ export default {
           //获取工单使用预算
           this.order_budget = res.data.price;
           //获取部门总预算
-          this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
+          this.$axios.get(this.$store.state.url+"/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
             this.total_budget = res.data;
           });
           //获取部门已使用预算
-          this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + this.depNum).then((res)=>{
+          this.$axios.get(this.$store.state.url+"/usedBudget/getUsedBudget?id=" + this.depNum).then((res)=>{
             this.used_budget = res.data.depUsedBudget;
           });
       });
       //查找工单申请的物理机资源
-      this.$axios.get("http://localhost:8084/pendtickets/getOrderCom?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/pendtickets/getOrderCom?workOrderNum="
       +workOrderNum).then((res)=>{
         this.phyCom = res.data;
       });
       //查找工单申请的虚拟机资源
-      this.$axios.get("http://localhost:8084/pendtickets/getOrderVm"
+      this.$axios.get(this.$store.state.url+"/pendtickets/getOrderVm"
         +workOrderNum).then((res)=>{
           this.virtualCom = res.data;
       });
     //通过工单编号查找流转过程
-      this.$axios.get("http://localhost:8084/flowProcess/selectByWorkOrderNum?workOrederNum="
+      this.$axios.get(this.$store.state.url+"/flowProcess/selectByWorkOrderNum?workOrederNum="
       +workOrderNum).then((res)=>{
         this.informData = res.data;
       })

@@ -51,7 +51,7 @@ export default {
 
     //确认延期
     requireToDelay(){
-      this.$axios.post("http://localhost:8084/staffAllTickets/delay",{
+      this.$axios.post(this.$store.state.url+"/staffAllTickets/delay",{
         workOrderNum: this.workOrderNum,
         delayTime:this.delayTime,
         delayReason: this.delayReason

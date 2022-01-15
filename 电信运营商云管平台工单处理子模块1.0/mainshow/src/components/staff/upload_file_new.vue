@@ -1,6 +1,6 @@
 <template>
   <el-upload
-    action="http://localhost:8084/applyTickets/upload"
+    action="/applyTickets/upload"
     :on-preview="handlePreview"
     multiple
     accept=".pdf"

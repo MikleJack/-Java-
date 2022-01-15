@@ -123,7 +123,7 @@ export default {
   },
   mounted() {
     //获取全部工单信息
-    this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
+    this.$axios.get(this.$store.state.url+'/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
       this.tableData = res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
     })
@@ -142,14 +142,14 @@ export default {
     handleClick_search(){
       this.ifPagination = true;
       this.resetPageSituation();
-      this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
+      this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
                       + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;})
       // let data = JSON.stringify(this.adminWorkOrderInform);
       // this.$axios({
       //   method: 'post',
-      //   url: 'http://localhost:8084/adminSearchOrder/criteriaQueryByPage',
+      //   url: this.$store.state.url+'/adminSearchOrder/criteriaQueryByPage',
       //   data: {data},
       //   headers:{"Content-Type":"application/json"},
       //   transformRequest: [
@@ -168,7 +168,7 @@ export default {
       this.ifPagination = false;
       this.resetPageSituation();
       this.workOrderTypeSelector = '';
-      this.$axios.get('http://localhost:8084/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -179,14 +179,14 @@ export default {
       if(!this.ifPagination){
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get("http://localhost:8084/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/adminSearchOrder/normalQueryByPage?page="+page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
       }else{
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get('http://localhost:8084/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
+        this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
                 + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;

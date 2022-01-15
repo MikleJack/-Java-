@@ -108,7 +108,7 @@ import order_detail from "./order_detail";
         else {
           this.first=sessionStorage.getItem("work_num");
         }
-        this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num="+this.second+
+        this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
           "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
@@ -139,7 +139,7 @@ import order_detail from "./order_detail";
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get("http://localhost:8084/leader/selectTicketsByNum?second_leader_num="+this.second+
+          this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
             "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
@@ -161,12 +161,9 @@ import order_detail from "./order_detail";
 <style scoped>
   .page-main{
     position: relative;
-
     width:100%;
     height: 100%;
   }
-
-
 
   .page-tail{
     width:100%;

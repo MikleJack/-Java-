@@ -300,7 +300,7 @@ export default {
       }
     },
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get('http://localhost:8084/leader/queryWorkOrderDetailTop?workOrderNum='
+      this.$axios.get(this.$store.state.url+'/leader/queryWorkOrderDetailTop?workOrderNum='
         + workOrderNum).then((res)=>{
         //个人信息
         this.workNum = res.data.workerNum;

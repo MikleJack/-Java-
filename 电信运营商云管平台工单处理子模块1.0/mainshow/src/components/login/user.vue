@@ -137,7 +137,7 @@ export default {
 
     //验证码
     getVertifyCode() {
-      document.getElementById("verifyCode").src = this.timestamp("http://localhost:8084/verifycode/getVertifyCodebyId");
+      document.getElementById("verifyCode").src = this.timestamp("https://localhost:8084/verifycode/getVertifyCodebyId");
     },
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面
@@ -162,9 +162,9 @@ export default {
         return
       }
       this.getdate();
-      this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
+      this.$axios.get(this.$store.state.url+'/verifycode/getStringOfVertifyCode').then((res)=>{
         if(true){
-          this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
+          this.$axios.get(this.$store.state.url+"/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data!==0) {
               //   $message消息提示框
               this.$message({
@@ -217,7 +217,7 @@ export default {
       })
 
       //增加登录日志
-      this.$axios.post("http://localhost:8084/login/addLog", this.ruleForm);
+      this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
 
     },
     setCookie(workNum){
@@ -241,7 +241,7 @@ export default {
         })
       }
       else if(errors==="15"){
-        this.$axios.get("http://localhost:8084/account/lockAccount?work_num="+workNum).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/account/lockAccount?work_num="+workNum).then((res)=>{
           this.$message({
             message:'账户已被锁定，请联系管理员进行解锁！',
             type:'error',
@@ -255,28 +255,6 @@ export default {
 </script>
 
 <style scoped>
-/*.max{*/
-/*  position: absolute;*/
-/*  height: 100%;*/
-/*  width: 100%;*/
-/*}*/
-
-/*.warp{*/
-/*  border-radius: 20px;*/
-/*  position: absolute;*/
-/*  left: 61.8%;*/
-/*  top: 35%;*/
-/*  width: 400px;*/
-/*  height: 400px;*/
-/*  background: #42be95;*/
-/*  box-shadow: 0px 0px 10px #888888;*/
-/*}*/
-/*.warp-line{*/
-/*  position: relative;*/
-/*  width: 80%;*/
-/*  margin-top: 40px;*/
-/*  left: 45%;*/
-/*}*/
 .warp{
   position:absolute;
   /*定位方式绝对定位absolute*/
@@ -303,14 +281,11 @@ export default {
   left: 0;
   width: 100%;
   height: 13.45%;
-  /*height: 100px;*/
   text-align: left;
   padding-left: 10px;
   font-size: 30px;
   line-height: 70px;
-  /*float: left;*/
   color: #ffffff;
-  /*background: #409EFF;*/
 }
 .background{
   position: absolute;
@@ -322,14 +297,6 @@ export default {
   overflow-x: hidden;
   overflow-y: hidden;
 }
-/*.warp-form{*/
-/*  position: absolute;*/
-/*  width: 80%;*/
-/*  text-align: center;*/
-/*  margin-top: 80px;*/
-/*  left: 40px;*/
-/*  !*background-color: #53c59e;*!*/
-/*}*/
 
 .code_input{
   width: 200px;
@@ -343,9 +310,7 @@ export default {
   text-align:center;
   /*文字居中*/
 }
-/*.warp-form{*/
-/*  position:relative;*/
-/*}*/
+
 .warp-form{
   position:relative;
   width: 100%;

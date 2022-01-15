@@ -600,11 +600,11 @@ export default {
   methods: {
     //虚拟机资源配置
     setVm(){
-      this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllVm").then((res) => {
         this.tableData_vir = res.data;
         this.formInline.diskPrice = this.tableData_vir[0].diskPrice;
       });
-      this.$axios.get("http://localhost:8084/adminHome/getVm").then((res)=>{
+      this.$axios.get(this.$store.state.url+"/adminHome/getVm").then((res)=>{
         if(res.data){
           this.formInline.cpuCore=res.data.cpuCore;
           this.formInline.storage=res.data.storage;
@@ -615,14 +615,14 @@ export default {
     },
     //物理机资源配置
     setphy(){
-      this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllPc").then((res) => {
         this.tableData_phy = res.data;
       });
       this.dialogVisible_phy=true;
     },
     //部门预算初始化
     setbudget(){
-      this.$axios.get("http://localhost:8084/adminHome/getDepBudget").then((res)=>{
+      this.$axios.get(this.$store.state.url+"/adminHome/getDepBudget").then((res)=>{
         if(res.data!==null){
           this.tableData_bud = res.data;
         }
@@ -678,7 +678,7 @@ export default {
 
     //增加物理机函数
     add_physics() {
-      this.$axios.post("http://localhost:8084/adminHome/insertPhysics",{
+      this.$axios.post(this.$store.state.url+"/adminHome/insertPhysics",{
         cpuCore : this.ruleForm_physics.cpuCore,
         ram: this.ruleForm_physics.ram,
         storage: this.ruleForm_physics.storage,
@@ -716,7 +716,7 @@ export default {
       if (this.ruleForm_virtual.processorModel === '' || this.ruleForm_virtual.description === ''){
         this.$message.error('error，请将信息填写完整');
       }else{
-        this.$axios.post("http://localhost:8084/adminHome/insertVirtual",this.ruleForm_virtual).then(
+        this.$axios.post(this.$store.state.url+"/adminHome/insertVirtual",this.ruleForm_virtual).then(
           (res)=>{
           if(res.data===true){
             this.$message({
@@ -755,7 +755,7 @@ export default {
     },
     //密码验证确认
     complete_confirm(){
-      this.$axios.post("http://localhost:8084/adminHome/confirmPassword?password="+this.confirm_password).then((res)=>{
+      this.$axios.post(this.$store.state.url+"/adminHome/confirmPassword?password="+this.confirm_password).then((res)=>{
         this.password_confirm = res.data === true;
       })
 
@@ -777,7 +777,7 @@ export default {
       }else if(this.which_page_confirm === 3){
 
         if(this.password_confirm === true){
-          this.$axios.put("http://localhost:8084/adminHome/setDiskPrice?diskPrice="+this.formInline.diskPrice).then((res)=>{
+          this.$axios.put(this.$store.state.url+"/adminHome/setDiskPrice?diskPrice="+this.formInline.diskPrice).then((res)=>{
             if(res.data===true){
               this.$message({
                 message: 'success，密码验证成功，成功修改硬盘价格',
@@ -791,7 +791,7 @@ export default {
 
       }else if(this.which_page_confirm === 4){
         if(this.password_confirm === true){
-          this.$axios.put("http://localhost:8084/adminHome/updateVm?cpuCore="+this.formInline.cpuCore+
+          this.$axios.put(this.$store.state.url+"/adminHome/updateVm?cpuCore="+this.formInline.cpuCore+
             "&ram="+this.formInline.ram+"&storage="+this.formInline.storage).then((res)=>{
             if(res.data===true){
               this.$message({

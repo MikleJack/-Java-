@@ -357,7 +357,6 @@ export default {
 
       this.virtual_price_temp = 0
       for (let i = 0; i < this.tabledata_virtual.length; ++i) {
-        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
         this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
       }
     },
@@ -404,7 +403,6 @@ export default {
       this.virtual_price_temp = 0
 
       for (let i = 0; i < this.tabledata_virtual.length; ++i) {
-        // this.virtual_price += this.tabledata_virtual[i].unit_price*this.tabledata_virtual[i].account_virtual
         this.virtual_price_temp += this.tabledata_virtual[i].price * this.tabledata_virtual[i].account_virtual
       }
       this.virtual_price_temp = this.diff_time * this.virtual_price_temp
@@ -418,21 +416,20 @@ export default {
     //提交所有工单数据
     submit() {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
-      // this.workorder.price= this.workorder.price;
       //插入到表单中
-      this.$axios.post("http://localhost:8084/applyTickets/intsertApplyTicket",
+      this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
         this.workorder).then((res) => {
 
         if (res.data) {
           //将原工单状态变为已变更
-          this.$axios.put("http://localhost:8084/changeTickets/OrderStateChange?workOrderNum="+this.value+"&state=已变更");
+          this.$axios.put(this.$store.state.url+"/changeTickets/OrderStateChange?workOrderNum="+this.value+"&state=已变更");
           //插入申请的物理机资源
-          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedCom", {
+          this.$axios.post(this.$store.state.url+"/applyTickets/insertAllocatedCom", {
             qs: JSON.stringify(this.tabledata_physics),
             workOrderNum: res.request.response
           });
           //插入申请的虚拟机资源
-          this.$axios.post("http://localhost:8084/applyTickets/insertAllocatedVm",{
+          this.$axios.post(this.$store.state.url+"/applyTickets/insertAllocatedVm",{
             qs:JSON.stringify(this.tabledata_virtual),
             workOrderNum:res.request.response,
             storage:this.storage,
@@ -444,10 +441,10 @@ export default {
           this.getDateFunc();
           this.flowProcess.dealNum=sessionStorage.getItem("work_num");
           this.flowProcess.operationType="变更工单";
-          this.$axios.post("http://localhost:8084/flowProcess/insert",{
+          this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
             flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
           });
-          this.$axios.post("http://localhost:8084/changeTickets/insertWorkOrderChange?workOrderNum=" +
+          this.$axios.post(this.$store.state.url+"/changeTickets/insertWorkOrderChange?workOrderNum=" +
             this.value + "&changedOldOrder=" + res.request.response
           ).then((res)=>{
             this.$message({
@@ -464,22 +461,21 @@ export default {
     //改变原工单号填入数据
     checkOldOrderNum(){
       //通过原工单号填入数据
-      this.$axios.get("http://localhost:8084/changeTickets/selectByWorkOrderNum?workOrderNum="
+      this.$axios.get(this.$store.state.url+"/changeTickets/selectByWorkOrderNum?workOrderNum="
         +this.value).then((res)=>{
         this.workorder.workOrderName = res.data.workOrderName;
         this.workorder.expirationTime = res.data.expirationTime;
-        // this.workorder.reason = res.data.reason;
 
         this.workorder.workerNum = sessionStorage.getItem("work_num");
         this.workorder.reason = res.data.reason;
         this.workorder.price = res.data.price;
       });
-      this.$axios.get("http://localhost:8084/changeTickets/selectComByWorkOrderNum?workOrderNum=" +
+      this.$axios.get(this.$store.state.url+"/changeTickets/selectComByWorkOrderNum?workOrderNum=" +
         this.value).then((res)=>{
         this.tabledata_physics = res.data;
       });
 
-      this.$axios.get("http://localhost:8084/changeTickets/selectVmByWorkOrderNum?workOrderNum=" +
+      this.$axios.get(this.$store.state.url+"/changeTickets/selectVmByWorkOrderNum?workOrderNum=" +
         this.value).then((res)=>{
         this.tabledata_virtual = res.data;
         this.storage = res.data[0].storage;
@@ -487,14 +483,14 @@ export default {
       });
     },
     getreasources(){
-      this.$axios.get("http://localhost:8084/applyTickets/selectAllPc").then((res) => {
+      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllPc").then((res) => {
         this.gridData_physics = res.data;
       });
-      this.$axios.get("http://localhost:8084/applyTickets/selectAllVm").then((res) => {
+      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllVm").then((res) => {
         this.gridData_virtual = res.data;
       });
       //获得当前工号人申请二级通过的工单号
-      this.$axios.get("http://localhost:8084/changeTickets/selectWorkOrderByworkNum?workerNum="
+      this.$axios.get(this.$store.state.url+"/changeTickets/selectWorkOrderByworkNum?workerNum="
         +sessionStorage.getItem("work_num")).then((res)=>{
         this.options = res.data;
       });
@@ -555,12 +551,10 @@ export default {
   height: auto;
   left: 0;
   top: 0;
-  /*background-color: #409EFF;*/
 }
 .page_title{
   width:80px;
   margin-left:50%;
-  /*text-align: center;*/
   margin-bottom:10px;
   font-weight:bolder;
   color: #0c805f;
@@ -581,7 +575,6 @@ export default {
 .page_block{
   width: 80%;
   margin-left: 10%;
-
 }
 
 
