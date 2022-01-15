@@ -56,7 +56,7 @@ export default {
         delayTime:this.delayTime,
         delayReason: this.delayReason
       }).then((res)=>{
-        if(res.data != "false"){
+        if(res.data.message == null){
           alert("发起延期成功，创建的延期工单号为" + res.data);
           this.$store.state.staffAllOrder_DelayDialogVisible = false;
           this.refresh();

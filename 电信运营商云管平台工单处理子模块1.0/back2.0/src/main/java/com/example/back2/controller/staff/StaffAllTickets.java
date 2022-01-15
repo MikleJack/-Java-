@@ -4,6 +4,7 @@ import com.example.back2.entity.table.WorkOrderDelay;
 import com.example.back2.entity.table.*;
 import com.example.back2.entity.view.AllocatedVmSpecifications;
 import com.example.back2.entity.view.OrderBeginEndTime;
+import com.example.back2.exception.GlobalException;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
@@ -73,11 +74,15 @@ public class StaffAllTickets {
     @PostMapping("delay")
     public ResponseEntity<String> delay(String workOrderNum,
                                         Date delayTime,
-                                         String delayReason) {
+                                         String delayReason)throws GlobalException  {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
         Long preEndTime = this.orderBeginEndTimeService.queryEndTimeByOrderNum(workOrderNum).getTime();
         Long preDurationTime = ((preEndTime - preBeginTime)/((long)24*60*60*1000*30));
+
+        if(preDurationTime <= 0 ){
+            throw new GlobalException("发起延期申请，计算原工单持续时间发生错误,可能错误出于数据库的持续时间表     计算的持续时间", preDurationTime);
+        }
 
         //计算当前工单持续时间： 单位月
         Date nowDate = new Date();
@@ -90,6 +95,9 @@ public class StaffAllTickets {
         Double nowPrice = (prePrice / preDurationTime) * nowDurationTime;
         Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice));
 
+        if(nowPricePrecision <= 0 ){
+            throw new GlobalException("发起延期申请，计算延期工单总价时发生错误     计算的持续时间", preDurationTime);
+        }
 
         //        生成工单号，并传入
         Date d = new Date();
@@ -99,9 +107,6 @@ public class StaffAllTickets {
         newWorkOrderNum += randomNum+ "";
 //        修改工单号
 //        workorder.setWorkOrderNum(workOrderNum);
-
-
-
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
             //插入流转过程
@@ -148,9 +153,10 @@ public class StaffAllTickets {
      * @return 用户的全部工单
      */
     @GetMapping("offline")
-    public ResponseEntity<Boolean> offline(String workOrderNum,String workOrderState, String offlineReason) {
+    public ResponseEntity<Boolean> offline(String workOrderNum,
+                                           String workOrderState,
+                                           String offlineReason) throws GlobalException {
         if(workOrderState.equals("二级审批通过")) {
-
             //批量下线物理机资源
             List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
             List<Integer> comNums = new ArrayList<Integer>();
@@ -173,21 +179,19 @@ public class StaffAllTickets {
             HisResourceUsage hisResourceUsage = new HisResourceUsage();
             hisResourceUsage.setResUtilization(Double.valueOf(String.format("%.2f", Math.random() * 100)));
             hisResourceUsage.setWorkOrderNum(workOrderNum);
-            hisResourceUsageService.insert(hisResourceUsage);
+            if(hisResourceUsageService.insert(hisResourceUsage) == null){
+                throw new GlobalException("在生成工单的历史资源利用率时发生错误   date为试图插入的记录", hisResourceUsage);
+            }
 
-            return ResponseEntity.ok(this.workOrderService.offline(workOrderNum, offlineReason));
+            if(this.workOrderService.offline(workOrderNum, offlineReason)){
+                return ResponseEntity.ok(true);
+            }else{
+                throw new GlobalException("插入延期工单时发生错误  date为新生成的工单号", workOrderNum);
+            }
         }else{
-            return ResponseEntity.ok(false);
+            throw new GlobalException("项目未通过二级审核    date为工单类型" , workOrderState);
         }
     }
-
-//    /**
-//     * 测试
-//     */
-//    @GetMapping("test")
-//    public long parameterQueryByPage(String workOrderNum) {
-//        return this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
-//    }
 
 //----------------------------下线按钮-底部----------------------------
 
