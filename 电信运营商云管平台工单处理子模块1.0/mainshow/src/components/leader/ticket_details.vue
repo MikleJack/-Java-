@@ -431,7 +431,7 @@ export default {
           this.expireTime = res.data.expirationTime;
           this.reasonContect = res.data.reason;
           //获取工单使用预算
-          this.order_budget = res.data.depBudget;
+          this.order_budget = res.data.price;
           //获取部门总预算
           this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
             this.total_budget = res.data;

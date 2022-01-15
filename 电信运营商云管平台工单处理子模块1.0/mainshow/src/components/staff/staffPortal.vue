@@ -219,7 +219,9 @@ export default {
       // 全部虚拟机资源利用率
       total_Virutilization:'35.83',
       // 部门预算使用率
-      depBudget:'78.90',
+      total_budget:0,
+      used_budget:0,
+      depBudget:0,
       fits: ['cover'],
       url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
 
@@ -236,6 +238,18 @@ export default {
     //获取左上角用户信息
     this.$axios.get("http://localhost:8084/staffHome/queryPersonInformById?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
       this.workerInform = res.data;
+      let depNum = res.data.depNum;
+      //获取部门总预算
+      this.$axios.get("http://localhost:8084/depart/getDepBudget?depNum=" + depNum).then((res)=>{
+        this.total_budget = res.data;
+        //获取部门已使用预算
+        this.$axios.get("http://localhost:8084/usedBudget/getUsedBudget?id=" + depNum).then((res)=>{
+          this.used_budget = res.data.depUsedBudget;
+          this.depBudget=parseFloat(100*this.used_budget/this.total_budget).toFixed(2);
+        });
+      });
+
+
     });
 
 

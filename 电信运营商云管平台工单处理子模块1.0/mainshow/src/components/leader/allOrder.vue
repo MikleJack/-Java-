@@ -170,7 +170,7 @@ import order_detail from "./order_detail";
 
   .page-tail{
     width:100%;
-    position: relative;
+    position: absolute;
     bottom: 0;
   }
 

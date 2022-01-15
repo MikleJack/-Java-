@@ -223,12 +223,9 @@ export default {
     return {
       //原工单编号下拉框内部数据
       options: [],
-
       value: '',//原工单编号初始化数据
-
       storage:'',
       os:'',
-
       expire_time: '',//资源到期时间
       // labelPosition: 'left',
       multipleSelection_physics: [],//存储选中物理机的数据
@@ -278,17 +275,6 @@ export default {
   // 获取当前时间的定时器
   mounted() {
     this.getreasources();
-    // let that = this;
-    // // 定时器
-    // setInterval(() => {
-    //   that.getDateFunc();
-    //   that.calculate_sum();
-    // }, 1000)
-    // this.scope.row.quantity = 50;
-
-
-
-
   },
   methods: {
     getDateFunc() {
@@ -460,18 +446,16 @@ export default {
           this.flowProcess.operationType="变更工单";
           this.$axios.post("http://localhost:8084/flowProcess/insert",{
             flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-            if(res.data===true){
-              this.$message({
-                message: '申请成功',
-                type: 'success',
-                center: true
-              });
-            }
           });
           this.$axios.post("http://localhost:8084/changeTickets/insertWorkOrderChange?workOrderNum=" +
             this.value + "&changedOldOrder=" + res.request.response
           ).then((res)=>{
-            alert("申请成功,工单编号为"+res.request.response);
+            this.$message({
+              showClose: true,
+              message: '申请成功',
+              type: 'success'
+            });
+            this.reset();
           });
         }
       });
@@ -514,6 +498,50 @@ export default {
         +sessionStorage.getItem("work_num")).then((res)=>{
         this.options = res.data;
       });
+    },
+    reset(){
+      this.storage='',
+        this.os='',
+        this.expire_time ='',//资源到期时间
+        this.multipleSelection_physics= [],//存储选中物理机的数据
+        this.multipleSelection_virtual=[],//存储选中虚拟机的数据
+        this.currentRowIndex_physics= [],//存储选中物理机的行号
+        this.currentRowIndex_virtual='',//存储选中虚拟机的行号
+        this.list= [],
+        this.length_physics= '',//选中物理机的个数
+        this.length_virtual='',//选中虚拟机的个数
+        // 多选选择数量循环计数器
+        this.multipleChoice_count= '0',
+        // 多选选择行号循环计数器
+        this.lineNumber_count= '0',
+        // 个人信息以及工单信息表单数据
+        this.workorder={
+        workOrderNum:'',
+          expirationTime: '',
+          workOrderName: '',
+          reason: '',
+          workerNum:'',
+          file:'',
+          price:'',
+          workOrderType:"变更工单",
+          WorkOrderState:"待审批"
+      },
+      // 已添加的物理机资源信息表数据
+        this.tabledata_physics= [],
+        // 已添加的虚拟机资源信息表数据
+        this.tabledata_virtual= [],
+        // 新增物理机弹窗内表格数据
+        this.gridData_physics= [],
+        // 新增虚拟机弹窗内表格数据
+        this.gridData_virtual= [],
+        // 流转过程需要的数据
+        this.flowProcess={
+        workOrderNum:'',
+          dealNum:'',
+          operationType:'',
+          dealDate:'',
+          dealComment:''
+      }
     }
   }
 }

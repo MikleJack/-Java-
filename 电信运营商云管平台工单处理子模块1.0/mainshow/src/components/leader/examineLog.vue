@@ -150,7 +150,6 @@
 
 .page-tail{
   width:100%;
-  height: 60px;
   position: absolute;
   bottom: 0;
 }

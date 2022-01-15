@@ -639,7 +639,6 @@ export default {
   display: block;
   float: right;
   color: rgba(12, 12, 12, 0.51);
-
   margin-right: 5px;
 }
 .pagination {

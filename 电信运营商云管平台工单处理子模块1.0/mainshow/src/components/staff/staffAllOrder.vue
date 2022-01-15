@@ -77,7 +77,7 @@
         </templte>
       </el-table-column>
     </el-table>
-    <div class="page-tail" style="width:70%;">
+    <div class="page-tail" >
       <!--放置分页部分-->
       <el-pagination
         @current-change="handleCurrentChange"
@@ -108,14 +108,14 @@ export default {
 
       //条件查询
       criteriaQueryByPage:{
-        orderType: ['申请工单','延期工单'],
+        orderType: ['申请工单','延期工单','变更工单'],
         workOrderTypeSelector: '',
         searchOrderWorkerName: '',
       },
 
       //分页相关
       currentPage:1,
-      pageSize:9,
+      pageSize:8,
       totalSize:0,
       ifPagination:false,
 
@@ -220,7 +220,7 @@ export default {
     //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
     resetPageSituation(){
       this.currentPage = 1;
-      this.pageSize = 9;
+      this.pageSize = 8;
       this.totalSize = 0;
     }
   }
@@ -236,5 +236,9 @@ export default {
   /*background: #888888;*/
   text-align: center;
   line-height: 100px;
+}
+.page-tail{
+  bottom: 0;
+  position: absolute;
 }
 </style>

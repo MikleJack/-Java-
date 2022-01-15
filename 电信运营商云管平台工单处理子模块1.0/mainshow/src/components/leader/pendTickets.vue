@@ -127,7 +127,7 @@ export default {
       tableData: [],
       //分页相关
       currentPage:1,
-      pageSize:8,
+      pageSize:7,
       totalSize:0
       // dialogTableVisible:false
     }
@@ -153,7 +153,6 @@ export default {
 
 .page-tail{
   width:100%;
-  height: 60px;
   position: absolute;
   bottom: 0;
 }

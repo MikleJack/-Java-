@@ -244,7 +244,7 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" @click="submit">提交</el-button>
+      <el-button class="add_type" :disabled="disable" @click="submit">提交</el-button>
     </div>
   </div>
 </template>
@@ -295,9 +295,9 @@ export default {
       //部门总预算利用情况
       used_budget:'',
       //部门总预算
-      total_budget:'',
+      total_budget:0,
       //部门剩余预算
-      surplus_budget:'',
+      surplus_budget:0,
       //工单预算
       order_budget:0,
       // 个人信息以及工单信息表单数据
@@ -519,6 +519,12 @@ export default {
       }
     },
 
+    // disable(){
+    //   if(this.order_budget>this.surplus_budget)
+    //     return false;
+    //   else
+    //     return true;
+    // },
 
 
 //设置表头行的样式
@@ -612,6 +618,7 @@ export default {
                 type: 'success',
                 center: true
               });
+              this.reset();
             }
           });
 
@@ -638,6 +645,50 @@ export default {
         return 'rgba(239,125,10,0.7)';
       }
     },
+    reset() {
+      this.storage = '',
+        this.os = '',
+        this.expire_time = '',//资源到期时间
+        this.multipleSelection_physics = [],//存储选中物理机的数据
+        this.multipleSelection_virtual = [],//存储选中虚拟机的数据
+        this.currentRowIndex_physics = [],//存储选中物理机的行号
+        this.currentRowIndex_virtual = '',//存储选中虚拟机的行号
+        this.list = [],
+        this.length_physics = '',//选中物理机的个数
+        this.length_virtual = '',//选中虚拟机的个数
+        // 多选选择数量循环计数器
+        this.multipleChoice_count = '0',
+        // 多选选择行号循环计数器
+        this.lineNumber_count = '0',
+        // 个人信息以及工单信息表单数据
+        this.workorder = {
+          workOrderNum: '',
+          expirationTime: '',
+          workOrderName: '',
+          reason: '',
+          workerNum: '',
+          file: '',
+          price: '',
+          workOrderType: "变更工单",
+          WorkOrderState: "待审批"
+        },
+        // 已添加的物理机资源信息表数据
+        this.tabledata_physics = [],
+        // 已添加的虚拟机资源信息表数据
+        this.tabledata_virtual = [],
+        // 新增物理机弹窗内表格数据
+        this.gridData_physics = [],
+        // 新增虚拟机弹窗内表格数据
+        this.gridData_virtual = [],
+        // 流转过程需要的数据
+        this.flowProcess = {
+          workOrderNum: '',
+          dealNum: '',
+          operationType: '',
+          dealDate: '',
+          dealComment: ''
+        }
+    }
   }
 }
 </script>
