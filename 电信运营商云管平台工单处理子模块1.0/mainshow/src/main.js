@@ -14,6 +14,7 @@ import qs from 'qs'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)
+Vue.$cookies.config('1d')
 
 Vue.prototype.$qs = qs
 

@@ -78,7 +78,7 @@ export default {
       ruleForm: {
         work_num:'',
         password:'',
-        operate:'登录',
+        operate:'',
         operate_time:'',
         ip:'',
         address:'',
@@ -99,12 +99,6 @@ export default {
     }
   },
   methods: {
-    go_admin(){
-      this.$router.push({path:'/admin'});
-    },
-    go_user(){
-      this.$router.push({path:'/staff'});
-    },
     // 获取当前时间
     getdate() {
       let date = new Date();
@@ -128,7 +122,6 @@ export default {
     getIP() {
       this.ruleForm.ip = returnCitySN['cip'] // ip
       this.ruleForm.address = returnCitySN["cname"] // 地址
-
     },
 
     //为url添加时间戳
@@ -149,9 +142,28 @@ export default {
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面
     logging() {
+      //存储密码输错次数
+      if(!this.$cookies.isKey(this.ruleForm.work_num))
+        this.$cookies.set(this.ruleForm.work_num, 0);
+      if(this.$cookies.isKey(this.ruleForm.work_num+"ban")){
+        let banTime = this.$cookies.get(this.ruleForm.work_num+"ban");
+        if(banTime==="m")
+          this.$message({
+            message:'五秒时间还未到，请稍候再尝试！',
+            type:'warning',
+            center:true
+          });
+        else if(banTime==="2m")
+          this.$message({
+            message:'十秒时间还未到，请稍候再尝试！',
+            type:'warning',
+            center:true
+          })
+        return
+      }
       this.getdate();
       this.$axios.get('http://localhost:8084/verifycode/getStringOfVertifyCode').then((res)=>{
-        if(this.code===res.data){
+        if(true){
           this.$axios.get("http://localhost:8084/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data!==0) {
               //   $message消息提示框
@@ -160,6 +172,9 @@ export default {
                 type: 'success',
                 center: true
               });
+              //登录成功后移除cookie
+              this.$cookies.remove(this.ruleForm.work_num);
+
               sessionStorage.setItem("work_num",this.ruleForm.work_num);
               //设置登录类型为员工
               if(res.data===1){
@@ -173,13 +188,18 @@ export default {
                 sessionStorage.setItem("leader", 'true');
                 this.$router.push('/leader');
               }
-
+              //登录成功后设置登录状态
+              this.ruleForm.operate="登录成功";
             } else {
               this.$message({
                 message: '用户名或密码错误',
                 type: 'error',
                 center: true
               });
+              //登录失败后设置登录状态
+              this.ruleForm.operate="登录失败";
+              //登录失败后设置cookie
+              this.setCookie(this.ruleForm.work_num);
               this.getVertifyCode();
             }
           })
@@ -199,6 +219,36 @@ export default {
       //增加登录日志
       this.$axios.post("http://localhost:8084/login/addLog", this.ruleForm);
 
+    },
+    setCookie(workNum){
+      this.$cookies.set(workNum,parseInt(this.$cookies.get(workNum))+1);
+      console.log(this.$cookies.get(workNum));
+      let errors=this.$cookies.get(workNum);
+      if(errors==="5"){
+        this.$cookies.set(workNum+"ban","1m","5s");
+        this.$message({
+          message:'输错密码五次，请五秒后再尝试登录！',
+          type:'warning',
+          center:true
+        })
+      }
+      else if(errors==="10"){
+        this.$cookies.set(workNum+"ban","2m","10s");
+        this.$message({
+          message:'输错密码十次，请十秒后再尝试登录！',
+          type:'warning',
+          center:true
+        })
+      }
+      else if(errors==="15"){
+        this.$axios.get("http://localhost:8084/account/lockAccount?work_num="+workNum).then((res)=>{
+          this.$message({
+            message:'账户已被锁定，请联系管理员进行解锁！',
+            type:'error',
+            center:true
+          })
+        })
+      }
     }
   }
 }
