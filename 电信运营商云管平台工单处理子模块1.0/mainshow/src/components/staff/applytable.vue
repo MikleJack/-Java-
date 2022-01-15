@@ -244,7 +244,7 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" :disabled="disable" @click="submit">提交</el-button>
+      <el-button class="add_type" :disabled="this.disable" @click="submit">提交</el-button>
     </div>
   </div>
 </template>
@@ -327,7 +327,8 @@ export default {
         operationType:'申请工单',
         dealDate:'',
         dealComment:''
-      }
+      },
+      disable:false
     }
   },
   // 获取当前时间的定时器
@@ -355,6 +356,7 @@ export default {
     setInterval(() => {
       that.getDateFunc();
       that.calculate_sum();
+      this.disable = this.isdisable;
     }, 1000)
     this.scope.row.quantity = 50;
   },
@@ -519,12 +521,9 @@ export default {
       }
     },
 
-    // disable(){
-    //   if(this.order_budget>this.surplus_budget)
-    //     return false;
-    //   else
-    //     return true;
-    // },
+    isdisable(){
+      return this.order_budget <= this.surplus_budget;
+    },
 
 
 //设置表头行的样式
