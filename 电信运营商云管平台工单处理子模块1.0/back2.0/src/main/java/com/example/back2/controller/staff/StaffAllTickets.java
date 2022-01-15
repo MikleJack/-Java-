@@ -90,19 +90,18 @@ public class StaffAllTickets {
         Double nowPrice = (prePrice / preDurationTime) * nowDurationTime;
         Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice));
 
-        //        通过时间和随机数生成工单号，并传入
+
+        //        生成工单号，并传入
+        Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        String newWorkOrderNum = df.format(new Date());
-        double t1 = Math.random();
-        t1 *= 10000;
-        String t2 = (int) t1 + "";
-        if(t2.length() != 4){
-            for(int i = 0;i < 4 - t2.length();i++){
-                t2 += '0';
-            }
-        }else{
-            newWorkOrderNum += t2+ "";
-        }
+        String newWorkOrderNum = df.format(d);
+        int randomNum = (int) ((Math.random() * 9 + 1) * 1000);
+        newWorkOrderNum += randomNum+ "";
+//        修改工单号
+//        workorder.setWorkOrderNum(workOrderNum);
+
+
+
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
             //插入流转过程
