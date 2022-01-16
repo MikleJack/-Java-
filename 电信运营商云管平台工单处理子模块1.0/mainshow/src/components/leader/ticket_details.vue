@@ -192,6 +192,7 @@
           </el-table>
         </div>
       </div>
+
       <div class="note_title" style="margin-top: 4%" v-if="show">批注</div>
       <div class="note" v-if="show">
         <el-input
@@ -202,6 +203,7 @@
         </el-input>
       </div>
       <div class="page_bottom" v-if="show">
+        <el-button style="color:white;background-color: #52b69a " type="primary" @click="handleDownLoad" >附件下载</el-button>
         <el-button style="color:white;background-color: #52b69a " @click="pass">审批通过</el-button>
         <el-button v-if="hasHangup" @click="hangup">挂起</el-button>
         <el-button @click="nopass">审批不通过</el-button>
@@ -216,6 +218,10 @@ export default {
   name: "ticket_details",
   data() {
     return {
+      //附件名称
+      file:'',
+      //附件下载按钮可见
+      showFile:true,
       //是否显示挂起按钮
       hasHangup:false,
       labelPosition: 'left',
@@ -280,6 +286,18 @@ export default {
     },
   props:["show"],
   methods: {
+    handleDownLoad() {
+     if(this.file===''){
+       this.$message({
+         message:"当前工单无附件！",
+         type:'warning',
+         center:true
+       })
+     }
+     else {
+       window.location.href = `http://localhost:8080/file/download?fileName=` + this.file;
+     }
+    },
     setFlow(){
       this.flowProcess.workOrderNum=this.workOrderNum;
       this.flowProcess.dealComment=this.note;
@@ -430,6 +448,9 @@ export default {
           this.workType = res.data.workOrderType;
           this.expireTime = res.data.expirationTime;
           this.reasonContect = res.data.reason;
+          this.file=res.data.file;
+          if(this.file==="")
+            this.showFile=false;
           //获取工单使用预算
           this.order_budget = res.data.price;
           //获取部门总预算
