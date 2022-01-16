@@ -78,7 +78,9 @@ public class StaffAllTickets {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
         Long preEndTime = this.orderBeginEndTimeService.queryEndTimeByOrderNum(workOrderNum).getTime();
-        Long preDurationTime = ((preEndTime - preBeginTime)/((long)24*60*60*1000*30));
+        Long tempTime = preEndTime - preBeginTime;
+        Long preDurationTime = tempTime / (24*60*60*1000);
+//        Long preDurationTime = ((preEndTime - preBeginTime)/((long)24*60*60*1000)/(long)30);
 
         if(preDurationTime <= 0 ){
             throw new GlobalException("发起延期申请，计算原工单持续时间发生错误,可能错误出于数据库的持续时间表     计算的持续时间", preDurationTime);
@@ -96,7 +98,7 @@ public class StaffAllTickets {
         Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice));
 
         if(nowPricePrecision <= 0 ){
-            throw new GlobalException("发起延期申请，计算延期工单总价时发生错误     计算的持续时间", preDurationTime);
+            throw new GlobalException("发起延期申请，计算延期工单总价时发生错误     date为计算的持续时间", preDurationTime);
         }
 
         //        生成工单号，并传入
@@ -107,6 +109,10 @@ public class StaffAllTickets {
         newWorkOrderNum += randomNum+ "";
 //        修改工单号
 //        workorder.setWorkOrderNum(workOrderNum);
+
+        if(newWorkOrderNum.length() != 18){
+            throw new GlobalException("准备新生成的新工单号不为18位    date为生成的工单编号为", newWorkOrderNum);
+        }
 
         if(this.workOrderService.delay(workOrderNum,newWorkOrderNum,delayTime, delayReason,nowPricePrecision)){
             //插入流转过程
@@ -120,7 +126,7 @@ public class StaffAllTickets {
 
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
-            return ResponseEntity.ok("false");
+            throw new GlobalException("发起延期申请时后台生成新工单或生成流转过程发生错误    date为新生成的工单号为",newWorkOrderNum);
         }
     }
 

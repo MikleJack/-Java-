@@ -15,10 +15,13 @@ public class GlobalException extends Exception {
 
         //记录发生异常的代码行数
         StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
-        this.trace = stackTraceElements.length;
+        this.trace = stackTraceElements[1].getLineNumber();
     }
 
     public Object getDate(){
         return  date;
     }
+
+    public int getTrace() {return this.trace;}
+
 }

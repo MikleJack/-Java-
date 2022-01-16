@@ -4,6 +4,7 @@ import com.example.back2.entity.table.Admin;
 import com.example.back2.entity.table.Department;
 import com.example.back2.entity.table.Staff;
 import com.example.back2.entity.view.Adminaccountmanage;
+import com.example.back2.exception.GlobalException;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.impl.table.StaffServiceImpl;
 import com.example.back2.service.table.AdminService;
@@ -53,7 +54,7 @@ public class manageAccount {
     }
 
     @GetMapping("reset")
-    public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password){
+    public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password) throws GlobalException{
         System.out.println(work_num+" "+root_num+" "+password);
         if (!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
@@ -64,10 +65,12 @@ public class manageAccount {
                 staffService.updatePassword(work_num,SHA_256.getSHA256(initPassword));
                 return ResponseEntity.ok(true);
             }
-            else
-                return ResponseEntity.ok(false);
-        }else
-            return ResponseEntity.ok(false);
+            else {
+                throw new GlobalException("解密后的管理员密码不匹配     输入的密码为",password);
+            }
+        }else{
+            throw new GlobalException("输入的管理员账号或密码为空值     输入的密码为",password);
+        }
     }
 
     /**
@@ -75,11 +78,11 @@ public class manageAccount {
      *
      */
     @GetMapping("lockAccount")
-    public ResponseEntity<Boolean> lockAccount(Integer work_num){
+    public ResponseEntity<Boolean> lockAccount(Integer work_num)throws GlobalException{
         if(staffService.lockAccount(work_num)) {
             return ResponseEntity.ok(true);
         } else {
-            return ResponseEntity.ok(false);
+            throw new GlobalException("在锁定员工账户时发生错误     员工的编号为",work_num);
         }
     }
 
@@ -88,7 +91,7 @@ public class manageAccount {
      *
      */
     @GetMapping("unlockAccount")
-    public ResponseEntity<Boolean> unlockAccount(Integer work_num,String root_num, String password){
+    public ResponseEntity<Boolean> unlockAccount(Integer work_num,String root_num, String password)throws GlobalException{
 
         if (!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
@@ -100,9 +103,9 @@ public class manageAccount {
                 return ResponseEntity.ok(true);
             }
             else
-                return ResponseEntity.ok(false);
+                throw new GlobalException("解密后的管理员密码不匹配     输入的密码为",password);
         }else
-            return ResponseEntity.ok(false);
+            throw new GlobalException("输入的管理员账号或密码为空值     输入的密码为",password);
     }
 
     /**
@@ -110,21 +113,23 @@ public class manageAccount {
      *
      */
     @GetMapping("deleteAccount")
-    public ResponseEntity<Boolean> deleteAccount(Integer work_num, String root_num, String password){
+    public ResponseEntity<Boolean> deleteAccount(Integer work_num, String root_num, String password) throws GlobalException{
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
             Admin admin = this.temp.queryById("root");
 
             if (password.equals(admin.getPassword())){
-                staffService.deleteAccount(work_num);
-                staffService.lockAccount(work_num);
-                return ResponseEntity.ok(true);
+                if(staffService.deleteAccount(work_num) || staffService.lockAccount(work_num)) {
+                    return ResponseEntity.ok(true);
+                }else{
+                    throw new GlobalException("对员工进行删除，在改变员工在职状态或锁定员工时发生错误    输入的员工编号为",work_num);
+                }
             }
             else
-                return ResponseEntity.ok(false);
+                throw new GlobalException("解密后的管理员密码不匹配     输入的密码为",password);
         }else
-            return ResponseEntity.ok(false);
+            throw new GlobalException("输入的管理员账号或密码为空值     输入的密码为",password);
     }
 
     /**
@@ -133,7 +138,7 @@ public class manageAccount {
      */
     @GetMapping("addAccount")
     public ResponseEntity<Boolean> addAccount(String root_num, String admin_password,String name,String depNum,
-                                              String phone,String work_password){
+                                              String phone,String work_password) throws GlobalException{
         if (!admin_password.equals("")&&!root_num.equals("")){
             admin_password = SHA_256.getSHA256(admin_password);
 
@@ -144,9 +149,9 @@ public class manageAccount {
                 return ResponseEntity.ok(true);
             }
             else
-                return ResponseEntity.ok(false);
+                throw new GlobalException("解密后的管理员密码不匹配     输入的密码为",admin_password);
         }else
-            return ResponseEntity.ok(false);
+            throw new GlobalException("输入的管理员账号或密码为空值     输入的密码为",admin_password);
     }
 
     /**

@@ -20,7 +20,7 @@ public class ExceptionController {
     @ExceptionHandler(value = GlobalException.class)    //异常处理器，处理HospitalException异常
     public ResponseEntity<?> hanlerException(HttpServletRequest request, GlobalException e){
         ErrorInfo<Object> error = new ErrorInfo<>();
-        error.setCode(ErrorInfo.ERROR);
+        error.setCode(e.getTrace());
         error.setMessage(e.getMessage());
         error.setUrl(request.getRequestURI().toString());
         error.setData(e.getDate());
