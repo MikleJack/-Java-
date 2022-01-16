@@ -236,7 +236,7 @@
       <div class="page_title">附件</div>
       <div class="page_line"></div>
       <div class="page_block">
-        <upload_file_new></upload_file_new>
+        <upload-file-byfhj></upload-file-byfhj>
       </div>
     </div>
 
@@ -250,11 +250,12 @@
 </template>
 
 <script>
-import upload_file from "./upload_file";
-import Upload_file_new from "./upload_file_new";
+import upload_file from "./uploadfile/upload_file";
+import Upload_file_new from "./uploadfile/upload_file_new";
 import qs from "qs";
+import UploadFileByfhj from "./uploadfile/uploadFileByfhj";
 export default {
-  components: {Upload_file_new, upload_file},
+  components: {UploadFileByfhj, Upload_file_new, upload_file},
   name: "applytable2",
   data() {
     return {

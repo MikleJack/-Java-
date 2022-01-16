@@ -213,8 +213,8 @@
 </template>
 
 <script>
-import upload_file from "./upload_file";
-import Upload_file_new from "./upload_file_new";
+import upload_file from "./uploadfile/upload_file";
+import Upload_file_new from "./uploadfile/upload_file_new";
 // import qs from "qs";
 export default {
   components: {Upload_file_new, upload_file},
