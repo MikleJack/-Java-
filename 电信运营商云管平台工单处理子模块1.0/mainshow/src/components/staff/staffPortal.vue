@@ -288,7 +288,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'近四年部门预算使用情况',
+        subtext:'近四年部门预算使用情况(万元)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
