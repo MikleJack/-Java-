@@ -210,21 +210,22 @@ const router = new Router({
 
 export default router
 
-// // 配置路由权限
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-//     let type = to.meta.role;
-//     if(sessionStorage.getItem(type)==='true'){
-//       next()
-//     }
-//     else{
-//       if(type==="root")
-//         next({path:"/root"})
-//       else
-//         next({path:"/user"})
-//     }
-//
-//   } else {
-//       next();
-//   }
-// });
+// 配置路由权限
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+    let type = to.meta.role;
+    if(sessionStorage.getItem(type)==='true'){
+      next()
+    }
+    else{
+      alert(type);
+      if(type==="admin")
+        next({path:"/admin"})
+      else
+        next({path:"/user"})
+    }
+
+  } else {
+      next();
+  }
+});

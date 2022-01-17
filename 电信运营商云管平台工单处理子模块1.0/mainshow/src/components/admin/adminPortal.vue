@@ -195,7 +195,10 @@
 <!--      <el-button @click="dialogVisible_phy = false" style="float: left">新增</el-button>-->
 
       <el-collapse v-model="activeNames" @change="handleChange_collapse">
-        <el-collapse-item title="新增物理机" name="0">
+        <el-collapse-item name="0">
+          <template slot="title">
+            <p class="title">新增物理机</p>
+          </template>
             <el-form :model="ruleForm_physics" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
               <el-form-item label="CPU(核)" prop="cpuCore">
                 <el-input v-model="ruleForm_physics.cpuCore"></el-input>
@@ -280,9 +283,14 @@
       :before-close="handleClose">
 
 
+
+
 <!--      //折叠面板-->
       <el-collapse v-model="activeNames" @change="handleChange_collapse">
-        <el-collapse-item title="虚拟机存储价格配置" name="2">
+        <el-collapse-item  name="2">
+          <template slot="title">
+            <p class="title">虚拟机存储价格配置</p>
+          </template>
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="虚拟机每G存储价格(元)">
               <el-input v-model="formInline.diskPrice" placeholder="输入每G的虚拟机存储价格"></el-input>
@@ -292,9 +300,11 @@
             </el-form-item>
           </el-form>
         </el-collapse-item>
-
         <!--      //折叠面板-->
-        <el-collapse-item title="虚拟机总资源配置" name="0">
+        <el-collapse-item name="0">
+          <template slot="title">
+            <p class="title">虚拟机总资源配置</p>
+          </template>
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="总CPU核数">
               <el-input v-model="formInline.cpuCore" placeholder="输入总cup核数"></el-input>
@@ -310,8 +320,12 @@
             </el-form-item>
           </el-form>
         </el-collapse-item>
+
         <!--      //折叠面板-->
-        <el-collapse-item title="新增虚拟机" name="1">
+        <el-collapse-item name="1">
+          <template slot="title">
+            <p class="title">新增虚拟机</p>
+          </template>
           <el-form :model="ruleForm_virtual" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
             <el-form-item label="规格族" prop="description">
               <el-input v-model="ruleForm_virtual.description"></el-input>
@@ -784,10 +798,15 @@ export default {
                 message: 'success，密码验证成功，成功修改硬盘价格',
                 type: 'success'
               });
+              this.dialogVisible_modify = false
             }
           })
         }else{
-
+          this.$message({
+            message: '密码验证失败',
+            type: 'error'
+          });
+          this.dialogVisible_modify = false
         }
 
       }else if(this.which_page_confirm === 4){
@@ -799,10 +818,15 @@ export default {
                 message: 'success，密码验证成功，成功修改虚拟机总资源',
                 type: 'success'
               });
+              this.dialogVisible_modify = false
             }
           })
         }else{
-
+          this.$message({
+            message: '密码验证失败',
+            type: 'error'
+          });
+          this.dialogVisible_modify = false
         }
 
       }else if(this.which_page_confirm === 5){
@@ -1100,6 +1124,13 @@ export default {
   height: fit-content;
   margin-bottom: 1px;
   margin-top: 5%;
+}
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #303331;
+  padding-bottom: 17px;
+  padding-top: 17px;
 }
 
 </style>
