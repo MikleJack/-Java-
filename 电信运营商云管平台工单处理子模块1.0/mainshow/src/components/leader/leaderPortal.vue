@@ -132,10 +132,6 @@
         </el-pagination>
       </div>
     </div>
-
-
-
-
     <!--右下方-->
     <div class="right-bottom">
       <div class="chart">
@@ -147,9 +143,15 @@
       <!--快捷入口具体按钮-->
       <div class="enter" >
         <el-row>
-          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle  @click="goRouter(2)"></el-button>
-          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(1)"></el-button>
-          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
+          <el-tooltip effect="light" content="修改个人信息" placement="left">
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:20% auto 0" circle @click="goRouter(1)"></el-button>
+          </el-tooltip>
+          <el-tooltip effect="light" content="全部工单查询" placement="left">
+            <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 0 auto 0;" circle  @click="goRouter(2)"></el-button>
+          </el-tooltip>
+          <el-tooltip effect="light" content="工单审批日志" placement="left">
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto 0" circle @click="goRouter(3)"></el-button>
+          </el-tooltip>
         </el-row>
       </div>
     </div>
