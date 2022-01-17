@@ -244,7 +244,7 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" @click="submit">提交</el-button>
+      <el-button class="add_type" @click="submit" :disabled="disable">提交</el-button>
     </div>
   </div>
 </template>

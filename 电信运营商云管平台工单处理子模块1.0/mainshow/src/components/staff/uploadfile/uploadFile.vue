@@ -15,7 +15,7 @@ export default {
       form: {
         fileName: '',
       },
-      uploadUrl: 'http://localhost:8083/file/upload',
+      uploadUrl: 'https://101.200.200.1:8083/file/upload',
       fileList: []
     }
   },
@@ -31,6 +31,7 @@ export default {
         type: 'error',
         position: 'bottom-right'
       })
+      console.log(error)
     },
     //测试上传文件(注意web的上下文)
     handleBeforeUpload(file){
