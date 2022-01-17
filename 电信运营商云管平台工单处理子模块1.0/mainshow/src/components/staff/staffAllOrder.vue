@@ -174,6 +174,7 @@ export default {
       this.ifPagination = false;
       this.resetPageSituation();
       this.criteriaQueryByPage.workOrderTypeSelector = '';
+      this.criteriaQueryByPage.searchOrderWorkerName = '';
       this.$axios.get(this.$store.state.url+'/staffAllTickets/criteriaQueryByPage?workerNum=' + sessionStorage.getItem("work_num")
         + '&page=0'+ '&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
