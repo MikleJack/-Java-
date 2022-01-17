@@ -91,7 +91,7 @@ export default {
     },
     //跳转修改个人信息页面
     changePassword(){
-      this.$router.push({path:"/adminMain/adminChangePassword"})
+      this.$router.push({path:"/adminMain/changePass"})
     },
     //退出
     logoutFn() {

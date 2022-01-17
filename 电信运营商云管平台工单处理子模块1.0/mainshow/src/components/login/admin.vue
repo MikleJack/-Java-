@@ -23,7 +23,7 @@
 
           <el-form-item>
             <div class="code_input">
-              <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
+              <el-input type="text" @keyup.enter.native="logging" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
             </div>
             <div style="float: right">
               <img @click="getVertifyCode" id="verifyCode" />
@@ -70,7 +70,7 @@ export default {
 
     return {
       // 背景图片
-      imgSrc: require('../../assets/0131055c989225a801208f8be5608b.jpg'),
+      imgSrc: require('../../assets/adminBack.jpg'),
 
       ruleForm: {
         work_num:'',

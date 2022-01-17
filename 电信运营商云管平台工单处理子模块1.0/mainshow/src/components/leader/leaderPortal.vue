@@ -4,7 +4,7 @@
     <div class="left-top">
       <!--头像-->
       <div class="headPortrait" :key="fit">
-        <img class="head" src="../../assets/头像梁云.jpg" :fit="fit">
+        <img class="head" src="../../assets/leader.jpg" :fit="fit">
       </div>
       <!--信息-->
       <div class="worker_information">
@@ -147,9 +147,9 @@
       <!--快捷入口具体按钮-->
       <div class="enter" >
         <el-row>
-          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle ></el-button>
-          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
+          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle  @click="goRouter(2)"></el-button>
+          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(1)"></el-button>
+          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
         </el-row>
       </div>
     </div>
@@ -188,8 +188,15 @@ export default {
       this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum="+
         sessionStorage.getItem("work_num")).then((res)=>{
           this.workInfo=res.data;
-          console.log(this.workInfo);
       })
+    },
+    goRouter(index){
+      if (index===1)
+        this.$router.push({path:"/leader/changePass"});
+      else if (index===2)
+        this.$router.push({path:"/leader/allOrder"});
+      else if (index===3)
+        this.$router.push({path:"/leader/examineLog"});
     }
   },
 

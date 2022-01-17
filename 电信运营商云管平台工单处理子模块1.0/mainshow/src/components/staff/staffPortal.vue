@@ -176,9 +176,9 @@
         <div class="enter">
           <el-row>
             <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle
-                       οnclick="window.location.href='../allOrder'"></el-button>
-            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
+                       οnclick="window.location.href='../allOrder'" @click="goRouter(2)"></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(1)"></el-button>
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
           </el-row>
         </div>
       </div>
@@ -217,7 +217,14 @@ export default {
       }
       return '';
     },
-
+    goRouter(index){
+      if (index===1)
+        this.$router.push({path:"/staff/changePass"});
+      else if (index===2)
+        this.$router.push({path:"/staff/allOrder"});
+      else if (index===3)
+        this.$router.push({path:"/staff/change"});
+    }
   },
 
 // 表格数据

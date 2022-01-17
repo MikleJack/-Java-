@@ -89,7 +89,7 @@ export default{
     },
     //跳转修改个人信息页面
     changePassword(){
-      this.$router.push({path:"/leader/changePassword"})
+      this.$router.push({path:"/leader/changePass"})
     },
     //改变页面
     changePage(page){
