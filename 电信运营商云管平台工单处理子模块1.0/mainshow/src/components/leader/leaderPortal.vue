@@ -167,9 +167,9 @@ export default {
   methods: {
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
-        return 'rgb(255,186,39)';
-      } else if (total_Phyutilization > 80) {
-        return 'rgb(226,131,22)';
+        return 'rgba(239,125,10,0.7)';
+      } else if (total_Phyutilization > 90) {
+        return 'rgba(239,125,10,0.7)';
       } else return '#41c6a2'
     },
     budCustomcolors(depBudget){
@@ -219,7 +219,7 @@ export default {
     var approveChart = echarts.init(chartDom);
     var approveOption;
     approveOption = {
-      width: '700px',
+      width: '650px',
       height: '120px',
       color:'#349165',
       title:{
@@ -228,7 +228,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'工单审批情况',
+        subtext:'工单审批情况(个)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -259,6 +259,14 @@ export default {
           lineStyle:{
             color: 'green',
             // type: 'dashed'//可选值还有 dotted  solid
+          },
+          markLine: {
+            data: [
+              {
+                type: 'average',
+                name: '平均值'
+              }
+            ]
           }
         }
       ]
@@ -278,7 +286,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'最近工单申请情况',
+        subtext:'最近工单申请情况(个)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -441,25 +449,6 @@ export default {
   font-size: 15px;
   /*margin-left: 14%;*/
   /*background-color: #73c8b3;*/
-}
-.bud{
-  width: 30%;
-  height: 100%;
-  float: left;
-  /*background-color: #3eb698;*/
-}
-.budPie{
-  width: 100%;
-  height: 75%;
-  float: left;
-  /*background-color: #3eb698;*/
-}
-.budMessage{
-  width: 100%;
-  height: 25%;
-  float: left;
-  font-size: 15px;
-  /*background-color: #36ba99;*/
 }
 .vir{
   width: 30%;
