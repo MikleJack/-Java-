@@ -2,6 +2,7 @@ package com.example.back2.controller.login;
 
 import com.example.back2.entity.table.OperationLog;
 import com.example.back2.entity.table.Staff;
+import com.example.back2.exception.GlobalException;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.impl.table.StaffServiceImpl;
 import com.example.back2.service.table.AdminService;
@@ -40,7 +41,7 @@ public class login {
         @ password 管理员登录密码
      */
     @GetMapping("admin")
-    public ResponseEntity<Boolean> adminLogin(String work_num, String password){
+    public ResponseEntity<Boolean> adminLogin(String work_num, String password)throws GlobalException{
         if(!work_num.equals("") && !password.equals("") ) {
             if (adminService.queryById(work_num) != null)
             {
@@ -48,10 +49,10 @@ public class login {
                 return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
             }
             else
-                return ResponseEntity.ok(false);
+                throw new GlobalException("未查询到管理员编号     输入的账号为",work_num);
         }
         else
-            return ResponseEntity.ok(false);
+            throw new GlobalException("输入的账号或密码为空","输入的账号或密码为空");
     }
 
     /**
@@ -61,9 +62,13 @@ public class login {
      *  @return 0 登录失败 1 普通员工 2 一级领导 3二级领导
      */
     @GetMapping("user")
-    public int userLogin(Integer work_num, String password){
+    public int userLogin(Integer work_num, String password) throws GlobalException{
         if(!password.equals("") ) {
             Staff staff = this.staff_temp.queryById(work_num);
+            if(staff == null){
+                throw new GlobalException("未查询到该员工账号     输入的员工编号为" , work_num);
+            }
+
             if (staff.getState() && staff.getInService())
             {
                 password = SHA_256.getSHA256(password);

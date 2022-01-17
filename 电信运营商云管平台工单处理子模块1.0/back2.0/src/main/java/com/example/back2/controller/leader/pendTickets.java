@@ -7,6 +7,7 @@ import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.entity.view.AdminsearchorderCom;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.exception.GlobalException;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AdminsearceorderVmService;
 import com.example.back2.service.view.AdminsearchorderComService;
@@ -95,7 +96,7 @@ public class pendTickets {
      * @return
      */
     @PostMapping("oneExamine")
-    public Boolean Examine(String workOrderNum, String workNum, String state){
+    public Boolean Examine(String workOrderNum, String workNum, String state) throws GlobalException{
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批不通过")){
             workOrder.setWorkOrderState(state);
@@ -106,6 +107,11 @@ public class pendTickets {
             Integer applyNum = workOrder.getWorkerNum();
             //得到这个人的所有上级领导
             List<Leadership> leaderList = leadershipService.getLeaderNum(applyNum);
+
+            if(leaderList == null){
+                throw new GlobalException("在审批通过后查询员工上级领导时发生错误      员工编号为",applyNum);
+            }
+
             Boolean success=true;
             //查询申请工单的员工的所有领导有无全部通过这个工单
             for (Leadership i :leaderList){
@@ -116,8 +122,9 @@ public class pendTickets {
             if(success){
                 workOrder.setWorkOrderState("一级审批通过");
                 workOrderService.update(workOrder);
+            }else {
+                throw new GlobalException("在一级审批时发生错误   工单信息为",workOrder);
             }
-
         }
         return true;
     }
@@ -136,7 +143,7 @@ public class pendTickets {
     private VirtualComResourceService virtualComResourceService;
 
     @PostMapping("towExamine")
-    public Boolean towExamine(String workOrderNum, String workNum, String state){
+    public Boolean towExamine(String workOrderNum, String workNum, String state) throws GlobalException{
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
             workOrder.setWorkOrderState("二级审批通过");
@@ -147,7 +154,9 @@ public class pendTickets {
             for(int i = 0; i <allocatedComs.size();i++) {
                 comNums.add(allocatedComs.get(i).getComNum());
             }
-            this.physicsComResourceService.setComAssign(comNums,false);
+            if(!this.physicsComResourceService.setComAssign(comNums,false)){
+                throw new GlobalException("在分配物理机资源时发生错误    选中的物理机的编号为",comNums);
+            }
             //分配虚拟机资源
 
             List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
@@ -158,13 +167,17 @@ public class pendTickets {
                 storage += tempVm.getStorage();
                 cpuCore += tempVm.getCpuCore();
             }
-            this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"down");
+            if(!this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"down")){
+                throw new GlobalException("在分配虚拟机资源时发生错误    生成的虚拟机资源为",allocatedVms);
+            }
 
             //更新部门使用预算
             Staff staff=staffService.queryById(workOrder.getWorkerNum());
             UsedBudget usedBudget = usedBudgetService.queryById(staff.getDepNum());
             usedBudget.setDepUsedBudget(usedBudget.getDepUsedBudget()+workOrder.getPrice());
-            usedBudgetService.update(usedBudget);
+            if(usedBudgetService.update(usedBudget) == null){
+                throw new GlobalException("更新部门预算时发生错误     计划插入的预算为",usedBudget);
+            }
 
         }
         else if(state.equals("挂起")||state.equals("审批不通过")){
@@ -172,7 +185,7 @@ public class pendTickets {
             workOrderService.update(workOrder);
         }
         else
-            return false;
+            throw new GlobalException("申请二级审批的工单未通过一级审批    工单编号为",workOrderNum);
         return true;
     }
 }
