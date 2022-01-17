@@ -13,6 +13,8 @@ import com.example.back2.service.view.AdminsearceorderVmService;
 import com.example.back2.service.view.AdminsearchorderComService;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.LeaderworkorderallService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import java.util.List;
 @RestController
 @RequestMapping("pendtickets")
 public class pendTickets {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     //--------------查询某个领导未审批的工单信息----------------------
     @Resource
     private LeaderworkorderallService leaderworkorderallService;
@@ -97,6 +101,8 @@ public class pendTickets {
      */
     @PostMapping("oneExamine")
     public Boolean Examine(String workOrderNum, String workNum, String state) throws GlobalException{
+        logger.info("工号为" + workNum + "的一级领导对工单" + workOrderNum + "发起了审批");
+
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批不通过")){
             workOrder.setWorkOrderState(state);
@@ -144,6 +150,8 @@ public class pendTickets {
 
     @PostMapping("towExamine")
     public Boolean towExamine(String workOrderNum, String workNum, String state) throws Exception{
+        logger.info("工号为" + workNum + "的二级领导对工单" + workOrderNum + "发起了审批");
+
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
             workOrder.setWorkOrderState("二级审批通过");

@@ -8,6 +8,8 @@ import com.example.back2.entity.table.VmSpecifications;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.table.*;
 import com.example.back2.utils.SHA_256;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("adminHome")
 public class AdminHome {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private PhysicsComResourceService physicsComResourceService;
@@ -27,12 +30,16 @@ public class AdminHome {
     //-----------------------------------主页配置预算，虚拟机，物理机资源模块---------------------------
     @PostMapping("insertPhysics")
     public boolean insertPhysics(int cpuCore, int ram, int storage, int price){
+        logger.info("有管理员新增了物理机资源，cup核心、内存、存储、价格 分别为" + cpuCore + ram + storage + price);
+
         this.physicsComResourceService.insertPhysics(cpuCore,ram,storage,price);
         return true;
     }
 
     @PostMapping("insertVirtual")
     public boolean insertVirtual(VmSpecifications vmSpecifications){
+        logger.info("有管理员新增了虚拟机资源" , vmSpecifications);
+
         vmSpecifications.setDiskPrice(0.5);
         this.vmSpecificationsService.insert(vmSpecifications);
         return true;
@@ -50,10 +57,10 @@ public class AdminHome {
      *
      * @return 返回
      */
-
-
     @PutMapping("updateVm")
     public Boolean updateResource(Integer cpuCore ,Integer ram,Integer storage){
+        logger.info("有管理员重置了虚拟机资源，cup核心、内存、存储 分别为" + cpuCore + ram + storage );
+
         return this.virtualComResourceService.updateVmResource( cpuCore , ram, storage,"update");
     }
 

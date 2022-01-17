@@ -8,6 +8,8 @@ import com.example.back2.exception.GlobalException;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import java.util.concurrent.Future;
 @RestController
 @RequestMapping("staffAllTickets")
 public class StaffAllTickets {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private WorkOrderService workOrderService;
@@ -81,6 +84,8 @@ public class StaffAllTickets {
     public ResponseEntity<String> delay(String workOrderNum,
                                         Date delayTime,
                                          String delayReason)throws Exception  {
+        logger.info("持有工单编号" + workOrderNum + "的员工对该工单发起了延期要求");
+
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
         Long preEndTime = this.orderBeginEndTimeService.queryEndTimeByOrderNum(workOrderNum).getTime();

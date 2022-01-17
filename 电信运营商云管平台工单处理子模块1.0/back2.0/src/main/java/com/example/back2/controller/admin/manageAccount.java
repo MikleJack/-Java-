@@ -12,6 +12,8 @@ import com.example.back2.service.table.DepartmentService;
 import com.example.back2.service.table.StaffService;
 import com.example.back2.service.view.AdminaccountmanageService;
 import com.example.back2.utils.SHA_256;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("account")
 public class manageAccount {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private StaffService staffService;
@@ -55,6 +58,8 @@ public class manageAccount {
 
     @GetMapping("reset")
     public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password) throws GlobalException{
+        logger.info("账号为" + root_num + "的管理员对员工编号为" + work_num + "的员工进行了重置操作");
+
         System.out.println(work_num+" "+root_num+" "+password);
         if (!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
@@ -79,6 +84,8 @@ public class manageAccount {
      */
     @GetMapping("lockAccount")
     public ResponseEntity<Boolean> lockAccount(Integer work_num)throws GlobalException{
+        logger.info("有管理员对员工编号为" + work_num + "的员工进行了锁定操作");
+
         if(staffService.lockAccount(work_num)) {
             return ResponseEntity.ok(true);
         } else {
@@ -92,6 +99,7 @@ public class manageAccount {
      */
     @GetMapping("unlockAccount")
     public ResponseEntity<Boolean> unlockAccount(Integer work_num,String root_num, String password)throws GlobalException{
+        logger.info("账号为" + root_num + "的管理员对员工编号为" + work_num + "的员工进行了解锁操作");
 
         if (!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
@@ -114,6 +122,8 @@ public class manageAccount {
      */
     @GetMapping("deleteAccount")
     public ResponseEntity<Boolean> deleteAccount(Integer work_num, String root_num, String password) throws GlobalException{
+        logger.info("账号为" + root_num + "的管理员对员工编号为" + work_num + "的员工进行了删除操作");
+
         if (!work_num.equals("")&&!password.equals("")&&!root_num.equals("")){
             password = SHA_256.getSHA256(password);
 
@@ -139,6 +149,8 @@ public class manageAccount {
     @GetMapping("addAccount")
     public ResponseEntity<Boolean> addAccount(String root_num, String admin_password,String name,String depNum,
                                               String phone,String work_password) throws GlobalException{
+        logger.info("账号为" + root_num + "的管理员对给员工" + name + "进行了新增账户操作" );
+
         if (!admin_password.equals("")&&!root_num.equals("")){
             admin_password = SHA_256.getSHA256(admin_password);
 

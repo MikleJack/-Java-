@@ -17,6 +17,8 @@ import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.AdminsearchorderTableService;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("changeTickets")
 public class changeTicket {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private WorkOrderChangeService workOrderChangeService;
@@ -73,6 +76,8 @@ public class changeTicket {
 
     @PostMapping("insertChangedTickets")
     public String insertChangedTickets(WorkOrder workorder) throws GlobalException{
+        logger.info("员工编号为" + workorder.getWorkerNum() + "的员工进行了变更工单申请");
+
         //        生成工单号，并传入
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");

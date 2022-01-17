@@ -9,6 +9,8 @@ import com.example.back2.utils.GenerateIP;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +27,8 @@ import java.util.*;
 @RestController
 @RequestMapping("applyTickets")
 public class applyTicket {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private PhysicsComResourceService physicsComResourceService;
     @Resource
@@ -57,6 +61,8 @@ public class applyTicket {
     //申请工单接口
     @PostMapping("intsertApplyTicket")
     public String intsertApplyTicket(WorkOrder workorder){
+        logger.info("员工编号为" + workorder.getWorkerNum() + "的员工进行了工单申请");
+
 //        生成工单号，并传入
         Date d = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -102,6 +108,7 @@ public class applyTicket {
     public Map<String, Object> fileUpload(MultipartFile file, HttpServletRequest req) throws IOException{
         Map<String, Object> resultMap = new HashMap<>();
 
+        logger.info("有文件被上传",file);
         // 得到上传时的文件名
         String originName = file.getOriginalFilename();
         assert originName != null;

@@ -9,6 +9,8 @@ import com.example.back2.service.table.AdminService;
 import com.example.back2.service.table.OperationLogService;
 import com.example.back2.service.table.StaffService;
 import com.example.back2.utils.SHA_256;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("login")
 public class login {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private AdminService adminService;
@@ -46,15 +49,17 @@ public class login {
             if (adminService.queryById(work_num) != null)
             {
                 password = SHA_256.getSHA256(password);
-                return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
+                if(password.equals(this.adminService.queryById(work_num).getPassword())){
+                    logger.info("账号为" + work_num + "的管理员登录");
+                    return ResponseEntity.ok(true);
+                }
+            } else{
+                throw new GlobalException("该账号不是管理员账号     date为输入的账号" , work_num);
             }
-            else{
-                return ResponseEntity.ok(false);
-
-            }
-        }
-        else
+        } else
             throw new GlobalException("输入的账号或密码为空","输入的账号或密码为空");
+
+        throw new GlobalException("管理员登录时发生错误","管理员登录时发生错误");
     }
 
     /**
@@ -70,17 +75,20 @@ public class login {
             if(staff == null){
                 throw new GlobalException("未查询到该员工账号     输入的员工编号为" , work_num);
             }
-
             if (staff.getState() && staff.getInService())
             {
                 password = SHA_256.getSHA256(password);
                 if(password.equals(staff.getPassword())){
-                    if(staff.getDepNum()==4||staff.getDepNum()==3)
+                    if(staff.getDepNum()==4||staff.getDepNum()==3){
+                        logger.info("工号为" + work_num + "的普通员工登录");
                         return 1;
-                    else if(staff.getDepNum()==2)
+                    } else if(staff.getDepNum()==2){
+                        logger.info("工号为" + work_num + "的一级领导登录");
                         return 2;
-                    else
+                    } else{
+                        logger.info("工号为" + work_num + "的二级领导登录");
                         return 3;
+                    }
                 }
                 else
                     return 0;

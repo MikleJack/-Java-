@@ -1,6 +1,7 @@
 package com.example.back2.dao.view;
 
 import com.example.back2.entity.view.Adminorganmanage;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2022-01-17 20:23:06
  */
+@Mapper
 public interface AdminorganmanageDao {
 
     /**
