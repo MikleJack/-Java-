@@ -4,8 +4,9 @@
     <div class="left-top">
       <!--头像-->
       <div class="headPortrait" :key="fit">
-        <el-image class="head" :src="url" :fit="fit">
-        </el-image>
+        <img class="head" src="../../assets/头像.png" :fit="fit">
+<!--        <el-image class="head" :src="url" :fit="fit">-->
+<!--        </el-image>-->
       </div>
       <!--信息-->
       <div class="worker_information">
