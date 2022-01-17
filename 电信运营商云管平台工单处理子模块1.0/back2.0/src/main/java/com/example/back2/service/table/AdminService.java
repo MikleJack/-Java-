@@ -53,4 +53,7 @@ public interface AdminService {
      */
     boolean deleteById(String adminNum);
 
+//    修改管理员密码
+    boolean changepw(String admin_num,String password);
+
 }

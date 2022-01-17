@@ -80,6 +80,15 @@
         where admin_num = #{adminNum}
     </update>
 
+<!--    管理员密码-->
+    <update id="changepw">
+        update admin
+        <set>
+            password = #{password}
+        </set>
+        where admin_num = #{adminNum}
+    </update>
+
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from admin where admin_num = #{adminNum}
