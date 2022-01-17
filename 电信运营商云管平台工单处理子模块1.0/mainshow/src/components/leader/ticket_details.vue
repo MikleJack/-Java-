@@ -295,7 +295,7 @@ export default {
        })
      }
      else {
-       window.location.href = `http://localhost:8083/file/download?fileName=` + this.file;
+       window.location.href = `https://101.200.200.1:8083/file/download?fileName=` + this.file;
      }
     },
     setFlow(){
