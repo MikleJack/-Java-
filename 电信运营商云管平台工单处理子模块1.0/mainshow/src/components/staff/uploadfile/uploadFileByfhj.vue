@@ -1,12 +1,10 @@
 <template>
-  <el-form :model="form" >
-    <el-form-item>
-      <el-upload  :action="uploadUrl" :before-upload="handleBeforeUpload"  :on-error="handleUploadError" :before-remove="beforeRemove" multiple :limit="1" :on-exceed="handleExceed" :file-list="fileList">
+      <el-upload  :action="uploadUrl" :before-upload="handleBeforeUpload"  :on-error="handleUploadError"
+                  :before-remove="beforeRemove"  :limit="1" :on-exceed="handleExceed"
+                  :file-list="fileList" :on-progress="success">
         <el-button class="upload-demo" size="small" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">最多上传一个文件，不超过1Gb</div>
       </el-upload>
-    </el-form-item>
-  </el-form>
 </template>
 
 <script>
@@ -17,7 +15,7 @@ export default {
       form: {
         fileName: '',
       },
-      uploadUrl: 'http://localhost:8080/file/upload',
+      uploadUrl: 'http://localhost:8083/file/upload',
       fileList: []
     }
   },
@@ -30,8 +28,6 @@ export default {
       return this.$confirm(`确定移除 ${ file.name }？`);
     },
     handleUploadError(error, file) {
-      console.log(error);
-      console.log(file);
       this.$notify.error({
         title: 'error',
         message: '上传出错:' +  error,
@@ -41,7 +37,11 @@ export default {
     },
     //测试上传文件(注意web的上下文)
     handleBeforeUpload(file){
-      this.uploadUrl =`http://localhost:8080/file/upload`
+    },
+    //文件上传成功
+    success(event, file, fileList){
+      this.$store.state.FileName=file.name;
+      console.log(this.$store.state.FileName)
     }
   }
 }

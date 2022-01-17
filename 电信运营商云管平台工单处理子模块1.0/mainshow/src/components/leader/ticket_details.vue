@@ -203,8 +203,8 @@
         </el-input>
       </div>
       <div class="page_bottom" v-if="show">
-        <el-button style="color:white;background-color: #52b69a " type="primary" @click="handleDownLoad" >附件下载</el-button>
-        <el-button style="color:white;background-color: #52b69a " @click="pass">审批通过</el-button>
+        <el-button class="button" @click="handleDownLoad" v-if="showFile">附件下载</el-button>
+        <el-button class="button"  @click="pass">审批通过</el-button>
         <el-button v-if="hasHangup" @click="hangup">挂起</el-button>
         <el-button @click="nopass">审批不通过</el-button>
       </div>
@@ -295,7 +295,7 @@ export default {
        })
      }
      else {
-       window.location.href = `http://localhost:8080/file/download?fileName=` + this.file;
+       window.location.href = `http://localhost:8083/file/download?fileName=` + this.file;
      }
     },
     setFlow(){
@@ -570,5 +570,9 @@ export default {
   height: 200px;
   font-size: larger;
   font-weight: bolder;
+}
+.button{
+  color:white;
+  background-color: #52b69a
 }
 </style>
