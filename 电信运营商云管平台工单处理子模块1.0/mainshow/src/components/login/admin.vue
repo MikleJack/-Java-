@@ -145,6 +145,9 @@ export default {
         if(this.code===res.data){
           this.$axios.get(this.$store.state.url+"/login/admin?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
             if (res.data) {
+              sessionStorage.setItem("type", "admin");
+              sessionStorage.setItem("admin", 'true');
+              this.$router.push('/adminMain');
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
@@ -152,9 +155,7 @@ export default {
                 center: true
               });
               //设置token以及路由
-              sessionStorage.setItem("type", "root");
-              sessionStorage.setItem("root", 'true');
-              this.$router.push('/adminMain');
+
             } else {
               this.$message({
                 message: '用户名或密码错误',

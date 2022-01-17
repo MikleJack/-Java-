@@ -218,8 +218,9 @@ router.beforeEach((to, from, next) => {
       next()
     }
     else{
-      if(type==="root")
-        next({path:"/root"})
+      alert(type);
+      if(type==="admin")
+        next({path:"/admin"})
       else
         next({path:"/user"})
     }
