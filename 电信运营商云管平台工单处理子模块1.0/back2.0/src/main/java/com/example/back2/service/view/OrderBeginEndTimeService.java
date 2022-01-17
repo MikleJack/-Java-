@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
+import java.util.concurrent.Future;
 
 /**
  * (OrderBeginEndTime)表服务接口
@@ -37,7 +38,7 @@ public interface OrderBeginEndTimeService {
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的记录，可获取申请时间和结束时间
      */
-    OrderBeginEndTime queryById(String workOrderNum);
+    Future<OrderBeginEndTime> queryById(String workOrderNum) throws Exception;
 
     /**
      * 通过工单编号得到结束日期
@@ -45,7 +46,7 @@ public interface OrderBeginEndTimeService {
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的结束日期
      */
-    Date queryEndTimeByOrderNum(String workOrderNum);
+    Date queryEndTimeByOrderNum(String workOrderNum) throws Exception;
 
     /**
      * 通过工单编号得到申请日期
@@ -53,6 +54,6 @@ public interface OrderBeginEndTimeService {
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的申请日期
      */
-    Date queryBeginTimeByOrderNum(String workOrderNum);
+    Date queryBeginTimeByOrderNum(String workOrderNum) throws Exception;
 
 }

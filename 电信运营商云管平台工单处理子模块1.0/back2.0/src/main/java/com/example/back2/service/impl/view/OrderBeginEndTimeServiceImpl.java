@@ -3,6 +3,8 @@ package com.example.back2.service.impl.view;
 import com.example.back2.entity.view.OrderBeginEndTime;
 import com.example.back2.dao.view.OrderBeginEndTimeDao;
 import com.example.back2.service.view.OrderBeginEndTimeService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.concurrent.Future;
 
 /**
  * (OrderBeginEndTime)表服务实现类
@@ -53,31 +56,36 @@ public class OrderBeginEndTimeServiceImpl implements OrderBeginEndTimeService {
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的记录，可获取申请时间和结束时间
      */
+    @Async
     @Override
-    public OrderBeginEndTime queryById(String workOrderNum){
-        return this.orderBeginEndTimeDao.queryById(workOrderNum);
+    public Future<OrderBeginEndTime> queryById(String workOrderNum)throws Exception{
+        return new AsyncResult<>(this.orderBeginEndTimeDao.queryById(workOrderNum));
     }
 
 
     /**
+     * 这个方法尽量不用，在同一个类中调用线程，不实现并发
+     *
      * 通过工单编号得到结束日期
      *
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的记录，可获取申请时间和结束时间
      */
     @Override
-    public Date queryEndTimeByOrderNum(String workOrderNum){
-        return queryById(workOrderNum).getExpirationTime();
+    public Date queryEndTimeByOrderNum(String workOrderNum) throws Exception{
+        return queryById(workOrderNum).get().getExpirationTime();
     }
 
     /**
+     * 这个方法尽量不用，在同一个类中调用线程，不实现并发
+     *
      * 通过工单编号得到申请日期
      *
      * @param workOrderNum 工单编号
      * @return 该工单编号对应的申请日期
      */
     @Override
-    public Date queryBeginTimeByOrderNum(String workOrderNum){
-        return queryById(workOrderNum).getDealDate();
+    public Date queryBeginTimeByOrderNum(String workOrderNum)throws Exception{
+        return queryById(workOrderNum).get().getDealDate();
     }
 }

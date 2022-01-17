@@ -143,13 +143,13 @@ public class pendTickets {
     private VirtualComResourceService virtualComResourceService;
 
     @PostMapping("towExamine")
-    public Boolean towExamine(String workOrderNum, String workNum, String state) throws GlobalException{
+    public Boolean towExamine(String workOrderNum, String workNum, String state) throws Exception{
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
             workOrder.setWorkOrderState("二级审批通过");
             workOrderService.update(workOrder);
             //分配物理机资源
-            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
             List<Integer> comNums = new ArrayList<Integer>();
             for(int i = 0; i <allocatedComs.size();i++) {
                 comNums.add(allocatedComs.get(i).getComNum());
@@ -159,7 +159,7 @@ public class pendTickets {
             }
             //分配虚拟机资源
 
-            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum).get();
             Integer ram = 0,storage = 0 ,cpuCore = 0;
             for (int i = 0; i < allocatedVms.size(); i++){
                 AllocatedVm tempVm = allocatedVms.get(i);

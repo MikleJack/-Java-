@@ -5,11 +5,13 @@ import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (WorkOrder)表服务接口
@@ -43,7 +45,7 @@ public interface WorkOrderService {
      * @param pageRequest 分页请求
      * @return 用户的全部工单
      */
-    Page<WorkOrder> criteriaQueryByPage(Integer workerNum,PageRequest pageRequest);
+    Future<Page<WorkOrder>> criteriaQueryByPage(Integer workerNum, PageRequest pageRequest);
 
     /**
      * 新增数据
@@ -94,7 +96,7 @@ public interface WorkOrderService {
      * @param workOrderNum 主键
      * @return 该工单总价
      */
-    Double queryPriceById(String workOrderNum);
+    Future<Double> queryPriceById(String workOrderNum);
 
 //-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
     /**
@@ -105,9 +107,13 @@ public interface WorkOrderService {
      * @param workerNum 工人编号
      * @return 查询结果
      */
-    Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest);
+    Future<Page<WorkOrder>> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest);
 //------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 
 //------------------------员工变更工单界面
     List<WorkOrder> selectWorkOrderByworkNum(String workerNum);
 }
+
+
+
+
