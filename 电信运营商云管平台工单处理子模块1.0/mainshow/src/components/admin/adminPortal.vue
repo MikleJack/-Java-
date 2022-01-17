@@ -169,7 +169,7 @@
           <el-table-column prop="depBudget" label="预算(元)" width="278.5" align="center">
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.depBudget" controls-position="right" @change="handleChange_bud"
-                               :precision="2" :step="1" :min="0" :max="999999"
+                                :step="100" :min="0" :max="999999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
           </el-table-column>
@@ -240,7 +240,7 @@
           <el-table-column prop="price" label="价格(元/月)" width="240" align="center">
             <template slot-scope="scope">
               <el-input-number v-model="scope.row.price" controls-position="right" @change="handleChange_phy"
-                                :step="50" :min="0" :max="9999"
+                                :step="50" :min="0" :max="999999"
                                style="margin-left: 8%" size="mini"></el-input-number>
             </template>
           </el-table-column>
@@ -282,7 +282,7 @@
 
 <!--      //折叠面板-->
       <el-collapse v-model="activeNames" @change="handleChange_collapse">
-        <el-collapse-item title="虚拟机总资源配置" name="2">
+        <el-collapse-item title="虚拟机存储价格配置" name="2">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="虚拟机每G存储价格(元)">
               <el-input v-model="formInline.diskPrice" placeholder="输入每G的虚拟机存储价格"></el-input>
@@ -400,7 +400,7 @@
       :visible.sync="dialogVisible_modify"
       width="30%"
       :before-close="handleClose">
-      <span>确定添加一个账户？</span>
+      <span></span>
       <el-input placeholder="请输入密码" v-model="confirm_password" show-password></el-input>
 
       <span slot="footer" class="dialog-footer">

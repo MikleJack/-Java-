@@ -23,7 +23,7 @@
 <!--保存按钮-->
           </el-form>
           <div class="grid-content bg-purple" style="margin-left: 20%">
-            <el-button type="primary"  @click="EditorUserClick" >保存</el-button>
+            <el-button class="info_button" type="primary"  @click="EditorUserClick" >保存</el-button>
           </div>
 <!--        修改密码表单-->
         </el-tab-pane>
@@ -41,7 +41,7 @@
           </el-form>
 <!--          保存-->
           <div class="grid-content bg-purple" style="margin-left: 20%">
-            <el-button type="primary"  @click="submitForm">保存</el-button>
+            <el-button class="password_button" type="primary"  @click="submitForm" :disabled="button_able">保存</el-button>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -68,12 +68,15 @@ export default {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.newpass) {
         callback(new Error("两次输入密码不一致!"));
+        this.button_able=true
       } else {
         callback();
+        this.button_able=false
       }
     };
 
     return {
+      button_able:false,//再次输入密码不正确时，保存按钮禁用
       ruleForm: {},//修改密码的表单
       activeName: "first",//tab导航栏
       userlist: {},//用户信息表单
@@ -176,14 +179,25 @@ export default {
   }
 }
 </script>
-<style scoped></style>
-<style>
-/*按钮颜色改变*/
-.el-button {
+<style scoped>
+.password_button{
   color: #fff;
   background-color: rgba(82, 182, 154, 0.8);
   border-color: #52b69a;
 }
+.info_button{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
+}
+</style>
+<style>
+/*按钮颜色改变*/
+/*.el-button {*/
+/*  color: #fff;*/
+/*  background-color: rgba(82, 182, 154, 0.8);*/
+/*  border-color: #52b69a;*/
+/*}*/
 
 /*鼠标移到标签上时颜色改变*/
 .el-tabs__item:hover {

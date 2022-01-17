@@ -38,7 +38,7 @@
       </div>
     </div>
 
-<!--    <p></p>-->
+    <p></p>
     <div style="border: rgba(82,182,154,0.25) solid 3px">
       <div class="page_title">物理机资源</div>
       <div class="page_line"></div>
@@ -192,7 +192,7 @@
       </div>
     </div>
 
-<!--    <p></p>-->
+    <p></p>
 
 <!--    附件-->
     <div style="border: rgba(82,182,154,0.25) solid 3px">
