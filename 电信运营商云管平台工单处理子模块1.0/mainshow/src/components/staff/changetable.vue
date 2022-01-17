@@ -199,7 +199,7 @@
       <div class="page_title">附件</div>
       <div class="page_line"></div>
       <div class="page_block">
-        <upload_file_new></upload_file_new>
+        <upload-file></upload-file>
       </div>
     </div>
 
@@ -213,11 +213,9 @@
 </template>
 
 <script>
-import upload_file from "./uploadfile/upload_file";
-import Upload_file_new from "./uploadfile/upload_file_new";
-// import qs from "qs";
+import UploadFile from "./uploadfile/uploadFile";
 export default {
-  components: {Upload_file_new, upload_file},
+  components: {UploadFile},
   name: "applytable2",
   data() {
     return {
@@ -416,6 +414,7 @@ export default {
     //提交所有工单数据
     submit() {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
+      this.workorder.file=this.$store.state.FileName;
       //插入到表单中
       this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
         this.workorder).then((res) => {
