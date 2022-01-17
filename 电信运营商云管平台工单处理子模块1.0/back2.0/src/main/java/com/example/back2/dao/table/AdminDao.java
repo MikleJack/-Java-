@@ -80,6 +80,8 @@ public interface AdminDao {
      * @return 影响行数
      */
     int deleteById(String adminNum);
+//
+    boolean changepw(String adminNum,String password);
 
 }
 
