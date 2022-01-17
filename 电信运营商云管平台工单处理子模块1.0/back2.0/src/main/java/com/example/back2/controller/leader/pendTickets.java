@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -40,10 +41,10 @@ public class pendTickets {
      * 分页查询
      *
      * @param second_leader_num 二级领导人工号
-     * @param first_leader_num      一级领导人工号
-     * @param orderState 工单状态
-     * @param page 页面
-     * @param size 页面大小
+     * @param first_leader_num  一级领导人工号
+     * @param orderState        工单状态
+     * @param page              页面
+     * @param size              页面大小
      * @return 查询结果
      */
     @GetMapping("selectTicketsByState")
@@ -51,9 +52,9 @@ public class pendTickets {
                                                                 Integer first_leader_num,
                                                                 String orderState,
                                                                 int page, int size) throws Exception {
-        PageRequest pageRequest = PageRequest.of(page,size);
+        PageRequest pageRequest = PageRequest.of(page, size);
         return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
-                first_leader_num,orderState, pageRequest).get());
+                first_leader_num, orderState, pageRequest).get());
     }
 
     //    根据工号查询工人信息
@@ -61,7 +62,7 @@ public class pendTickets {
     AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
 
     @GetMapping("queryWorkOrderDetailTop")
-    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) throws Exception{
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) throws Exception {
         return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
     }
 
@@ -71,16 +72,18 @@ public class pendTickets {
     private AdminsearchorderComService adminsearchorderComService;
 
     @GetMapping("getOrderCom")
-    public List<AdminsearchorderCom> getOrderCom(String workOrderNum) throws Exception{
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum) throws Exception {
+        List<AdminsearchorderCom> a = this.adminsearchorderComService.getOrderCom(workOrderNum).get();
         return this.adminsearchorderComService.getOrderCom(workOrderNum).get();
     }
+
 //根据工单号返回该工单的虚拟机信息
 
     @Resource
     private AdminsearceorderVmService adminsearceorderVmService;
 
     @GetMapping("getOrderVm")
-    public List<AdminsearceorderVm> getOrderVm(String workOrderNum) throws Exception{
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum) throws Exception {
         return this.adminsearceorderVmService.getOrderVm(workOrderNum).get();
     }
 
@@ -93,10 +96,9 @@ public class pendTickets {
     private FlowProcessService flowProcessService;
 
     /**
-     *
-     * @param workOrderNum  要审批的工单号
-     * @param workNum       审批人工号
-     * @param state         审批状态
+     * @param workOrderNum 要审批的工单号
+     * @param workNum      审批人工号
+     * @param state        审批状态
      * @return
      */
     @PostMapping("oneExamine")
@@ -107,29 +109,28 @@ public class pendTickets {
         if(state.equals("审批不通过")){
             workOrder.setWorkOrderState(state);
             workOrderService.update(workOrder);
-        }
-        else if(state.equals("审批通过")){
+        } else if (state.equals("审批通过")) {
             //得到申请这个工单人的姓名
             Integer applyNum = workOrder.getWorkerNum();
             //得到这个人的所有上级领导
             List<Leadership> leaderList = leadershipService.getLeaderNum(applyNum);
 
-            if(leaderList == null){
-                throw new GlobalException("在审批通过后查询员工上级领导时发生错误      员工编号为",applyNum);
+            if (leaderList == null) {
+                throw new GlobalException("在审批通过后查询员工上级领导时发生错误      员工编号为", applyNum);
             }
 
-            Boolean success=true;
+            Boolean success = true;
             //查询申请工单的员工的所有领导有无全部通过这个工单
-            for (Leadership i :leaderList){
-                if(flowProcessService.selectByOrderNumLeaderNum(workOrderNum,
-                        i.getLederNum(),"审批通过")==null)
-                    success=false;
+            for (Leadership i : leaderList) {
+                if (flowProcessService.selectByOrderNumLeaderNum(workOrderNum,
+                        i.getLederNum(), "审批通过") == null)
+                    success = false;
             }
-            if(success){
+            if (success) {
                 workOrder.setWorkOrderState("一级审批通过");
                 workOrderService.update(workOrder);
-            }else {
-                throw new GlobalException("在一级审批时发生错误   工单信息为",workOrder);
+            } else {
+                throw new GlobalException("在一级审批时发生错误   工单信息为", workOrder);
             }
         }
         return true;
@@ -159,41 +160,76 @@ public class pendTickets {
             //分配物理机资源
             List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
             List<Integer> comNums = new ArrayList<Integer>();
-            for(int i = 0; i <allocatedComs.size();i++) {
+            for (int i = 0; i < allocatedComs.size(); i++) {
                 comNums.add(allocatedComs.get(i).getComNum());
             }
-            if(!this.physicsComResourceService.setComAssign(comNums,false)){
-                throw new GlobalException("在分配物理机资源时发生错误    选中的物理机的编号为",comNums);
+            if (!this.physicsComResourceService.setComAssign(comNums, false)) {
+                throw new GlobalException("在分配物理机资源时发生错误    选中的物理机的编号为", comNums);
             }
             //分配虚拟机资源
 
             List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum).get();
-            Integer ram = 0,storage = 0 ,cpuCore = 0;
-            for (int i = 0; i < allocatedVms.size(); i++){
+            Integer ram = 0, storage = 0, cpuCore = 0;
+            for (int i = 0; i < allocatedVms.size(); i++) {
                 AllocatedVm tempVm = allocatedVms.get(i);
                 ram += tempVm.getRam();
-                storage += tempVm.getStorage();
+                storage = tempVm.getStorage();
                 cpuCore += tempVm.getCpuCore();
             }
-            if(!this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"down")){
-                throw new GlobalException("在分配虚拟机资源时发生错误    生成的虚拟机资源为",allocatedVms);
+            if (!this.virtualComResourceService.updateVmResource(cpuCore, ram, storage, "down")) {
+                throw new GlobalException("在分配虚拟机资源时发生错误    生成的虚拟机资源为", allocatedVms);
             }
 
             //更新部门使用预算
-            Staff staff=staffService.queryById(workOrder.getWorkerNum());
+            Staff staff = staffService.queryById(workOrder.getWorkerNum());
             UsedBudget usedBudget = usedBudgetService.queryById(staff.getDepNum());
-            usedBudget.setDepUsedBudget(usedBudget.getDepUsedBudget()+workOrder.getPrice());
-            if(usedBudgetService.update(usedBudget) == null){
-                throw new GlobalException("更新部门预算时发生错误     计划插入的预算为",usedBudget);
+            usedBudget.setDepUsedBudget(usedBudget.getDepUsedBudget() + workOrder.getPrice());
+            if (usedBudgetService.update(usedBudget) == null) {
+                throw new GlobalException("更新部门预算时发生错误     计划插入的预算为", usedBudget);
             }
 
-        }
-        else if(state.equals("挂起")||state.equals("审批不通过")){
+        } else if (state.equals("挂起") || state.equals("审批不通过")) {
             workOrder.setWorkOrderState(state);
             workOrderService.update(workOrder);
+        } else
+            throw new GlobalException("申请二级审批的工单未通过一级审批    工单编号为", workOrderNum);
+        return true;
+    }
+//查询当前剩余资源
+    @GetMapping("checkresource")
+    public boolean checkresource(String workOrderNum) throws Exception{
+
+
+//      对比当前申请的物理机资源
+        List<PhysicsComResource> unresource = this.physicsComResourceService.selectAllpc();
+        List<AllocatedCom> usedcom = this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
+
+        List<Integer> unresourcecomnum = new LinkedList<Integer>();
+        for (PhysicsComResource i:unresource){
+            unresourcecomnum.add(i.getComNum());
         }
-        else
-            throw new GlobalException("申请二级审批的工单未通过一级审批    工单编号为",workOrderNum);
+
+        for (AllocatedCom i:usedcom){
+            if (!unresourcecomnum.contains(i.getComNum())){
+                return false;
+            }
+        }
+
+//        获取申请的虚拟机资源
+        List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum).get();
+        Integer ram = 0, storage = 0, cpuCore = 0;
+        for (int i = 0; i < allocatedVms.size(); i++) {
+            AllocatedVm tempVm = allocatedVms.get(i);
+            ram += tempVm.getRam();
+            storage = tempVm.getStorage();
+            cpuCore += tempVm.getCpuCore();
+        }
+        VirtualComResource vmresource = this.virtualComResourceService.selectOne();
+
+        if(ram > vmresource.getRam() || storage > vmresource.getStorage() || cpuCore > vmresource.getCpuCore()){
+            return false;
+        }
+
         return true;
     }
 }

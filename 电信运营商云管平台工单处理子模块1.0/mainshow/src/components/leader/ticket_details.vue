@@ -275,14 +275,15 @@ export default {
         operationType:'申请工单',
         dealDate:'',
         dealComment:''
-      }
+      },
+      passable:''
 
     };
   },
   mounted() {
     if(sessionStorage.getItem("level")==="3"){
       this.hasHangup=true;
-    }
+    };
     },
   props:["show"],
   methods: {
@@ -372,6 +373,59 @@ export default {
           state:"挂起"
         })
       })
+    },
+    //刷新数据
+    refresh(){
+      //workNum工号
+      this.workNum =  '',
+        //name人员姓名
+        this.name= '',
+        //所在部门编号
+        this.depNum= '',
+        //所在部门名称
+        this.depName='',
+        //电话号码
+        this.phone= '',
+        //工单编号
+        this.workOrderNum= '',
+        //工单标题
+        this.workOrderName='',
+        //工单类型
+        this.workType= '',
+        //申请时间
+        this.applyTime= '2023-5-3 ',
+        //到期时间
+        this.expireTime='',
+        //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
+        this.reasonContect= '',
+        //  输入的批注内容
+        this.note='',
+
+
+        //部门总预算利用情况
+        this.used_budget='',
+        //部门总预算
+        this.total_budget='',
+        //部门剩余预算
+        this.surplus_budget='',
+        //工单预算
+        this.order_budget='',
+
+
+        //物理机资源数据
+        this.phyCom=[],
+        this.virtualCom= [],
+        //流传过程数据
+        this.informData=[],
+
+        this.flowProcess={
+        workOrderNum:'',
+          dealNum:'',
+          operationType:'',
+          dealDate:'',
+          dealComment:''
+      },
+      this.passable=''
     },
 
     //关闭详情页
@@ -468,7 +522,7 @@ export default {
         this.phyCom = res.data;
       });
       //查找工单申请的虚拟机资源
-      this.$axios.get(this.$store.state.url+"/pendtickets/getOrderVm"
+      this.$axios.get(this.$store.state.url+"/pendtickets/getOrderVm?workOrderNum="
         +workOrderNum).then((res)=>{
           this.virtualCom = res.data;
       });

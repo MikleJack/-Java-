@@ -109,7 +109,7 @@
         from adminSearceOrder_Vm
         <where>
             <if test="workOrderNum != null and workOrderNum != ''">
-                and work_order_num = #{workOrderNum}
+                 work_order_num = #{workOrderNum}
             </if>
         </where>
     </select>
