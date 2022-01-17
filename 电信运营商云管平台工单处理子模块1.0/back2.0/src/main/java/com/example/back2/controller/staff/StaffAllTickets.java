@@ -183,7 +183,7 @@ public class StaffAllTickets {
             for (int i = 0; i < allocatedVms.size(); i++){
                 AllocatedVm tempVm = allocatedVms.get(i);
                 ram += tempVm.getRam();
-                storage += tempVm.getStorage();
+                storage = tempVm.getStorage();
                 cpuCore += tempVm.getCpuCore();
             }
             this.virtualComResourceService.updateVmResource(cpuCore,ram,storage,"up");
