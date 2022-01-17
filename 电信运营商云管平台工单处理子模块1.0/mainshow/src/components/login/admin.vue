@@ -162,6 +162,7 @@ export default {
                 type: 'error',
                 center: true
               });
+              this.getVertifyCode();
             }
           })
         }
