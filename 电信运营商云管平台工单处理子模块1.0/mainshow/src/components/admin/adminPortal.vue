@@ -4,8 +4,9 @@
     <div class="left-top">
       <!--头像-->
       <div class="headPortrait" :key="fit">
-        <el-image class="head" :src="url" :fit="fit">
-        </el-image>
+        <img class="head" src="../../assets/admin.png" :fit="fit">
+<!--        <el-image class="head" :src="url" :fit="fit">-->
+<!--        </el-image>-->
       </div>
       <!--信息-->
       <div class="worker_information">
@@ -126,7 +127,7 @@
       <div class="adminBottom">
         <el-row class="adminButton1" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="部门预算设置" placement="left">
-          <el-button style="margin-top: 20%; color: white;background-color: #52b69a;font-size: 30px"
+          <el-button style="margin-top: 80%; color: white;background-color: #52b69a;font-size: 30px"
                      @click="setbudget" size="mini"
                      icon="el-icon-odometer" circle
                      ></el-button>
@@ -538,7 +539,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'近四年部门预算使用情况',
+        subtext:'近四年部门预算使用情况(万元)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -559,7 +560,7 @@ export default {
       },
       series: [
         {
-          data: [8.7, 9.6, 7.4, 0.9],
+          data: [9.6, 8.7, 7.4, 0.9],
           type: 'line',
           label: {
             show: true,	// 是否可见
@@ -636,9 +637,9 @@ export default {
 
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
-        return 'rgb(255,186,39)';
-      } else if (total_Phyutilization > 80) {
-        return 'rgb(226,131,22)';
+        return 'rgba(239,125,10,0.7)';
+      } else if (total_Phyutilization > 90) {
+        return 'rgba(239,125,10,0.7)';
       } else return '#41c6a2'
     },
 

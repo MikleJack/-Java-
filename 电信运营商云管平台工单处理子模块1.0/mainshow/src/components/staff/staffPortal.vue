@@ -64,14 +64,14 @@
           <p style="text-align: center">虚拟机利用率</p>
         </div>
       </div>
-      <!--快捷入口具体按钮-->
-      <div class="enter" >
-        <el-row>
-          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle ></el-button>
-          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
-        </el-row>
-      </div>
+<!--      &lt;!&ndash;快捷入口具体按钮&ndash;&gt;-->
+<!--      <div class="enter" >-->
+<!--        <el-row>-->
+<!--          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle ></el-button>-->
+<!--          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>-->
+<!--          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>-->
+<!--        </el-row>-->
+<!--      </div>-->
     </div>
     <!--通知栏-->
     <div class="left-bottom">
@@ -172,6 +172,15 @@
             <p>{{untreated_order}}</p>
           </div>
         </div>
+        <!--快捷入口具体按钮-->
+        <div class="enter">
+          <el-row>
+            <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle
+                       οnclick="window.location.href='../allOrder'" @click="goRouter(2)"></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(1)"></el-button>
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
+          </el-row>
+        </div>
       </div>
     </div>
   </div>
@@ -188,16 +197,16 @@ export default {
 
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
-        return 'rgb(255,186,39)';
-      } else if (total_Phyutilization > 80) {
-        return 'rgb(226,131,22)';
+        return 'rgba(239,125,10,0.7)';
+      } else if (total_Phyutilization > 90) {
+        return 'rgba(239,125,10,0.7)';
       } else return '#41c6a2'
     },
 
     budCustomcolors(depBudget){
       if (depBudget <= 90){
         return '#41c6a2';
-      } else return '#f56c6c';
+      } else return 'rgba(239,125,10,0.7)';
     },
 
     tableRowClassName({row, rowIndex}) {
@@ -208,7 +217,14 @@ export default {
       }
       return '';
     },
-
+    goRouter(index){
+      if (index===1)
+        this.$router.push({path:"/staff/changePass"});
+      else if (index===2)
+        this.$router.push({path:"/staff/allOrder"});
+      else if (index===3)
+        this.$router.push({path:"/staff/change"});
+    }
   },
 
 // 表格数据
@@ -335,7 +351,7 @@ export default {
       },
       series: [
         {
-          data: [9.8, 8.7, 8.7, 9.6, 7.4, 0.9],
+          data: [9, 8, 8, 9, 7, 1],
           type: 'bar',
           label: {
             show: true,	// 是否可见
@@ -482,11 +498,6 @@ export default {
   float: left;
   font-size: 15px;
 }
-.enter{
-  width: 10%;
-  height: 100%;
-  float: left;
-}
 .left-bottom{
   border:2px solid #53c59e;
   position: absolute;
@@ -526,7 +537,7 @@ export default {
   width: 95%;
   height: 13%;
   float: left;
-  margin-top: 30%;
+  margin-top: 0;
   margin-left: 8%;
   border-radius: 20px;
   border:3px solid #53c59e
@@ -551,6 +562,11 @@ export default {
   height: 100%;
   float: left;
   border-radius: 20px;
+}
+.enter{
+  width: 95%;
+  height: 60%;
+  float: left;
 }
 .untreatedPart{
   width: 95%;

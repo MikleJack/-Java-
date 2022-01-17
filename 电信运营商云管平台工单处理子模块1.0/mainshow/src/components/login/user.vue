@@ -73,7 +73,7 @@ export default {
 
     return {
       // 背景图片
-      imgSrc: require('../../assets/72f082025aafa40fa627f806aa64034f79f01903.jpg'),
+      imgSrc: require('../../assets/userBack.jpg'),
 
       ruleForm: {
         work_num:'',

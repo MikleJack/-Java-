@@ -4,8 +4,7 @@
     <div class="left-top">
       <!--头像-->
       <div class="headPortrait" :key="fit">
-        <el-image class="head" :src="url" :fit="fit">
-        </el-image>
+        <img class="head" src="../../assets/leader.jpg" :fit="fit">
       </div>
       <!--信息-->
       <div class="worker_information">
@@ -148,9 +147,9 @@
       <!--快捷入口具体按钮-->
       <div class="enter" >
         <el-row>
-          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle ></el-button>
-          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
+          <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 20% auto 0;" circle  @click="goRouter(2)"></el-button>
+          <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(1)"></el-button>
+          <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
         </el-row>
       </div>
     </div>
@@ -167,9 +166,9 @@ export default {
   methods: {
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
-        return 'rgb(255,186,39)';
-      } else if (total_Phyutilization > 80) {
-        return 'rgb(226,131,22)';
+        return 'rgba(239,125,10,0.7)';
+      } else if (total_Phyutilization > 90) {
+        return 'rgba(239,125,10,0.7)';
       } else return '#41c6a2'
     },
     budCustomcolors(depBudget){
@@ -189,8 +188,15 @@ export default {
       this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum="+
         sessionStorage.getItem("work_num")).then((res)=>{
           this.workInfo=res.data;
-          console.log(this.workInfo);
       })
+    },
+    goRouter(index){
+      if (index===1)
+        this.$router.push({path:"/leader/changePass"});
+      else if (index===2)
+        this.$router.push({path:"/leader/allOrder"});
+      else if (index===3)
+        this.$router.push({path:"/leader/examineLog"});
     }
   },
 
@@ -204,7 +210,6 @@ export default {
       // 部门预算使用率
       depBudget:'78.90',
       fits: ['cover'],
-      url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F40%2Fc9%2F53%2F40c9533e47b9ce0945a2030f9320b80e.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644379289&t=487f84fb7f4d9252f4fa8ef334c39618',
       workInfo:{
 
       },
@@ -219,7 +224,7 @@ export default {
     var approveChart = echarts.init(chartDom);
     var approveOption;
     approveOption = {
-      width: '700px',
+      width: '650px',
       height: '120px',
       color:'#349165',
       title:{
@@ -228,7 +233,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'工单审批情况',
+        subtext:'工单审批情况(个)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -259,6 +264,14 @@ export default {
           lineStyle:{
             color: 'green',
             // type: 'dashed'//可选值还有 dotted  solid
+          },
+          markLine: {
+            data: [
+              {
+                type: 'average',
+                name: '平均值'
+              }
+            ]
           }
         }
       ]
@@ -278,7 +291,7 @@ export default {
           triggerOn: 'click',
           formatter: '{b}:{c}'
         },
-        subtext:'最近工单申请情况',
+        subtext:'最近工单申请情况(个)',
         x:'center',
         subtextStyle: {//副标题文本样式{"color": "#aaa"}
           // fontFamily: 'Arial, Verdana, sans...',
@@ -441,25 +454,6 @@ export default {
   font-size: 15px;
   /*margin-left: 14%;*/
   /*background-color: #73c8b3;*/
-}
-.bud{
-  width: 30%;
-  height: 100%;
-  float: left;
-  /*background-color: #3eb698;*/
-}
-.budPie{
-  width: 100%;
-  height: 75%;
-  float: left;
-  /*background-color: #3eb698;*/
-}
-.budMessage{
-  width: 100%;
-  height: 25%;
-  float: left;
-  font-size: 15px;
-  /*background-color: #36ba99;*/
 }
 .vir{
   width: 30%;
