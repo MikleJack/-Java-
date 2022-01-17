@@ -3,12 +3,15 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.HisResourceUsage;
 import com.example.back2.dao.table.HisResourceUsageDao;
 import com.example.back2.service.table.HisResourceUsageService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
+import java.util.concurrent.Future;
 
 /**
  * (HisResourceUsage)表服务实现类
@@ -27,9 +30,10 @@ public class HisResourceUsageServiceImpl implements HisResourceUsageService {
      * @param workOrderNum 主键
      * @return 实例对象
      */
+    @Async
     @Override
-    public HisResourceUsage queryById(String workOrderNum) {
-        return this.hisResourceUsageDao.queryById(workOrderNum);
+    public Future<HisResourceUsage> queryById(String workOrderNum) {
+        return new AsyncResult<>(this.hisResourceUsageDao.queryById(workOrderNum));
     }
 
     /**
@@ -64,9 +68,9 @@ public class HisResourceUsageServiceImpl implements HisResourceUsageService {
      * @return 实例对象
      */
     @Override
-    public HisResourceUsage update(HisResourceUsage hisResourceUsage) {
+    public HisResourceUsage update(HisResourceUsage hisResourceUsage) throws Exception{
         this.hisResourceUsageDao.update(hisResourceUsage);
-        return this.queryById(hisResourceUsage.getWorkOrderNum());
+        return this.queryById(hisResourceUsage.getWorkOrderNum()).get();
     }
 
     /**
@@ -79,4 +83,7 @@ public class HisResourceUsageServiceImpl implements HisResourceUsageService {
     public boolean deleteById(String workOrderNum) {
         return this.hisResourceUsageDao.deleteById(workOrderNum) > 0;
     }
+
+
+
 }

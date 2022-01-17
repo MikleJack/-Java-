@@ -8,14 +8,20 @@ import com.example.back2.exception.GlobalException;
 import com.example.back2.service.table.*;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import com.example.back2.service.view.OrderBeginEndTimeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("staffAllTickets")
@@ -54,9 +60,9 @@ public class StaffAllTickets {
      * @return 是否下线成功
      */
     @GetMapping("criteriaQueryByPage")
-    public ResponseEntity<Page<WorkOrder>> criteriaQueryByPage(Integer workerNum, int page, int size) {
+    public ResponseEntity<Page<WorkOrder>> criteriaQueryByPage(Integer workerNum, int page, int size) throws Exception {
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.workOrderService.criteriaQueryByPage(workerNum,pageRequest));
+        return ResponseEntity.ok(this.workOrderService.criteriaQueryByPage(workerNum,pageRequest).get());
     }
 
 //----------------首页表单显示-底部-------------------------------------------------------
@@ -74,7 +80,7 @@ public class StaffAllTickets {
     @PostMapping("delay")
     public ResponseEntity<String> delay(String workOrderNum,
                                         Date delayTime,
-                                         String delayReason)throws GlobalException  {
+                                         String delayReason)throws Exception  {
         //计算工单的持续时间: 单位月
         Long preBeginTime = this.orderBeginEndTimeService.queryBeginTimeByOrderNum(workOrderNum).getTime();
         Long preEndTime = this.orderBeginEndTimeService.queryEndTimeByOrderNum(workOrderNum).getTime();
@@ -93,7 +99,7 @@ public class StaffAllTickets {
         Long nowDurationTime = ((nowEndTime - nowBeginTime)/(24*60*60*1000));
 
         //通过 原工单总价/持续时间 * 当前工单持续时间 得到当前工单的总价
-        Double prePrice = this.workOrderService.queryPriceById(workOrderNum);
+        Double prePrice = this.workOrderService.queryPriceById(workOrderNum).get();
         Double nowPrice = (prePrice / preDurationTime) * nowDurationTime;
         Double nowPricePrecision = Double.valueOf(String.format("%.2f", nowPrice));
 
@@ -142,9 +148,9 @@ public class StaffAllTickets {
      * @return 查询结果
      */
     @GetMapping("parameterQueryByPage")
-    public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) {
+    public ResponseEntity<Page<WorkOrder>> parameterQueryByPage(String workOrderType,String workOrderTile, Integer workerNum, int page, int size) throws Exception{
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest));
+        return ResponseEntity.ok(this.workOrderService.parameterQueryByPage(workOrderType, workOrderTile, workerNum, pageRequest).get());
     }
 //----------------------------查询按钮-底部----------------------------
 
@@ -161,10 +167,10 @@ public class StaffAllTickets {
     @GetMapping("offline")
     public ResponseEntity<Boolean> offline(String workOrderNum,
                                            String workOrderState,
-                                           String offlineReason) throws GlobalException {
+                                           String offlineReason) throws Exception {
         if(workOrderState.equals("二级审批通过")) {
             //批量下线物理机资源
-            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
             List<Integer> comNums = new ArrayList<Integer>();
             for(int i = 0; i <allocatedComs.size();i++) {
                 comNums.add(allocatedComs.get(i).getComNum());
@@ -172,7 +178,7 @@ public class StaffAllTickets {
             this.physicsComResourceService.setComAssign(comNums,true);
 
             //批量下线虚拟机资源
-            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum).get();
             Integer ram = 0,storage = 0 ,cpuCore = 0;
             for (int i = 0; i < allocatedVms.size(); i++){
                 AllocatedVm tempVm = allocatedVms.get(i);
@@ -210,8 +216,8 @@ public class StaffAllTickets {
      * @return 该工单所有物理机资源
      */
     @GetMapping("allocatedCom")
-    public ResponseEntity<List<AllocatedCom>> allocatedCom(String workOrderNum){
-        return ResponseEntity.ok(this.allocatedComService.queryByWorkOrderNum(workOrderNum));
+    public ResponseEntity<List<AllocatedCom>> allocatedCom(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.allocatedComService.queryByWorkOrderNum(workOrderNum).get());
     }
 
     /**
@@ -221,19 +227,19 @@ public class StaffAllTickets {
      * @return 该工单所有虚拟机资源
      */
     @GetMapping("allocatedVir")
-    public ResponseEntity<List<AllocatedVmSpecifications>> allocatedVir(String workOrderNum){
-        return ResponseEntity.ok(this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum));
+    public ResponseEntity<List<AllocatedVmSpecifications>> allocatedVir(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum).get());
     }
 
     /**
-     * 通过工单编号查询该工单所有虚拟机机资源
+     * 通过工单编号查询该工单的开始和结束时间
      *
      * @param workOrderNum 工单编号
      * @return 该工单所有虚拟机资源
      */
     @GetMapping("queryBeginAndEndTime")
-    public ResponseEntity<OrderBeginEndTime> queryBeginTime(String workOrderNum){
-        return ResponseEntity.ok(this.orderBeginEndTimeService.queryById(workOrderNum));
+    public ResponseEntity<OrderBeginEndTime> queryBeginTime(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.orderBeginEndTimeService.queryById(workOrderNum).get());
     }
 
     /**
@@ -243,8 +249,8 @@ public class StaffAllTickets {
      * @return 该工单的资源利用率
      */
     @GetMapping("queryResourceUsage")
-    public ResponseEntity<HisResourceUsage> queryResourceUsage(String workOrderNum){
-        return ResponseEntity.ok(this.hisResourceUsageService.queryById(workOrderNum));
+    public ResponseEntity<HisResourceUsage> queryResourceUsage(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.hisResourceUsageService.queryById(workOrderNum).get());
     }
 
 //----------------详情按钮-底部-------------------------------------------------------
