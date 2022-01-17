@@ -12,7 +12,8 @@ export default new Vuex.Store({
     staffAllOrder_DetailDialogVisible:false,
     order_detail_dialogTableVisible:false,
     pendtickets_dialogTableVisible:false,
-    url:"https://localhost:8084"
+    url:"https://localhost:8084",
+    FileName:''
   },
   mutations: {
 

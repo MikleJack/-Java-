@@ -244,7 +244,7 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" :disabled="this.disable" @click="submit">提交</el-button>
+      <el-button class="add_type" @click="submit">提交</el-button>
     </div>
   </div>
 </template>
@@ -561,6 +561,7 @@ export default {
     submit() {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
       this.workorder.price= this.total_price;
+      this.workorder.file=this.$store.state.FileName;
       //插入到表单中
       this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
         this.workorder).then((res) => {
