@@ -184,6 +184,24 @@
         where work_num = #{workNum}
     </update>
 
+
+<!--    修改密码-->
+    <update id="changepw">
+        update staff
+        <set>
+            password = #{password}
+        </set>
+        where work_num = #{workernum}
+    </update>
+<!--    修改电话号码-->
+    <update id="changephone">
+        update staff
+            <set>
+                phone = #{phone}
+            </set>
+        where work_num = #{workernum}
+    </update>
+
     <!--新增新账户-->
     <insert id="addAccount" useGeneratedKeys="true">
         insert into staff(name, dep_num, phone, password, state,in_service)

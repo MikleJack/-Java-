@@ -118,5 +118,9 @@ public interface StaffDao {
                        String phone,String work_password);
 
 
+//    修改密码
+    boolean changepw(String password,Integer workernum);
+//    修改电话号码
+    boolean changephone(Integer workernum,String phone);
 }
 
