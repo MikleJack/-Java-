@@ -1,15 +1,15 @@
 <template>
       <el-upload  :action="uploadUrl" :before-upload="handleBeforeUpload"  :on-error="handleUploadError"
-                  :before-remove="beforeRemove"  :limit="1" :on-exceed="handleExceed"
-                  :file-list="fileList" :on-progress="success">
+                  :limit="1" :on-exceed="handleExceed"
+                  :file-list="fileList" :on-progress="success" accept="txt">
         <el-button class="upload-demo" size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">最多上传一个文件，不超过1Gb</div>
+        <div slot="tip" class="el-upload__tip">最多上传一个文件，不超过1Gb，只支持pdf/docx文档</div>
       </el-upload>
 </template>
 
 <script>
 export default {
-  name: "uploadFileByfhj",
+  name: "uploadFile",
   data() {
     return {
       form: {
@@ -24,9 +24,6 @@ export default {
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
-    },
     handleUploadError(error, file) {
       this.$notify.error({
         title: 'error',
@@ -37,6 +34,19 @@ export default {
     },
     //测试上传文件(注意web的上下文)
     handleBeforeUpload(file){
+      if(file.type==="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ||file.type==="application/pdf"){
+        return true;
+      }
+      else
+      {
+        this.$message({
+          message:"上传了不支持的文件类型，请重新选择！",
+          type:"error",
+          center:true,
+        })
+        return false;
+      }
     },
     //文件上传成功
     success(event, file, fileList){
