@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AdminsearchorderCom)表服务接口
@@ -23,5 +24,5 @@ public interface AdminsearchorderComService {
      */
     Page<AdminsearchorderCom> queryByPage(AdminsearchorderCom adminsearchorderCom, PageRequest pageRequest);
 
-    List<AdminsearchorderCom> getOrderCom(String workOrderNum);
+    Future<List<AdminsearchorderCom>> getOrderCom(String workOrderNum);
 }

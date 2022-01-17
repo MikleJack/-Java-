@@ -4,6 +4,8 @@ import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.concurrent.Future;
+
 /**
  * (AdminsearchorderDetailperson)表服务接口
  *
@@ -36,7 +38,7 @@ public interface AdminsearchorderDetailpersonService {
      * @param workOrderNum 工单编号
      * @return 每个工单详情页面上的员工信息、部门信息、工单信息
      */
-    AdminsearchorderDetailperson queryWorkOrderDetailTop(String workOrderNum);
+    Future<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum);
 
 
 }

@@ -62,8 +62,8 @@ public class changeTicket {
     AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
 
     @GetMapping("selectByWorkOrderNum")
-    public ResponseEntity<AdminsearchorderDetailperson> selectByWorkOrderNum(String workOrderNum){
-        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    public ResponseEntity<AdminsearchorderDetailperson> selectByWorkOrderNum(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
     }
 
 //    提交变更之后的工单内容

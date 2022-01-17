@@ -4,13 +4,17 @@ import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.dao.view.AdminsearchorderTableDao;
 import com.example.back2.service.view.AdminsearchorderTableService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.thymeleaf.spring5.util.FieldUtils;
 
 import javax.annotation.Resource;
+import java.util.concurrent.Future;
 
 /**
  * (AdminsearchorderTable)表服务实现类
@@ -30,10 +34,11 @@ public class AdminsearchorderTableServiceImpl implements AdminsearchorderTableSe
      * @param pageRequest      分页对象
      * @return 查询结果
      */
+    @Async
     @Override
-    public Page<AdminsearchorderTable> queryByPage(AdminsearchorderTable adminsearchorderTable, PageRequest pageRequest) {
+    public Future<Page<AdminsearchorderTable>> queryByPage(AdminsearchorderTable adminsearchorderTable, PageRequest pageRequest) {
         long total = this.adminsearchorderTableDao.count(adminsearchorderTable);
-        return new PageImpl<>(this.adminsearchorderTableDao.queryAllByLimit(adminsearchorderTable, pageRequest), pageRequest, total);
+        return new AsyncResult<>(new PageImpl<>(this.adminsearchorderTableDao.queryAllByLimit(adminsearchorderTable, pageRequest), pageRequest, total));
     }
 
     /**
@@ -54,9 +59,11 @@ public class AdminsearchorderTableServiceImpl implements AdminsearchorderTableSe
      *
      * @return 查询结果
      */
-    public Page<AdminsearchorderTable> normalQueryByPage(PageRequest pageRequest) {
+    @Async
+    @Override
+    public Future<Page<AdminsearchorderTable>> normalQueryByPage(PageRequest pageRequest) {
         long total = this.adminsearchorderTableDao.normalCount();
-        return new PageImpl<>(this.adminsearchorderTableDao.normalQueryAllByLimit(pageRequest), pageRequest, total);
+        return new AsyncResult<>(new PageImpl<>(this.adminsearchorderTableDao.normalQueryAllByLimit(pageRequest), pageRequest, total));
     }
 
     /**

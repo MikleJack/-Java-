@@ -4,6 +4,8 @@ import com.example.back2.entity.view.Leaderworkorderall;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.concurrent.Future;
+
 /**
  * (Leaderworkorderall)表服务接口
  *
@@ -19,10 +21,10 @@ public interface LeaderworkorderallService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Leaderworkorderall> queryByPage(Integer second_leader_num,
-                                         Integer first_leader_num,
-                                         String orderState,
-                                         PageRequest pageRequest);
+    Future<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
+                                                Integer first_leader_num,
+                                                String orderState,
+                                                PageRequest pageRequest);
 
     Integer getSecondNum(String workOrderNum);
 

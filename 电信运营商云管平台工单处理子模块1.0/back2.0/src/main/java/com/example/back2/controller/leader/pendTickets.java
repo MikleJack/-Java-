@@ -46,10 +46,10 @@ public class pendTickets {
     public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
                                                                 Integer first_leader_num,
                                                                 String orderState,
-                                                                int page, int size) {
+                                                                int page, int size) throws Exception {
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
-                first_leader_num,orderState, pageRequest));
+                first_leader_num,orderState, pageRequest).get());
     }
 
     //    根据工号查询工人信息
@@ -57,8 +57,8 @@ public class pendTickets {
     AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
 
     @GetMapping("queryWorkOrderDetailTop")
-    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum){
-        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
     }
 
 //  根据工单号返回该工单的物理机信息
@@ -67,8 +67,8 @@ public class pendTickets {
     private AdminsearchorderComService adminsearchorderComService;
 
     @GetMapping("getOrderCom")
-    public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
-        return this.adminsearchorderComService.getOrderCom(workOrderNum);
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum) throws Exception{
+        return this.adminsearchorderComService.getOrderCom(workOrderNum).get();
     }
 //根据工单号返回该工单的虚拟机信息
 
@@ -76,8 +76,8 @@ public class pendTickets {
     private AdminsearceorderVmService adminsearceorderVmService;
 
     @GetMapping("getOrderVm")
-    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
-        return this.adminsearceorderVmService.getOrderVm(workOrderNum);
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum) throws Exception{
+        return this.adminsearceorderVmService.getOrderVm(workOrderNum).get();
     }
 
 
