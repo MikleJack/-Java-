@@ -4,7 +4,7 @@
     <div class="left-top">
       <!--头像-->
       <div class="headPortrait" :key="fit">
-        <img class="head" src="../../assets/头像.png" :fit="fit">
+        <img class="head" src="../../assets/admin.png" :fit="fit">
 <!--        <el-image class="head" :src="url" :fit="fit">-->
 <!--        </el-image>-->
       </div>

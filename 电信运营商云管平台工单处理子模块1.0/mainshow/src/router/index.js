@@ -21,6 +21,8 @@ import staffAllOrder from "../components/staff/staffAllOrder";
 import employeePortal from "../components/staff/staffPortal";
 import leaderPortal from "../components/leader/leaderPortal"
 import adminPortal from "../components/admin/adminPortal"
+import changepassword from "../components/changePassword";
+import adminChangePassword from "../components/admin/adminChangePassword";
 
 Vue.use(Router)
 
@@ -89,6 +91,11 @@ const router = new Router({
             requireAuth:true,
             role:'admin'
           },
+        },
+        {
+          path: 'changePass',
+          name:'changePass',
+          component: adminChangePassword
         }
       ]
     },
@@ -136,6 +143,11 @@ const router = new Router({
             requireAuth: true,
             role:'leader'
           },
+        },
+        {
+          path: 'changePass',
+          name:'changePass',
+          component: changepassword
         }
       ]
     },
@@ -183,6 +195,11 @@ const router = new Router({
             requireAuth: true,
             role:'staff'
           },
+        },
+        {
+          path: 'changePass',
+          name:'changePass',
+          component: changepassword
         }
       ]
     }
