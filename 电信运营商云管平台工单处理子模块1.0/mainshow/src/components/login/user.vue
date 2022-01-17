@@ -26,7 +26,7 @@
 
           <el-form-item>
             <div class="code_input">
-              <el-input type="text" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
+              <el-input type="text" @keyup.enter.native="logging" v-model="code" placeholder="请输入验证码"  autocomplete="off"></el-input>
             </div>
             <div style="float: right">
               <img @click="getVertifyCode" id="verifyCode" />
