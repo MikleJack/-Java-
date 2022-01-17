@@ -32,13 +32,15 @@ public class StaffServiceImpl implements StaffService {
         return this.staffDao.queryById(workNum);
     }
 
-    /**
-     * 分页查询
-     *
-     * @param staff 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
+//    /**
+//     * 分页查询
+//     *
+//     * @param staff 筛选条件
+//     * @param pageRequest      分页对象
+//     * @return 查询结果
+//     */
+
+
     @Override
     public Page<Staff> queryByPage(PageRequest pageRequest) {
         long total = this.staffDao.count();
@@ -131,5 +133,14 @@ public class StaffServiceImpl implements StaffService {
                               String phone,String work_password){
         return this.staffDao.addAccount(name,depNum,phone,work_password);
     }
-
+// 修改密码
+    @Override
+    public boolean changepw(String password,Integer workernum){
+        return this.staffDao.changepw(password,workernum);
+    }
+//    修改电话号码
+    @Override
+    public boolean changephone(Integer workernum,String phone){
+        return this.staffDao.changephone(workernum,phone);
+    }
 }

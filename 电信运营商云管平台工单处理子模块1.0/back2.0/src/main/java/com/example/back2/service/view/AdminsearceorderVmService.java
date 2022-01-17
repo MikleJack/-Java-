@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AdminsearceorderVm)表服务接口
@@ -25,5 +26,5 @@ public interface AdminsearceorderVmService {
     Page<AdminsearceorderVm> queryByPage(AdminsearceorderVm adminsearceorderVm, PageRequest pageRequest);
 
 
-    List<AdminsearceorderVm> getOrderVm(String workOrderNum);
+    Future<List<AdminsearceorderVm>> getOrderVm(String workOrderNum);
 }

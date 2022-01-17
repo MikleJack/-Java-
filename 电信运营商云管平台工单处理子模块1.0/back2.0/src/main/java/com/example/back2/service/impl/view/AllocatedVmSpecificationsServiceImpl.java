@@ -4,6 +4,8 @@ import com.example.back2.entity.view.AllocatedVmSpecifications;
 import com.example.back2.dao.view.AllocatedVmSpecificationsDao;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AllocatedVmSpecifications)表服务实现类
@@ -56,8 +59,9 @@ public class AllocatedVmSpecificationsServiceImpl implements AllocatedVmSpecific
      * @param workOrderNum 工单编号
      * @return 该工单所有虚拟机资源
      */
+    @Async
     @Override
-    public List<AllocatedVmSpecifications> queryVmByWorkOrderNum(String workOrderNum){
-        return this.allocatedVmSpecificationsDao.queryVmByWorkOrderNum(workOrderNum);
+    public Future<List<AllocatedVmSpecifications>> queryVmByWorkOrderNum(String workOrderNum){
+        return new AsyncResult<>(this.allocatedVmSpecificationsDao.queryVmByWorkOrderNum(workOrderNum));
     }
 }

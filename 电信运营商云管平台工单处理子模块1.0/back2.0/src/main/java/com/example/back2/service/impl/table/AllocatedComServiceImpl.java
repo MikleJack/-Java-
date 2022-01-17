@@ -3,10 +3,13 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.AllocatedCom;
 import com.example.back2.dao.table.AllocatedComDao;
 import com.example.back2.service.table.AllocatedComService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AllocatedCom)表服务实现类
@@ -83,9 +86,10 @@ public class AllocatedComServiceImpl implements AllocatedComService {
      * @param workOrderNum 工单编号
      * @return 该工单所有物理机资源
      */
+    @Async
     @Override
-    public List<AllocatedCom> queryByWorkOrderNum(String workOrderNum){
-        return this.allocatedComDao.queryByWorkOrderNum(workOrderNum);
+    public Future<List<AllocatedCom>> queryByWorkOrderNum(String workOrderNum){
+        return new AsyncResult<>(this.allocatedComDao.queryByWorkOrderNum(workOrderNum));
     }
 
 }

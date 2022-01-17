@@ -62,8 +62,8 @@ public class changeTicket {
     AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
 
     @GetMapping("selectByWorkOrderNum")
-    public ResponseEntity<AdminsearchorderDetailperson> selectByWorkOrderNum(String workOrderNum){
-        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    public ResponseEntity<AdminsearchorderDetailperson> selectByWorkOrderNum(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
     }
 
 //    提交变更之后的工单内容
@@ -96,8 +96,8 @@ public class changeTicket {
     private AllocatedComService allocatedComService;
 
     @GetMapping("selectComByWorkOrderNum")
-    public List<AllocatedCom> selectComByWorkOrderNum(String workOrderNum){
-        return this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+    public List<AllocatedCom> selectComByWorkOrderNum(String workOrderNum) throws Exception{
+        return this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
     }
 
 //    获取原工单申请的虚拟机资源
@@ -105,9 +105,8 @@ public class changeTicket {
     private AllocatedVmSpecificationsService allocatedVmSpecificationsService;
 
     @GetMapping("selectVmByWorkOrderNum")
-    public List<AllocatedVmSpecifications> selectVmByWorkOrderNum(String workOrderNum){
-
-        return this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum);
+    public List<AllocatedVmSpecifications> selectVmByWorkOrderNum(String workOrderNum) throws Exception{
+        return this.allocatedVmSpecificationsService.queryVmByWorkOrderNum(workOrderNum).get();
     }
 
 

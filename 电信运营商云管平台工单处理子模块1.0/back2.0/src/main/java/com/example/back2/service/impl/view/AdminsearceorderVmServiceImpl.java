@@ -3,6 +3,8 @@ package com.example.back2.service.impl.view;
 import com.example.back2.entity.view.AdminsearceorderVm;
 import com.example.back2.dao.view.AdminsearceorderVmDao;
 import com.example.back2.service.view.AdminsearceorderVmService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AdminsearceorderVm)表服务实现类
@@ -36,9 +39,10 @@ public class AdminsearceorderVmServiceImpl implements AdminsearceorderVmService 
         return new PageImpl<>(this.adminsearceorderVmDao.queryAllByLimit(adminsearceorderVm, pageRequest), pageRequest, total);
     }
 
+    @Async
     @Override
-    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
-        return this.adminsearceorderVmDao.getOrderVm(workOrderNum);
+    public Future<List<AdminsearceorderVm>> getOrderVm(String workOrderNum){
+        return new AsyncResult<>(this.adminsearceorderVmDao.getOrderVm(workOrderNum));
     }
 
 }

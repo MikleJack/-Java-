@@ -3,12 +3,15 @@ package com.example.back2.service.impl.view;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.dao.view.AdminsearchorderDetailpersonDao;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
+import java.util.concurrent.Future;
 
 /**
  * (AdminsearchorderDetailperson)表服务实现类
@@ -54,9 +57,10 @@ public class AdminsearchorderDetailpersonServiceImpl implements Adminsearchorder
      * @param workOrderNum 工单编号
      * @return 每个工单详情页面上的员工信息、部门信息、工单信息
      */
+    @Async
     @Override
-    public AdminsearchorderDetailperson queryWorkOrderDetailTop(String workOrderNum){
-        return this.adminsearchorderDetailpersonDao.queryWorkOrderDetailTop(workOrderNum);
+    public Future<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum){
+        return new AsyncResult<>(this.adminsearchorderDetailpersonDao.queryWorkOrderDetailTop(workOrderNum));
     }
 
 }

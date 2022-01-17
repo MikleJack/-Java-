@@ -46,10 +46,10 @@ public class pendTickets {
     public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
                                                                 Integer first_leader_num,
                                                                 String orderState,
-                                                                int page, int size) {
+                                                                int page, int size) throws Exception {
         PageRequest pageRequest = PageRequest.of(page,size);
         return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
-                first_leader_num,orderState, pageRequest));
+                first_leader_num,orderState, pageRequest).get());
     }
 
     //    根据工号查询工人信息
@@ -57,8 +57,8 @@ public class pendTickets {
     AdminsearchorderDetailpersonService adminsearchorderDetailpersonService;
 
     @GetMapping("queryWorkOrderDetailTop")
-    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum){
-        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) throws Exception{
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
     }
 
 //  根据工单号返回该工单的物理机信息
@@ -67,8 +67,8 @@ public class pendTickets {
     private AdminsearchorderComService adminsearchorderComService;
 
     @GetMapping("getOrderCom")
-    public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
-        return this.adminsearchorderComService.getOrderCom(workOrderNum);
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum) throws Exception{
+        return this.adminsearchorderComService.getOrderCom(workOrderNum).get();
     }
 //根据工单号返回该工单的虚拟机信息
 
@@ -76,8 +76,8 @@ public class pendTickets {
     private AdminsearceorderVmService adminsearceorderVmService;
 
     @GetMapping("getOrderVm")
-    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
-        return this.adminsearceorderVmService.getOrderVm(workOrderNum);
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum) throws Exception{
+        return this.adminsearceorderVmService.getOrderVm(workOrderNum).get();
     }
 
 
@@ -143,13 +143,13 @@ public class pendTickets {
     private VirtualComResourceService virtualComResourceService;
 
     @PostMapping("towExamine")
-    public Boolean towExamine(String workOrderNum, String workNum, String state) throws GlobalException{
+    public Boolean towExamine(String workOrderNum, String workNum, String state) throws Exception{
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
             workOrder.setWorkOrderState("二级审批通过");
             workOrderService.update(workOrder);
             //分配物理机资源
-            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedCom> allocatedComs = this.allocatedComService.queryByWorkOrderNum(workOrderNum).get();
             List<Integer> comNums = new ArrayList<Integer>();
             for(int i = 0; i <allocatedComs.size();i++) {
                 comNums.add(allocatedComs.get(i).getComNum());
@@ -159,7 +159,7 @@ public class pendTickets {
             }
             //分配虚拟机资源
 
-            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum);
+            List<AllocatedVm> allocatedVms = this.allocatedVmService.queryByWorkOrderNum(workOrderNum).get();
             Integer ram = 0,storage = 0 ,cpuCore = 0;
             for (int i = 0; i < allocatedVms.size(); i++){
                 AllocatedVm tempVm = allocatedVms.get(i);

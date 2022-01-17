@@ -7,15 +7,15 @@
         <el-tab-pane label="基本信息" name="first" style="margin-left: 30%">
           <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
             <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
-              <el-col :span="8">  <el-input v-model="userlist.username" disabled ></el-input></el-col>
+              <el-col :span="8">  <el-input v-model="userlist.name" disabled ></el-input></el-col>
             </el-form-item>
             <el-form-item label="工号" prop="user_num" :label-width="formLabelWidth">
               <el-col :span="8">
-                <el-input v-model="userlist.user_num" disabled ></el-input>
+                <el-input v-model="userlist.workNum" disabled ></el-input>
               </el-col>
             </el-form-item>
             <el-form-item label="所在部门" prop="user_depart" :label-width="formLabelWidth">
-              <el-col :span="8">  <el-input v-model="userlist.user_depart" disabled ></el-input></el-col>
+              <el-col :span="8">  <el-input v-model="userlist.depName" disabled ></el-input></el-col>
             </el-form-item>
             <el-form-item label="电话" prop="phone" :label-width="formLabelWidth">
               <el-col :span="8">   <el-input v-model="userlist.phone" placeholder="请输入电话"></el-input></el-col>
@@ -23,7 +23,7 @@
 <!--保存按钮-->
           </el-form>
           <div class="grid-content bg-purple" style="margin-left: 20%">
-            <el-button type="primary"  @click="EditorUserClick('userlist')" >保存</el-button>
+            <el-button class="info_button" type="primary"  @click="EditorUserClick" >保存</el-button>
           </div>
 <!--        修改密码表单-->
         </el-tab-pane>
@@ -41,7 +41,7 @@
           </el-form>
 <!--          保存-->
           <div class="grid-content bg-purple" style="margin-left: 20%">
-            <el-button type="primary"  @click="submitForm('ruleForm')">保存</el-button>
+            <el-button class="password_button" type="primary"  @click="submitForm" :disabled="button_able">保存</el-button>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -68,12 +68,15 @@ export default {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.newpass) {
         callback(new Error("两次输入密码不一致!"));
+        this.button_able=true
       } else {
         callback();
+        this.button_able=false
       }
     };
 
     return {
+      button_able:false,//再次输入密码不正确时，保存按钮禁用
       ruleForm: {},//修改密码的表单
       activeName: "first",//tab导航栏
       userlist: {},//用户信息表单
@@ -112,6 +115,7 @@ export default {
       }
     };
   },
+
   methods: {
     //tab切换
     handleClick(tab, event) {
@@ -119,21 +123,81 @@ export default {
     },
     //保存新密码
     submitForm(ruleForm) {
+      // if(this.ruleForm.)
+
+      this.$axios.post(this.$store.state.url +
+      "/personaldetails/changepw?workernum=" +
+        sessionStorage.getItem("work_num") +
+        "&oldpw=" +
+        this.ruleForm.pass +
+        "&newpw=" +
+        this.ruleForm.checknewpass
+      ).then((res)=>{
+        if(res.data){
+          this.$message({
+            message: '修改成功',
+            type: 'success',
+            center: true
+          })
+        }else{
+          this.$message({
+            message: '修改失败',
+            type: 'error',
+            center: true
+          })
+        }
+      })
     },
     //保存个人信息
     EditorUserClick() {
+      this.$axios.post(this.$store.state.url +
+      "/personaldetails/changephone?workernum=" +
+        sessionStorage.getItem("work_num") + "&phone=" +
+        this.userlist.phone).then((res)=>{
+          if(res.data === true){
+            this.$message({
+              message: '修改成功',
+              type: 'success',
+              center: true
+            })
+          }else {
+            this.$message({
+              message:'修改失败',
+              type:'error',
+              center:true
+            })
+          }
+      })
     }
+  },
+  mounted() {
+    this.$axios.get(this.$store.state.url +
+      "/personaldetails/queryPersonInformById?workernum=" +
+      sessionStorage.getItem("work_num")).then((res)=>{
+        this.userlist = res.data;
+    });
   }
 }
 </script>
-<style scoped></style>
-<style>
-/*按钮颜色改变*/
-.el-button {
+<style scoped>
+.password_button{
   color: #fff;
   background-color: rgba(82, 182, 154, 0.8);
   border-color: #52b69a;
 }
+.info_button{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
+}
+</style>
+<style>
+/*按钮颜色改变*/
+/*.el-button {*/
+/*  color: #fff;*/
+/*  background-color: rgba(82, 182, 154, 0.8);*/
+/*  border-color: #52b69a;*/
+/*}*/
 
 /*鼠标移到标签上时颜色改变*/
 .el-tabs__item:hover {

@@ -244,7 +244,9 @@
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
-      <el-button class="add_type" @click="submit" :disabled="disable">提交</el-button>
+<!--      <el-button class="add_type" @click="submit" :disabled="(this.order_budget <= this.surplus_budget)&&(this.workorder.workOrderName != '')">提交</el-button>-->
+      <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName != '')">提交</el-button>
+
     </div>
   </div>
 </template>
@@ -354,7 +356,8 @@ export default {
     setInterval(() => {
       that.getDateFunc();
       that.calculate_sum();
-      this.disable = this.isdisable;
+      // this.isdisable();
+      // that.isdisable();
     }, 1000)
     this.scope.row.quantity = 50;
   },
@@ -506,10 +509,11 @@ export default {
       }
     },
 
-    isdisable(){
-      return this.order_budget <= this.surplus_budget;
-    },
-
+    //检验工单预算，如果工单预算比部门预算大就让申请
+    // isdisable(){
+    //   this.disable = (this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName === '');
+    //   return this.disable;
+    // },
 
 //设置表头行的样式
     tableHeaderColor({row, column, rowIndex, columnIndex}) {
