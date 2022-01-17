@@ -88,6 +88,25 @@ export default {
 
     //保存新密码
     submitForm(ruleForm) {
+      this.$axios.post(this.$store.state.url+
+      "/admindetails/changepw?admin_num=root&oldpw=" +
+        this.ruleForm.pass +
+        "&newpw=" +
+        this.ruleForm.checknewpass).then((res)=>{
+          if (res.data === true){
+            this.$message({
+                message: '修改成功',
+                type: 'success',
+                center: true
+            })
+          }else{
+            this.$message({
+              message:'修改失败，原密码输入不正确',
+              type:'error',
+              center:true
+            })
+          }
+      })
     },
 
   }
