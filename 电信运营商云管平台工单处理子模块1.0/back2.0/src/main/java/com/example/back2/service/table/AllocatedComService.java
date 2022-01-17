@@ -3,6 +3,7 @@ package com.example.back2.service.table;
 import com.example.back2.entity.table.AllocatedCom;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AllocatedCom)表服务接口
@@ -59,7 +60,7 @@ public interface AllocatedComService {
      * @param workOrderNum 工单编号
      * @return 该工单所有物理机资源
      */
-    List<AllocatedCom> queryByWorkOrderNum(String workOrderNum);
+    Future<List<AllocatedCom>> queryByWorkOrderNum(String workOrderNum);
 
 
 }

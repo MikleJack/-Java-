@@ -4,6 +4,8 @@ import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.dao.table.WorkOrderDao;
 import com.example.back2.service.table.WorkOrderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +17,7 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (WorkOrder)表服务实现类
@@ -58,10 +61,11 @@ public class WorkOrderServiceImpl implements WorkOrderService {
      * @param pageRequest 分页请求
      * @return 用户的全部工单
      */
+    @Async
     @Override
-    public Page<WorkOrder> criteriaQueryByPage(Integer workerNum,PageRequest pageRequest){
+    public Future<Page<WorkOrder>> criteriaQueryByPage(Integer workerNum, PageRequest pageRequest){
         long total = this.workOrderDao.criteriaCount(workerNum);
-        return new PageImpl<>(this.workOrderDao.criteriaQueryAllByLimit(workerNum, pageRequest), pageRequest, total);
+        return new AsyncResult<>(new PageImpl<>(this.workOrderDao.criteriaQueryAllByLimit(workerNum, pageRequest), pageRequest, total));
     }
 
     /**
@@ -137,9 +141,10 @@ public class WorkOrderServiceImpl implements WorkOrderService {
      * @param workOrderNum 主键
      * @return 该工单总价
      */
+    @Async
     @Override
-    public Double queryPriceById(String workOrderNum){
-        return this.workOrderDao.queryById(workOrderNum).getPrice();
+    public Future<Double> queryPriceById(String workOrderNum){
+        return new AsyncResult<>(this.workOrderDao.queryById(workOrderNum).getPrice());
     }
 
 //-------------------员工全部工单查询界面--查询按钮-顶部----------------------------
@@ -151,10 +156,11 @@ public class WorkOrderServiceImpl implements WorkOrderService {
      * @param workerNum 工人编号
      * @return 查询结果
      */
+    @Async
     @Override
-    public Page<WorkOrder> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest){
+    public Future<Page<WorkOrder>> parameterQueryByPage(String workOrderType, String workerTitle,Integer workerNum,PageRequest pageRequest){
         long total = this.workOrderDao.parameterCount(workOrderType, workerTitle, workerNum);
-        return new PageImpl<>(this.workOrderDao.parameterQueryAllByLimit(workOrderType, workerTitle, workerNum, pageRequest), pageRequest, total);
+        return new AsyncResult<>(new PageImpl<>(this.workOrderDao.parameterQueryAllByLimit(workOrderType, workerTitle, workerNum, pageRequest), pageRequest, total));
     }
 //------------------------员工全部工单查询界面----查询按钮-底部----------------------------
 

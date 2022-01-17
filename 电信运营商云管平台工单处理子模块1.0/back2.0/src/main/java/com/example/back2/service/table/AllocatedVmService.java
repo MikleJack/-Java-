@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AllocatedVm)表服务接口
@@ -62,6 +63,6 @@ public interface AllocatedVmService {
      * @param workOrderNum 工单编号
      * @return 该工单所有虚拟机资源
      */
-    List<AllocatedVm> queryByWorkOrderNum(String workOrderNum);
+    Future<List<AllocatedVm>> queryByWorkOrderNum(String workOrderNum);
 
 }
