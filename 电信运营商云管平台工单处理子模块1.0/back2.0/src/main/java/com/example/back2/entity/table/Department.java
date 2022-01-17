@@ -1,6 +1,7 @@
 package com.example.back2.entity.table;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (Department)实体类
@@ -18,6 +19,16 @@ public class Department implements Serializable {
     private Integer depLevel;
     
     private Double depBudget;
+
+    private List<Department> children;
+
+    public void setChildren(List<Department> children){
+        this.children=children;
+    }
+
+    public List<Department> getChildren(){
+        return this.children;
+    }
 
 
     public Integer getDepNum() {

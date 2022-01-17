@@ -48,8 +48,10 @@ public class login {
                 password = SHA_256.getSHA256(password);
                 return ResponseEntity.ok(password.equals(this.adminService.queryById(work_num).getPassword()));
             }
-            else
-                throw new GlobalException("未查询到管理员编号     输入的账号为",work_num);
+            else{
+                return ResponseEntity.ok(false);
+
+            }
         }
         else
             throw new GlobalException("输入的账号或密码为空","输入的账号或密码为空");

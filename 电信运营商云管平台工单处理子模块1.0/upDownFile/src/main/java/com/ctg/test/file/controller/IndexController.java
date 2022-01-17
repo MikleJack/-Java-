@@ -1,4 +1,4 @@
-package com.ctg.test.file;
+package com.ctg.test.file.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
