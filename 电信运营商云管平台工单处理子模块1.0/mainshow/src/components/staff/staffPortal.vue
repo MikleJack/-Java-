@@ -148,16 +148,16 @@
             <p>{{due_order}}</p>
           </div>
         </div>
-        <div class="onlinePart">
-          <div class="online">
+        <div class="backPart">
+          <div class="back">
             <el-tag type="success" effect="dark" color="#349165"
                     style="width: 90%;height: 85%;font-size: large;
                     text-align: center;line-height: 40px;
-                    margin-top: 10%;border-radius: 50%">在</el-tag>
+                    margin-top: 10%;border-radius: 50%">退</el-tag>
           </div>
           <div class="Message">
-            <p>在线工单</p>
-            <p>{{online_order}}</p>
+            <p>回退工单</p>
+            <p>{{back_order}}</p>
           </div>
         </div>
         <div class="untreatedPart">
@@ -175,10 +175,16 @@
         <!--快捷入口具体按钮-->
         <div class="enter">
           <el-row>
-            <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 40% auto 0;" circle
-                       οnclick="window.location.href='../allOrder'"></el-button>
-            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin:0 auto" circle></el-button>
-            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle></el-button>
+            <el-tooltip effect="light" content="修改个人信息" placement="left">
+            <el-button type="primary" icon="el-icon-edit" size="medium " style="display:block;margin: 20% auto 0" circle @click="goRouter(1)"></el-button>
+            </el-tooltip>
+            <el-tooltip effect="light" content="全部工单查询" placement="left">
+              <el-button type="success" icon="el-icon-search" size="medium " style="display:block;margin: 0 auto 0" circle
+                         οnclick="window.location.href='../allOrder'" @click="goRouter(2)"></el-button>
+            </el-tooltip>
+            <el-tooltip effect="light" content="变更工单" placement="left">
+            <el-button type="warning" icon="el-icon-star-off" size="medium " style="display:block;margin:0 auto" circle @click="goRouter(3)"></el-button>
+            </el-tooltip>
           </el-row>
         </div>
       </div>
@@ -217,7 +223,14 @@ export default {
       }
       return '';
     },
-
+    goRouter(index){
+      if (index===1)
+        this.$router.push({path:"/staff/changePass"});
+      else if (index===2)
+        this.$router.push({path:"/staff/allOrder"});
+      else if (index===3)
+        this.$router.push({path:"/staff/change"});
+    }
   },
 
 // 表格数据
@@ -236,7 +249,7 @@ export default {
 
       workerInform:{},
       due_order:'5',
-      online_order:'12',
+      back_order:'12',
       untreated_order:'3',
 
 
@@ -541,7 +554,7 @@ export default {
   float: left;
   border-radius: 20px;
 }
-.onlinePart{
+.backPart{
   width: 95%;
   height: 13%;
   float: left;
@@ -550,7 +563,7 @@ export default {
   border-radius: 20px;
   border:3px solid #53c59e
 }
-.online{
+.back{
   width: 50%;
   height: 100%;
   float: left;

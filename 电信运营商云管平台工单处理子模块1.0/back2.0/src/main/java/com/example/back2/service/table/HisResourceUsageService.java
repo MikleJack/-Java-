@@ -3,6 +3,9 @@ package com.example.back2.service.table;
 import com.example.back2.entity.table.HisResourceUsage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
+
+import java.util.concurrent.Future;
 
 /**
  * (HisResourceUsage)表服务接口
@@ -18,7 +21,7 @@ public interface HisResourceUsageService {
      * @param workOrderNum 主键
      * @return 实例对象
      */
-    HisResourceUsage queryById(String workOrderNum);
+    Future<HisResourceUsage> queryById(String workOrderNum);
 
     /**
      * 分页查询
@@ -43,7 +46,7 @@ public interface HisResourceUsageService {
      * @param hisResourceUsage 实例对象
      * @return 实例对象
      */
-    HisResourceUsage update(HisResourceUsage hisResourceUsage);
+    HisResourceUsage update(HisResourceUsage hisResourceUsage) throws Exception;
 
     /**
      * 通过主键删除数据

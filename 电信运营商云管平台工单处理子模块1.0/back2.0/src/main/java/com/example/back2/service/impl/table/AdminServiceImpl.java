@@ -79,4 +79,10 @@ public class AdminServiceImpl implements AdminService {
     public boolean deleteById(String adminNum) {
         return this.adminDao.deleteById(adminNum) > 0;
     }
+
+//    管理员修改密码
+    @Override
+    public boolean changepw(String adminNum,String password){
+        return this.adminDao.changepw(adminNum,password);
+    }
 }

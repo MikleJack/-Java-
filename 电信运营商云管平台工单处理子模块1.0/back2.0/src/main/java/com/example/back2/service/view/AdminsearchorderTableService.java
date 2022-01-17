@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.concurrent.Future;
+
 /**
  * (AdminsearchorderTable)表服务接口
  *
@@ -22,7 +24,7 @@ public interface AdminsearchorderTableService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<AdminsearchorderTable> queryByPage(AdminsearchorderTable adminsearchorderTable, PageRequest pageRequest);
+    Future<Page<AdminsearchorderTable>> queryByPage(AdminsearchorderTable adminsearchorderTable, PageRequest pageRequest);
 
     /**
      * 新增数据
@@ -37,7 +39,7 @@ public interface AdminsearchorderTableService {
      *
      * @return 查询结果
      */
-    Page<AdminsearchorderTable> normalQueryByPage(PageRequest pageRequest);
+    Future<Page<AdminsearchorderTable>> normalQueryByPage(PageRequest pageRequest);
 
 
     /**

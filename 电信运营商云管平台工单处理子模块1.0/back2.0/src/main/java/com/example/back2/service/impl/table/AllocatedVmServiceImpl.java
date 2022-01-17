@@ -4,10 +4,13 @@ import com.example.back2.entity.table.AllocatedCom;
 import com.example.back2.entity.table.AllocatedVm;
 import com.example.back2.dao.table.AllocatedVmDao;
 import com.example.back2.service.table.AllocatedVmService;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (AllocatedVm)表服务实现类
@@ -84,8 +87,9 @@ public class AllocatedVmServiceImpl implements AllocatedVmService {
      * @param workOrderNum 工单编号
      * @return 该工单所有虚拟机资源
      */
+    @Async
     @Override
-    public List<AllocatedVm> queryByWorkOrderNum(String workOrderNum){
-        return this.allocatedVmDao.queryByWorkOrderNum(workOrderNum);
+    public Future<List<AllocatedVm>> queryByWorkOrderNum(String workOrderNum){
+        return new AsyncResult<>(this.allocatedVmDao.queryByWorkOrderNum(workOrderNum));
     }
 }

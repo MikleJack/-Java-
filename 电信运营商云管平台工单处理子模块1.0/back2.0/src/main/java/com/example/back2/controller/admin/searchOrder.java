@@ -35,9 +35,9 @@ public class searchOrder {
      * @return 查询结果+
      */
     @PostMapping("criteriaQueryByPage")
-    public ResponseEntity<Page<AdminsearchorderTable>> criteriaQueryByPage(AdminsearchorderTable adminsearchorderTable) {
+    public ResponseEntity<Page<AdminsearchorderTable>> criteriaQueryByPage(AdminsearchorderTable adminsearchorderTable) throws Exception{
         PageRequest pageRequest = PageRequest.of(0,8);
-        return ResponseEntity.ok(this.adminsearchorderTableService.queryByPage(adminsearchorderTable, pageRequest));
+        return ResponseEntity.ok(this.adminsearchorderTableService.queryByPage(adminsearchorderTable, pageRequest).get());
     }
 
     /**
@@ -61,9 +61,9 @@ public class searchOrder {
      * @return 查询结果
      */
     @GetMapping("normalQueryByPage")
-    public ResponseEntity<Page<AdminsearchorderTable>> normalQueryByPage(int page,int size) {
+    public ResponseEntity<Page<AdminsearchorderTable>> normalQueryByPage(int page,int size) throws  Exception{
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.adminsearchorderTableService.normalQueryByPage(pageRequest));
+        return ResponseEntity.ok(this.adminsearchorderTableService.normalQueryByPage(pageRequest).get());
     }
 
 
@@ -83,9 +83,9 @@ public class searchOrder {
      * @return 每个工单详情页面上的员工信息、部门信息、工单信息
      */
     @GetMapping("queryWorkOrderDetailTop")
-    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) {
+    public ResponseEntity<AdminsearchorderDetailperson> queryWorkOrderDetailTop(String workOrderNum) throws Exception{
 
-        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum));
+        return ResponseEntity.ok(this.adminsearchorderDetailpersonService.queryWorkOrderDetailTop(workOrderNum).get());
 
     }
 
@@ -98,8 +98,8 @@ public class searchOrder {
      * @return 返回该工单申请的物理机信息
      */
     @GetMapping("getOrderCom")
-    public List<AdminsearchorderCom> getOrderCom(String workOrderNum){
-        return this.adminsearchorderComService.getOrderCom(workOrderNum);
+    public List<AdminsearchorderCom> getOrderCom(String workOrderNum) throws Exception{
+        return this.adminsearchorderComService.getOrderCom(workOrderNum).get();
     }
 
     @Resource
@@ -111,8 +111,8 @@ public class searchOrder {
      * @return 返回该工单申请的虚拟机信息
      */
     @GetMapping("getOrderVm")
-    public List<AdminsearceorderVm> getOrderVm(String workOrderNum){
-        return this.adminsearceorderVmService.getOrderVm(workOrderNum);
+    public List<AdminsearceorderVm> getOrderVm(String workOrderNum) throws Exception{
+        return this.adminsearceorderVmService.getOrderVm(workOrderNum).get();
     }
 
 
