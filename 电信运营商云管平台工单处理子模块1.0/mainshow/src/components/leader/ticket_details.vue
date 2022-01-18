@@ -158,6 +158,7 @@
         <div class="resoure_usage">
           <el-table
             :data="informData"
+            :default-sort = "{prop: 'dealDate', order: 'descending'}"
             border>
             <el-table-column
               type="index"
