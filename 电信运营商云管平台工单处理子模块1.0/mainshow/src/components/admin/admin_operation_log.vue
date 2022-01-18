@@ -11,7 +11,7 @@
           </el-form-item>
           <!--输入查询框-->
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button class="query" type="primary" @click="onSubmit">查询</el-button>
             <el-button @click="handleClick_clean">清空</el-button>
           </el-form-item>
           <!--查询按钮-->
@@ -101,6 +101,7 @@
       },
 
       handleClick_clean(){
+        this.formInline.name=''
         this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
@@ -148,6 +149,9 @@
     position: absolute;
     bottom: 0;
     /*background-color: rgb(243, 119, 158);*/
+  }
+  .query{
+    background-color: rgb(62, 143, 118);
   }
 
 </style>
