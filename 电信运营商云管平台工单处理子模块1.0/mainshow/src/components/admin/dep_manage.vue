@@ -2,16 +2,6 @@
     <div class="manage">
 <!--      树形列表-->
       <div class="tree">
-        <!--      显示当前选取的部门-->
-        <div>
-          <el-alert
-            title="当前选取的部门：软件学院"
-            type="info"
-            :closable="false"
-            show-icon
-            effect="dark">
-          </el-alert>
-        </div>
 <!--        模糊搜索部门-->
         <div style="top: 5px;margin-bottom: 5px;position: relative">
           <el-input
@@ -21,7 +11,6 @@
         </div>
         <el-tree
           :data="data"
-          show-checkbox
           node-key="id"
           default-expand-all
           :expand-on-click-node="false"
@@ -29,23 +18,12 @@
           ref="tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
-        <span>
+        <span style="right: 0;position: absolute;">
           <el-button
             type="text"
             size="mini"
             @click="() => append(data)">
             增加子部门
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="() => remove(node, data)">
-            删除部门
-          </el-button>
-          <el-button
-            type="text"
-            size="mini">
-            部门详情
           </el-button>
         </span>
       </span>
@@ -95,18 +73,7 @@ export default {
   data() {
 
       return {
-        data : [{
-          id: 1,
-          label: '软件学院',
-          children: [{
-            id: 2,
-            label: '软件19-2班',
-            children: [{
-              id: 3,
-              label: '小组1'
-            }]
-          }]
-        }],
+        data : [],
         form:{
           name:''
         },
@@ -117,7 +84,9 @@ export default {
       }
     },
     mounted() {
-      this.axios.get(this.$store.state.url+'/depTree/cateList').then((res)=>{
+      this.$axios.get(this.$store.state.url+'/Organ/getTree').then((res)=>{
+        this.data=res.data;
+        console.log(this.data)
       })
     },
     methods: {
@@ -126,15 +95,19 @@ export default {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
       },
-    //隐藏对话框
+      //隐藏对话框
       hied(isInsert){
         this.dialogFormVisible=false;
         if(isInsert){
-          const newChild = { id: 4, label: this.form.name, children: [] };
-          if (!this.temp.children) {
-            this.$set(this.temp, 'children', []);
-          }
-          this.temp.children.push(newChild);
+          this.$axios.post("https://localhost:8084/Organ/insert?depName="+this.form.name+"&depLevel="
+            +(this.temp.depLevel-1).toString()).then((res)=>{
+              this.$axios.post("https://localhost:8084/Organ/addRelate?supe="+this.temp.depNum+"&low="+res.data.depNum)
+            if (!this.temp.children) {
+              this.$set(this.temp, 'children', []);
+            }
+            this.temp.children.push(res.data);
+          })
+
         }
       },
 
@@ -142,15 +115,9 @@ export default {
       append(data) {
         this.dialogFormVisible=true;
         this.temp=data;
+        console.log(this.temp)
       },
 
-      //移除部门
-      remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
-      },
     }
 }
 </script>
