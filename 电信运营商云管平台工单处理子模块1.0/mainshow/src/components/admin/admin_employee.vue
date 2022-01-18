@@ -29,22 +29,22 @@
         <el-table-column
           prop="workNum"
           label="工号"
-          width="150">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="150">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="150">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="depName"
           label="部门名称"
-          width="150">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="depLevel"
@@ -54,11 +54,6 @@
         <el-table-column
           prop="state_string"
           label="账户状态"
-          width="150">
-        </el-table-column>
-        <el-table-column
-          prop="state"
-          label="是否在职"
           width="150">
         </el-table-column>
 
