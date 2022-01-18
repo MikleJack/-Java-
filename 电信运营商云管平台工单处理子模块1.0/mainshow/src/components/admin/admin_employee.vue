@@ -325,12 +325,12 @@ export default {
       this.password_confirm='';
       this.row={};
       this.dialogVisible_lock = false;
+      this.init();
     },
     //解锁用户账号的函数
     unlock(row){
       this.dialogVisible_unlock = true;
       this.row=row;
-      this.init();
     },
     handleClick_unlock() {
       this.$axios.get(this.$store.state.url+"/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -358,7 +358,6 @@ export default {
     delect(row){
       this.dialogVisible_delete=true;
       this.row=row;
-      this.init();
     },
     handleClick_delect() {
       this.$axios.get(this.$store.state.url+"/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -425,7 +424,7 @@ export default {
     handleClick_clean(){
       this.ifPagination = false;
       this.resetPageSituation();
-      this.searchOrderWorkerName = '',
+      this.searchOrderWorkerName = '';
       this.init();
     },
   }
