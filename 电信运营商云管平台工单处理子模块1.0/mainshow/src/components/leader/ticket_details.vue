@@ -368,10 +368,16 @@ export default {
       this.flowProcess.operationType="挂起";
       this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-        this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
+        this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
           workOrderNum:this.workOrderNum,
           state:"挂起"
-        })
+        });
+        this.$store.state.pendtickets_dialogTableVisible = false;
+        this.$message({
+          message: '挂起成功！',
+          type: 'success',
+          center: true
+        });
       })
     },
     //刷新数据

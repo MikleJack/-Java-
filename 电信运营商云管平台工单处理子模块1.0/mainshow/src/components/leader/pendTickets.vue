@@ -4,55 +4,55 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 100%;">
         <el-table-column
           fixed
           prop="workOrderNum"
           label="工单编号"
-          width="200"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderName"
           label="工单标题"
-          width="auto"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderType"
           label="工单类型"
-          width="auto"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderState"
           label="工单状态"
-          width="auto"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="expirationTime"
           label="资源到期时间"
           sortable
-          width="200"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workerNum"
           label="申请人工号"
-          width="auto"
+          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           prop="name"
           label="申请人姓名"
-          width="auto"
+          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="100"
+          width="80"
           align="center">
           <template slot-scope="scope">
             <el-button type="text" @click=handleClick_detail(scope.row.workOrderNum)>查看详情</el-button>
@@ -139,15 +139,15 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
-  left:10%;
-  width: 90%;
+  width: 100%;
+  left: 0;
   height: 100%;
 }
 
 /*页面中部*/
 .page_central{
   position: relative;
-  width: 80%;
+  width: 100%;
 
 }
 
