@@ -56,6 +56,20 @@ public class manageAccount {
         return ResponseEntity.ok(this.adminaccountmanageService.queryByPage( pageRequest));
     }
 
+    /**
+     * 带条件的分页查询
+     *
+     * @param name 员工姓名
+     * @param page 页数
+     * @param size 每页大小
+     * @return 查询结果
+     */
+    @GetMapping("criteriaQueryByPage")
+    public ResponseEntity<Page<Adminaccountmanage>> criteriaQueryByPage(String name,int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.adminaccountmanageService.criteriaQueryByPage(name, pageRequest));
+    }
+
     @GetMapping("reset")
     public ResponseEntity<Boolean> ResetStaffPassword(Integer work_num,String root_num, String password) throws GlobalException{
         logger.info("账号为" + root_num + "的管理员对员工编号为" + work_num + "的员工进行了重置操作");

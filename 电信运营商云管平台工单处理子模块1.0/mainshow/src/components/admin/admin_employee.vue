@@ -1,14 +1,28 @@
 <template>
   <div>
+<!--查询-->
+    <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+      <el-form-item label="员工姓名">
+        <!--          通过项目名称搜索项目-->
+        <el-input
+          placeholder="输入员工姓名搜索"
+          v-model="searchOrderWorkerName">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button @click="handleClick_clean">清空</el-button>
 
-<!--    新增账户-->
-    <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus">新增账号</el-button>
+        <!--    新增账户-->
+        <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus">新增账号</el-button>
+      </el-form-item>
+    </el-form>
     <div>
 
 <!--       .slice((currentPage-1)*pageSize,currentPage*pageSize)"-->
 <!--      人员管理页面的列表-->
       <el-table
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="tableData"
 
         border
         style="width: 100%">
@@ -45,13 +59,8 @@
 
         <el-table-column
           fixed="right"
+          label="操作"
           width="300">
-<!--          搜索操作-->
-          <template slot="header" slot-scope="scope">
-            <el-input
-              v-model="search"
-              placeholder="输入关键字搜索"/>
-          </template>
 <!--          对账户的各种操作-->
           <templte slot-scope="scope">
             <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
@@ -61,8 +70,6 @@
           </templte>
 
         </el-table-column>
-
-
       </el-table>
 
       <div class="paging">
@@ -168,9 +175,6 @@
                 <el-button type="primary" @click="handleClick_delect">确 定</el-button>
               </span>
       </el-dialog>
-
-<!--      分页-->
-
     </div>
   </div>
 
@@ -190,6 +194,7 @@ export default {
       currentPage:1,
       pageSize:8,
       totalSize:0,
+      ifPagination: false,
       // dialog显示与不显示的参数
       dialogVisible_add:false,
       dialogVisible_addAccount:false,
@@ -200,8 +205,10 @@ export default {
       //dialog中的密码验证参数
       password_confirm: '',
 
+      //搜索栏中人员姓名
+      searchOrderWorkerName: '',
+
       input: '',
-      search: '',
       //存储人员信息表
       tableData: [],
       ruleForm: {
@@ -381,22 +388,53 @@ export default {
     },
     //查询所有员工信息
     handleCurrentChange(val){
-      this.currentPage=parseInt(val);
-      let page = this.currentPage-1;
-      this.$axios.get(this.$store.state.url+"/account/all?page="+page+"&size="+this.pageSize).then((res)=>{
-        this.tableData= res.data.content;
+      if(!this.ifPagination){
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get(this.$store.state.url+"/account/all?page="+page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }else{
+        this.currentPage=parseInt(val);
+        let page = this.currentPage-1;
+        this.$axios.get(this.$store.state.url + '/account/criteriaQueryByPage?name=' + this.searchOrderWorkerName+'&page='+page+'&size='+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+    },
+
+    //根据姓名分页查询
+    handleClick_search(){
+      this.ifPagination = true;
+      this.resetPageSituation();
+      this.$axios.get(this.$store.state.url + '/account/criteriaQueryByPage?name=' + this.searchOrderWorkerName + '&page=0&size=' + this.pageSize).then((res)=>{
+        this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
     },
+    //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
+    resetPageSituation(){
+      this.currentPage = 1;
+      this.pageSize = 8;
+      this.totalSize = 0;
+    },
 
+    //重置查询
+    handleClick_clean(){
+      this.ifPagination = false;
+      this.resetPageSituation();
+      this.searchOrderWorkerName = '',
+      this.init();
+    },
   }
 }
 </script>
 
 <style scoped>
-.paging {
-  width:100%;
-  position: relative;
+.paging{
   bottom: 0;
+  position: absolute;
 }
 </style>

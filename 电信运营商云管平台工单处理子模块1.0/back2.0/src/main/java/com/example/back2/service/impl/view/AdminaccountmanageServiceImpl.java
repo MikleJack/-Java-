@@ -34,4 +34,17 @@ public class AdminaccountmanageServiceImpl implements AdminaccountmanageService 
         return new PageImpl<>(this.adminaccountmanageDao.queryAllByLimit( pageRequest), pageRequest, total);
     }
 
+    /**
+     * 带条件的分页查询
+     *
+     * @param name 员工姓名
+     * @param pageRequest      分页对象
+     * @return 查询结果
+     */
+    @Override
+    public Page<Adminaccountmanage> criteriaQueryByPage(String name, PageRequest pageRequest){
+        long total = this.adminaccountmanageDao.criteriaQueryCount(name);
+        return new PageImpl<>(this.adminaccountmanageDao.criteriaQueryAllByLimit(name, pageRequest),pageRequest,total);
+    }
+
 }

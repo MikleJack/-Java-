@@ -149,21 +149,6 @@ export default {
                       + '&workerName=' + this.criteriaQueryByPage.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;})
-      // let data = JSON.stringify(this.adminWorkOrderInform);
-      // this.$axios({
-      //   method: 'post',
-      //   url: this.$store.state.url+'/adminSearchOrder/criteriaQueryByPage',
-      //   data: {data},
-      //   headers:{"Content-Type":"application/json"},
-      //   transformRequest: [
-      //     (data) => {
-      //       return this.$qs.stringify(data); //使用Qs将请求参数序列化
-      //     }
-      //   ]
-      // }).then((res) => {
-      //   //逻辑代码
-      //   console.log(res);
-      // });
     },
 
     //重置查询
@@ -196,14 +181,12 @@ export default {
           this.totalSize = res.data.totalPages*this.pageSize;
         })
       }
-
     },
 
     //在进行查询时重置当前页状态，防止上一次查询的结果影响到当前的分页结果
     resetPageSituation(){
-      this.ifPagination = true,
       this.currentPage = 1;
-      this.pageSize = 9;
+      this.pageSize = 8;
       this.totalSize = 0;
     }
   }
@@ -214,10 +197,8 @@ export default {
 
 <style scoped>
 .paging{
-  width:100%;
-  height: 60px;
-  position: relative;
   bottom: 0;
+  position: absolute;
 }
 .search_button{
   color: #fff;
