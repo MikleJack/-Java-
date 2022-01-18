@@ -10,11 +10,11 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button type="primary" @click="handleClick_search" class="query">查询</el-button>
         <el-button @click="handleClick_clean">清空</el-button>
 
         <!--    新增账户-->
-        <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus">新增账号</el-button>
+        <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus" class="query">新增账号</el-button>
       </el-form-item>
     </el-form>
     <div>
@@ -325,12 +325,12 @@ export default {
       this.password_confirm='';
       this.row={};
       this.dialogVisible_lock = false;
+      this.init();
     },
     //解锁用户账号的函数
     unlock(row){
       this.dialogVisible_unlock = true;
       this.row=row;
-      this.init();
     },
     handleClick_unlock() {
       this.$axios.get(this.$store.state.url+"/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -358,7 +358,6 @@ export default {
     delect(row){
       this.dialogVisible_delete=true;
       this.row=row;
-      this.init();
     },
     handleClick_delect() {
       this.$axios.get(this.$store.state.url+"/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -425,7 +424,7 @@ export default {
     handleClick_clean(){
       this.ifPagination = false;
       this.resetPageSituation();
-      this.searchOrderWorkerName = '',
+      this.searchOrderWorkerName = '';
       this.init();
     },
   }
@@ -436,5 +435,10 @@ export default {
 .paging{
   bottom: 0;
   position: absolute;
+}
+.query{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
 }
 </style>

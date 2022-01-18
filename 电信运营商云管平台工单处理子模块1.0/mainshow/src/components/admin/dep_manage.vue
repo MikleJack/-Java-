@@ -58,7 +58,7 @@
                   <el-input v-model="depInfom.depBudget" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="onSubmit(depInfom.depNum)">保存</el-button>
+                  <el-button type="primary" @click="onSubmit(depInfom.depNum)" class="query">保存</el-button>
                   <el-button @click="depInfo(depInfom.depNum)">重置</el-button>
                 </el-form-item>
               </el-form>
@@ -177,5 +177,10 @@ export default {
   width: 100%;
   height: 100%;
   /*background-color: #888888;*/
+}
+.query{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
 }
 </style>

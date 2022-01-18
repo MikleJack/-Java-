@@ -3,7 +3,7 @@
     <!--主要界面部分-->
     <div class="page-head">
       <!--界面头部分-->
-      <div style="width:100%;text-align:center">
+      <div style="left: 0;position: relative">
         <!--设置居中-->
         <el-form :inline="true" :model="applyName" class="demo-form-inline">
 
@@ -13,7 +13,7 @@
 
           <!--输入查询框-->
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button type="primary" @click="onSubmit" class="query">查询</el-button>
           </el-form-item>
           <!--查询按钮-->
         </el-form>
@@ -152,6 +152,11 @@
   width:100%;
   position: absolute;
   bottom: 0;
+}
+.query{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
 }
 
 </style>
