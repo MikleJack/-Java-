@@ -190,6 +190,8 @@ export default {
               }
               //登录成功后设置登录状态
               this.ruleForm.operate="登录成功";
+              //增加登录日志
+              this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
             } else {
               this.$message({
                 message: '用户名或密码错误',
@@ -201,7 +203,10 @@ export default {
               //登录失败后设置cookie
               this.setCookie(this.ruleForm.work_num);
               this.getVertifyCode();
+              //增加登录日志
+              this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
             }
+
           })
         }
         else
@@ -216,8 +221,7 @@ export default {
         }
       })
 
-      //增加登录日志
-      this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
+
 
     },
     setCookie(workNum){
