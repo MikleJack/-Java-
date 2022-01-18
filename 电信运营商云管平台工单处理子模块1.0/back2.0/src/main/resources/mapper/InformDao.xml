@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.InformDao">
+
+    <resultMap type="com.example.back2.entity.table.Inform" id="InformMap">
+        <result property="informNum" column="inform_num" jdbcType="INTEGER"/>
+        <result property="senderNum" column="sender_num" jdbcType="INTEGER"/>
+        <result property="details" column="details" jdbcType="VARCHAR"/>
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="recipient" column="recipient" jdbcType="INTEGER"/>
+        <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+        <result property="readState" column="read_state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="InformMap">
+        select
+          inform_num, sender_num, details, work_order_num, recipient, send_time, read_state
+        from inform
+        where inform_num = #{informNum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="InformMap">
+        select
+          inform_num, sender_num, details, work_order_num, recipient, send_time, read_state
+        from inform
+        <where>
+            <if test="informNum != null">
+                and inform_num = #{informNum}
+            </if>
+            <if test="senderNum != null">
+                and sender_num = #{senderNum}
+            </if>
+            <if test="details != null and details != ''">
+                and details = #{details}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="recipient != null">
+                and recipient = #{recipient}
+            </if>
+            <if test="sendTime != null">
+                and send_time = #{sendTime}
+            </if>
+            <if test="readState != null">
+                and read_state = #{readState}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from inform
+        <where>
+            <if test="informNum != null">
+                and inform_num = #{informNum}
+            </if>
+            <if test="senderNum != null">
+                and sender_num = #{senderNum}
+            </if>
+            <if test="details != null and details != ''">
+                and details = #{details}
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                and work_order_num = #{workOrderNum}
+            </if>
+            <if test="recipient != null">
+                and recipient = #{recipient}
+            </if>
+            <if test="sendTime != null">
+                and send_time = #{sendTime}
+            </if>
+            <if test="readState != null">
+                and read_state = #{readState}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="informNum" useGeneratedKeys="true">
+        insert into inform(sender_num, details, work_order_num, recipient, send_time, read_state)
+        values (#{senderNum}, #{details}, #{workOrderNum}, #{recipient}, #{sendTime}, #{readState})
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="informNum" useGeneratedKeys="true">
+        insert into inform(sender_num, details, work_order_num, recipient, send_time, read_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.senderNum}, #{entity.details}, #{entity.workOrderNum}, #{entity.recipient}, #{entity.sendTime}, #{entity.readState})
+        </foreach>
+        on duplicate key update
+        sender_num = values(sender_num),
+        details = values(details),
+        work_order_num = values(work_order_num),
+        recipient = values(recipient),
+        send_time = values(send_time),
+        read_state = values(read_state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update inform
+        <set>
+            <if test="senderNum != null">
+                sender_num = #{senderNum},
+            </if>
+            <if test="details != null and details != ''">
+                details = #{details},
+            </if>
+            <if test="workOrderNum != null and workOrderNum != ''">
+                work_order_num = #{workOrderNum},
+            </if>
+            <if test="recipient != null">
+                recipient = #{recipient},
+            </if>
+            <if test="sendTime != null">
+                send_time = #{sendTime},
+            </if>
+            <if test="readState != null">
+                read_state = #{readState},
+            </if>
+        </set>
+        where inform_num = #{informNum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from inform where inform_num = #{informNum}
+    </delete>
+
+<!--    批量插入消息通知  这个用不了-->
+    <insert id="insertBatch" keyProperty="informNum" useGeneratedKeys="true">
+        insert into inform(sender_num, details, work_order_num, recipient, send_time, read_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.senderNum}, #{entity.details}, #{entity.workOrderNum}, #{entity.recipient}, #{entity.sendTime}, #{entity.readState})
+        </foreach>
+    </insert>
+
+</mapper>
+

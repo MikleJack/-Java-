@@ -1,5 +1,7 @@
 package com.example.back2.entity.table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -17,7 +19,8 @@ public class FlowProcess implements Serializable {
     private Integer dealNum;
     
     private String operationType;
-    
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date dealDate;
     
     private String dealComment;

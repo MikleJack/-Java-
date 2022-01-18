@@ -40,6 +40,9 @@ public class applyTicket {
     @Resource
     private AllocatedVmService allocatedVmService;
 
+    @Resource
+    private InformService informService;
+
     /**
      * 查询所有未分配的物理机
      * @return
@@ -72,7 +75,10 @@ public class applyTicket {
 //        修改工单号
         workorder.setWorkOrderNum(workOrderNum);
 //        System.out.println(workOrder.getWorkOrderNum());
-        return this.workOrderService.insert(workorder).getWorkOrderNum();
+
+        WorkOrder newWorkOrder = this.workOrderService.insert(workorder);
+        this.informService.staffApplyInsertInform(workOrderNum, workorder.getWorkerNum(), "发起了申请资源工单");
+        return newWorkOrder.getWorkOrderNum();
 
     }
 

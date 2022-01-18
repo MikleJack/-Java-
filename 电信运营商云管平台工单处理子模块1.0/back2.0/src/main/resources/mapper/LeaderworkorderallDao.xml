@@ -33,13 +33,13 @@
           name, work_order_num, work_order_type, expiration_time, work_order_name, worker_num, file, work_order_state, reason, price, offline_reason, dep_num, phone, state, in_service, first_leader_name, first_leader_num, second_leader_num, second_leader_name, dep_name, dep_budget, dep_level
         from leaderWorkOrderAll
         <where>
-            <if test="firstLeaderNum != null">
+            <if test="firstLeaderNum != null and firstLeaderNum!=''">
                 and first_leader_num = #{firstLeaderNum}
             </if>
-            <if test="secondLeaderNum != null">
+            <if test="secondLeaderNum != null and secondLeaderNum !=''">
                 and second_leader_num = #{secondLeaderNum}
             </if>
-            <if test="orderState != null">
+            <if test="orderState != null and orderState !='' ">
                 and work_order_state = #{orderState}
             </if>
         </where>
@@ -51,13 +51,13 @@
         select count(1)
         from leaderWorkOrderAll
         <where>
-            <if test="firstLeaderNum != null">
+            <if test="firstLeaderNum != null and firstLeaderNum!=''">
                 and first_leader_num = #{firstLeaderNum}
             </if>
-            <if test="secondLeaderNum != null">
+            <if test="secondLeaderNum != null and secondLeaderNum !=''">
                 and second_leader_num = #{secondLeaderNum}
             </if>
-            <if test="orderState != null">
+            <if test="orderState != null and orderState !='' ">
                 and work_order_state = #{orderState}
             </if>
         </where>

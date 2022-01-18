@@ -14,6 +14,7 @@
         <result property="ip" column="ip" jdbcType="VARCHAR"/>
         <result property="os" column="os" jdbcType="VARCHAR"/>
         <result property="storage" column="storage" jdbcType="INTEGER"/>
+        <result property="quantity" column="quantity" jdbcType="INTEGER"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -105,7 +106,7 @@
 
     <select id="getOrderVm" resultMap="AdminsearceorderVmMap">
         select
-        work_order_num, com_num, cpu_core, ram, processor_model, processor_frequency, allPrice, perPrice, ip, os, storage,description
+        work_order_num, com_num, cpu_core, ram, processor_model, processor_frequency, allPrice, perPrice, ip, os, storage,description,quantity
         from adminSearceOrder_Vm
         <where>
             <if test="workOrderNum != null and workOrderNum != ''">

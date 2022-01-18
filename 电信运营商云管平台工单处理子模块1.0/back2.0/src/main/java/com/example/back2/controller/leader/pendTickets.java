@@ -3,16 +3,10 @@ package com.example.back2.controller.leader;
 import com.example.back2.controller.admin.searchOrder;
 import com.example.back2.entity.VirtualComResource;
 import com.example.back2.entity.table.*;
-import com.example.back2.entity.view.AdminsearceorderVm;
-import com.example.back2.entity.view.AdminsearchorderCom;
-import com.example.back2.entity.view.AdminsearchorderDetailperson;
-import com.example.back2.entity.view.Leaderworkorderall;
+import com.example.back2.entity.view.*;
 import com.example.back2.exception.GlobalException;
 import com.example.back2.service.table.*;
-import com.example.back2.service.view.AdminsearceorderVmService;
-import com.example.back2.service.view.AdminsearchorderComService;
-import com.example.back2.service.view.AdminsearchorderDetailpersonService;
-import com.example.back2.service.view.LeaderworkorderallService;
+import com.example.back2.service.view.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +33,8 @@ public class pendTickets {
     //--------------查询某个领导未审批的工单信息----------------------
     @Resource
     private LeaderworkorderallService leaderworkorderallService;
+    @Resource
+    private AdminordertowleaderService adminordertowleaderService;
 
     /**
      * 分页查询
@@ -49,12 +48,18 @@ public class pendTickets {
      */
     @GetMapping("selectTicketsByState")
     public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
-                                                                Integer first_leader_num,
-                                                                String orderState,
-                                                                int page, int size) throws Exception {
+                                                                 Integer first_leader_num,
+                                                                 String orderState,
+                                                                 int page, int size) throws Exception {
         PageRequest pageRequest = PageRequest.of(page, size);
         return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
                 first_leader_num, orderState, pageRequest).get());
+    }
+
+    @GetMapping("selectTow")
+    public ResponseEntity<Page<Adminordertowleader>> selectTow(int page, int size)throws Exception{
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return ResponseEntity.ok(this.adminordertowleaderService.queryByPage(pageRequest).get());
     }
 
     //    根据工号查询工人信息
@@ -231,5 +236,25 @@ public class pendTickets {
         }
 
         return true;
+    }
+//    通过工单号查找工单申请时间
+
+    @GetMapping("getordertime")
+    public String getordertime(String workOrderNum){
+        List<FlowProcess> a = this.flowProcessService.selectApplyTime(workOrderNum);
+
+
+        Date applytime = a.get(0).getDealDate();
+        for (FlowProcess i:a){
+//            System.out.println(i.getDealDate());
+            if (i.getDealDate().compareTo(applytime) == -1){
+                applytime = i.getDealDate();
+            }
+        }
+
+        SimpleDateFormat sp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String ans;
+        ans = sp.format(applytime);
+        return ans;
     }
 }

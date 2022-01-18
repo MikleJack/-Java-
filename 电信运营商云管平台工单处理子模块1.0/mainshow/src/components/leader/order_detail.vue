@@ -109,41 +109,11 @@
             label="硬盘大小/G">
           </el-table-column>
           <el-table-column
-            prop="allprice"
-            label="总价/元">
+            prop="quantity"
+            label="数量">
           </el-table-column>
         </el-table>
       </div>
-      <!--      部门资源利用情况展示-->
-<!--      <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">-->
-<!--        <div class="page_title" >部门预算利用情况</div>-->
-<!--        <div class="total_progress">-->
-<!--          <br>-->
-<!--          <el-progress type="circle" class="left_progress"-->
-<!--                       :stroke-width="15"-->
-<!--                       :percentage="total_percentage()"-->
-<!--                       :color="customColorMethod">-->
-<!--          </el-progress>-->
-<!--        </div>-->
-<!--        <div class="total_description">-->
-<!--          <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>-->
-<!--          已使用预算：&nbsp;{{used_budget}}元-->
-<!--        </div>-->
-<!--        <div class="progress">-->
-<!--          <br>-->
-<!--          <el-progress type="circle"-->
-<!--                       class="right_progress"-->
-<!--                       :stroke-width="15"-->
-<!--                       :percentage="percentage()"-->
-<!--                       :color="customColorMethod">-->
-<!--          </el-progress>-->
-<!--        </div>-->
-<!--        <div class="description">-->
-<!--          <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>-->
-<!--          工单使用预算：&nbsp;{{order_budget}}元-->
-<!--        </div>-->
-
-<!--      </div>-->
 
       <!--显示流转过程-->
       <div class="frame" style=" border: rgba(82,182,154,0.25) solid 3px ">
@@ -153,6 +123,7 @@
         <div class="resoure_usage">
           <el-table
             :data="informData"
+            :default-sort = "{prop: 'dealDate', order: 'ascending'}"
             border>
             <el-table-column
               type="index"

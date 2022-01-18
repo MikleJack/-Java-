@@ -9,10 +9,7 @@ import com.example.back2.entity.table.WorkOrderChange;
 import com.example.back2.entity.view.AdminsearchorderDetailperson;
 import com.example.back2.entity.view.AllocatedVmSpecifications;
 import com.example.back2.exception.GlobalException;
-import com.example.back2.service.table.AllocatedComService;
-import com.example.back2.service.table.AllocatedVmService;
-import com.example.back2.service.table.WorkOrderChangeService;
-import com.example.back2.service.table.WorkOrderService;
+import com.example.back2.service.table.*;
 import com.example.back2.service.view.AdminsearchorderDetailpersonService;
 import com.example.back2.service.view.AdminsearchorderTableService;
 import com.example.back2.service.view.AllocatedVmSpecificationsService;
@@ -36,6 +33,8 @@ public class changeTicket {
     @Resource
     private WorkOrderChangeService workOrderChangeService;
 
+    @Resource
+    private InformService informService;
 
 //创建插入已申请物理机资源
     @PostMapping("insertAllocatedCom")
@@ -91,8 +90,10 @@ public class changeTicket {
 
 //        填入新的工单号
         workorder.setWorkOrderNum(workOrderNum);
+        WorkOrder newWorkOrder = this.workOrderService.insert(workorder);
+        this.informService.staffApplyInsertInform(workOrderNum, workorder.getWorkerNum(), "发起了变更工单");
 
-        return this.workOrderService.insert(workorder).getWorkOrderNum();
+        return newWorkOrder.getWorkOrderNum();
     }
 
 

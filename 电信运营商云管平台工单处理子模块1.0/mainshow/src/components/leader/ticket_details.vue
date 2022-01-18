@@ -95,7 +95,7 @@
           width="150px">
           </el-table-column>
           <el-table-column
-            prop="processormodel"
+            prop="processorModel"
             label="处理器型号">
           </el-table-column>
           <el-table-column
@@ -111,9 +111,10 @@
             label="硬盘大小/G">
           </el-table-column>
           <el-table-column
-            prop="allprice"
-            label="总价/元">
+            prop="quantity"
+            label="数量">
           </el-table-column>
+
         </el-table>
       </div>
 <!--      部门预算利用情况展示-->
@@ -158,6 +159,7 @@
         <div class="resoure_usage">
           <el-table
             :data="informData"
+            :default-sort = "{prop: 'dealDate', order: 'ascending'}"
             border>
             <el-table-column
               type="index"
@@ -368,10 +370,16 @@ export default {
       this.flowProcess.operationType="挂起";
       this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-        this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
+        this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
           workOrderNum:this.workOrderNum,
           state:"挂起"
-        })
+        });
+        this.$store.state.pendtickets_dialogTableVisible = false;
+        this.$message({
+          message: '挂起成功！',
+          type: 'success',
+          center: true
+        });
       })
     },
     //刷新数据
