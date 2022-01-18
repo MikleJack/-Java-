@@ -434,9 +434,7 @@ export default {
 
 <style scoped>
 .paging{
-  width:100%;
-  height: 60px;
-  position: relative;
   bottom: 0;
+  position: absolute;
 }
 </style>
