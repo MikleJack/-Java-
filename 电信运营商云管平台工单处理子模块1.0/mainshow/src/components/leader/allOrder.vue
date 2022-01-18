@@ -6,14 +6,18 @@
       <!--界面头部-->
 
         <!--设置居中-->
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" class="demo-form-inline">
         <el-form-item label="工单类型">
-          <el-select v-model="formInline.work_order_type" placeholder="工单类型">
+          <el-select v-model="orderState" placeholder="工单类型">
             <!--下拉的可选表单框-->
-            <el-option label="待审批工单" value="work_order_to_approve"></el-option>
-            <el-option label="已审批工单" value="work_order_have_approved"></el-option>
-            <el-option label="已挂起工单" value="work_order_have_suspended"></el-option>
+            <el-option label="全部工单" value=""></el-option>
+            <el-option label="待审批工单" value="待审批"></el-option>
+            <el-option label="审批不通过" value="审批不通过"></el-option>
+            <el-option label="已变更" value="已变更"></el-option>
+            <el-option label="一级审批通过" value="一级审批通过"></el-option>
+            <el-option label="二级审批通过" value="二级审批通过"></el-option>
             <!--为后端提供选择的工单类型，为上述三种之一-->
+
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -95,7 +99,6 @@
 </template>
 
 <script>
-// import Ticket_details from "./ticket_details";
 import order_detail from "./order_detail";
 
     export default {
@@ -109,7 +112,7 @@ import order_detail from "./order_detail";
           this.first=sessionStorage.getItem("work_num");
         }
         this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
-          "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0).then((res)=>{
+          "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -119,9 +122,7 @@ import order_detail from "./order_detail";
           //领导人编号
           first:"",
           second:"",
-          formInline: {
-            work_order_type: ''
-          },
+          orderState:'',
           //工单详情弹窗
           // dialogTableVisible: false,
           tableData: [],
@@ -133,14 +134,18 @@ import order_detail from "./order_detail";
       },
       methods: {
         onSubmit() {
-          console.log('submit!');
+          this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
+            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
         },
         //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
           this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
-            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page).then((res)=>{
+            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page+"&orderState="+this.orderState).then((res)=>{
             this.tableData= res.data.content;
             this.totalSize = res.data.totalPages*this.pageSize;
           })

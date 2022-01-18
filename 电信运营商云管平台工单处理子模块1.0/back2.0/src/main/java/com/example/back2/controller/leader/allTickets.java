@@ -39,9 +39,11 @@ public class allTickets {
     @GetMapping("selectTicketsByNum")
     public ResponseEntity<Page<Leaderworkorderall>> queryByPage(Integer second_leader_num,
                                                                 Integer first_leader_num,
-                                                                int page,int size) throws Exception{
+                                                                int page,int size,String orderState)
+            throws Exception{
         PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,first_leader_num,null, pageRequest).get());
+        return ResponseEntity.ok(this.leaderworkorderallService.queryByPage(second_leader_num,
+                first_leader_num,orderState, pageRequest).get());
     }
 
 
