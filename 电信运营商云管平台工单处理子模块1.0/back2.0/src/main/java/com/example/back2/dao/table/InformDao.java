@@ -81,5 +81,14 @@ public interface InformDao {
      */
     int deleteById(Integer informNum);
 
+
+    /**
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @return 此人发送或接收的所有通知
+     */
+    List<Inform> queryBySenderNumOrRecipientNum(Integer workNum);
+
 }
 

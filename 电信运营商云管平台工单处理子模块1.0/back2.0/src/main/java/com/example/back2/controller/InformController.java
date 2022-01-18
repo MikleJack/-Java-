@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (Inform)表控制层
@@ -83,12 +84,14 @@ public class InformController {
     }
 
     /**
-     * 测试
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @return 此人发送或接收的所有通知
      */
-    @PostMapping("insertInform")
-    public ResponseEntity<Boolean> insertInform(String workOrderNum, Integer workNum) {
-        this.informService.firstLeaderInsertInform(workOrderNum,workNum, "挂起工单");
-        return ResponseEntity.ok(true);
+    @GetMapping("queryBySenderNumOrRecipientNum")
+    public ResponseEntity<List<Inform>> queryBySenderNumOrRecipientNum(Integer workNum) {
+        return ResponseEntity.ok(this.informService.queryBySenderNumOrRecipientNum(workNum));
     }
 
 }

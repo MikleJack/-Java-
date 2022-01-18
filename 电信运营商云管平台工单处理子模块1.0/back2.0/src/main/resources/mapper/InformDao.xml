@@ -141,5 +141,12 @@
         </foreach>
     </insert>
 
+    <!--通过消息接受人的账号查询此人发送或接收的所有通知-->
+    <select id="queryBySenderNumOrRecipientNum" resultMap="InformMap">
+        select
+            inform_num, sender_num, details, work_order_num, recipient, send_time, read_state
+        from inform
+        where sender_num = #{workNum} or recipient = #{workNum}
+    </select>
 </mapper>
 
