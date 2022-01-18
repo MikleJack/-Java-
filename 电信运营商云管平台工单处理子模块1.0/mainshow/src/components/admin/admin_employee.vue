@@ -29,38 +29,44 @@
         <el-table-column
           prop="workNum"
           label="工号"
-          width="auto">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="auto">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="auto">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="depName"
           label="部门名称"
-          width="auto">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="depLevel"
           label="部门级别"
-          width="auto">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="state_string"
           label="账户状态"
-          width="auto">
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="state"
+          label="是否在职"
+          width="150">
         </el-table-column>
 
         <el-table-column
           fixed="right"
           label="操作"
-          width="300">
+
+          >
 <!--          对账户的各种操作-->
           <templte slot-scope="scope">
             <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
