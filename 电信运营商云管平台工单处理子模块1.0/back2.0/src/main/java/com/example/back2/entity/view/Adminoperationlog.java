@@ -41,7 +41,7 @@ public class Adminoperationlog implements Serializable {
     }
 
     public void setOperateTime(Date operateTime) {
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
         this.operateTime = ft.format(operateTime);
     }
 

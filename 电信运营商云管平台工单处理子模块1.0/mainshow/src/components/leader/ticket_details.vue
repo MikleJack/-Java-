@@ -95,7 +95,7 @@
           width="150px">
           </el-table-column>
           <el-table-column
-            prop="processormodel"
+            prop="processorModel"
             label="处理器型号">
           </el-table-column>
           <el-table-column
@@ -244,7 +244,7 @@ export default {
       //工单类型
       workType: '',
       //申请时间
-      applyTime: '2023-5-3 00:00:00',
+      applyTime: '',
       //到期时间
       expireTime:'',
       //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
@@ -368,10 +368,16 @@ export default {
       this.flowProcess.operationType="挂起";
       this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
-        this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
+        this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
           workOrderNum:this.workOrderNum,
           state:"挂起"
-        })
+        });
+        this.$store.state.pendtickets_dialogTableVisible = false;
+        this.$message({
+          message: '挂起成功！',
+          type: 'success',
+          center: true
+        });
       })
     },
     //刷新数据
@@ -393,7 +399,7 @@ export default {
         //工单类型
         this.workType= '',
         //申请时间
-        this.applyTime= '2023-5-3 ',
+        this.applyTime= '',
         //到期时间
         this.expireTime='',
         //reason可变，为申请工单时，为申请理由，为回退工单时，为回退理由，
@@ -527,9 +533,14 @@ export default {
           this.virtualCom = res.data;
       });
     //通过工单编号查找流转过程
-      this.$axios.get(this.$store.state.url+"/flowProcess/selectByWorkOrderNum?workOrederNum="
+      this.$axios.get(this.$store.state.url+"/flowProcess/selectByWorkOrderNum?workOrderNum="
       +workOrderNum).then((res)=>{
         this.informData = res.data;
+      });
+    //  通过工单号查找申请时间
+      this.$axios.get(this.$store.state.url +"/pendtickets/getordertime?workOrderNum="+
+      workOrderNum).then((res)=>{
+        this.applyTime = res.data;
       })
     }
 

@@ -132,6 +132,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         preWorkOrder.setWorkOrderNum(newWorkOrderNum);
         preWorkOrder.setReason(delayReason);
         preWorkOrder.setWorkOrderType("延期工单");
+        preWorkOrder.setWorkOrderState("待审批");
         return this.workOrderDao.insertDelayWorkOrder(preWorkOrder);
     }
 

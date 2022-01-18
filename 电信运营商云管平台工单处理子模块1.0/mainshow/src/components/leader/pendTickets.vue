@@ -4,55 +4,55 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 100%;">
         <el-table-column
           fixed
           prop="workOrderNum"
           label="工单编号"
-          style="margin: auto"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderName"
           label="工单标题"
-          width="auto"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderType"
           label="工单类型"
-          width="auto"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderState"
           label="工单状态"
-          width="auto"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="expirationTime"
           label="资源到期时间"
           sortable
-          width="200"
+          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workerNum"
           label="申请人工号"
-          width="auto"
+          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           prop="name"
           label="申请人姓名"
-          width="auto"
+          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="100"
+          width="80"
           align="center">
           <template slot-scope="scope">
             <el-button type="text" @click=handleClick_detail(scope.row.workOrderNum)>查看详情</el-button>
@@ -84,30 +84,41 @@ export default {
     if(sessionStorage.getItem("level")==="3"){
       this.worderOrderState="一级审批通过";
       this.second=sessionStorage.getItem("work_num");
+      this.$axios.get("https://localhost:8084/pendtickets/selectTow?page=0&size="+this.pageSize).then((res)=>{
+        this.tableData= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
     }
     else {
       this.worderOrderState="待审批";
       this.first=sessionStorage.getItem("work_num");
-    }
-
-    setTimeout(()=>{
       this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page="+0+"&size="
         +this.pageSize+"&orderState="+this.worderOrderState).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       });
-    },500);
+    }
+
   },
   methods: {
     //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page="+page+"&size="
-        +this.pageSize+"&orderState="+this.worderOrderState).then((res)=>{
-        this.tableData= res.data.content;
-        this.totalSize = res.data.totalPages*this.pageSize;
-      })
+      if(sessionStorage.getItem("level")==="3"){
+        this.$axios.get("https://localhost:8084/pendtickets/selectTow?page="+page+"&size="+this.pageSize).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+      else{
+        this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page="+page+"&size="
+          +this.pageSize+"&orderState="+this.worderOrderState).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }
+
     },
     handleClick_detail(workOrderNum){
       // this.dialogTableVisible = true;
@@ -139,15 +150,15 @@ export default {
 /*页面样式*/
 .page {
   position: relative;
-  left:10%;
-  width: 90%;
+  width: 100%;
+  left: 0;
   height: 100%;
 }
 
 /*页面中部*/
 .page_central{
   position: relative;
-  width: 80%;
+  width: 100%;
 
 }
 

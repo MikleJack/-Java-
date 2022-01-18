@@ -9,17 +9,19 @@
       <!-- 工单信息填写表单 -->
       <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
 
-        <el-form-item label="工单标题">
+        <el-form-item label="工单标题" required>
           <el-input v-model="workorder.workOrderName" placeholder="工单标题"></el-input>
         </el-form-item>
-        <span class="demonstration">资源到期时间</span>
-        <el-date-picker
-          v-model="workorder.expirationTime"
-          type="date"
-          placeholder="选择日期">
-        </el-date-picker>
-
+        <el-form-item label="资源到期时间" required>
+<!--          <span class="demonstration" style="color: black">资源到期时间</span>-->
+          <el-date-picker
+            v-model="workorder.expirationTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
       </el-form>
+
       <el-form :model="workorder">
         <el-form-item label="申请理由">
           <el-input type="textarea" v-model="workorder.reason" style="width:100%;float:left"></el-input>
@@ -196,6 +198,7 @@
     <!--    //部门预算使用情况 进度条-->
     <div style="border: rgba(82,182,154,0.25) solid 3px;height: 250px;margin-bottom: 1%">
       <div class="budget_title" >部门预算利用情况</div>
+      <div class="page_line"></div>
       <!--        部门已用预算/部门总预算进度条-->
       <div class="total_progress">
         <br>
@@ -245,7 +248,7 @@
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
 <!--      <el-button class="add_type" @click="submit" :disabled="(this.order_budget <= this.surplus_budget)&&(this.workorder.workOrderName != '')">提交</el-button>-->
-      <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName != '')">提交</el-button>
+      <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName !== '') && (this.workorder.expirationTime !== '')">提交</el-button>
 
     </div>
   </div>
@@ -312,6 +315,11 @@ export default {
         workOrderType:"申请工单",
         WorkOrderState:"待审批"
       },
+      // rules: {
+      //   workOrderName: [
+      //     { required: true, message: '请输入工单标题', trigger: 'blur' },
+      //   ]
+      // },
       // 已添加的物理机资源信息表数据
       tabledata_physics: [],
       // 已添加的虚拟机资源信息表数据
@@ -417,7 +425,7 @@ export default {
     // 点击selection多选框
     handleSelectionChange_physics(data) {
       this.multipleSelection_physics = data;
-      console.log(data)
+      // console.log(data)
       this.length_physics = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
     },
     handleSelectionChange_virtual(data) {
@@ -478,6 +486,10 @@ export default {
       let year = new Date().getFullYear();//年
       let month = new Date().getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
       let day = new Date().getDate();//日
+      var date = new Date();//获取当前时间
+      var minute = date.getMinutes();
+      var hour = date.getHours();
+      var second = date.getSeconds();
 
       let year1 = this.workorder.expirationTime.getFullYear();//年
       let month1 = this.workorder.expirationTime.getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
@@ -488,7 +500,11 @@ export default {
         '-' +
         (month >= 10 ? month : '0' + month) +
         '-' +
-        (day >= 10 ? day : '0' + day);
+        (day >= 10 ? day : '0' + day) +
+        ' ' +
+        (hour >= 10 ? hour : '0' + hour)+':'+
+        (minute >= 10 ? minute : '0' + minute)+':'+
+        (second >= 10 ? second : '0' + second);
 
       this.expire_time =
         year1 +

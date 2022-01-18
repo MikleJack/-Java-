@@ -1,9 +1,6 @@
 <template>
   <div class="background">
     <div class="title">
-      <!--        <div style="position:relative;float: left;top: 18px;">-->
-      <!--          <img src="../../assets/white.png" height="64" width="64"/>-->
-      <!--        </div>-->
       <div style="position: relative;left: 10px;line-height: 75px;position: relative;top: 0;">
         电信运营商云管平台工单处理子模块
       </div>
@@ -18,7 +15,8 @@
         <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
           <el-form-item  prop="work_num">
-            <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user" placeholder="请输入账号"  autocomplete="off"></el-input>
+            <el-input type="text" v-model="ruleForm.work_num" prefix-icon="el-icon-user"
+                      placeholder="请输入账号"  autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item  prop="password">
             <el-input type="password" @keyup.enter.native="logging" v-model="ruleForm.password" prefix-icon="el-icon-setting" placeholder="请输入密码"  autocomplete="off"></el-input>
@@ -190,6 +188,8 @@ export default {
               }
               //登录成功后设置登录状态
               this.ruleForm.operate="登录成功";
+              //增加登录日志
+              this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
             } else {
               this.$message({
                 message: '用户名或密码错误',
@@ -201,7 +201,10 @@ export default {
               //登录失败后设置cookie
               this.setCookie(this.ruleForm.work_num);
               this.getVertifyCode();
+              //增加登录日志
+              this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
             }
+
           })
         }
         else
@@ -216,8 +219,7 @@ export default {
         }
       })
 
-      //增加登录日志
-      this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
+
 
     },
     setCookie(workNum){

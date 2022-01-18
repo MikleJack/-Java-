@@ -9,14 +9,15 @@
         <result property="state" column="state" jdbcType="VARCHAR"/>
         <result property="depName" column="dep_name" jdbcType="VARCHAR"/>
         <result property="depLevel" column="dep_level" jdbcType="INTEGER"/>
+        <result property="inService" column="in_service" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="AdminaccountmanageMap">
         select
-          work_num, name, phone, state, dep_name, dep_level
+          work_num, name, phone, state, dep_name, dep_level, in_service
         from adminAccountManage
-<!--        <where>-->
+        <where>
 <!--            <if test="workNum != null">-->
 <!--                and work_num = #{workNum}-->
 <!--            </if>-->
@@ -35,7 +36,8 @@
 <!--            <if test="depLevel != null">-->
 <!--                and dep_level = #{depLevel}-->
 <!--            </if>-->
-<!--        </where>-->
+            in_service=1
+        </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -68,7 +70,7 @@
 <!--    管理员根据姓名搜索员工信息-->
     <select id="criteriaQueryAllByLimit" resultMap="AdminaccountmanageMap">
         select
-        work_num, name, phone, state, dep_name, dep_level
+        work_num, name, phone, state, dep_name, dep_level,in_service
         from adminAccountManage
         where name LIKE '%${name}%'
         limit #{pageable.offset}, #{pageable.pageSize}

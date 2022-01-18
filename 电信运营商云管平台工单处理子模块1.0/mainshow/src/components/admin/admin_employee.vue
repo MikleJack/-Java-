@@ -10,11 +10,11 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button type="primary" @click="handleClick_search" class="query">查询</el-button>
         <el-button @click="handleClick_clean">清空</el-button>
 
         <!--    新增账户-->
-        <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus">新增账号</el-button>
+        <el-button @click="dialogVisible_add = true" type="primary" icon="el-icon-plus" class="query">新增账号</el-button>
       </el-form-item>
     </el-form>
     <div>
@@ -29,43 +29,44 @@
         <el-table-column
           prop="workNum"
           label="工号"
-          width="auto">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="name"
           label="姓名"
-          width="auto">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系方式"
-          width="auto">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="depName"
           label="部门名称"
-          width="auto">
+          width="180">
         </el-table-column>
         <el-table-column
           prop="depLevel"
           label="部门级别"
-          width="auto">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="state_string"
           label="账户状态"
-          width="auto">
+          width="150">
         </el-table-column>
 
         <el-table-column
           fixed="right"
           label="操作"
-          width="300">
+
+          >
 <!--          对账户的各种操作-->
           <templte slot-scope="scope">
             <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
             <el-button @click="lock(scope.row)" type="text" size="small" v-if="scope.row.state_string==='未锁定'">锁定</el-button>
-            <el-button @click="unlock(scope.row)" type="text" size="small" v-if="scope.row.state_string!=='未锁定'">解锁</el-button>
+            <el-button @click="unlock(scope.row)" type="text" size="small"  style="color: red " v-if="scope.row.state_string!=='未锁定'">解锁</el-button>
             <el-button @click="delect(scope.row)" type="text" size="small">删除</el-button>
           </templte>
 
@@ -159,7 +160,7 @@
         <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_unlock = false">取 消</el-button>
-                <el-button type="primary" @click="handleClick_unlock">确 定</el-button>
+                <el-button type="error" @click="handleClick_unlock">确 定</el-button>
               </span>
       </el-dialog>
 <!--删除账户的dialog-->
@@ -325,12 +326,12 @@ export default {
       this.password_confirm='';
       this.row={};
       this.dialogVisible_lock = false;
+      this.init();
     },
     //解锁用户账号的函数
     unlock(row){
       this.dialogVisible_unlock = true;
       this.row=row;
-      this.init();
     },
     handleClick_unlock() {
       this.$axios.get(this.$store.state.url+"/account/unlockAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -358,7 +359,6 @@ export default {
     delect(row){
       this.dialogVisible_delete=true;
       this.row=row;
-      this.init();
     },
     handleClick_delect() {
       this.$axios.get(this.$store.state.url+"/account/deleteAccount?work_num="+this.row.workNum+"&root_num=root&password="+
@@ -425,7 +425,7 @@ export default {
     handleClick_clean(){
       this.ifPagination = false;
       this.resetPageSituation();
-      this.searchOrderWorkerName = '',
+      this.searchOrderWorkerName = '';
       this.init();
     },
   }
@@ -436,5 +436,10 @@ export default {
 .paging{
   bottom: 0;
   position: absolute;
+}
+.query{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.8);
+  border-color: #52b69a;
 }
 </style>

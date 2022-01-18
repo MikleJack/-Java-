@@ -25,6 +25,30 @@ public class Adminaccountmanage implements Serializable {
 
     private String state_string;
 
+    private Boolean inService;
+
+    private String service_string;
+
+    public Boolean getInService() {
+        return inService;
+    }
+
+    public void setInService(Boolean inService) {
+        this.inService = inService;
+        if(inService)
+            this.service_string="未离职";
+        else
+            this.service_string="已离职";
+    }
+
+    public String getService_string() {
+        return service_string;
+    }
+
+    public void setService_string(String service_string) {
+        this.service_string = service_string;
+    }
+
     public String getState_string(){
         return state_string;
     }
