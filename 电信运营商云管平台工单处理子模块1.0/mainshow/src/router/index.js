@@ -29,7 +29,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: '/admin',
+      path: '/2022AdminBrccq',
       name: 'admin',
       component: admin
     },
@@ -220,7 +220,7 @@ router.beforeEach((to, from, next) => {
     else{
       alert(type);
       if(type==="admin")
-        next({path:"/admin"})
+        next({path:"/2022AdminBrccq"})
       else
         next({path:"/user"})
     }

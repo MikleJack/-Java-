@@ -101,7 +101,7 @@ export default {
         type: "warning",
       }).then(() => {
         //先修改路由，然后删除token
-        this.$router.push({ path: "/admin" });
+        this.$router.push({ path: "/2022AdminBrccq" });
         sessionStorage.removeItem("root");
       });
     },
