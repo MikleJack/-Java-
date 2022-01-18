@@ -6,9 +6,9 @@
     <el-form :inline="true" :model="searchForm" class="demo-form-inline">
       <el-form-item label="工单类型">
         <!--    根据工单类型筛选工单-->
-        <el-select v-model="workOrderTypeSelector" filterable placeholder="请选择工单类型">
+        <el-select v-model="criteriaQueryByPage.workOrderTypeSelector" filterable placeholder="请选择工单类型">
           <el-option
-            v-for="item in searchOrderType"
+            v-for="item in criteriaQueryByPage.searchOrderType"
             :key="item"
             :label="item"
             :value="item">
@@ -19,11 +19,11 @@
         <!--          通过项目名称搜索项目-->
         <el-input
           placeholder="输入员工姓名搜索"
-          v-model="searchOrderWorkerName">
+          v-model="criteriaQueryByPage.searchOrderWorkerName">
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleClick_search">查询</el-button>
+        <el-button type="primary" @click="handleClick_search" class="search_button">查询</el-button>
         <el-button @click="handleClick_clean">清空</el-button>
       </el-form-item>
     </el-form>
@@ -39,7 +39,7 @@
       element-loading-background="rgba(245, 247, 250, 1)">
       <el-table-column
         prop="workOrderNum"
-        label="工号"
+        label="工单单号"
         width="auto">
       </el-table-column>
       <el-table-column
@@ -108,9 +108,12 @@ export default {
       ifPagination:false,
 
       //搜索栏数据
-      searchOrderType: ['申请工单','回退工单'],
-      workOrderTypeSelector:'',
-      searchOrderWorkerName:'',
+      criteriaQueryByPage:{
+        searchOrderType: ['申请工单','变更工单','延期工单'],
+        workOrderTypeSelector:'',
+        searchOrderWorkerName:'',
+      },
+
 
 
       //当前页面
@@ -142,8 +145,8 @@ export default {
     handleClick_search(){
       this.ifPagination = true;
       this.resetPageSituation();
-      this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
-                      + '&workerName=' + this.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector
+                      + '&workerName=' + this.criteriaQueryByPage.searchOrderWorkerName + '&page='+ 0 +'&size=' + this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;})
       // let data = JSON.stringify(this.adminWorkOrderInform);
@@ -167,7 +170,8 @@ export default {
     handleClick_clean(){
       this.ifPagination = false;
       this.resetPageSituation();
-      this.workOrderTypeSelector = '';
+      this.criteriaQueryByPage.workOrderTypeSelector = '';
+      this.criteriaQueryByPage.searchOrderWorkerName = '';
       this.$axios.get(this.$store.state.url+'/adminSearchOrder/normalQueryByPage?page='+ 0 + '&size=' +this.pageSize).then((res)=>{
         this.tableData = res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
@@ -186,8 +190,8 @@ export default {
       }else{
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.workOrderTypeSelector
-                + '&workerName=' + this.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+'/adminSearchOrder/parameterQueryByPage?workOrderType=' + this.criteriaQueryByPage.workOrderTypeSelector
+                + '&workerName=' + this.criteriaQueryByPage.searchOrderWorkerName +'&page=' +page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -214,5 +218,10 @@ export default {
   height: 60px;
   position: relative;
   bottom: 0;
+}
+.search_button{
+  color: #fff;
+  background-color: rgba(82, 182, 154, 0.76);
+  border-color: #52b69a;
 }
 </style>
