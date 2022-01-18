@@ -65,7 +65,7 @@
           <templte slot-scope="scope">
             <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
             <el-button @click="lock(scope.row)" type="text" size="small" v-if="scope.row.state_string==='未锁定'">锁定</el-button>
-            <el-button @click="unlock(scope.row)" type="text" size="small" v-if="scope.row.state_string!=='未锁定'">解锁</el-button>
+            <el-button @click="unlock(scope.row)" type="text" size="small"  style="color: red " v-if="scope.row.state_string!=='未锁定'">解锁</el-button>
             <el-button @click="delect(scope.row)" type="text" size="small">删除</el-button>
           </templte>
 
@@ -159,7 +159,7 @@
         <el-input placeholder="请输入密码" v-model="password_confirm" show-password></el-input>
         <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible_unlock = false">取 消</el-button>
-                <el-button type="primary" @click="handleClick_unlock">确 定</el-button>
+                <el-button type="error" @click="handleClick_unlock">确 定</el-button>
               </span>
       </el-dialog>
 <!--删除账户的dialog-->
