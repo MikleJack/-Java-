@@ -9,17 +9,19 @@
       <!-- 工单信息填写表单 -->
       <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" :label-position="labelPosition">
 
-        <el-form-item label="工单标题">
+        <el-form-item label="工单标题" required>
           <el-input v-model="workorder.workOrderName" placeholder="工单标题"></el-input>
         </el-form-item>
-        <span class="demonstration">资源到期时间</span>
-        <el-date-picker
-          v-model="workorder.expirationTime"
-          type="date"
-          placeholder="选择日期">
-        </el-date-picker>
-
+        <el-form-item label="资源到期时间" required>
+<!--          <span class="demonstration" style="color: black">资源到期时间</span>-->
+          <el-date-picker
+            v-model="workorder.expirationTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
       </el-form>
+
       <el-form :model="workorder">
         <el-form-item label="申请理由">
           <el-input type="textarea" v-model="workorder.reason" style="width:100%;float:left"></el-input>
@@ -196,6 +198,7 @@
     <!--    //部门预算使用情况 进度条-->
     <div style="border: rgba(82,182,154,0.25) solid 3px;height: 250px;margin-bottom: 1%">
       <div class="budget_title" >部门预算利用情况</div>
+      <div class="page_line"></div>
       <!--        部门已用预算/部门总预算进度条-->
       <div class="total_progress">
         <br>
@@ -312,6 +315,11 @@ export default {
         workOrderType:"申请工单",
         WorkOrderState:"待审批"
       },
+      // rules: {
+      //   workOrderName: [
+      //     { required: true, message: '请输入工单标题', trigger: 'blur' },
+      //   ]
+      // },
       // 已添加的物理机资源信息表数据
       tabledata_physics: [],
       // 已添加的虚拟机资源信息表数据
