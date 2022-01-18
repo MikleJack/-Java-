@@ -1,10 +1,7 @@
 <template>
 <!--  管理员工单查询界面，详情按钮-->
-  <el-dialog
-    title="工单详情信息"
-    :visible.sync="$store.state.workOrderDetailVisibleDetail"
-    width="70%"
-    append-to-body=“true”>
+  <el-dialog title="工单详情" :visible.sync="$store.state.workOrderDetailVisibleDetail" width="80%" :before-close="handleClose">
+
     <div class="page">
       <div class="page_body">
         <!--      申请人信息展示-->
@@ -51,20 +48,20 @@
               width="100">
             </el-table-column>
             <el-table-column
-              prop="phy_cpuCore"
+              prop="cpuCore"
               label="CPU核数/个"
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="phy_ram"
+              prop="ram"
               label="内存/G">
             </el-table-column>
             <el-table-column
-              prop="phy_mem"
+              prop="storage"
               label="存储大小/G">
             </el-table-column>
             <el-table-column
-              prop="phy_price"
+              prop="price"
               label="单价 元/月">
             </el-table-column>
           </el-table>
@@ -78,75 +75,45 @@
             :data="virtualCom"
             border
           ><el-table-column
-            prop="vir_require"
+            prop="description"
             label="规格族"
             width="auto">
           </el-table-column>
             <el-table-column
-              prop="vir_cpuCore"
+              prop="cpuCore"
               label="CPU核数/个"
               width="auto">
             </el-table-column>
             <el-table-column
-              prop="vir_ram"
+              prop="ram"
               label="内存/G">
             </el-table-column>
             <el-table-column
-              prop="vir_frequency"
+              prop="processorFrequency"
               label="处理机主频/GHz"
               width="150px">
             </el-table-column>
             <el-table-column
-              prop="vir_model"
+              prop="processorModel"
               label="处理器型号">
             </el-table-column>
             <el-table-column
-              prop="vir_os"
+              prop="os"
               label="操作系统">
             </el-table-column>
             <el-table-column
-              prop="vir_price"
+              prop="perprice"
               label="单价 元/月">
             </el-table-column>
             <el-table-column
-              prop="hardDisk"
+              prop="storage"
               label="硬盘大小/G">
             </el-table-column>
             <el-table-column
-              prop="vir_totalPrice"
-              label="总价/元">
+              prop="quantity"
+              label="数量">
             </el-table-column>
           </el-table>
-        </div>
-        <!--      部门资源利用情况展示-->
-        <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">
-          <div class="page_title" >部门预算利用情况</div>
-          <div class="total_progress">
-            <br>
-            <el-progress type="circle" class="left_progress"
-                         :stroke-width="15"
-                         :percentage="total_percentage()"
-                         :color="customColorMethod">
-            </el-progress>
-          </div>
-          <div class="total_description">
-            <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
-            已使用预算：&nbsp;{{used_budget}}元
-          </div>
-          <div class="progress">
-            <br>
-            <el-progress type="circle"
-                         class="right_progress"
-                         :stroke-width="15"
-                         :percentage="percentage()"
-                         :color="customColorMethod">
-            </el-progress>
-          </div>
-          <div class="description">
-            <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
-            工单使用预算：&nbsp;{{order_budget}}元
-          </div>
-
         </div>
 
         <!--显示流转过程-->
@@ -169,7 +136,7 @@
                 width="auto">
               </el-table-column>
               <el-table-column
-                prop="dealName"
+                prop="name"
                 label="处理人姓名"
                 width="auto">
               </el-table-column>
@@ -205,7 +172,7 @@ export default {
       //字体大小
       size: '',
       //workNum工号
-      workNum: '11',
+      workNum: '',
       //name人员姓名
       name: '',
       //所在部门编号
@@ -217,7 +184,7 @@ export default {
       //工单编号
       workOrderNum: '',
       //工单标题
-      workOrderName: '',
+      workOrderName: '第一次的默认标题/',
       //工单类型
       workType: '',
       //申请时间
@@ -235,61 +202,22 @@ export default {
       //工单预算
       order_budget:'300',
       //物理机资源数据
-      phyCom: [{
-        //物理机cpu核数
-        phy_cpuCore: '8',
-        //物理机内存
-        phy_ram: '16',
-        //物理机存储
-        phy_mem: '256',
-        //物理机单价
-        phy_price: '2000'
-      }],
-      virtualCom: [{
-        //虚拟机规格族
-        vir_require:'共享标准型',
-        //虚拟机cpu核数
-        vir_cpuCore: '2',
-        //虚拟机内存
-        vir_ram: '32',
-        //虚拟机处理器主频
-        vir_frequency: '2.5',
-        //虚拟机处理器型号
-        vir_model: '型号',
-        //虚拟机操作系统
-        vir_os: 'windows',
-        //虚拟机单价
-        vir_price:'100',
-        //硬盘
-        hardDisk:'256',
-        //总价
-        vir_totalPrice: '200'
-      }],
+      phyCom: [],
+      virtualCom: [],
       //流传过程数据
-      informData: [{
-        //处理人工号
-        dealNum: '00000002',
-        //处理人姓名
-        dealName: '陈大炮',
-        //操作类型
-        operationType: '审批通过',
-        //操作日期
-        dealDate: '2021-12-28 15:30:00',
-        //批注
-        dealComment: '申请合理，建议通过',
-      }],
+      informData: [],
 
     };
   },
   methods: {
     //部门已用预算/部门总预算进度条
     total_percentage(){
-      return 100*this.used_budget/this.total_budget;
+      return (100*this.used_budget/this.total_budget).toFixed(2);
     },
     //工单预算/部门剩余预算进度条
     percentage(){
       this.surplus_budget=this.total_budget-this.used_budget;
-      return 100*this.order_budget/this.surplus_budget;
+      return (100*this.order_budget/this.surplus_budget).toFixed(2);
     },
     customColorMethod(percentage) {
       if (percentage < 90) {
@@ -299,8 +227,14 @@ export default {
         return 'rgba(250,116,14,0.55)';
       }
     },
+    //关闭详情页
+    handleClose(){
+      this.$store.state.workOrderDetailVisibleDetail = false;
+      this.refresh();
+    },
+
     autoGetAllDetail(workOrderNum) {
-      this.$axios.get(this.$store.state.url+'/leader/queryWorkOrderDetailTop?workOrderNum='
+      this.$axios.get(this.$store.state.url+"/leader/queryWorkOrderDetailTop?workOrderNum="
         + workOrderNum).then((res)=>{
         //个人信息
         this.workNum = res.data.workerNum;
@@ -308,12 +242,39 @@ export default {
         this.depNum = res.data.depNum;
         this.depName = res.data.depName;
         this.phone = res.data.phone;
+
         //工单信息
         this.workOrderNum = workOrderNum;
         this.workOrderName  = res.data.workOrderName;
         this.workType = res.data.workOrderType;
         this.expireTime = res.data.expirationTime;
         this.reasonContect = res.data.reason;
+      });
+      this.$axios.get(this.$store.state.url+"/leader/getOrderCom?workOrderNum="
+        +workOrderNum).then((res)=>{
+        this.phyCom = res.data;
+      });
+      this.$axios.get(this.$store.state.url+"/leader/getOrderVm?workOrderNum="
+        +workOrderNum).then((res)=>{
+        this.virtualCom = res.data;
+      });
+      //通过工单编号查找流转过程
+      this.$axios.get(this.$store.state.url+'/flowProcess/selectByWorkOrderNum?workOrderNum='
+        +workOrderNum).then((res)=>{
+        console.log(workOrderNum);
+        console.log(res.data);
+        this.informData = res.data;
+      });
+
+      //  通过工单编号查找物理机资源
+      this.$axios.get(this.$store.state.url+"/leader/getOrderCom?workOrderNum=" +
+        workOrderNum).then((res)=>{
+        this.phyCom = res.data;
+      });
+      //  通过同单编号查找虚拟机资源
+      this.$axios.get(this.$store.state.url+"/leader/getOrderVm?workOrderNum=" +
+        workOrderNum).then((res)=>{
+        this.virtualCom = res.data;
       });
     }
   }
@@ -325,7 +286,7 @@ export default {
   position: relative;
   width: 100%;
   height: auto;
-  left: 10%;
+  /*left: 10%;*/
   top: 0;
   /*background-color: #409EFF;*/
 }
@@ -333,7 +294,7 @@ export default {
   position: relative;
   width: 90%;
   height: 100%;
-  right: 5%;
+  left: 5%;
 }
 .reason_contect{
   width: 80%;
