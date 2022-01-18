@@ -17,7 +17,7 @@
           :filter-node-method="filterNode"
           ref="tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
+        <span @click="depInfo(node.data.depNum)">{{ node.label }}</span>
         <span style="right: 0;position: absolute;">
           <el-button
             type="text"
@@ -43,16 +43,25 @@
 <!--右侧详情页面-->
       </div>
       <div class="info">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" >
           <el-tab-pane label="基本信息" name="first">
             <div class="window">
 <!--              展示部门详细信息同时可以修改-->
-              <dep_info></dep_info>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="部门权限" name="second">
-            <div class="window">
-
+              <el-form ref="form" :model="depInfom" label-width="80px">
+                <el-form-item label="部门名称">
+                  <el-input v-model="depInfom.depName"></el-input>
+                </el-form-item>
+                <el-form-item label="部门编号">
+                  <el-input v-model="depInfom.depNum" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="部门预算">
+                  <el-input v-model="depInfom.depBudget" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="onSubmit(depInfom.depNum)">保存</el-button>
+                  <el-button @click="depInfo(depInfom.depNum)">重置</el-button>
+                </el-form-item>
+              </el-form>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -71,25 +80,30 @@ export default {
     }
   },
   data() {
-
       return {
         data : [],
         form:{
           name:''
         },
+        depInfom:{
+
+        },
         dialogFormVisible:false,
         temp:{},
         activeName:'first',
-        filterText:''
+        filterText:'',
       }
     },
     mounted() {
-      this.$axios.get(this.$store.state.url+'/Organ/getTree').then((res)=>{
-        this.data=res.data;
-        console.log(this.data)
-      })
+      this.init();
     },
     methods: {
+    //
+      depInfo(depNum){
+        this.$axios.get(this.$store.state.url+"/depart/getDepInfo?depNum="+depNum).then((res)=>{
+          this.depInfom=res.data;
+        })
+      },
       //过滤函数
       filterNode(value, data) {
         if (!value) return true;
@@ -99,9 +113,9 @@ export default {
       hied(isInsert){
         this.dialogFormVisible=false;
         if(isInsert){
-          this.$axios.post("https://localhost:8084/Organ/insert?depName="+this.form.name+"&depLevel="
+          this.$axios.post(this.$store.state.url+"/Organ/insert?depName="+this.form.name+"&depLevel="
             +(this.temp.depLevel-1).toString()).then((res)=>{
-              this.$axios.post("https://localhost:8084/Organ/addRelate?supe="+this.temp.depNum+"&low="+res.data.depNum)
+              this.$axios.post(this.$store.state.url+"/Organ/addRelate?supe="+this.temp.depNum+"&low="+res.data.depNum)
             if (!this.temp.children) {
               this.$set(this.temp, 'children', []);
             }
@@ -115,9 +129,25 @@ export default {
       append(data) {
         this.dialogFormVisible=true;
         this.temp=data;
-        console.log(this.temp)
       },
+      onSubmit(depNum) {
+        this.$axios.put(this.$store.state.url+"/depart/updateDep?depNum="+depNum
+          +"&depName="+this.depInfom.depName).then((res)=>{
+          this.depInfom=res.data;
+          this.init();
+          this.$message({
+            message:"修改成功！",
+            type:"success",
+            center:true
+          })
+        })
 
+      },
+      init(){
+        this.$axios.get(this.$store.state.url+'/Organ/getTree').then((res)=>{
+          this.data=res.data;
+        })
+      }
     }
 }
 </script>
