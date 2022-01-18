@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.table.DepRelateDao">
+
+    <resultMap type="com.example.back2.entity.table.DepRelate" id="DepRelateMap">
+        <result property="depNumSuperior" column="dep_num_superior" jdbcType="INTEGER"/>
+        <result property="depNumJunior" column="dep_num_junior" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DepRelateMap">
+        select
+          dep_num_superior, dep_num_junior
+        from dep_relate
+        where dep_num_superior = #{depNumSuperior}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DepRelateMap">
+        select
+          dep_num_superior, dep_num_junior
+        from dep_relate
+        <where>
+            <if test="depNumSuperior != null">
+                and dep_num_superior = #{depNumSuperior}
+            </if>
+            <if test="depNumJunior != null">
+                and dep_num_junior = #{depNumJunior}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from dep_relate
+        <where>
+            <if test="depNumSuperior != null">
+                and dep_num_superior = #{depNumSuperior}
+            </if>
+            <if test="depNumJunior != null">
+                and dep_num_junior = #{depNumJunior}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="depNumSuperior" useGeneratedKeys="true">
+        insert into dep_relate(dep_num_superior,dep_num_junior)
+        values (#{depNumSuperior},#{depNumJunior})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="depNumSuperior" useGeneratedKeys="true">
+        insert into dep_relate()
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        ()
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="depNumSuperior" useGeneratedKeys="true">
+        insert into dep_relate()
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            ()
+        </foreach>
+        on duplicate key update
+        
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update dep_relate
+        <set>
+        </set>
+        where dep_num_superior = #{depNumSuperior}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from dep_relate where dep_num_superior = #{depNumSuperior}
+    </delete>
+
+</mapper>
+

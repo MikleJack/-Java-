@@ -11,7 +11,11 @@ import java.util.List;
  */
 public class Department implements Serializable {
     private static final long serialVersionUID = 116660775774922741L;
-    
+
+    private String id;
+
+    private String label;
+
     private Integer depNum;
     
     private String depName;
@@ -21,6 +25,22 @@ public class Department implements Serializable {
     private Double depBudget;
 
     private List<Department> children;
+
+    public void setId(String id){
+        this.id=id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 
     public void setChildren(List<Department> children){
         this.children=children;
@@ -36,6 +56,7 @@ public class Department implements Serializable {
     }
 
     public void setDepNum(Integer depNum) {
+        setId(depNum.toString());
         this.depNum = depNum;
     }
 
@@ -44,6 +65,7 @@ public class Department implements Serializable {
     }
 
     public void setDepName(String depName) {
+        setLabel(depName);
         this.depName = depName;
     }
 
