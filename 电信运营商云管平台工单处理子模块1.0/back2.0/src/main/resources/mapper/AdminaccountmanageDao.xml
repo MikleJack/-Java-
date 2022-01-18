@@ -65,5 +65,25 @@
 <!--        </where>-->
     </select>
 
+<!--    管理员根据姓名搜索员工信息-->
+    <select id="criteriaQueryAllByLimit" resultMap="AdminaccountmanageMap">
+        select
+        work_num, name, phone, state, dep_name, dep_level
+        from adminAccountManage
+        where name LIKE '%${name}%'
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--    管理员根据姓名搜索员工信息-->
+    <select id="criteriaQueryCount" resultType="java.lang.Long">
+        select count(1)
+        from adminAccountManage
+                <where>
+                    <if test="name != null and name != ''">
+                        and name = #{name}
+                    </if>
+                </where>
+    </select>
+
 </mapper>
 

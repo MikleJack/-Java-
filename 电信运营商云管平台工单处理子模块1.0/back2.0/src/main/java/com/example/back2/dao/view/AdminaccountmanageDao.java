@@ -24,12 +24,21 @@ public interface AdminaccountmanageDao {
     List<Adminaccountmanage> queryAllByLimit( @Param("pageable") Pageable pageable);
 
     /**
+     * 根据员工姓名分页查询
+     *
+     * @param name          员工姓名
+     * @param pageable         分页对象
+     * @return 对象列表
+     */
+    List<Adminaccountmanage> criteriaQueryAllByLimit(String name, @Param("pageable") Pageable pageable);
+
+    /**
      * 统计总行数
      *
      * @return 总行数
      */
     long count();
-
+    long criteriaQueryCount(String name);
 
 }
 
