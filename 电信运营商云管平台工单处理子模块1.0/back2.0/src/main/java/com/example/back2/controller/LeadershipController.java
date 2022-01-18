@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Leadership)表控制层
@@ -43,8 +44,8 @@ public class LeadershipController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<Leadership> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.leadershipService.queryById(id));
+    public ResponseEntity<List<Leadership>> queryById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(this.leadershipService.getUnderNum(id));
     }
 
     /**
@@ -65,7 +66,7 @@ public class LeadershipController {
      * @return 编辑结果
      */
     @PutMapping
-    public ResponseEntity<Leadership> edit(Leadership leadership) {
+    public ResponseEntity<List<Leadership>> edit(Leadership leadership) {
         return ResponseEntity.ok(this.leadershipService.update(leadership));
     }
 

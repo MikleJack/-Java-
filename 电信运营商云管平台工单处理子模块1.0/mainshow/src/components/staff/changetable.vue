@@ -416,7 +416,7 @@ export default {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
       this.workorder.file=this.$store.state.FileName;
       //插入到表单中
-      this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
+      this.$axios.post(this.$store.state.url+"/changeTickets/insertChangedTickets",
         this.workorder).then((res) => {
 
         if (res.data) {

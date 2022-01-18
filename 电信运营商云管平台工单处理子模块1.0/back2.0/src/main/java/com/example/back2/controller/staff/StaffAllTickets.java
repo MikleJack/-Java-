@@ -53,6 +53,9 @@ public class StaffAllTickets {
     @Resource
     private HisResourceUsageService hisResourceUsageService;
 
+    @Resource
+    private InformService informService;
+
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
      * 通过员工编号分页查询
@@ -135,6 +138,8 @@ public class StaffAllTickets {
             workOrderDelay.setOldOrder(workOrderNum);
             workOrderDelay.setWorkOrderNum(newWorkOrderNum);
 
+            this.informService.staffApplyInsertInform(newWorkOrderNum,
+                    this.workOrderService.queryById(workOrderNum).getWorkerNum(),"发起了延期工单");
             return ResponseEntity.ok(newWorkOrderNum);
         }else{
             throw new GlobalException("发起延期申请时后台生成新工单或生成流转过程发生错误    date为新生成的工单号为",newWorkOrderNum);

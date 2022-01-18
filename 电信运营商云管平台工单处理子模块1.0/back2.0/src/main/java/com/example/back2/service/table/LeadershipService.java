@@ -20,7 +20,7 @@ public interface LeadershipService {
      * @param lederNum 主键
      * @return 实例对象
      */
-    Leadership queryById(Integer lederNum);
+    List<Leadership> getUnderNum(Integer lederNum);
 
     /**
      * 分页查询
@@ -45,7 +45,7 @@ public interface LeadershipService {
      * @param leadership 实例对象
      * @return 实例对象
      */
-    Leadership update(Leadership leadership);
+    List<Leadership> update(Leadership leadership);
 
     /**
      * 通过主键删除数据
