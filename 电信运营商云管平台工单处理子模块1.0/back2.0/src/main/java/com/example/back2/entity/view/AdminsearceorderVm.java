@@ -35,6 +35,16 @@ public class AdminsearceorderVm implements Serializable {
 
     private String description;
 
+    private Integer quantity;
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
     public String getDescription(){
         return this.description;
     }
