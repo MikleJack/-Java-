@@ -9,26 +9,29 @@
         <!-- 工单信息填写表单 -->
         <el-form :inline="true" :model="workorder" class="demo-form-inline" style="width: 100%" >
 <!--          :label-position="labelPosition">-->
-
-          <el-form-item label="工单标题">
+          <el-form-item label="工单标题" required>
             <el-input v-model="workorder.workOrderName" placeholder="工单标题"></el-input>
           </el-form-item>
-          <span class="demonstration" style="color: black" >资源到期时间</span>
-          <el-date-picker
-            v-model="workorder.expirationTime"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
-          <span  style="color: black" >原工单编号</span>
-          <el-select v-model="value"  placeholder="请选择" @change="checkOldOrderNum">
-            <el-option
-              v-for="item in options"
-              :key="item"
-              :value="item"
-            >
+          <el-form-item label="资源到期时间" required>
+<!--            <span class="demonstration" style="color: black" >资源到期时间</span>-->
+            <el-date-picker
+              v-model="workorder.expirationTime"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="原工单编号" required>
+<!--            <span  style="color: black" ></span>-->
+            <el-select v-model="value"  placeholder="请选择" @change="checkOldOrderNum">
+              <el-option
+                v-for="item in options"
+                :key="item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
 
-            </el-option>
-          </el-select>
         </el-form>
         <el-form :model="workorder">
           <el-form-item label="变更理由">
@@ -175,7 +178,7 @@
 
 
 
-<!--        <P></P>-->
+        <P></P>
         <el-form :inline="true"  class="demo-form-inline">
           <el-form-item label="存储(G)">
             <el-input v-model="storage" placeholder="存储(G)"></el-input>
@@ -416,7 +419,7 @@ export default {
       this.workorder.workerNum = sessionStorage.getItem("work_num");
       this.workorder.file=this.$store.state.FileName;
       //插入到表单中
-      this.$axios.post(this.$store.state.url+"/applyTickets/intsertApplyTicket",
+      this.$axios.post(this.$store.state.url+"/changeTickets/insertChangedTickets",
         this.workorder).then((res) => {
 
         if (res.data) {

@@ -199,6 +199,7 @@
           <div class="resoure_usage">
             <el-table
               :data="flowProcess"
+              :default-sort = "{prop: 'dealDate', order: 'descending'}"
               border>
               <el-table-column
                 type="index"

@@ -8,7 +8,7 @@
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="LeadershipMap">
+    <select id="getUnderNum" resultMap="LeadershipMap">
         select
           leder_num, under_num
         from leadership
@@ -66,7 +66,7 @@
             ()
         </foreach>
         on duplicate key update
-        
+
     </insert>
 
     <!--通过主键修改数据-->

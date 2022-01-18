@@ -29,8 +29,8 @@ public class LeadershipServiceImpl implements LeadershipService {
      * @return 实例对象
      */
     @Override
-    public Leadership queryById(Integer lederNum) {
-        return this.leadershipDao.queryById(lederNum);
+    public List<Leadership> getUnderNum(Integer lederNum) {
+        return this.leadershipDao.getUnderNum(lederNum);
     }
 
     /**
@@ -65,9 +65,9 @@ public class LeadershipServiceImpl implements LeadershipService {
      * @return 实例对象
      */
     @Override
-    public Leadership update(Leadership leadership) {
+    public List<Leadership> update(Leadership leadership) {
         this.leadershipDao.update(leadership);
-        return this.queryById(leadership.getLederNum());
+        return this.getUnderNum(leadership.getLederNum());
     }
 
     /**
@@ -85,4 +85,5 @@ public class LeadershipServiceImpl implements LeadershipService {
     public List<Leadership> getLeaderNum(Integer underNum){
         return this.leadershipDao.getLeaderNum(underNum);
     }
+
 }
