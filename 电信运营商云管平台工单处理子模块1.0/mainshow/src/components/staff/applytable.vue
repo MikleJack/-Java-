@@ -245,7 +245,7 @@
       <!-- 保存、提交按钮 -->
       <el-button>保存</el-button>
 <!--      <el-button class="add_type" @click="submit" :disabled="(this.order_budget <= this.surplus_budget)&&(this.workorder.workOrderName != '')">提交</el-button>-->
-      <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName != '')">提交</el-button>
+      <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName !== '') && (this.workorder.expirationTime !== '')">提交</el-button>
 
     </div>
   </div>
@@ -417,7 +417,7 @@ export default {
     // 点击selection多选框
     handleSelectionChange_physics(data) {
       this.multipleSelection_physics = data;
-      console.log(data)
+      // console.log(data)
       this.length_physics = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
     },
     handleSelectionChange_virtual(data) {
@@ -478,6 +478,10 @@ export default {
       let year = new Date().getFullYear();//年
       let month = new Date().getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
       let day = new Date().getDate();//日
+      var date = new Date();//获取当前时间
+      var minute = date.getMinutes();
+      var hour = date.getHours();
+      var second = date.getSeconds();
 
       let year1 = this.workorder.expirationTime.getFullYear();//年
       let month1 = this.workorder.expirationTime.getMonth() + 1;//注意！月份是从0月开始获取的，所以要+1;
@@ -488,7 +492,11 @@ export default {
         '-' +
         (month >= 10 ? month : '0' + month) +
         '-' +
-        (day >= 10 ? day : '0' + day);
+        (day >= 10 ? day : '0' + day) +
+        ' ' +
+        (hour >= 10 ? hour : '0' + hour)+':'+
+        (minute >= 10 ? minute : '0' + minute)+':'+
+        (second >= 10 ? second : '0' + second);
 
       this.expire_time =
         year1 +

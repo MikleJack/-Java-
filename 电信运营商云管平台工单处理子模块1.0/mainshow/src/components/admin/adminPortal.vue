@@ -674,11 +674,7 @@ export default {
 
     //部门预算设置的dialog函数
     handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
           done();
-        })
-        .catch(_ => {});
     },
 
     handleChange_bud(budValue) {

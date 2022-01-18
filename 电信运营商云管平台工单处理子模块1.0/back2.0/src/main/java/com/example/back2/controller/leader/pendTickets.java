@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -231,5 +234,25 @@ public class pendTickets {
         }
 
         return true;
+    }
+//    通过工单号查找工单申请时间
+
+    @GetMapping("getordertime")
+    public String getordertime(String workOrderNum){
+        List<FlowProcess> a = this.flowProcessService.selectApplyTime(workOrderNum);
+
+
+        Date applytime = a.get(0).getDealDate();
+        for (FlowProcess i:a){
+//            System.out.println(i.getDealDate());
+            if (i.getDealDate().compareTo(applytime) == -1){
+                applytime = i.getDealDate();
+            }
+        }
+
+        SimpleDateFormat sp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String ans;
+        ans = sp.format(applytime);
+        return ans;
     }
 }
