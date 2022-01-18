@@ -70,10 +70,8 @@
 </template>
 
 <script>
-import Dep_info from "./department/dep_info";
 export default {
   name: 'dep_manage',
-  components: {Dep_info},
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
