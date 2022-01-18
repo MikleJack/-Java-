@@ -1,5 +1,7 @@
 package com.example.back2.entity.view;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -17,7 +19,8 @@ public class Adminordertowleader implements Serializable {
     private String workOrderType;
     
     private String workOrderName;
-    
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date expirationTime;
     
     private String workOrderState;
