@@ -95,7 +95,7 @@
           width="150px">
           </el-table-column>
           <el-table-column
-            prop="processormodel"
+            prop="processorModel"
             label="处理器型号">
           </el-table-column>
           <el-table-column

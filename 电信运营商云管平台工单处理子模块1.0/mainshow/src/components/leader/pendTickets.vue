@@ -9,7 +9,7 @@
           fixed
           prop="workOrderNum"
           label="工单编号"
-          style="margin: auto"
+          width="200"
           align="center">
         </el-table-column>
         <el-table-column
