@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back2.dao.view.AdminordertowleaderDao">
+
+    <resultMap type="com.example.back2.entity.view.Adminordertowleader" id="AdminordertowleaderMap">
+        <result property="workOrderNum" column="work_order_num" jdbcType="VARCHAR"/>
+        <result property="workOrderType" column="work_order_type" jdbcType="VARCHAR"/>
+        <result property="workOrderName" column="work_order_name" jdbcType="VARCHAR"/>
+        <result property="expirationTime" column="expiration_time" jdbcType="TIMESTAMP"/>
+        <result property="workOrderState" column="work_order_state" jdbcType="VARCHAR"/>
+        <result property="workerNum" column="worker_num" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="AdminordertowleaderMap">
+        select
+          work_order_num, work_order_type, work_order_name, expiration_time, work_order_state, worker_num, name
+        from adminOrderTowLeader
+            where work_order_state='一级审批通过'
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from adminOrderTowLeader
+        where work_order_state='一级审批通过'
+    </select>
+
+
+</mapper>
+
