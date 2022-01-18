@@ -22,14 +22,14 @@ public interface AdminoperationlogDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Adminoperationlog> queryAllByLimit( @Param("pageable") Pageable pageable);
+    List<Adminoperationlog> queryAllByLimit(String name, @Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
      *
      * @return 总行数
      */
-    long count();
+    long count(String name);
 
 
 }

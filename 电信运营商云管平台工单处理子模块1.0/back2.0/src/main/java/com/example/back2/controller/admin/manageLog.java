@@ -22,8 +22,8 @@ public class manageLog {
 
 
     @GetMapping("query")
-    public ResponseEntity<Page<Adminoperationlog>> queryByPage2(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page,size);
-        return ResponseEntity.ok(this.adminoperationlogService.queryByPage( pageRequest));
+    public ResponseEntity<Page<Adminoperationlog>> queryByPage2(String name, int page, int size) {
+        PageRequest pageRequest = PageRequest.of( page,size);
+        return ResponseEntity.ok(this.adminoperationlogService.queryByPage( name, pageRequest));
     }
 }

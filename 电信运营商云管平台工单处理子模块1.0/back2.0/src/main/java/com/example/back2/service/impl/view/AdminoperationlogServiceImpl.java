@@ -27,9 +27,9 @@ public class AdminoperationlogServiceImpl implements AdminoperationlogService {
      * @return 查询结果
      */
     @Override
-    public Page<Adminoperationlog> queryByPage( PageRequest pageRequest) {
-        long total = this.adminoperationlogDao.count();
-        return new PageImpl<>(this.adminoperationlogDao.queryAllByLimit( pageRequest), pageRequest, total);
+    public Page<Adminoperationlog> queryByPage( String name,PageRequest pageRequest) {
+        long total = this.adminoperationlogDao.count(name);
+        return new PageImpl<>(this.adminoperationlogDao.queryAllByLimit( name,pageRequest), pageRequest, total);
     }
 
 }

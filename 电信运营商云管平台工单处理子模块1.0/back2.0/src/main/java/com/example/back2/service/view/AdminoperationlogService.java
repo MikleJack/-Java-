@@ -18,6 +18,6 @@ public interface AdminoperationlogService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Adminoperationlog> queryByPage( PageRequest pageRequest);
+    Page<Adminoperationlog> queryByPage( String name,PageRequest pageRequest);
 
 }

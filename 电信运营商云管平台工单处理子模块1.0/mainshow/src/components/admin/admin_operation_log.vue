@@ -20,7 +20,7 @@
       <div page class="page-body">
         <!--界面体部分-->
         <el-table
-          :data="tableData.filter(data => !formInline.name || data.name.toLowerCase().includes(formInline.name.toLowerCase()))"
+          :data="tableData"
           border
           style="width: 100%">
           <el-table-column
@@ -97,12 +97,15 @@
     },
     methods: {
       onSubmit() {
-        console.log('submit!');
+        this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize+"&name="+this.formInline.name).then((res)=>{
+          this.tableData= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
       },
 
       handleClick_clean(){
         this.formInline.name=''
-        this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/Log/query?page="+0+"&size="+this.pageSize+"&name="+this.formInline.name).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -112,7 +115,7 @@
       handleCurrentChange(val){
         this.currentPage=parseInt(val);
         let page = this.currentPage-1;
-        this.$axios.get(this.$store.state.url+"/Log/query?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/Log/query?page="+page+"&size="+this.pageSize+"&name="+this.formInline.name).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
