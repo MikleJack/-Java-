@@ -17,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="onSubmit" class="add_type">查询</el-button>
           <!--从后端查询选择的工单类型的详细信息-->
         </el-form-item>
       </el-form>
@@ -170,5 +170,9 @@ import order_detail from "./order_detail";
     position: absolute;
     bottom: 0;
   }
-
+  .add_type {
+    color: #fff;
+    background-color: rgba(82, 182, 154, 0.8);
+    border-color: #52b69a;
+  }
 </style>

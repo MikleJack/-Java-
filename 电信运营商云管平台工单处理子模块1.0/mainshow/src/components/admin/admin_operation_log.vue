@@ -154,7 +154,9 @@
     /*background-color: rgb(243, 119, 158);*/
   }
   .query{
-    background-color: rgb(62, 143, 118);
+    color: #fff;
+    background-color: rgba(82, 182, 154, 0.8);
+    border-color: #52b69a;
   }
 
 </style>
