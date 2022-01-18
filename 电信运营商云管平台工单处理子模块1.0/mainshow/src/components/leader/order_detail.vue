@@ -109,8 +109,8 @@
             label="硬盘大小/G">
           </el-table-column>
           <el-table-column
-            prop="allprice"
-            label="总价/元">
+            prop="quantity"
+            label="数量">
           </el-table-column>
         </el-table>
       </div>
