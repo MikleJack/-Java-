@@ -353,7 +353,7 @@ export default {
   position: relative;
   width: 100%;
   height: auto;
-  left: 0;
+  left: 4%;
   top: 0;
 }
 .page_body{
