@@ -73,7 +73,8 @@ public class login {
         if(!password.equals("") ) {
             Staff staff = this.staff_temp.queryById(work_num);
             if(staff == null){
-                throw new GlobalException("未查询到该员工账号     输入的员工编号为" , work_num);
+                return 0;
+//                throw new GlobalException("未查询到该员工账号     输入的员工编号为" , 0);
             }
             if (staff.getState() && staff.getInService())
             {
