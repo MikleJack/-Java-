@@ -3,10 +3,15 @@ package com.example.back2.service.impl.table;
 import com.example.back2.entity.table.VmSpecifications;
 import com.example.back2.dao.table.VmSpecificationsDao;
 import com.example.back2.service.table.VmSpecificationsService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (VmSpecifications)表服务实现类
@@ -33,13 +38,12 @@ public class VmSpecificationsServiceImpl implements VmSpecificationsService {
     /**
      * 查询多条数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
     @Override
-    public List<VmSpecifications> queryAllByLimit(int offset, int limit) {
-        return this.vmSpecificationsDao.queryAllByLimit(offset, limit);
+    public Future<Page<VmSpecifications>> queryAllByLimit(PageRequest pageRequest) {
+        long total = this.vmSpecificationsDao.count();
+        return new AsyncResult<>(new PageImpl<>(this.vmSpecificationsDao.queryAllByLimit(pageRequest),pageRequest, total));
     }
 
     /**

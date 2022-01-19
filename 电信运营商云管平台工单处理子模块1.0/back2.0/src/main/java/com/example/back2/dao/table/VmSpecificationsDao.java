@@ -3,6 +3,7 @@ package com.example.back2.dao.table;
 import com.example.back2.entity.table.VmSpecifications;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -26,11 +27,11 @@ public interface VmSpecificationsDao {
     /**
      * 查询指定行数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
-    List<VmSpecifications> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+    List<VmSpecifications> queryAllByLimit(@Param("pageable") Pageable pageable);
+
+    Long count();
 
 
     /**

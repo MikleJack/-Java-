@@ -3,8 +3,11 @@ package com.example.back2.service.table;
 import com.example.back2.entity.table.PhysicsComResource;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (PhysicsComResource)表服务接口
@@ -25,11 +28,9 @@ public interface PhysicsComResourceService {
     /**
      * 查询多条数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
-    List<PhysicsComResource> queryAllByLimit(int offset, int limit);
+    Future<Page<PhysicsComResource>> queryAllByLimit(PageRequest pageRequest);
 
     /**
      * 新增数据

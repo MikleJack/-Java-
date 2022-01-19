@@ -2,11 +2,18 @@ package com.example.back2.service.impl.table;
 
 import com.example.back2.entity.table.PhysicsComResource;
 import com.example.back2.dao.table.PhysicsComResourceDao;
+import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.service.table.PhysicsComResourceService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (PhysicsComResource)表服务实现类
@@ -33,13 +40,13 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     /**
      * 查询多条数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
+    @Async
     @Override
-    public List<PhysicsComResource> queryAllByLimit(int offset, int limit) {
-        return this.physicsComResourceDao.queryAllByLimit(offset, limit);
+    public Future<Page<PhysicsComResource>> queryAllByLimit(PageRequest pageRequest) {
+        long total = this.physicsComResourceDao.count();
+        return new AsyncResult<>(new PageImpl<>(this.physicsComResourceDao.queryAllByLimit(pageRequest), pageRequest, total));
     }
 
     /**
