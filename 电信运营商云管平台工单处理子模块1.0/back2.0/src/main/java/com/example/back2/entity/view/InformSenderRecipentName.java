@@ -33,6 +33,16 @@ public class InformSenderRecipentName implements Serializable {
 
     private String recipentName;
 
+    private String workOrderName;
+
+
+    public String getWorkOrderName() {
+        return workOrderName;
+    }
+
+    public void setWorkOrderName(String workOrderName) {
+        this.workOrderName = workOrderName;
+    }
 
     public Integer getInformNum() {
         return informNum;

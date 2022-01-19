@@ -87,7 +87,7 @@
           <el-button style="line-height: 0px;"
                      @click="setInfromState(item.informNum)"
                       :disabled = "item.readState"
-                     type="text">{{ '有工单' + item.details  }} </el-button>
+                     type="text">{{ '有工单' + item.details +'(' + item.workOrderName +')' }} </el-button>
         </div>
         <div class="message_date" style="color: #0c805f" >{{item.sendTime}}</div>
       </div>
