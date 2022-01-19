@@ -3,7 +3,7 @@
                   :limit="1" :on-exceed="handleExceed"
                   :file-list="fileList" :on-progress="success" accept="txt">
         <el-button class="upload-demo" size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">最多上传一个文件，不超过1Gb，只支持pdf/docx文档</div>
+        <div slot="tip" class="el-upload__tip">最多上传一个文件，不超过200Mb，只支持pdf/docx文档</div>
       </el-upload>
 </template>
 

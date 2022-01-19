@@ -43,6 +43,7 @@
                 and work_order_state = #{orderState}
             </if>
         </where>
+        order by work_order_num desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -60,7 +61,6 @@
             <if test="orderState != null and orderState !='' ">
                 and work_order_state = #{orderState}
             </if>
-
         </where>
     </select>
 

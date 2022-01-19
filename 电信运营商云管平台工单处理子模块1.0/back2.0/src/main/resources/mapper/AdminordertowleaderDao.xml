@@ -25,6 +25,7 @@
                     and (work_order_state='一级审批通过' or work_order_state='挂起')
                 </if>
             </where>
+            order by work_order_num desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 

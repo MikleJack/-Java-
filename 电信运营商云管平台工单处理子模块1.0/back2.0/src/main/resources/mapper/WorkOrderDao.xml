@@ -21,7 +21,9 @@
             work_order_num
         from work_order
         where worker_num = #{workerNum} and work_order_state = '二级审批通过'
+        order by work_order_num desc
     </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="WorkOrderMap">
         select
@@ -36,7 +38,8 @@
         work_order_num, work_order_type, work_order_name, expiration_time, worker_num, file, work_order_state, reason, price, offline_reason
         from work_order
         where worker_num = #{workerNum}
-        limit #{pageable.offset}, #{pageable.pageSize}
+        order by work_order_num desc
+            limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--查询指定行数据-->
@@ -238,6 +241,7 @@
                 and worker_num = #{workerNum}
             </if>
         </where>
+        order by work_order_num desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 <!--员工全部工单查询界面    查询按钮-底部-->
