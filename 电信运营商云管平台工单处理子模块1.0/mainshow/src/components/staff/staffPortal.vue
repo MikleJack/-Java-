@@ -254,7 +254,7 @@ export default {
 
       //分页相关
       currentPage:1,
-      pageSize:8,
+      pageSize:7,
       totalSize:0,
 
       informationTable: [],
