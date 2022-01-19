@@ -101,6 +101,9 @@ public class pendTickets {
     @Resource
     private FlowProcessService flowProcessService;
 
+    @Resource
+    private InformService informService;
+
     /**
      * @param workOrderNum 要审批的工单号
      * @param workNum      审批人工号
@@ -109,12 +112,13 @@ public class pendTickets {
      */
     @PostMapping("oneExamine")
     public Boolean Examine(String workOrderNum, String workNum, String state) throws GlobalException{
-        logger.info("工号为" + workNum + "的一级领导对工单" + workOrderNum + "发起了审批");
+        logger.info("有一级领导对工单" + workOrderNum + "发起了审批");
 
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批不通过")){
             workOrder.setWorkOrderState(state);
             workOrderService.update(workOrder);
+            this.informService.firstLeaderInsertInform(workOrderNum, workOrder.getWorkerNum(), "未通过一级审批");
         } else if (state.equals("审批通过")) {
             //得到申请这个工单人的姓名
             Integer applyNum = workOrder.getWorkerNum();
@@ -135,6 +139,7 @@ public class pendTickets {
             if (success) {
                 workOrder.setWorkOrderState("一级审批通过");
                 workOrderService.update(workOrder);
+                this.informService.firstLeaderInsertInform(workOrderNum, workOrder.getWorkerNum(), "通过一级审批");
             } else {
                 throw new GlobalException("在一级审批时发生错误   工单信息为", workOrder);
             }
@@ -157,7 +162,7 @@ public class pendTickets {
 
     @PostMapping("towExamine")
     public Boolean towExamine(String workOrderNum, String workNum, String state) throws Exception{
-        logger.info("工号为" + workNum + "的二级领导对工单" + workOrderNum + "发起了审批");
+        logger.info("有二级领导对工单" + workOrderNum + "发起了审批");
 
         WorkOrder workOrder  = workOrderService.queryById(workOrderNum);
         if(state.equals("审批通过")){
@@ -194,9 +199,12 @@ public class pendTickets {
                 throw new GlobalException("更新部门预算时发生错误     计划插入的预算为", usedBudget);
             }
 
+            this.informService.secondLeaderInsertInform(workOrderNum, workOrder.getWorkerNum(), "通过二级审批");
+
         } else if (state.equals("挂起") || state.equals("审批不通过")) {
             workOrder.setWorkOrderState(state);
             workOrderService.update(workOrder);
+            this.informService.secondLeaderInsertInform(workOrderNum, workOrder.getWorkerNum(), state);
         } else
             throw new GlobalException("申请二级审批的工单未通过一级审批    工单编号为", workOrderNum);
         return true;

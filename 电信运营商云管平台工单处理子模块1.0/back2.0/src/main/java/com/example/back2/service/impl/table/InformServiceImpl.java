@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +31,7 @@ public class InformServiceImpl implements InformService {
 
     @Resource
     private WorkOrderService workOrderService;
+
 
     /**
      * 通过ID查询单条数据
@@ -120,7 +120,7 @@ public class InformServiceImpl implements InformService {
     }
 
     /**
-     * 一级领导审批或挂起工单，发起消息通知
+     * 一级领导审批工单，发起消息通知
      *
      * @param workOrderNum 工单编号
      * @param workNum 工人编号
@@ -148,4 +148,49 @@ public class InformServiceImpl implements InformService {
 
         return ;
     }
+
+    /**
+     * 二级领导审批或挂起工单，发起消息通知
+     *
+     * @param workOrderNum 工单编号
+     * @param workNum 工人编号
+     * @param detail 消息详情
+     * @return 实例对象
+     */
+    @Override
+    public void secondLeaderInsertInform(String workOrderNum, Integer workNum, String detail){
+        Inform inform = new Inform();
+        inform.setReadState(false);
+        inform.setSendTime(new Date());
+        inform.setSenderNum(workNum);
+        inform.setDetails(detail);
+        inform.setWorkOrderNum(workOrderNum);
+
+        Integer applicant = this.workOrderService.queryById(workOrderNum).getWorkerNum();
+        inform.setRecipient(applicant);
+        //消息的通知者只为该工单的发起人和该发起人的一级领导
+        this.informDao.insert(inform);
+        List<Leadership> upLeadershipList = this.leadershipService.getLeaderNum(applicant);
+        for(int i = 0; i < upLeadershipList.size() ; i++){
+            inform.setWorkOrderNum(workOrderNum);
+            inform.setRecipient(upLeadershipList.get(i).getLederNum());
+            this.informDao.insert(inform);
+        }
+
+        return ;
+    }
+
+    /**
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @param pageRequest 分页请求
+     * @return 此人发送或接收的所有通知
+     */
+    @Override
+    public Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest){
+        long total = this.informDao.count(workNum);
+        return new PageImpl<>(this.informDao.queryBySenderNumOrRecipientNum(workNum, pageRequest), pageRequest, total);
+    }
+
 }

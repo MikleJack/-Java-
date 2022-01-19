@@ -39,6 +39,7 @@ public interface InformDao {
      * @return 总行数
      */
     long count(Inform inform);
+    long count(Integer workNum);
 
     /**
      * 新增数据
@@ -80,6 +81,15 @@ public interface InformDao {
      * @return 影响行数
      */
     int deleteById(Integer informNum);
+
+
+    /**
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @return 此人发送或接收的所有通知
+     */
+    List<Inform> queryBySenderNumOrRecipientNum(Integer workNum , @Param("pageable") Pageable pageable);
 
 }
 

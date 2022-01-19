@@ -1,8 +1,10 @@
 package com.example.back2.controller;
 
 import com.example.back2.entity.table.Inform;
+import com.example.back2.entity.view.InformSenderRecipentName;
 import com.example.back2.service.table.InformService;
 import com.example.back2.service.table.InformService;
+import com.example.back2.service.view.InformSenderRecipentNameService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * (Inform)表控制层
@@ -25,6 +28,9 @@ public class InformController {
      */
     @Resource
     private InformService informService;
+
+    @Resource
+    private InformSenderRecipentNameService informSenderRecipentNameService;
 
     /**
      * 分页查询
@@ -83,12 +89,15 @@ public class InformController {
     }
 
     /**
-     * 测试
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @return 此人发送或接收的所有通知
      */
-    @PostMapping("insertInform")
-    public ResponseEntity<Boolean> insertInform(String workOrderNum, Integer workNum) {
-        this.informService.firstLeaderInsertInform(workOrderNum,workNum, "挂起工单");
-        return ResponseEntity.ok(true);
+    @GetMapping("queryByRecipientNum")
+    public ResponseEntity<Page<InformSenderRecipentName>> queryBySenderNumOrRecipientNum(Integer workNum, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.informSenderRecipentNameService.queryByWorkerNum(workNum,pageRequest));
     }
 
 }
