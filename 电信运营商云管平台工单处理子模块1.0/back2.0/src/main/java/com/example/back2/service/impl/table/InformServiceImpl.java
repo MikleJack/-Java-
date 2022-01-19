@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -185,9 +184,13 @@ public class InformServiceImpl implements InformService {
      * 通过消息接受人的账号查询此人发送或接收的所有通知
      *
      * @param workNum 消息接受人的账号
+     * @param pageRequest 分页请求
      * @return 此人发送或接收的所有通知
      */
-    public List<Inform> queryBySenderNumOrRecipientNum(Integer workNum){
-        return this.informDao.queryBySenderNumOrRecipientNum(workNum);
+    @Override
+    public Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest){
+        long total = this.informDao.count(workNum);
+        return new PageImpl<>(this.informDao.queryBySenderNumOrRecipientNum(workNum, pageRequest), pageRequest, total);
     }
+
 }

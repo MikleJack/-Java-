@@ -95,6 +95,6 @@ public interface InformService {
      * @param workNum 消息接受人的账号
      * @return 此人发送或接收的所有通知
      */
-    List<Inform> queryBySenderNumOrRecipientNum(Integer workNum);
+    Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest);
 
 }

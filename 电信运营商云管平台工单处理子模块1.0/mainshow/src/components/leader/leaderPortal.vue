@@ -89,45 +89,19 @@
       <div class="message_title">
         通知中心
       </div>
-      <div class="round-i1">
+      <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
+        <div class="message"> {{ item.senderName + item.details }} </div>
+        <div class="message_date">{{item.sendTime}}</div>
       </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729即将到期 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 您的账号已被解除锁定 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 请尽快完善个人信息 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
+
       <div class="pagination">
         <el-pagination
-          layout="prev, pager, next"
-          :total="1000"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout=" prev, pager, next, jumper"
+          :total="totalSize"
           style="color: #0c805f">
         </el-pagination>
       </div>
@@ -166,6 +140,17 @@ export default {
   name: "leaderPortal",
   components: {},
   methods: {
+    //分页按钮操作
+    handleCurrentChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum="
+        + sessionStorage.getItem("work_num") + '&page=' + page + '&size=' + this.pageSize ).then((res)=>{
+        this.informationTable= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
+    },
+
     resCustomColor(total_Phyutilization) {
       if (total_Phyutilization < 50 ) {
         return 'rgba(239,125,10,0.7)';
@@ -217,11 +202,25 @@ export default {
       },
       hang_order:'5',
       untreated_order:'3',
-    }
 
+      //分页相关
+      currentPage:1,
+      pageSize:8,
+      totalSize:0,
+
+      informationTable: [],
+    }
   },
   mounted(){
     this.init();
+
+    //获取通知中心
+    this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum="
+      + sessionStorage.getItem("work_num") + '&page=0&size=' + this.pageSize ).then((res)=>{
+      this.informationTable = res.data.content;
+      this.totalSize = res.data.totalPages*this.pageSize;
+    })
+
     var chartDom = document.getElementById('approvemain');
     var approveChart = echarts.init(chartDom);
     var approveOption;
@@ -597,19 +596,8 @@ export default {
   margin-top: 2%;
 }
 .round-i1{
-
-
   height: 10px;
-  /*width: 10px;*/
-  margin-top: 10%;
-  margin-left: 3%;
-}
-.round-i{
-
-
-  height: 10px;
-  /*width: 10px;*/
-  margin-top: 30px;
+  margin-top: 6%;
   margin-left: 3%;
 }
 .round{
@@ -638,6 +626,8 @@ export default {
   margin-right: 5px;
 }
 .pagination {
+  position: absolute;
+  bottom: 10px;
   height: fit-content;
   margin-bottom: 1px;
   margin-top: 5%;
