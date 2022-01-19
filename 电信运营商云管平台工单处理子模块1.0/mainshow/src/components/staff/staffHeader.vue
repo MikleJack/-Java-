@@ -79,6 +79,10 @@ export default {
       }).then(() => {
         this.$router.push({ path: "/user" });
         sessionStorage.removeItem("staff")
+        this.$axios.get(this.$store.state.url+"/login/userLogout?work_num="+sessionStorage.getItem("work_num")).then((res)=>{
+          if (res.data)
+            sessionStorage.removeItem("work_num");
+        })
       });
     },
     //跳转修改个人信息页面

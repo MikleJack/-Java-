@@ -163,7 +163,7 @@ export default {
       this.$axios.get(this.$store.state.url+'/verifycode/getStringOfVertifyCode').then((res)=>{
         if(true){
           this.$axios.get(this.$store.state.url+"/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data!==0) {
+            if (res.data>=0) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
@@ -190,7 +190,14 @@ export default {
               this.ruleForm.operate="登录成功";
               //增加登录日志
               this.$axios.post(this.$store.state.url+"/login/addLog", this.ruleForm);
-            } else {
+            } else if (res.data===-1){
+              this.$message({
+                message: '不允许同时登录!',
+                type: 'warning',
+                center: true
+              });
+            }
+            else {
               this.$message({
                 message: '用户名或密码错误',
                 type: 'error',

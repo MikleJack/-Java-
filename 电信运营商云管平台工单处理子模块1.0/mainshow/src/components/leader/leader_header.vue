@@ -75,7 +75,6 @@ export default{
     this.$router.push({path:"/leader/home"});
   },
   methods:{
-
     //退出
     logoutFn() {
       this.$confirm("退出登录, 是否继续?", "提示", {
@@ -85,6 +84,10 @@ export default{
       }).then(() => {
         this.$router.push({ path: "/user" });
         sessionStorage.removeItem("leader")
+        this.$axios.get(this.$store.state.url+"/login/userLogout?work_num="+sessionStorage.getItem("work_num")).then((res)=>{
+          if (res.data)
+            sessionStorage.removeItem("work_num");
+        })
       });
     },
     //跳转修改个人信息页面

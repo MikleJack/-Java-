@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("login")
@@ -30,6 +31,8 @@ public class login {
     private OperationLogService operationLogService;
 
     private String initPassword="brccq123456";
+    private HashMap<Integer,Boolean> userLogin = new HashMap<>();
+    private HashMap<String,Boolean> adminLogin = new HashMap<>();
 
 
     //必须通过Autowired注解来生成其他服务类
@@ -44,20 +47,23 @@ public class login {
         @ password 管理员登录密码
      */
     @GetMapping("admin")
-    public ResponseEntity<Boolean> adminLogin(String work_num, String password)throws GlobalException{
+    public Integer adminLogin(String work_num, String password)throws GlobalException{
         if(!work_num.equals("") && !password.equals("") ) {
+            if(adminLogin.containsKey(work_num) && adminLogin.get(work_num))
+                return -1;
             if (adminService.queryById(work_num) != null)
             {
                 password = SHA_256.getSHA256(password);
                 if(password.equals(this.adminService.queryById(work_num).getPassword())){
+                    adminLogin.put(work_num,true);
                     logger.info("账号为" + work_num + "的管理员登录");
-                    return ResponseEntity.ok(true);
+                    return 1;
                 }
             } else{
-                throw new GlobalException("该账号不是管理员账号     date为输入的账号" , work_num);
+                return 0;
             }
         } else
-            throw new GlobalException("输入的账号或密码为空","输入的账号或密码为空");
+            return 0;
 
         throw new GlobalException("管理员登录时发生错误","管理员登录时发生错误");
     }
@@ -70,7 +76,9 @@ public class login {
      */
     @GetMapping("user")
     public int userLogin(Integer work_num, String password) throws GlobalException{
-        if(!password.equals("") ) {
+        if(!password.equals("")) {
+            if(userLogin.containsKey(work_num) && userLogin.get(work_num))
+                return -1;
             Staff staff = this.staff_temp.queryById(work_num);
             if(staff == null){
                 return 0;
@@ -78,6 +86,7 @@ public class login {
             }
             if (staff.getState() && staff.getInService())
             {
+                userLogin.put(work_num,true);
                 password = SHA_256.getSHA256(password);
                 if(password.equals(staff.getPassword())){
                     if(staff.getDepNum()==4||staff.getDepNum()==3){
@@ -112,4 +121,23 @@ public class login {
         return ResponseEntity.ok(this.operationLogService.insert(operationLog));
     }
 
+    @GetMapping("userLogout")
+    public Boolean userLogout(Integer work_num){
+        if(userLogin.containsKey(work_num)){
+            userLogin.put(work_num,false);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    @GetMapping("adminLogout")
+    public Boolean adminLogout(String work_num){
+        if(adminLogin.containsKey(work_num)){
+            adminLogin.put(work_num,false);
+            return true;
+        }
+        else
+            return false;
+    }
 }

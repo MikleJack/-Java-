@@ -144,7 +144,7 @@ export default {
       this.$axios.get(this.$store.state.url+'/verifycode/getStringOfVertifyCode').then((res)=>{
         if(this.code===res.data){
           this.$axios.get(this.$store.state.url+"/login/admin?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data) {
+            if (res.data===1) {
               sessionStorage.setItem("type", "admin");
               sessionStorage.setItem("admin", 'true');
               this.$router.push('/adminMain');
@@ -156,7 +156,14 @@ export default {
               });
               //设置token以及路由
 
-            } else {
+            }else if (res.data===-1){
+              this.$message({
+                message: '不允许同时登录!',
+                type: 'warning',
+                center: true
+              });
+            }
+            else {
               this.$message({
                 message: '用户名或密码错误',
                 type: 'error',

@@ -187,6 +187,9 @@
 export default {
   name: "admin_employee",
   mounted() {
+    this.$axios.get(this.$store.state.url+"/account/getDep").then((res)=>{
+      this.options = res.data;
+    })
     this.init();
   },
   data() {
@@ -240,9 +243,7 @@ export default {
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       });
-      this.$axios.get(this.$store.state.url+"/account/getDep").then((res)=>{
-        this.options = res.data;
-      })
+
     },
     addAccount() {
       this.dialogVisible_add = false;

@@ -76,7 +76,6 @@ export default {
         this.$router.push({path:"/adminMain/home"});
       }
       else if(page===2){
-        console.log(2)
         this.$router.push({path:"/adminMain/search"});
       }
       else if(page===3){
@@ -103,6 +102,10 @@ export default {
         //先修改路由，然后删除token
         this.$router.push({ path: "/2022AdminBrccq" });
         sessionStorage.removeItem("root");
+        this.$axios.get(this.$store.state.url+"/login/adminLogout?work_num=root").then((res)=>{
+          if (res.data){
+          }
+        })
       });
     },
   },
