@@ -102,6 +102,15 @@
         where dep_num = #{depNum}
     </update>
 
+<!--    通过部门编号修改部门编号-->
+    <update id="setDepBudget">
+        update department
+        <set>
+            dep_budget = #{DepBudget}
+        </set>
+        where dep_num = #{DepNum}
+    </update>
+
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from department where dep_num = #{depNum}
