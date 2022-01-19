@@ -1,4 +1,4 @@
-package com.example.back2.entity.table;
+package com.example.back2.entity.view;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -6,13 +6,13 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
- * (Inform)实体类
+ * (InformSenderRecipentName)实体类
  *
  * @author makejava
- * @since 2022-01-18 14:35:14
+ * @since 2022-01-19 09:50:54
  */
-public class Inform implements Serializable {
-    private static final long serialVersionUID = -42618633169135130L;
+public class InformSenderRecipentName implements Serializable {
+    private static final long serialVersionUID = 177164279676444581L;
 
     private Integer informNum;
 
@@ -28,6 +28,10 @@ public class Inform implements Serializable {
     private Date sendTime;
 
     private Boolean readState;
+
+    private String senderName;
+
+    private String recipentName;
 
 
     public Integer getInformNum() {
@@ -84,6 +88,22 @@ public class Inform implements Serializable {
 
     public void setReadState(Boolean readState) {
         this.readState = readState;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getRecipentName() {
+        return recipentName;
+    }
+
+    public void setRecipentName(String recipentName) {
+        this.recipentName = recipentName;
     }
 
 }

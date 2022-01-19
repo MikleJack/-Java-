@@ -32,9 +32,9 @@ public class AdminordertowleaderServiceImpl implements AdminordertowleaderServic
      */
     @Async
     @Override
-    public Future<Page<Adminordertowleader>> queryByPage(PageRequest pageRequest) {
-        long total = this.adminordertowleaderDao.count();
-        return new AsyncResult<>( new PageImpl<>(this.adminordertowleaderDao.queryAllByLimit(pageRequest), pageRequest, total));
+    public Future<Page<Adminordertowleader>> queryByPage(String orderState,PageRequest pageRequest) {
+        long total = this.adminordertowleaderDao.count(orderState);
+        return new AsyncResult<>( new PageImpl<>(this.adminordertowleaderDao.queryAllByLimit(orderState,pageRequest), pageRequest, total));
     }
 
 }

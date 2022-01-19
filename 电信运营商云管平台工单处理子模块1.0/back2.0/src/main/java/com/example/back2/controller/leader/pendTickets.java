@@ -57,9 +57,10 @@ public class pendTickets {
     }
 
     @GetMapping("selectTow")
-    public ResponseEntity<Page<Adminordertowleader>> selectTow(int page, int size)throws Exception{
+    public ResponseEntity<Page<Adminordertowleader>> selectTow(int page, int size,
+                                                               String orderState)throws Exception{
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ResponseEntity.ok(this.adminordertowleaderService.queryByPage(pageRequest).get());
+        return ResponseEntity.ok(this.adminordertowleaderService.queryByPage(orderState,pageRequest).get());
     }
 
     //    根据工号查询工人信息

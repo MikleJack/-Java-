@@ -6,13 +6,14 @@ import com.example.back2.entity.table.Leadership;
 import com.example.back2.service.table.InformService;
 import com.example.back2.service.table.LeadershipService;
 import com.example.back2.service.table.WorkOrderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -92,6 +93,20 @@ public class InformServiceImpl implements InformService {
     public boolean deleteById(Integer informNum) {
         return this.informDao.deleteById(informNum) > 0;
     }
+
+    /**
+     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     *
+     * @param workNum 消息接受人的账号
+     * @param pageRequest 分页请求
+     * @return 此人发送或接收的所有通知
+     */
+    @Override
+    public Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest){
+        long total = this.informDao.count(workNum);
+        return new PageImpl<>(this.informDao.queryBySenderNumOrRecipientNum(workNum, pageRequest), pageRequest, total);
+    }
+
 
     /**
      * 普通员工发起工单申请，插入消息通知
@@ -182,12 +197,34 @@ public class InformServiceImpl implements InformService {
     }
 
     /**
-     * 通过消息接受人的账号查询此人发送或接收的所有通知
+     * 有员工账号被冻结,给管理员发起通知
      *
-     * @param workNum 消息接受人的账号
+     * @param workNum 工人编号
+     * @param detail 消息详情
+     * @return 实例对象
+     */
+    @Override
+    public void adminInsertInform(Integer workNum, String detail){
+        Inform inform = new Inform();
+        inform.setReadState(false);
+        inform.setSendTime(new Date());
+        inform.setSenderNum(workNum);
+        inform.setDetails(detail);
+        inform.setRecipient(20220000);
+
+        //消息的通知者只为所有管理员
+        this.informDao.insert(inform);
+
+        return ;
+    }
+
+    /**
+     * 通过消息号来改变消息已读状态
+     *
+     * @param informNum 消息编号
      * @return 此人发送或接收的所有通知
      */
-    public List<Inform> queryBySenderNumOrRecipientNum(Integer workNum){
-        return this.informDao.queryBySenderNumOrRecipientNum(workNum);
+    public Boolean changeInformState(Integer informNum) {
+        return this.informDao.changeInformState(informNum);
     }
 }

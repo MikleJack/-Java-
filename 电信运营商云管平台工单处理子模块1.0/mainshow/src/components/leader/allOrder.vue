@@ -14,6 +14,7 @@
             <el-option label="待审批工单" value="待审批"></el-option>
             <el-option label="审批不通过" value="审批不通过"></el-option>
             <el-option label="已变更" value="已变更"></el-option>
+            <el-option label="挂起" value="挂起"></el-option>
             <el-option label="一级审批通过" value="一级审批通过"></el-option>
             <el-option label="二级审批通过" value="二级审批通过"></el-option>
             <!--为后端提供选择的工单类型，为上述三种之一-->
@@ -107,15 +108,20 @@ import order_detail from "./order_detail";
       mounted() {
         if(sessionStorage.getItem("level")==="3"){
           this.second=sessionStorage.getItem("work_num");
+          this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size="+this.pageSize+"&orderState="+this.orderState).then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
         }
         else {
           this.first=sessionStorage.getItem("work_num");
+          this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
+            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
+            this.tableData= res.data.content;
+            this.totalSize = res.data.totalPages*this.pageSize;
+          })
         }
-        this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
-          "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
-          this.tableData= res.data.content;
-          this.totalSize = res.data.totalPages*this.pageSize;
-        })
+
       },
       data() {
         return {
@@ -134,21 +140,38 @@ import order_detail from "./order_detail";
       },
       methods: {
         onSubmit() {
-          this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
-            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
-            this.tableData= res.data.content;
-            this.totalSize = res.data.totalPages*this.pageSize;
-          })
+          if(sessionStorage.getItem("level")==="3"){
+            this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size="+this.pageSize+"&orderState="+this.orderState).then((res)=>{
+              this.tableData= res.data.content;
+              this.totalSize = res.data.totalPages*this.pageSize;
+            })
+          }
+          else {
+            this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
+              "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+0+"&orderState="+this.orderState).then((res)=>{
+              this.tableData= res.data.content;
+              this.totalSize = res.data.totalPages*this.pageSize;
+            })
+          }
+
         },
         //进行查询，后端给前端姓名对应的操作日志,包括工号、姓名、操作时间、操作、ip地址、地址
         handleCurrentChange(val){
           this.currentPage=parseInt(val);
           let page = this.currentPage-1;
-          this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
-            "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page+"&orderState="+this.orderState).then((res)=>{
-            this.tableData= res.data.content;
-            this.totalSize = res.data.totalPages*this.pageSize;
-          })
+          if(sessionStorage.getItem("level")==="3"){
+            this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page="+page+"&size="+this.pageSize+"&orderState="+this.orderState).then((res)=>{
+              this.tableData= res.data.content;
+              this.totalSize = res.data.totalPages*this.pageSize;
+            })
+          }
+          else {
+            this.$axios.get(this.$store.state.url+"/leader/selectTicketsByNum?second_leader_num="+this.second+
+              "&first_leader_num="+this.first+"&size="+this.pageSize+"&page="+page+"&orderState="+this.orderState).then((res)=>{
+              this.tableData= res.data.content;
+              this.totalSize = res.data.totalPages*this.pageSize;
+            })
+          }
         },
         handleClick_detail( workOrderNum ) {
           this.$refs.order_detail.autoGetAllDetail(workOrderNum);

@@ -1,8 +1,10 @@
 package com.example.back2.controller;
 
 import com.example.back2.entity.table.Inform;
+import com.example.back2.entity.view.InformSenderRecipentName;
 import com.example.back2.service.table.InformService;
 import com.example.back2.service.table.InformService;
+import com.example.back2.service.view.InformSenderRecipentNameService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class InformController {
      */
     @Resource
     private InformService informService;
+
+    @Resource
+    private InformSenderRecipentNameService informSenderRecipentNameService;
 
     /**
      * 分页查询
@@ -89,10 +94,21 @@ public class InformController {
      * @param workNum 消息接受人的账号
      * @return 此人发送或接收的所有通知
      */
-    @GetMapping("queryBySenderNumOrRecipientNum")
-    public ResponseEntity<List<Inform>> queryBySenderNumOrRecipientNum(Integer workNum) {
-        return ResponseEntity.ok(this.informService.queryBySenderNumOrRecipientNum(workNum));
+    @GetMapping("queryByRecipientNum")
+    public ResponseEntity<Page<InformSenderRecipentName>> queryBySenderNumOrRecipientNum(Integer workNum, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.informSenderRecipentNameService.queryByWorkerNum(workNum,pageRequest));
     }
 
+    /**
+     * 通过消息号来改变消息已读状态
+     *
+     * @param informNum 消息编号
+     * @return 此人发送或接收的所有通知
+     */
+    @GetMapping("changeInformState")
+    public ResponseEntity<Boolean> changeInformState(Integer informNum) {
+        return ResponseEntity.ok(this.informService.changeInformState(informNum));
+    }
 }
 

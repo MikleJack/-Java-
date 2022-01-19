@@ -73,46 +73,23 @@
       <div class="message_title">
         通知中心
       </div>
-      <div class="round-i1">
+      <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
+        <div class="message">
+          <el-button style="line-height: 0px;"
+                     @click="setInfromState(item.informNum)"
+                     :disabled = "item.readState"
+                     type="text">{{ '员工' + item.senderNum + '账号被' + item.details}} </el-button>
+        </div>
+        <div class="message_date" style="color: #0c805f" >{{item.sendTime}}</div>
       </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729即将到期 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 您的账号已被解除锁定 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 请尽快完善个人信息 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-
       <div class="pagination">
         <el-pagination
-          layout="prev, pager, next"
-          :total="1000"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout=" prev, pager, next, jumper"
+          :total="totalSize"
           style="color: #0c805f">
         </el-pagination>
       </div>
@@ -184,6 +161,13 @@ export default {
 // 表格数据
   data() {
     return {
+      //分页相关
+      currentPage:1,
+      pageSize:7,
+      totalSize:0,
+
+      informationTable: [],
+
       confirm_password:'',
 
       //dialog中的密码验证参数
@@ -304,10 +288,36 @@ export default {
     };
     budOption && budChart.setOption(budOption);
 
+    //获取通知中心
+    this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=0&size=' + this.pageSize ).then((res)=>{
+      this.informationTable = res.data.content;
+      this.totalSize = res.data.totalPages*this.pageSize;
+    });
 
 
   },
   methods: {
+    //分页按钮操作
+    handleCurrentChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + page + '&size=' + this.pageSize ).then((res)=>{
+        this.informationTable= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
+      })
+    },
+
+    //通知中心设置状态已读
+    setInfromState(informNum){
+      this.$axios.get(this.$store.state.url + "/inform/changeInformState?informNum=" + informNum);
+      setTimeout(()=>{
+        this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + (this.currentPage-1) + '&size=' + this.pageSize ).then((res)=>{
+          this.informationTable= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }, 500)
+    },
+
     //显示虚拟机资源配置
     seeVM(){
       this.$store.state.dialogVisible_vir = true;
@@ -597,6 +607,8 @@ export default {
   margin-right: 5px;
 }
 .pagination {
+  position: absolute;
+  bottom: 10px;
   height: fit-content;
   margin-bottom: 1px;
   margin-top: 5%;
