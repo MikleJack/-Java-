@@ -91,7 +91,7 @@
       </div>
       <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
-        <div class="message"> {{ item.senderName + item.details }} </div>
+        <div class="message"> {{ item.senderName + item.details + '(' + item.workOrderNum + ')'}} </div>
         <div class="message_date">{{item.sendTime}}</div>
       </div>
 
