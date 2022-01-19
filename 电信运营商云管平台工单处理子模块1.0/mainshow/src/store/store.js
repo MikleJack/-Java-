@@ -28,6 +28,9 @@ export default new Vuex.Store({
     //对哪个dialog页面进行密码验证，1：预算页面，2：物理机页面，3：虚拟机存储价格页面，4：虚拟机总资源页面，5：虚拟机页面
     which_page_confirm:0,
 
+    DepNum:0,
+    DepBudget:0,
+
     //修改的信息
     formInline: {
       cpuCore: 0,

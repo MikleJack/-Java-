@@ -221,7 +221,7 @@ export default {
 
       //分页相关
       currentPage:1,
-      pageSize:7,
+      pageSize:6,
       totalSize:0,
 
       informationTable: [],
@@ -527,7 +527,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 36%;
+  width: 40%;
   height: 61%;
 }
 .right-bottom{

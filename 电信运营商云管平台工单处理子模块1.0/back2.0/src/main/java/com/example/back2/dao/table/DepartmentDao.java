@@ -84,5 +84,7 @@ public interface DepartmentDao {
     List<Department> AllDep();
 
     List<Department> getDepBudget();
+
+    int setDepBudget(Integer DepNum,double DepBudget);
 }
 

@@ -60,4 +60,5 @@ public interface DepartmentService {
 
     List<Department> getDepBudget();
 
+    int setDepBudget(Integer DepNum,double DepBudget);
 }

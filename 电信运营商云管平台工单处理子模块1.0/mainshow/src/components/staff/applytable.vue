@@ -246,7 +246,6 @@
     <p></p>
     <div style="text-align: center">
       <!-- 保存、提交按钮 -->
-      <el-button>保存</el-button>
 <!--      <el-button class="add_type" @click="submit" :disabled="(this.order_budget <= this.surplus_budget)&&(this.workorder.workOrderName != '')">提交</el-button>-->
       <el-button class="add_type" @click="submit" v-if="(this.order_budget <= this.surplus_budget) && (this.workorder.workOrderName !== '') && (this.workorder.expirationTime !== '')">提交</el-button>
 

@@ -51,7 +51,17 @@ export default {
 
         if (this.$store.state.which_page_confirm === 1){
           if(this.$store.state.password_confirm === true){
-
+            // alert("调用修改部门预算接口");
+            this.$axios.put(this.$store.state.url+"/adminHome/setDepBudget?DepNum=" + this.$store.state.DepNum + "&DepBudget=" +
+              this.$store.state.DepBudget).then((res)=>{
+                this.$message({
+                  message:"修改成功",
+                  type:"success",
+                  center:true
+                })
+                this.$store.state.dialogVisible_modify = false;
+                // this.$store.state.dialogVisible_budget = false;
+            })
           }else{
 
           }
