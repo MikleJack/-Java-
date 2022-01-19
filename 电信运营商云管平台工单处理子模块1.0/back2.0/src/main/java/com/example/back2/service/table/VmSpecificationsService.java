@@ -1,8 +1,11 @@
 package com.example.back2.service.table;
 
 import com.example.back2.entity.table.VmSpecifications;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * (VmSpecifications)表服务接口
@@ -23,11 +26,9 @@ public interface VmSpecificationsService {
     /**
      * 查询多条数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
-    List<VmSpecifications> queryAllByLimit(int offset, int limit);
+    Future<Page<VmSpecifications>> queryAllByLimit(PageRequest pageRequest);
 
     /**
      * 新增数据

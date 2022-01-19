@@ -31,9 +31,14 @@
                storage,
                assign,
                price
-        from brccq2.physics_com_resource limit #{offset}, #{limit}
+        from physics_com_resource
+        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from physics_com_resource
+    </select>
     <!--查询未分配出去的计算机-->
     <select id="selectAllpc" resultMap="PhysicsComResourceMap">
         select com_num,

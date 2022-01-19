@@ -4,13 +4,17 @@ package com.example.back2.controller.admin;
 import com.example.back2.entity.VirtualComResource;
 import com.example.back2.entity.table.Admin;
 import com.example.back2.entity.table.Department;
+import com.example.back2.entity.table.PhysicsComResource;
 import com.example.back2.entity.table.VmSpecifications;
+import com.example.back2.entity.view.Adminaccountmanage;
 import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.table.*;
 import com.example.back2.utils.SHA_256;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,4 +112,18 @@ public class AdminHome {
     public Boolean setDiskPrice(Double diskPrice){
         return this.vmSpecificationsService.updateDiskPrice(diskPrice);
     }
+
+
+    @GetMapping("getAllPhy")
+    public ResponseEntity<Page<PhysicsComResource>> getAllPhy(int page,int size) throws Exception{
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.physicsComResourceService.queryAllByLimit(pageRequest).get());
+    }
+
+    @GetMapping("getAllVm")
+    public ResponseEntity<Page<VmSpecifications>> getAllVm(int page,int size) throws Exception{
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.vmSpecificationsService.queryAllByLimit(pageRequest).get());
+    }
+
 }
