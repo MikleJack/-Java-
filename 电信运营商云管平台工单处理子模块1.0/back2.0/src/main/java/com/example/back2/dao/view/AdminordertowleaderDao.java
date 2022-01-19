@@ -22,14 +22,14 @@ public interface AdminordertowleaderDao {
      * @param pageable         分页对象
      * @return 对象列表
      */
-    List<Adminordertowleader> queryAllByLimit(@Param("pageable") Pageable pageable);
+    List<Adminordertowleader> queryAllByLimit(String orderState,@Param("pageable") Pageable pageable);
 
     /**
      * 统计总行数
 
      * @return 总行数
      */
-    long count();
+    long count(String orderState);
 
 
 }

@@ -21,7 +21,7 @@ public interface AdminordertowleaderService {
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Future<Page<Adminordertowleader>> queryByPage(PageRequest pageRequest);
+    Future<Page<Adminordertowleader>> queryByPage(String orderState,PageRequest pageRequest);
 
 
 }

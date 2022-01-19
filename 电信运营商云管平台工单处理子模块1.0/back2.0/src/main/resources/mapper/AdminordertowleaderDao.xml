@@ -17,7 +17,14 @@
         select
           work_order_num, work_order_type, work_order_name, expiration_time, work_order_state, worker_num, name
         from adminOrderTowLeader
-            where work_order_state='一级审批通过'
+            <where>
+                <if test="orderState!=null and orderState!=''">
+                    and work_order_state = #{orderState}
+                </if>
+                <if test="orderState==null or orderState=='' and orderState!=''">
+                    and (work_order_state='一级审批通过' or work_order_state='挂起')
+                </if>
+            </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -25,7 +32,14 @@
     <select id="count" resultType="java.lang.Long">
         select count(1)
         from adminOrderTowLeader
-        where work_order_state='一级审批通过'
+        <where>
+            <if test="orderState!=null and orderState!=''">
+                and work_order_state = #{orderState}
+            </if>
+            <if test="orderState==null or orderState=='' and orderState!=''">
+                and (work_order_state='一级审批通过' or work_order_state='挂起')
+            </if>
+        </where>
     </select>
 
 
