@@ -73,46 +73,23 @@
       <div class="message_title">
         通知中心
       </div>
-      <div class="round-i1">
+      <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
+        <div class="message">
+          <el-button style="line-height: 0px;"
+                     @click="setInfromState(item.informNum)"
+                     :disabled = "item.readState"
+                     type="text">{{ '员工' + item.senderNum + '账号被' + item.details}} </el-button>
+        </div>
+        <div class="message_date" style="color: #0c805f" >{{item.sendTime}}</div>
       </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729即将到期 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 您的账号已被解除锁定 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 请尽快完善个人信息 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729已被审批通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-      <div class="round-i">
-        <i class="round"></i>
-        <div class="message"> 工单202234567891235729审批未通过 </div>
-        <div class="message_date">2022.02.12</div>
-      </div>
-
       <div class="pagination">
         <el-pagination
-          layout="prev, pager, next"
-          :total="1000"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          layout=" prev, pager, next, jumper"
+          :total="totalSize"
           style="color: #0c805f">
         </el-pagination>
       </div>
@@ -128,7 +105,7 @@
         <el-row class="adminButton1" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="部门预算设置" placement="left">
           <el-button style="margin-top: 80%; color: white;background-color: #52b69a;font-size: 30px"
-                     @click="setbudget" size="mini"
+                     @click="seebudget" size="mini"
                      icon="el-icon-odometer" circle
                      ></el-button>
           </el-tooltip>
@@ -136,292 +113,33 @@
         <el-row class="adminButton2" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="物理机资源及价格配置" placement="left">
           <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
-                     @click="setphy" size="mini"
+                     @click="seephy" size="mini"
                      icon="el-icon-monitor" circle></el-button>
           </el-tooltip>
         </el-row>
+
         <el-row class="adminButton2" type="flex" justify="center" align="middle">
           <el-tooltip effect="light" content="虚拟机资源及价格配置" placement="left">
             <el-button style="margin-top: 10%;color: white;background-color: #52b69a;font-size: 30px"
-                       @click="setVm" size="mini"
+                       @click="seeVM" size="mini"
                        icon="el-icon-connection" circle></el-button>
           </el-tooltip>
         </el-row>
       </div>
     </div>
 
+
     <!--    点击部门预算设置后的dialog界面-->
-    <el-dialog
-      style="text-align: center"
-      title="部门预算设置"
-      :visible.sync="dialogVisible_budget"
-      width="500px"
-      height="700px"
-      :before-close="handleClose">
-      <div class="block" style="text-align: center">
-        <el-table class="budTable" frame=above
-          :data="tableData_bud"
-          border
-          style="width: 100%"
-        :cell-style="{textAlign:'center'}">
-          <el-table-column prop="depName" label="部门名称" width="180" align="center">
-          </el-table-column>
-          <el-table-column prop="depBudget" label="预算(元)" width="278.5" align="center">
-            <template slot-scope="scope">
-              <el-input-number v-model="scope.row.depBudget" controls-position="right" @change="handleChange_bud"
-                                :step="100" :min="0" :max="999999"
-                               style="margin-left: 8%" size="mini"></el-input-number>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_budget=false">取 消</el-button>
-                <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="budget_confirm()">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <!--    点击物理机资源配置后的dialog界面-->
-
-    <el-dialog
-      style="text-align: center"
-      title="物理机资源及价格配置"
-      :visible.sync="dialogVisible_phy"
-      width="58%"
-
-
-      :before-close="handleClose">
-
-<!--      <el-button @click="dialogVisible_phy = false" style="float: left">新增</el-button>-->
-
-      <el-collapse v-model="activeNames" @change="handleChange_collapse">
-        <el-collapse-item name="0">
-          <template slot="title">
-            <p class="title">新增物理机</p>
-          </template>
-            <el-form :model="ruleForm_physics" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
-              <el-form-item label="CPU(核)" prop="cpuCore">
-                <el-input v-model="ruleForm_physics.cpuCore"></el-input>
-              </el-form-item>
-
-              <el-form-item label="内存(G)" prop="ram">
-                <el-input v-model="ruleForm_physics.ram"></el-input>
-              </el-form-item>
-            </el-form>
-
-          <el-form :model="ruleForm_physics" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
-            <el-form-item label="存储(G)" prop="storage">
-              <el-input v-model="ruleForm_physics.storage"></el-input>
-            </el-form-item>
-
-            <el-form-item label="单价(元)" prop="price">
-              <el-input v-model="ruleForm_physics.price"></el-input>
-            </el-form-item>
-          </el-form>
-
-          <el-button @click="reset_physics">重置</el-button>
-          <el-button @click="add_physics" style="color: white;background-color: #52b69a ">新增</el-button>
-
-
-        </el-collapse-item>
-      </el-collapse>
-      <p></p>
-      <div class="block" style="text-align: center">
-        <el-table class="budTable" frame=above
-                  :data="tableData_phy"
-                  border
-                  style="width: 100%"
-                  :cell-style="{textAlign:'center'}">
-<!--          <el-table-column-->
-<!--            type="selection"-->
-<!--            width="55">-->
-<!--          </el-table-column>-->
-          <el-table-column prop="comNum" label="物理机编号" width="120" align="center"></el-table-column>
-          <el-table-column prop="cpuCore" label="CPU(核)" width="120" align="center"></el-table-column>
-          <el-table-column prop="ram" label="内存(G)" width="120" align="center"></el-table-column>
-          <el-table-column prop="storage" label="存储(G)" width="120" align="center"></el-table-column>
-          <el-table-column prop="price" label="价格(元/月)" width="240" align="center">
-            <template slot-scope="scope">
-              <el-input-number v-model="scope.row.price" controls-position="right" @change="handleChange_phy"
-                                :step="50" :min="0" :max="999999"
-                               style="margin-left: 8%" size="mini"></el-input-number>
-            </template>
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            align="center"
-            width="100">
-            <template slot-scope="scope">
-              <el-button
-                @click.native.prevent="delete_physics(scope.$index, scope.row)"
-                type="text"
-                size="small"
-                style="color: #52b69a"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_phy = false">取 消</el-button>
-                <el-button style="margin-right: 40%;color: white;background-color: #52b69a " @click="physics_confirm()">确 定</el-button>
-      </span>
-    </el-dialog>
-
-
+    <Depbudget ref="depbudget"></Depbudget>
 
     <!--点击虚拟机资源配置后的dialog界面-->
-    <el-dialog
-      style="text-align: center"
-      title="虚拟机资源及价格配置"
-      :visible.sync="dialogVisible_vir"
-      width="78%"
-
-      :before-close="handleClose">
+    <VMconfiguration ref="vm_configuration"></VMconfiguration>
+<!--    点击物理机资源配置后的dialog界面-->
+    <Phyconfiguration ref="phyconfiguration"></Phyconfiguration>
 
 
-
-
-<!--      //折叠面板-->
-      <el-collapse v-model="activeNames" @change="handleChange_collapse">
-        <el-collapse-item  name="2">
-          <template slot="title">
-            <p class="title">虚拟机存储价格配置</p>
-          </template>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="虚拟机每G存储价格(元)">
-              <el-input v-model="formInline.diskPrice" placeholder="输入每G的虚拟机存储价格"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit_storagePrice">确定</el-button>
-            </el-form-item>
-          </el-form>
-        </el-collapse-item>
-        <!--      //折叠面板-->
-        <el-collapse-item name="0">
-          <template slot="title">
-            <p class="title">虚拟机总资源配置</p>
-          </template>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="总CPU核数">
-              <el-input v-model="formInline.cpuCore" placeholder="输入总cup核数"></el-input>
-            </el-form-item>
-            <el-form-item label="总内存数(G)">
-              <el-input v-model="formInline.ram" placeholder="输入总内存数"></el-input>
-            </el-form-item>
-            <el-form-item label="总存储数(G)">
-              <el-input v-model="formInline.storage" placeholder="输入总存储数"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit_allvirtual">确定</el-button>
-            </el-form-item>
-          </el-form>
-        </el-collapse-item>
-
-        <!--      //折叠面板-->
-        <el-collapse-item name="1">
-          <template slot="title">
-            <p class="title">新增虚拟机</p>
-          </template>
-          <el-form :model="ruleForm_virtual" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
-            <el-form-item label="规格族" prop="description">
-              <el-input v-model="ruleForm_virtual.description"></el-input>
-            </el-form-item>
-
-            <el-form-item label="处理器型号" prop="processorModel">
-              <el-input v-model="ruleForm_virtual.processorModel"></el-input>
-            </el-form-item>
-
-            <el-form-item label="VCPu(核)" prop="cpuCore">
-              <el-input v-model="ruleForm_virtual.cpuCore"></el-input>
-            </el-form-item>
-          </el-form>
-
-          <el-form :model="ruleForm_virtual" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" inline>
-            <el-form-item label="内存(G)" prop="ram">
-              <el-input v-model="ruleForm_virtual.ram"></el-input>
-            </el-form-item>
-
-            <el-form-item label="处理器频率" prop="processorFrequency">
-              <el-input v-model="ruleForm_virtual.processorFrequency"></el-input>
-            </el-form-item>
-
-            <el-form-item label="单价(元)" prop="price">
-              <el-input v-model="ruleForm_virtual.price"></el-input>
-            </el-form-item>
-          </el-form>
-
-          <el-button @click="reset_virtual">重置</el-button>
-          <el-button @click="add_virtual" style="color: white;background-color: #52b69a " :plain="true">新增</el-button>
-
-
-        </el-collapse-item>
-      </el-collapse>
-      <p></p>
-
-
-      <div class="block" style="text-align: center">
-        <el-table class="budTable" frame=above
-                  :data="tableData_vir"
-                  border
-                  style="width: 100%"
-                  :cell-style="{textAlign:'center'}">
-          <el-table-column prop="comNum" label="虚拟机编号" width="120" align="center"></el-table-column>
-          <el-table-column prop="description" label="规格族" width="150" align="center"></el-table-column>
-          <el-table-column prop="processorModel" label="处理机型号" width="150" align="center"></el-table-column>
-          <el-table-column prop="cpuCore" label="VCPu(核)" width="120" align="center"></el-table-column>
-          <el-table-column prop="ram" label="内存(G)" width="120" align="center"></el-table-column>
-          <el-table-column prop="processorFrequency" label="处理器频率(GHz)" width="160" align="center"></el-table-column>
-          <el-table-column prop="price" label="价格(元/月)" width="220" align="center">
-            <template slot-scope="scope">
-              <el-input-number v-model="scope.row.price" controls-position="right" @change="handleChange_vir"
-                               :step="50" :min="0" :max="9999"
-                               style="margin-left: 8%" size="mini"></el-input-number>
-            </template>
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            align="center"
-            width="100">
-            <template slot-scope="scope">
-              <el-button
-                @click.native.prevent="delete_virtual(scope.$index, scope.row)"
-                type="text"
-                size="small"
-                style="color: #52b69a"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible_vir = false">取 消</el-button>
-                <el-button style="margin-right: 45%;color: white;background-color: #52b69a " @click="virtual_confirm()">确 定</el-button>
-      </span>
-    </el-dialog>
-
-
-
-    <!--确认密码的dialog-->
-    <el-dialog
-      title="确认密码"
-      :visible.sync="dialogVisible_modify"
-      width="30%"
-      :before-close="handleClose">
-      <span></span>
-      <el-input placeholder="请输入密码" v-model="confirm_password" show-password></el-input>
-
-      <span slot="footer" class="dialog-footer">
-                <el-button @click="cancel_confirm()">取 消</el-button>
-                <el-button type="primary" @click="complete_confirm()" >确 定</el-button>
-              </span>
-    </el-dialog>
+    <ConfirmPW>
+    </ConfirmPW>
   </div>
 
 
@@ -430,15 +148,26 @@
 
 <script>
 import * as echarts from 'echarts';
+import ConfirmPW from "./ConfirmPW";
+import Depbudget from "./dialogs/Depbudget";
+import VMconfiguration from "./dialogs/VMconfiguration";
+import Phyconfiguration from "./dialogs/Phyconfiguration";
 
 export default {
   name: "adminPortal",
-  components: {},
+  components: {Phyconfiguration, VMconfiguration, Depbudget, ConfirmPW},
 
 
 // 表格数据
   data() {
     return {
+      //分页相关
+      currentPage:1,
+      pageSize:7,
+      totalSize:0,
+
+      informationTable: [],
+
       confirm_password:'',
 
       //dialog中的密码验证参数
@@ -466,26 +195,6 @@ export default {
       //工号
       worker_num:'root',
 
-      //部门预算
-      // //部门名称
-      // department_name:'小组1',
-      // //具体部门预算
-      // department_nameBud:'10',
-
-      //确认密码的dialog
-      dialogVisible_modify:false,
-
-      dialogVisible_budget: false,
-      dialogVisible_phy: false,
-      dialogVisible_vir: false,
-
-      formInline: {
-        cpuCore: 0,
-        ram: 0,
-        storage:0,
-        diskPrice:0.5
-      },
-
       tableData_bud: [],
 
       tableData_phy:[
@@ -496,13 +205,7 @@ export default {
       ],
 
 
-      ruleForm_physics: {
-        comNum:1,
-        cpuCore: 1,
-        ram:1,
-        storage:1,
-        price:0
-      },
+
       ruleForm_virtual: {
         comNum:1,
         description:'',
@@ -512,30 +215,6 @@ export default {
         processorFrequency: 0,
         price: 0,
       },
-      rules: {
-        description: [
-          { required: true, message: '请输入规格族', trigger: 'blur' },
-        ],
-        processorModel: [
-          { required: true, message: '请输入处理器型号', trigger: 'blur' },
-        ],
-        processorFrequency: [
-          { required: true, message: '请输入处理器频率', trigger: 'blur'},
-        ],
-        cpuCore: [
-          { required: true, message: '请输入cpu核数', trigger: 'blur' },
-        ],
-        ram: [
-          { required: true, message: '请输入内存大小', trigger: 'blur' },
-        ],
-        storage: [
-          { required: true, message: '请输入存储大小', trigger: 'blur' },
-        ],
-        price: [
-          { required: true, message: '请输入该物理机单价', trigger: 'blur'},
-        ],
-
-      }
     }
 
   },
@@ -609,40 +288,50 @@ export default {
     };
     budOption && budChart.setOption(budOption);
 
+    //获取通知中心
+    this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=0&size=' + this.pageSize ).then((res)=>{
+      this.informationTable = res.data.content;
+      this.totalSize = res.data.totalPages*this.pageSize;
+    });
 
 
   },
   methods: {
-    //虚拟机资源配置
-    setVm(){
-      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllVm").then((res) => {
-        this.tableData_vir = res.data;
-        this.formInline.diskPrice = this.tableData_vir[0].diskPrice;
-      });
-      this.$axios.get(this.$store.state.url+"/adminHome/getVm").then((res)=>{
-        if(res.data){
-          this.formInline.cpuCore=res.data.cpuCore;
-          this.formInline.storage=res.data.storage;
-          this.formInline.ram =res.data.ram;
-        }
-      });
-      this.dialogVisible_vir=true;
-    },
-    //物理机资源配置
-    setphy(){
-      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllPc").then((res) => {
-        this.tableData_phy = res.data;
-      });
-      this.dialogVisible_phy=true;
-    },
-    //部门预算初始化
-    setbudget(){
-      this.$axios.get(this.$store.state.url+"/adminHome/getDepBudget").then((res)=>{
-        if(res.data!==null){
-          this.tableData_bud = res.data;
-        }
+    //分页按钮操作
+    handleCurrentChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + page + '&size=' + this.pageSize ).then((res)=>{
+        this.informationTable= res.data.content;
+        this.totalSize = res.data.totalPages*this.pageSize;
       })
-      this.dialogVisible_budget=true;
+    },
+
+    //通知中心设置状态已读
+    setInfromState(informNum){
+      this.$axios.get(this.$store.state.url + "/inform/changeInformState?informNum=" + informNum);
+      setTimeout(()=>{
+        this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + (this.currentPage-1) + '&size=' + this.pageSize ).then((res)=>{
+          this.informationTable= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }, 500)
+    },
+
+    //显示虚拟机资源配置
+    seeVM(){
+      this.$store.state.dialogVisible_vir = true;
+      this.$refs.vm_configuration.setVm();
+    },
+    //查看物理机配置
+    seephy(){
+      this.$store.state.dialogVisible_phy = true;
+      this.$refs.phyconfiguration.setphy();
+    },
+    //查看部门的详情页
+    seebudget(){
+      this.$store.state.dialogVisible_budget = true;
+      this.$refs.depbudget.setbudget();
     },
     //折叠面板
     handleChange_collapse(val) {
@@ -672,205 +361,6 @@ export default {
       return '';
     },
 
-    //部门预算设置的dialog函数
-    handleClose(done) {
-          done();
-    },
-
-    handleChange_bud(budValue) {
-      console.log(value);
-    },
-    handleChange_phy(phyValue) {
-      console.log(value);
-    },
-    handleChange_vir(phyValue) {
-      console.log(value);
-    },
-
-    //增加物理机函数
-    add_physics() {
-      this.$axios.post(this.$store.state.url+"/adminHome/insertPhysics",{
-        cpuCore : this.ruleForm_physics.cpuCore,
-        ram: this.ruleForm_physics.ram,
-        storage: this.ruleForm_physics.storage,
-        price: this.ruleForm_physics.price
-      }).then((res)=>{
-        if (res.data===true)
-        {
-          this.$message({
-            message:'添加成功',
-            type:'success'
-          })
-          this.tableData_phy.push(this.ruleForm_physics);
-        }else
-          this.$message({
-            message: '添加失败',
-            type: 'error'
-          });
-
-      })
-    },
-    //重置新增物理机填写的值
-    reset_physics(){
-      this.ruleForm_physics.price=0
-      this.ruleForm_physics.cpuCore=1
-      this.ruleForm_physics.storage=1
-      this.ruleForm_physics.ram=1
-    },
-    //删除所点击行的物理机
-    delete_physics(index,rows){
-      this.tableData_phy.splice(index,1)
-    },
-
-    //增加虚拟机函数
-    add_virtual(){
-      if (this.ruleForm_virtual.processorModel === '' || this.ruleForm_virtual.description === ''){
-        this.$message.error('error，请将信息填写完整');
-      }else{
-        this.$axios.post(this.$store.state.url+"/adminHome/insertVirtual",this.ruleForm_virtual).then(
-          (res)=>{
-          if(res.data===true){
-            this.$message({
-              message: 'success，成功添加虚拟机',
-              type: 'success'
-            });
-            this.tableData_vir.push(this.ruleForm_virtual)
-          }
-        })
-
-      }
-    },
-
-    //重置新增虚拟机填写的值
-    reset_virtual(){
-      this.ruleForm_virtual.price=0
-      this.ruleForm_virtual.cpuCore=1
-      this.ruleForm_virtual.processorFrequency=0
-      this.ruleForm_virtual.ram=1
-      this.ruleForm_virtual.description=''
-      this.ruleForm_virtual.processorModel=''
-    },
-
-    //删除所点击行的虚拟机
-    delete_virtual(index,rows){
-      this.tableData_vir.splice(index,1)
-    },
-
-
-    //密码验证取消
-    cancel_confirm(){
-      this.dialogVisible_modify = false
-      this.$message.error('error，密码验证失败');
-      this.password_confirm = false
-      this.which_page_confirm = 0
-    },
-    //密码验证确认
-    complete_confirm(){
-      this.$axios.post(this.$store.state.url+"/adminHome/confirmPassword?password="+this.confirm_password).then((res)=>{
-        this.password_confirm = res.data === true;
-      })
-
-      if (this.which_page_confirm === 1){
-        if(this.password_confirm === true){
-
-        }else{
-
-        }
-
-      }else if(this.which_page_confirm === 2){
-
-        if(this.password_confirm === true){
-
-        }else{
-
-        }
-
-      }else if(this.which_page_confirm === 3){
-
-        if(this.password_confirm === true){
-          this.$axios.put(this.$store.state.url+"/adminHome/setDiskPrice?diskPrice="+this.formInline.diskPrice).then((res)=>{
-            if(res.data===true){
-              this.$message({
-                message: 'success，密码验证成功，成功修改硬盘价格',
-                type: 'success'
-              });
-              this.dialogVisible_modify = false
-            }
-          })
-        }else{
-          this.$message({
-            message: '密码验证失败',
-            type: 'error'
-          });
-          this.dialogVisible_modify = false
-        }
-
-      }else if(this.which_page_confirm === 4){
-        if(this.password_confirm === true){
-          this.$axios.put(this.$store.state.url+"/adminHome/updateVm?cpuCore="+this.formInline.cpuCore+
-            "&ram="+this.formInline.ram+"&storage="+this.formInline.storage).then((res)=>{
-            if(res.data===true){
-              this.$message({
-                message: 'success，密码验证成功，成功修改虚拟机总资源',
-                type: 'success'
-              });
-              this.dialogVisible_modify = false
-            }
-          })
-        }else{
-          this.$message({
-            message: '密码验证失败',
-            type: 'error'
-          });
-          this.dialogVisible_modify = false
-        }
-
-      }else if(this.which_page_confirm === 5){
-
-        if(this.password_confirm === true){
-
-        }else{
-
-        }
-
-      }else{
-        this.dialogVisible_modify = false
-      }
-
-
-    },
-
-    //确定修改虚拟机总资源
-    onSubmit_allvirtual(){
-      this.which_page_confirm = 4
-      this.dialogVisible_modify = true
-    },
-    //确认修改虚拟机存储价格
-    onSubmit_storagePrice(){
-      this.which_page_confirm = 3
-      this.dialogVisible_modify = true
-
-    },
-
-    //对虚拟机的dialog的确认
-    virtual_confirm(){
-      this.which_page_confirm = 5
-      this.dialogVisible_modify = true
-
-    },
-
-    //对物理机的dialog的确认
-    physics_confirm(){
-      this.which_page_confirm = 2
-      this.dialogVisible_modify = true
-    },
-
-    //对预算dialog的确认
-    budget_confirm(){
-      this.which_page_confirm = 1
-      this.dialogVisible_modify = true
-    }
-
   },
 }
 </script>
@@ -878,7 +368,7 @@ export default {
 <style scoped>
 .adminPortal{
   width: 100%;
-  height: 100%;
+  height: 725px;
   position: relative;
   overflow-y: hidden;
 }
@@ -1117,6 +607,8 @@ export default {
   margin-right: 5px;
 }
 .pagination {
+  position: absolute;
+  bottom: 10px;
   height: fit-content;
   margin-bottom: 1px;
   margin-top: 5%;

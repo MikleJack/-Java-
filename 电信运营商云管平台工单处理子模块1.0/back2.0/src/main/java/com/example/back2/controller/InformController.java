@@ -100,5 +100,15 @@ public class InformController {
         return ResponseEntity.ok(this.informSenderRecipentNameService.queryByWorkerNum(workNum,pageRequest));
     }
 
+    /**
+     * 通过消息号来改变消息已读状态
+     *
+     * @param informNum 消息编号
+     * @return 此人发送或接收的所有通知
+     */
+    @GetMapping("changeInformState")
+    public ResponseEntity<Boolean> changeInformState(Integer informNum) {
+        return ResponseEntity.ok(this.informService.changeInformState(informNum));
+    }
 }
 
