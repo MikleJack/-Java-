@@ -289,7 +289,7 @@ export default {
     budOption && budChart.setOption(budOption);
 
     //获取通知中心
-    this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=0&size=' + this.pageSize ).then((res)=>{
+    this.$axios.get(this.$store.state.url + "/inform/adminQueryInform?page=0&size=" + this.pageSize ).then((res)=>{
       this.informationTable = res.data.content;
       this.totalSize = res.data.totalPages*this.pageSize;
     });

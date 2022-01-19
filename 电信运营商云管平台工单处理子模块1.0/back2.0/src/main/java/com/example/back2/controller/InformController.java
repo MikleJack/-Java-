@@ -101,6 +101,17 @@ public class InformController {
     }
 
     /**
+     * 管理员查找消息
+     *
+     * @return 此人发送或接收的所有通知
+     */
+    @GetMapping("adminQueryInform")
+    public ResponseEntity<Page<Inform>> adminQueryInform(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(this.informService.queryBySenderNumOrRecipientNum(20220000,pageRequest));
+    }
+
+    /**
      * 通过消息号来改变消息已读状态
      *
      * @param informNum 消息编号

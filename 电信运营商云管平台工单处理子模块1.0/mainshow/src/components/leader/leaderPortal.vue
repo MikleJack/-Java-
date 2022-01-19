@@ -192,7 +192,28 @@ export default {
       this.$axios.get(this.$store.state.url+"/staffHome/queryPersonInformById?workerNum="+
         sessionStorage.getItem("work_num")).then((res)=>{
           this.workInfo=res.data;
-      })
+      });
+      //获取待审批的工单数量
+      if(sessionStorage.getItem("level")==="3"){
+        this.worderOrderState="一级审批通过";
+        this.second=sessionStorage.getItem("work_num");
+        this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size=1").then((res)=>{
+          this.pendingTickets = res.data.totalElements;
+        });
+      }
+      else {
+        this.worderOrderState="待审批";
+        this.first=sessionStorage.getItem("work_num");
+        this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page=0&size=1"
+          +"&orderState="+this.worderOrderState).then((res)=>{
+          this.pendingTickets = res.data.totalElements;
+        });
+      };
+
+      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num=0"+"&page=0&size=1"
+        +"&orderState=挂起").then((res)=>{
+        this.hangingTickets = res.data.totalElements;
+      });
     },
     goRouter(index){
       if (index===1)
@@ -201,7 +222,8 @@ export default {
         this.$router.push({path:"/leader/allOrder"});
       else if (index===3)
         this.$router.push({path:"/leader/examineLog"});
-    }
+    },
+
   },
 
 // 表格数据
@@ -219,6 +241,8 @@ export default {
       },
       second:'',
 
+      level:  sessionStorage.getItem('level'),
+
       //分页相关
       currentPage:1,
       pageSize:6,
@@ -232,27 +256,6 @@ export default {
   },
   mounted(){
     this.init();
-
-    //获取待审批的工单数量
-    if(sessionStorage.getItem("level")==="3"){
-      this.worderOrderState="一级审批通过";
-      this.second=sessionStorage.getItem("work_num");
-      this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size=1").then((res)=>{
-        this.pendingTickets = res.data.totalElements;
-      })
-    }
-    else {
-      this.worderOrderState="待审批";
-      this.first=sessionStorage.getItem("work_num");
-      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page=0&size=1"
-        +"&orderState="+this.worderOrderState).then((res)=>{
-        this.pendingTickets = res.data.totalElements;
-      });
-      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page=0&size=1"
-        +"&orderState=挂起").then((res)=>{
-        this.hangingTickets = res.data.totalElements;
-      });
-    }
 
     //获取通知中心
     this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum="
