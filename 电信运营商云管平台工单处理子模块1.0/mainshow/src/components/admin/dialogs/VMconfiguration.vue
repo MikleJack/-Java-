@@ -108,7 +108,7 @@
           fixed="right"
           label="操作"
           align="center"
-          width="100">
+          width="auto">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="delete_virtual(scope.$index, scope.row)"
@@ -121,6 +121,15 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        @current-change="pageChange"
+        :current-page="currentPage"
+        :page-size="this.pagesize"
+        layout="prev, pager, next, jumper"
+        :total=this.VMtotal>
+      </el-pagination>
+
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_vir = false">取 消</el-button>
@@ -134,6 +143,13 @@ export default {
   name: "VMconfiguration",
   data(){
     return{
+
+      //虚拟机总条目数
+      VMtotal:0,
+      //分页大小
+      pagesize:5,
+      //当前页
+      currentPage:1,
 
       activeNames: [],//折叠面板
       ruleForm_virtual: {
@@ -175,8 +191,13 @@ export default {
 
     //虚拟机资源配置
     setVm(){
-      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllVm").then((res) => {
-        this.tableData_vir = res.data;
+      // this.$axios.get(this.$store.state.url+"")
+
+      this.$axios.get(this.$store.state.url+"/adminHome/getAllVm/?page=0&size=" + this.pagesize).then((res) => {
+
+        this.tableData_vir = res.data.content;
+        this.VMtotal = res.data.totalPages * res.data.size;
+        // console.log(res.data)
         this.$store.state.formInline.diskPrice = this.tableData_vir[0].diskPrice;
       });
       this.$axios.get(this.$store.state.url+"/adminHome/getVm").then((res)=>{
@@ -243,6 +264,18 @@ export default {
 
       }
     },
+    //改变分页调用的函数
+    pageChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get(this.$store.state.url + "/adminHome/getAllVm?page=" + page + "&size=" + this.pagesize).then((res)=>{
+        this.tableData_vir = res.data.content;
+        this.currentPage = res.data.number + 1;
+        this.VMtotal = res.data.totalPages * res.data.size;
+      })
+    },
+
+
     //重置新增虚拟机填写的值
     reset_virtual(){
       this.ruleForm_virtual.price=0

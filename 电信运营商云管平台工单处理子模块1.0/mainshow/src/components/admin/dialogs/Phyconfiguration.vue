@@ -42,7 +42,7 @@
       </el-collapse-item>
     </el-collapse>
     <p></p>
-    <div class="block" style="text-align: center; background-color: #0c805f;">
+    <div class="block" style="text-align: center">
       <el-table class="budTable" frame=above
                 :data="tableData_phy"
                 border
@@ -67,7 +67,7 @@
           fixed="right"
           label="操作"
           align="center"
-          width="100">
+          width="auto">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="delete_physics(scope.$index, scope.row)"
@@ -80,6 +80,15 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        @current-change="pageChange"
+        :current-page="currentPage"
+        :page-size="this.pagesize"
+        layout="prev, pager, next, jumper"
+        :total=this.Phytotal>
+      </el-pagination>
+
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_phy = false">取 消</el-button>
@@ -93,6 +102,14 @@ export default {
   name: "Phyconfiguration",
   data(){
     return{
+
+      //物理机总条目数
+      Phytotal:0,
+      //分页大小
+      pagesize:5,
+      //当前页
+      currentPage:1,
+
       activeNames: [],
       tableData_phy:[],
       //折叠面板
@@ -131,8 +148,10 @@ export default {
   methods:{
     //物理机资源配置
     setphy(){
-      this.$axios.get(this.$store.state.url+"/applyTickets/selectAllPc").then((res) => {
-        this.tableData_phy = res.data;
+      this.$axios.get(this.$store.state.url+"/adminHome/getAllPhy?page=0&size=" + this.pagesize).then((res) => {
+
+        this.tableData_phy = res.data.content;
+        this.Phytotal = res.data.totalPages * res.data.size;
       });
       // this.dialogVisible_phy=true;
     },
@@ -186,7 +205,17 @@ export default {
           });
 
       })
-    }
+    },
+    //改变分页调用的函数
+    pageChange(val){
+      this.currentPage=parseInt(val);
+      let page = this.currentPage-1;
+      this.$axios.get(this.$store.state.url + "/adminHome/getAllPhy?page=" + page + "&size=" + this.pagesize).then((res)=>{
+        this.tableData_phy = res.data.content;
+        this.currentPage = res.data.number + 1;
+        this.Phytotal = res.data.totalPages * res.data.size;
+      })
+    },
   }
 }
 </script>
