@@ -84,7 +84,7 @@ export default {
     if(sessionStorage.getItem("level")==="3"){
       this.worderOrderState="一级审批通过";
       this.second=sessionStorage.getItem("work_num");
-      this.$axios.get("https://localhost:8084/pendtickets/selectTow?page=0&size="+this.pageSize).then((res)=>{
+      this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size="+this.pageSize).then((res)=>{
         this.tableData= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
