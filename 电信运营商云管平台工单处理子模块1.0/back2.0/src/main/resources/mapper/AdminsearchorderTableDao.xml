@@ -40,6 +40,7 @@
                 and name = #{name}
             </if>
         </where>
+        order by work_order_num desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
@@ -48,7 +49,8 @@
         select
         work_order_num, work_order_type, work_order_name, worker_num, work_order_state, expiration_time, name
         from adminSearchOrder_table
-        limit #{pageable.offset}, #{pageable.pageSize}
+        order by work_order_num desc
+            limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--参数查询指定行数据-->
@@ -64,6 +66,7 @@
                 and name = #{workerName}
             </if>
         </where>
+        order by work_order_num desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 

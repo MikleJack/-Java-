@@ -26,6 +26,7 @@
                 and name = #{applyName}
             </if>
         </where>
+        order by deal_date desc
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
