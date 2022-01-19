@@ -151,6 +151,7 @@ export default {
       this.$axios.get(this.$store.state.url+"/adminHome/getAllPhy?page=0&size=" + this.pagesize).then((res) => {
 
         this.tableData_phy = res.data.content;
+        this.currentPage = 1;
         this.Phytotal = res.data.totalPages * res.data.size;
       });
       // this.dialogVisible_phy=true;
@@ -166,7 +167,10 @@ export default {
     },
     //删除所点击行的物理机
     delete_physics(index,rows){
+
       this.tableData_phy.splice(index,1)
+
+
     },
     //对物理机的dialog的确认
     physics_confirm(){

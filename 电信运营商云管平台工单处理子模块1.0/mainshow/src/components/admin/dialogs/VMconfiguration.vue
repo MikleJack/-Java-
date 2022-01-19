@@ -110,6 +110,14 @@
           align="center"
           width="auto">
           <template slot-scope="scope">
+<!--            <el-button-->
+<!--              @click.native.prevent="(scope.$index, scope.row)"-->
+<!--              type="text"-->
+<!--              size="small"-->
+<!--              style="color: #52b69a"-->
+<!--            >-->
+<!--              删除-->
+<!--            </el-button>-->
             <el-button
               @click.native.prevent="delete_virtual(scope.$index, scope.row)"
               type="text"
@@ -196,6 +204,7 @@ export default {
       this.$axios.get(this.$store.state.url+"/adminHome/getAllVm/?page=0&size=" + this.pagesize).then((res) => {
 
         this.tableData_vir = res.data.content;
+        this.currentPage = 1;
         this.VMtotal = res.data.totalPages * res.data.size;
         // console.log(res.data)
         this.$store.state.formInline.diskPrice = this.tableData_vir[0].diskPrice;
@@ -240,6 +249,7 @@ export default {
     },
     //删除所点击行的虚拟机
     delete_virtual(index,rows){
+
       this.tableData_vir.splice(index,1)
     },
     //
