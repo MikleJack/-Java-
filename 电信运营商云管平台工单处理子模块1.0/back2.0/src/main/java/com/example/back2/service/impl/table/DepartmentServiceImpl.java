@@ -90,4 +90,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<Department> getDepBudget(){
         return this.departmentDao.getDepBudget();
     }
+
+    @Override
+    public int setDepBudget(Integer DepNum,double DepBudget){
+        return this.departmentDao.setDepBudget(DepNum,DepBudget);
+    }
 }

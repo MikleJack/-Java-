@@ -126,4 +126,13 @@ public class AdminHome {
         return ResponseEntity.ok(this.vmSpecificationsService.queryAllByLimit(pageRequest).get());
     }
 
+    //    改变部门预算
+    @PutMapping("setDepBudget")
+    public boolean setDepBudget(Integer DepNum,double DepBudget){
+        if(this.departmentService.setDepBudget(DepNum,DepBudget) != 0){
+            return true;
+        }
+        return false;
+    }
+
 }

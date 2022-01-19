@@ -64,7 +64,7 @@
           </div>
           <div class="Message">
             <p>挂起工单</p>
-            <p>{{hang_order}}</p>
+            <p>{{hangingTickets}}</p>
           </div>
         </div>
         <div class="untreatedPart">
@@ -76,7 +76,7 @@
           </div>
           <div class="Message">
             <p>待审工单</p>
-            <p>{{untreated_order}}</p>
+            <p>{{pendingTickets}}</p>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
           <el-button style="line-height: 0px;"
                      @click="setInfromState(item.informNum)"
                      :disabled = "item.readState"
-                     type="text">{{ '有工单' + item.details  }} </el-button>
+                     type="text">{{ item.senderName + item.details +'(' + item.workOrderName +')' }} </el-button>
         </div>
         <div class="message_date" style="color: #0c805f" >{{item.sendTime}}</div>
       </div>
@@ -217,8 +217,7 @@ export default {
       workInfo:{
 
       },
-      hang_order:'5',
-      untreated_order:'3',
+      second:'',
 
       //分页相关
       currentPage:1,
@@ -226,10 +225,34 @@ export default {
       totalSize:0,
 
       informationTable: [],
+
+      pendingTickets: '',
+      hangingTickets: '',
     }
   },
   mounted(){
     this.init();
+
+    //获取待审批的工单数量
+    if(sessionStorage.getItem("level")==="3"){
+      this.worderOrderState="一级审批通过";
+      this.second=sessionStorage.getItem("work_num");
+      this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page=0&size=1").then((res)=>{
+        this.pendingTickets = res.data.totalElements;
+      })
+    }
+    else {
+      this.worderOrderState="待审批";
+      this.first=sessionStorage.getItem("work_num");
+      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page=0&size=1"
+        +"&orderState="+this.worderOrderState).then((res)=>{
+        this.pendingTickets = res.data.totalElements;
+      });
+      this.$axios.get(this.$store.state.url+"/pendtickets/selectTicketsByState?second_leader_num="+this.second+"&first_leader_num="+this.first+"&page=0&size=1"
+        +"&orderState=挂起").then((res)=>{
+        this.hangingTickets = res.data.totalElements;
+      });
+    }
 
     //获取通知中心
     this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum="

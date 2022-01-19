@@ -12,20 +12,25 @@
                 border
                 style="width: 100%"
                 :cell-style="{textAlign:'center'}">
-        <el-table-column prop="depName" label="部门名称" width="180" align="center">
+        <el-table-column prop="depName" label="部门名称" width="100" align="center">
         </el-table-column>
-        <el-table-column prop="depBudget" label="预算(元)" width="278.5" align="center">
+        <el-table-column prop="depBudget" label="预算(元)" width="180" align="center">
           <template slot-scope="scope">
             <el-input-number v-model="scope.row.depBudget" controls-position="right" @change="handleChange_bud(scope.row.depBudget)"
                              :step="100" :min="0" :max="999999"
                              style="margin-left: 8%" size="mini"></el-input-number>
           </template>
         </el-table-column>
+        <el-table-column prop="rigth" label="操作" width="180" align="center">
+          <template slot-scope="scope">
+            <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="budget_confirm(scope.row.depNum,scope.row.depBudget)">确 定</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_budget = false">取 消</el-button>
-                <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="budget_confirm()">确 定</el-button>
+
       </span>
   </el-dialog>
 </template>
@@ -65,9 +70,12 @@ export default {
       console.log(value);
     },
     //对预算dialog的确认
-    budget_confirm(){
-      this.$store.state.which_page_confirm = 1
-      this.$store.state.dialogVisible_modify = true
+    budget_confirm(DepNum,DepBudget){
+      // alert(DepNum + "    " + DepBudget);
+      this.$store.state.DepNum = DepNum;
+      this.$store.state.DepBudget = DepBudget;
+      this.$store.state.which_page_confirm = 1;
+      this.$store.state.dialogVisible_modify = true;
     }
   }
 
