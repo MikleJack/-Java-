@@ -97,4 +97,21 @@ public interface InformService {
      */
     Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest);
 
+    /**
+     * 有员工账号被冻结,给管理员发起通知
+     *
+     * @param workNum 工人编号
+     * @param detail 消息详情
+     * @return 实例对象
+     */
+    void adminInsertInform(Integer workNum, String detail);
+
+    /**
+     * 通过消息号来改变消息已读状态
+     *
+     * @param informNum 消息编号
+     * @return 此人发送或接收的所有通知
+     */
+    Boolean changeInformState(Integer informNum);
+
 }

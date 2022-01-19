@@ -149,5 +149,13 @@
         where sender_num = #{workNum} or recipient = #{workNum}
             limit #{pageable.offset}, #{pageable.pageSize}
     </select>
+
+
+    <!--通过主键修改数据-->
+    <update id="changeInformState">
+        update inform
+            set read_state = true
+        where inform_num = #{informNum}
+    </update>
 </mapper>
 

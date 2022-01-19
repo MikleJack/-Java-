@@ -83,8 +83,13 @@
       </div>
       <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
-        <div class="message"> {{ '有工单' + item.details + '(' + item.workOrderNum + ')' }} </div>
-        <div class="message_date">{{item.sendTime}}</div>
+        <div class="message">
+          <el-button style="line-height: 0px;"
+                     @click="setInfromState(item.informNum)"
+                      :disabled = "item.readState"
+                     type="text">{{ '有工单' + item.details  }} </el-button>
+        </div>
+        <div class="message_date" style="color: #0c805f" >{{item.sendTime}}</div>
       </div>
 
       <div class="pagination">
@@ -182,6 +187,18 @@ export default {
         this.informationTable= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
+    },
+
+    //通知中心设置状态已读
+    setInfromState(informNum){
+      this.$axios.get(this.$store.state.url + "/inform/changeInformState?informNum=" + informNum);
+      setTimeout(()=>{
+        this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum="
+          + sessionStorage.getItem("work_num") + '&page=' + (this.currentPage-1) + '&size=' + this.pageSize ).then((res)=>{
+          this.informationTable= res.data.content;
+          this.totalSize = res.data.totalPages*this.pageSize;
+        })
+      }, 500)
     },
 
     resCustomColor(total_Phyutilization) {

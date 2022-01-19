@@ -9,6 +9,7 @@ import com.example.back2.service.impl.table.AdminServiceImpl;
 import com.example.back2.service.impl.table.StaffServiceImpl;
 import com.example.back2.service.table.AdminService;
 import com.example.back2.service.table.DepartmentService;
+import com.example.back2.service.table.InformService;
 import com.example.back2.service.table.StaffService;
 import com.example.back2.service.view.AdminaccountmanageService;
 import com.example.back2.utils.SHA_256;
@@ -36,6 +37,9 @@ public class manageAccount {
     private AdminaccountmanageService adminaccountmanageService;
     @Resource
     private DepartmentService departmentService;
+
+    @Resource
+    private InformService informService;
 
     @Autowired
     AdminService temp =new AdminServiceImpl();
@@ -101,6 +105,7 @@ public class manageAccount {
         logger.info("有管理员对员工编号为" + work_num + "的员工进行了锁定操作");
 
         if(staffService.lockAccount(work_num)) {
+            this.informService.adminInsertInform(work_num,"锁定");
             return ResponseEntity.ok(true);
         } else {
             throw new GlobalException("在锁定员工账户时发生错误     员工的编号为",work_num);
@@ -122,6 +127,7 @@ public class manageAccount {
 
             if (password.equals(admin.getPassword())){
                 staffService.unlockAccount(work_num);
+                this.informService.adminInsertInform(work_num,"解锁");
                 return ResponseEntity.ok(true);
             }
             else

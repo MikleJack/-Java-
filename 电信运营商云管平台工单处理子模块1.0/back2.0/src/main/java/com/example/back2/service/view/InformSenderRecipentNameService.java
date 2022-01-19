@@ -3,6 +3,8 @@ package com.example.back2.service.view;
 import com.example.back2.entity.view.InformSenderRecipentName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * (InformSenderRecipentName)表服务接口
@@ -38,4 +40,5 @@ public interface InformSenderRecipentNameService {
      * @return 查询结果
      */
     Page<InformSenderRecipentName> queryByWorkerNum(Integer workerNum, PageRequest pageRequest);
+
 }

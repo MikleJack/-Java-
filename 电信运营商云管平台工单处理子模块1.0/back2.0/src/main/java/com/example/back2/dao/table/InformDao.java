@@ -91,5 +91,13 @@ public interface InformDao {
      */
     List<Inform> queryBySenderNumOrRecipientNum(Integer workNum , @Param("pageable") Pageable pageable);
 
+    /**
+     * 通过消息号来改变消息已读状态
+     *
+     * @param informNum 消息编号
+     * @return 此人发送或接收的所有通知
+     */
+    Boolean changeInformState(Integer informNum);
+
 }
 
