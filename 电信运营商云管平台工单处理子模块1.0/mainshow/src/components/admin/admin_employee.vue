@@ -60,16 +60,17 @@
         <el-table-column
           fixed="right"
           label="操作"
+          
 
           >
 <!--          对账户的各种操作-->
-          <templte slot-scope="scope">
-            <el-button @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
-            <el-button @click="lock(scope.row)" type="text" size="small" v-if="scope.row.state_string==='未锁定'">锁定</el-button>
-            <el-button @click="unlock(scope.row)" type="text" size="small"  style="color: red " v-if="scope.row.state_string!=='未锁定'">解锁</el-button>
-            <el-button @click="delect(scope.row)" type="text" size="small">删除</el-button>
+          <templte slot-scope="scope" >
+            <el-button v-if="scope.row.inService"  @click="reset(scope.row)" type="text" size="small">重置密码</el-button>
+            <el-button  @click="lock(scope.row)" type="text" size="small" v-if="scope.row.state_string==='未锁定' && scope.row.inService">锁定</el-button>
+            <el-button  @click="unlock(scope.row)" type="text" size="small"  style="color: red " v-if="scope.row.state_string!=='未锁定' && scope.row.inService">解锁</el-button>
+            <el-button v-if="scope.row.inService" @click="delect(scope.row)" type="text" size="small">删除</el-button>
+            <div v-if="!scope.row.inService" style="color: red;font-size: 10px">已离职</div>
           </templte>
-
         </el-table-column>
       </el-table>
 

@@ -36,7 +36,7 @@
 <!--            <if test="depLevel != null">-->
 <!--                and dep_level = #{depLevel}-->
 <!--            </if>-->
-            in_service=1
+
         </where>
         limit #{pageable.offset}, #{pageable.pageSize}
     </select>
