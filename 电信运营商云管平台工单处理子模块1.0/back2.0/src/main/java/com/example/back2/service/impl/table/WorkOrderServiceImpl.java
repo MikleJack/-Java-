@@ -170,4 +170,15 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public List<WorkOrder> selectWorkOrderByworkNum(String workerNum){
         return this.workOrderDao.selectWorkOrderByworkNum(workerNum);
     }
+
+//   统计待审批工单数量
+    @Override
+    public long getNumPendticket(Integer workerNum){
+        return this.workOrderDao.getNumPendticket(workerNum);
+    }
+//    统计审批不通过工单数量
+    @Override
+    public long getNumFailedtickets(Integer workerNum){
+        return this.workOrderDao.getNumFailedtickets(workerNum);
+    }
 }

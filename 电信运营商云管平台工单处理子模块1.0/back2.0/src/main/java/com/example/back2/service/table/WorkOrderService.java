@@ -112,6 +112,10 @@ public interface WorkOrderService {
 
 //------------------------员工变更工单界面
     List<WorkOrder> selectWorkOrderByworkNum(String workerNum);
+
+    long getNumPendticket(Integer workerNum);
+
+    long getNumFailedtickets(Integer workerNum);
 }
 
 

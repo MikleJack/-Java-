@@ -2,6 +2,7 @@ package com.example.back2.controller.staff;
 
 import com.example.back2.entity.view.AdminsearchorderTable;
 import com.example.back2.entity.view.StaffhomePersoninform;
+import com.example.back2.service.table.WorkOrderService;
 import com.example.back2.service.view.StaffhomePersoninformService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,5 +31,18 @@ public class StaffHome {
     }
 
 //----------------左上角员工信息界面-底部部-------------------------------
+
+
+    @Resource
+    WorkOrderService workOrderService;
+    @GetMapping("getNumPendticket")
+    public long getNumPendticket(Integer workerNum) throws Exception{
+        return this.workOrderService.getNumPendticket(workerNum);
+    }
+
+    @GetMapping("getNumFailedtickets")
+    public long getNumFailedtickets(Integer workerNum) {
+        return this.workOrderService.getNumFailedtickets(workerNum);
+    }
 
 }

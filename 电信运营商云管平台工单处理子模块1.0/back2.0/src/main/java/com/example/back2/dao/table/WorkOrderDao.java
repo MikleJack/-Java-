@@ -154,5 +154,10 @@ public interface WorkOrderDao {
 //------------------------员工变更工单界面
     List<WorkOrder> selectWorkOrderByworkNum(String workerNum);
 
+//    统计待审批工单数量
+    long getNumPendticket(Integer workerNum);
+
+    long getNumFailedtickets(Integer workerNum);
+
 }
 

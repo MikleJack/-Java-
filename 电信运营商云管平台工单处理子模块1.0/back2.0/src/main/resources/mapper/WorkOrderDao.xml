@@ -15,6 +15,20 @@
         <result property="offlineReason" column="offline_reason" jdbcType="VARCHAR"/>
     </resultMap>
 
+
+<!--    统计待审批工单数量-->
+    <select id="getNumPendticket" resultType="java.lang.Long">
+        select count(1)
+        from work_order
+        where worker_num = #{workerNum} and work_order_state = '待审批'
+    </select>
+
+<!--    统计审批不通过工单数量-->
+    <select id="getNumFailedtickets" resultType="java.lang.Long">
+        select count(1)
+        from work_order
+        where worker_num = #{workerNum} and work_order_state = '审批不通过'
+    </select>
 <!--    通过工号查询通过了二级审批通过的工单号-->
     <select id="selectWorkOrderByworkNum" resultMap="WorkOrderMap">
         select
