@@ -4,7 +4,14 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="file:///C|/Users/86135/Desktop/数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="/grade_3_softpeoject/buruchichaqu/电信运营商云管平台工单处理子模块-不如吃茶去-详细设计说明书/数据库/数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Loaded="No" Name="PhysicalDataModel_1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
+		<Model Expanded="Yes" ID="{61924B90-F816-4BEE-A5CB-8E11D6D9E64F}" Name="PhysicalDataModel_1" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据模型.pdm"/>
 	</Local>
 	<BrowserModule Name="仓库(&amp;R)"/>
 </Workspace>
