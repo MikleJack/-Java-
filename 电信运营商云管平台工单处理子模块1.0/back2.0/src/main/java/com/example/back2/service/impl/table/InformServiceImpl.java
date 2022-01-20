@@ -103,7 +103,7 @@ public class InformServiceImpl implements InformService {
      */
     @Override
     public Page<Inform> queryBySenderNumOrRecipientNum(Integer workNum, PageRequest pageRequest){
-        long total = this.informDao.count(workNum);
+        long total = this.informDao.adminCount(workNum);
         return new PageImpl<>(this.informDao.queryBySenderNumOrRecipientNum(workNum, pageRequest), pageRequest, total);
     }
 
