@@ -117,39 +117,63 @@
 
         </el-table>
       </div>
-<!--      部门预算利用情况展示-->
-      <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px">
-        <div class="page_title" >部门预算利用情况</div>
-<!--        部门已用预算/部门总预算进度条-->
-        <div class="total_progress">
-          <br>
-          <el-progress type="circle" class="left_progress"
-                       :stroke-width="15"
-                       :percentage="total_percentage()"
-                       :color="customColorMethod"></el-progress>
-        </div>
-<!--        文字描述-->
-        <div class="total_description">
-          <br><br>部门总预算：&nbsp;{{total_budget}}元<br><br>
-          已使用预算：&nbsp;{{used_budget}}元
-        </div>
-<!--        工单预算/部门剩余预算进度条-->
-        <div class="progress">
-          <br>
-          <el-progress type="circle"
-                       class="right_progress"
-                       :stroke-width="15"
-                       :percentage="percentage()"
-                       :color="customColorMethod">
+      <!--      部门预算利用情况展示-->
+      <div class="frame" style="border: rgba(82,182,154,0.25) solid 3px;height: 250px;text-align: center">
+        <div class="page_title">预算使用情况</div>
+        <el-row :gutter="50">
 
-          </el-progress>
-        </div>
-<!--        文字描述-->
-        <div class="description">
-          <br><br>部门剩余预算：&nbsp;{{surplus_budget}}元<br><br>
-          工单使用预算：&nbsp;{{order_budget}}元
-        </div>
-    </div>
+          <!--              部门已使用预算/部门总预算情况展示-->
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <div class="processColumn">
+                <el-progress type="circle" class="left_progress"
+                             :stroke-width="15"
+                             :percentage="depUsedDivisionDepTotal()"
+                             :color="customColorMethod">
+                </el-progress>
+                <el-descriptions label-style style="margin-left: 40px" :column="1">
+                  <el-descriptions-item label="部门总预算">{{ depTotalBudget }}</el-descriptions-item>
+                  <el-descriptions-item label="部门已用预算">{{ depUsedBudget }}</el-descriptions-item>
+                </el-descriptions>
+              </div>
+            </div>
+          </el-col>
+
+          <!--        工单使用预算/部门剩余预算-->
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <div class="processColumn">
+                <el-progress type="circle" class="left_progress"
+                             :stroke-width="15"
+                             :percentage="OrderBudgetDivisionDepSurplus()"
+                             :color="customColorMethod">
+                </el-progress>
+                <el-descriptions label-style style="margin-left: 40px" :column="1">
+                  <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
+                  <el-descriptions-item label="部门剩余预算">{{ surplus_budget }}</el-descriptions-item>
+                </el-descriptions>
+              </div>
+            </div>
+          </el-col>
+
+          <!--        工单使用预算 和 工单资源利用率-->
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <div class="processColumn">
+                <el-progress type="circle" class="left_progress"
+                             :stroke-width="15"
+                             :percentage="staffUsage"
+                             :color="customColorMethod">
+                </el-progress>
+                <el-descriptions label-style style="margin-left: 40px" :column="1">
+                  <el-descriptions-item label="员工历史资源利用率">{{ staffUsage }}</el-descriptions-item>
+                  <el-descriptions-item label="工单预算">{{ order_budget }}</el-descriptions-item>
+                </el-descriptions>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
 
       <!--显示流转过程-->
       <div class="frame" style=" border: rgba(82,182,154,0.25) solid 3px ">
@@ -254,16 +278,15 @@ export default {
       //  输入的批注内容
       note: '',
 
+      //部门预算使用情况
+      depTotalBudget: '',
+      depUsedBudget: '',
+      order_budget: '',
 
-      //部门总预算利用情况
-      used_budget:'',
-      //部门总预算
-      total_budget:'',
-      //部门剩余预算
-      surplus_budget:'',
-      //工单预算
-      order_budget:'',
-
+      //工单资源利用率
+      resourceUsage: '',
+      //员工历史资源利用率
+      staffUsage: '',
 
       //物理机资源数据
       phyCom: [],
@@ -286,9 +309,26 @@ export default {
     if(sessionStorage.getItem("level")==="3"){
       this.hasHangup=true;
     };
-    },
+  },
   props:["show"],
   methods: {
+    //部门已用预算/部门总预算进度条
+    depUsedDivisionDepTotal(){
+      return parseFloat(100*this.depUsedBudget/this.depTotalBudget).toFixed(2);
+    },
+    //工单预算/部门剩余预算进度条
+    OrderBudgetDivisionDepSurplus(){
+      this.surplus_budget = this.depTotalBudget-this.depUsedBudget;
+      return parseFloat(100*this.order_budget/this.surplus_budget).toFixed(2);
+    },
+    customColorMethod(percentage) {
+      if (percentage < 90) {
+        return '#52b69a';
+      } else {
+        return 'rgba(239,125,10,0.7)';
+      }
+    },
+
     handleDownLoad() {
      if(this.file===''){
        this.$message({
@@ -411,9 +451,9 @@ export default {
 
 
         //部门总预算利用情况
-        this.used_budget='',
+        this.depUsedBudget='',
         //部门总预算
-        this.total_budget='',
+        this.depTotalBudget='',
         //部门剩余预算
         this.surplus_budget='',
         //工单预算
@@ -473,28 +513,12 @@ export default {
         + " " + hour + seperator2 + minute + seperator2 + second;
     },
 
-    //部门已用预算/部门总预算进度条
-    total_percentage(){
-      return (100*this.used_budget/this.total_budget).toFixed(2);
-    },
-
-    //工单预算/部门剩余预算进度条
-    percentage(){
-      this.surplus_budget=this.total_budget-this.used_budget;
-      // let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2)
-      // return 100*temp_per;
-      return (100*this.order_budget/this.surplus_budget).toFixed(2);
-      },
-
-    customColorMethod(percentage) {
-      if (percentage < 90) {
-        return '#52b69a';
-
-      } else {
-        return 'rgba(239,125,10,0.7)';
-      }
-    },
-    autoGetAllDetail(workOrderNum) {
+    autoGetAllDetail(workOrderNum, workerNum) {
+      setTimeout(()=>{
+        this.$axios.get(this.$store.state.url+"/usedBudget/getStaffUsage?workerNum" + workerNum ).then((res)=>{
+          this.staffUsage = parseFloat(res).toFixed(2);
+        })
+      },500)
       this.$axios.get(this.$store.state.url+"/pendtickets/queryWorkOrderDetailTop?workOrderNum="
         +workOrderNum).then((res)=>{
           // console.log(res.data);
@@ -517,11 +541,11 @@ export default {
           this.order_budget = res.data.price;
           //获取部门总预算
           this.$axios.get(this.$store.state.url+"/depart/getDepBudget?depNum=" + this.depNum).then((res)=>{
-            this.total_budget = res.data;
+            this.depTotalBudget = res.data;
           });
           //获取部门已使用预算
           this.$axios.get(this.$store.state.url+"/usedBudget/getUsedBudget?id=" + this.depNum).then((res)=>{
-            this.used_budget = res.data.depUsedBudget;
+            this.depUsedBudget = res.data.depUsedBudget;
           });
       });
       //查找工单申请的物理机资源
@@ -611,32 +635,6 @@ export default {
   margin-right: 10%;
   margin-left:-10%;
   align:center,
-}
-
-.total_progress{
-  width:25%;
-  float: left;
-  height: 200px;
-  text-align: center;
-}
-.total_description{
-  width: 25%;
-  float: left;
-  height: 200px;
-  font-size: larger;
-  font-weight: bolder;
-}
-.progress{
-  width: 25%;
-  float: left;
-  height: 200px;
-}
-.description{
-  width: 25%;
-  float: left;
-  height: 200px;
-  font-size: larger;
-  font-weight: bolder;
 }
 .button{
   color:white;
