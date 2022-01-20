@@ -212,6 +212,7 @@ export default {
       });
       this.$axios.get(this.$store.state.url+"/adminHome/getVm").then((res)=>{
         if(res.data){
+          console.log(res.data)
           this.$store.state.formInline.cpuCore=res.data.cpuCore;
           this.$store.state.formInline.storage=res.data.storage;
           this.$store.state.formInline.ram =res.data.ram;

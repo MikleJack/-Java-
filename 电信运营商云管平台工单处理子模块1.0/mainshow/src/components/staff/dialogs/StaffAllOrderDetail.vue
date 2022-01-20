@@ -275,7 +275,7 @@ export default {
     },
     //工单预算/部门剩余预算进度条
     OrderBudgetDivisionDepSurplus(){
-      this.surplus_budget = this.depTotalBudget-this.depUsedBudget;
+      this.surplus_budget = (this.depTotalBudget-this.depUsedBudget).toFixed(2);
       let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(2);
       return 100*temp_per;
     },

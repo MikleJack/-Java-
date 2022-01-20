@@ -104,7 +104,7 @@ public class login {
                     return 0;
             }
             else
-                return 0;
+                return -2;
         }
         else
             return 0;
