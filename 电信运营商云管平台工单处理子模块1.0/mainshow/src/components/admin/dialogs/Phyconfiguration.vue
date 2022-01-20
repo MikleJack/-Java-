@@ -69,6 +69,16 @@
           align="center"
           width="auto">
           <template slot-scope="scope">
+
+            <el-button
+              @click.native.prevent="changeprice(scope.row)"
+              type="text"
+              size="small"
+              style="color: #52b69a"
+            >
+              确认修改
+            </el-button>
+
             <el-button
               @click.native.prevent="delete_physics(scope.$index, scope.row)"
               type="text"
@@ -92,7 +102,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_phy = false">取 消</el-button>
-                <el-button style="margin-right: 40%;color: white;background-color: #52b69a " @click="physics_confirm()">确 定</el-button>
+<!--                <el-button style="margin-right: 40%;color: white;background-color: #52b69a " @click="physics_confirm()">确 定</el-button>-->
       </span>
   </el-dialog>
 </template>
@@ -173,10 +183,24 @@ export default {
 
     },
     //对物理机的dialog的确认
-    physics_confirm(){
+    // physics_confirm(){
+    //   this.$store.state.which_page_confirm = 2
+    //   this.$store.state.dialogVisible_modify = true
+    // },
+    //修改物理机价格
+    changeprice(row){
+
+      // alert(row.comNum + "     " + row.price);
+
+
+      this.$store.state.comNum = row.comNum;
+      this.$store.state.comprice = row.price;
+
       this.$store.state.which_page_confirm = 2
       this.$store.state.dialogVisible_modify = true
+
     },
+
     handleChange_phy(phyValue) {
       console.log(value);
     },

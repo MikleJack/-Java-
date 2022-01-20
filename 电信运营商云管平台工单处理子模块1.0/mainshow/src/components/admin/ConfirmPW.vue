@@ -63,14 +63,40 @@ export default {
                 // this.$store.state.dialogVisible_budget = false;
             })
           }else{
-
+            this.$message({
+              message:"密码验证失败",
+              type:"error",
+              center:true
+            })
           }
 
+        //  修改物理机预算
         }else if(this.$store.state.which_page_confirm === 2){
-          if(this.password_confirm === true){
-
+          if(this.$store.state.password_confirm === true){
+            this.$axios.put(this.$store.state.url + "/adminHome/setPhyPrice?comNum=" + this.$store.state.comNum
+              + "&price=" + this.$store.state.comprice).then((res)=>{
+                if (res.data === true){
+                  this.$message({
+                    message: '成功修改物理机价格',
+                    type: 'success',
+                    center:true
+                  });
+                  this.$store.state.dialogVisible_modify = false;
+                }else{
+                  this.$message({
+                    message: '修改失败',
+                    type: 'error',
+                    center:true
+                  });
+                  this.$store.state.dialogVisible_modify = false;
+                }
+            })
           }else{
-
+            this.$message({
+              message: '密码验证失败',
+              type: 'error'
+            });
+            this.$store.state.dialogVisible_modify = false
           }
 
         }else if(this.$store.state.which_page_confirm === 3){
@@ -116,9 +142,33 @@ export default {
         }else if(this.$store.state.which_page_confirm === 5){
 
           if(this.$store.state.password_confirm === true){
+            this.$axios.put(this.$store.state.url + "/adminHome/setVmPrice?comNum=" +
+              this.$store.state.comNum + "&price="
+            + this.$store.state.comprice).then((res) =>{
+              if(res.data === true){
+                this.$message({
+                  message: '成功修改虚拟机价格',
+                  type: 'success',
+                  center:true,
+                });
+                this.$store.state.dialogVisible_modify = false;
+              }else {
+                this.$message({
+                  message: '修改失败',
+                  type: 'error',
+                  center:true,
+                });
+                this.$store.state.dialogVisible_modify = false;
+              }
+            })
 
           }else{
-
+            this.$message({
+              message: '密码验证失败',
+              type: 'error',
+              center:true,
+            });
+            this.$store.state.dialogVisible_modify = false;
           }
 
         }else{

@@ -110,14 +110,15 @@
           align="center"
           width="auto">
           <template slot-scope="scope">
-<!--            <el-button-->
-<!--              @click.native.prevent="(scope.$index, scope.row)"-->
-<!--              type="text"-->
-<!--              size="small"-->
-<!--              style="color: #52b69a"-->
-<!--            >-->
-<!--              删除-->
-<!--            </el-button>-->
+            <el-button
+              @click="changeprice(scope.row)"
+              type="text"
+              size="small"
+              style="color: #52b69a"
+            >
+              修改价格
+            </el-button>
+
             <el-button
               @click.native.prevent="delete_virtual(scope.$index, scope.row)"
               type="text"
@@ -141,7 +142,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_vir = false">取 消</el-button>
-                <el-button style="margin-right: 45%;color: white;background-color: #52b69a " @click="virtual_confirm()">确 定</el-button>
+<!--                <el-button style="margin-right: 45%;color: white;background-color: #52b69a " @click="virtual_confirm()">确 定</el-button>-->
       </span>
   </el-dialog>
 </template>
@@ -242,11 +243,11 @@ export default {
     },
 
     //对虚拟机的dialog的确认
-    virtual_confirm(){
-      this.$store.state.which_page_confirm = 5
-      this.$store.state.dialogVisible_modify = true
-
-    },
+    // virtual_confirm(){
+    //   this.$store.state.which_page_confirm = 5
+    //   this.$store.state.dialogVisible_modify = true
+    //
+    // },
     //删除所点击行的虚拟机
     delete_virtual(index,rows){
 
@@ -294,6 +295,14 @@ export default {
       this.ruleForm_virtual.ram=1
       this.ruleForm_virtual.description=''
       this.ruleForm_virtual.processorModel=''
+    },
+    //修改虚拟机的价格
+    changeprice(row){
+      this.$store.state.comNum = row.comNum;
+      this.$store.state.comprice = row.price;
+
+      this.$store.state.which_page_confirm = 5
+      this.$store.state.dialogVisible_modify = true
     }
   }
 }
