@@ -458,7 +458,7 @@ export default {
         this.surplus_budget='',
         //工单预算
         this.order_budget='',
-
+        this.staffUsage='',
 
         //物理机资源数据
         this.phyCom=[],
@@ -516,7 +516,7 @@ export default {
     autoGetAllDetail(workOrderNum, workerNum) {
       setTimeout(()=>{
         this.$axios.get(this.$store.state.url+"/usedBudget/getStaffUsage?workerNum" + workerNum ).then((res)=>{
-          this.staffUsage = parseFloat(res).toFixed(2);
+          this.staffUsage = parseFloat(res.data).toFixed(2);
         })
       },500)
       this.$axios.get(this.$store.state.url+"/pendtickets/queryWorkOrderDetailTop?workOrderNum="
