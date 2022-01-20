@@ -10,7 +10,7 @@
     <img :src="imgSrc" width="100%" height="100%" alt="" />
     <div class="warp">
       <div class="warp-form">
-        <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
+        <img src="../../assets/LOGO3.0.png" height="64" width="64" style="margin-left: 40%">
         <h2>管理员登录</h2>
         <!--        el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >

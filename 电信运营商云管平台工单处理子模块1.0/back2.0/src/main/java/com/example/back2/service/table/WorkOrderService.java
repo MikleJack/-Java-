@@ -4,11 +4,14 @@ import com.example.back2.entity.table.WorkOrder;
 import com.example.back2.entity.view.AdminsearchorderTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.naming.InsufficientResourcesException;
+import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -116,6 +119,8 @@ public interface WorkOrderService {
     long getNumPendticket(Integer workerNum);
 
     long getNumFailedtickets(Integer workerNum);
+
+    long getAboutTicket(Integer workerNum,Date ddl);
 }
 
 

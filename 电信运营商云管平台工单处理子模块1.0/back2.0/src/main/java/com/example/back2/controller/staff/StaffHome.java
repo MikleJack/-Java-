@@ -10,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @RestController
 @RequestMapping("staffHome")
@@ -32,17 +36,30 @@ public class StaffHome {
 
 //----------------左上角员工信息界面-底部部-------------------------------
 
-
+// 获取该工号人的待审批工单数量
     @Resource
     WorkOrderService workOrderService;
     @GetMapping("getNumPendticket")
     public long getNumPendticket(Integer workerNum) throws Exception{
         return this.workOrderService.getNumPendticket(workerNum);
     }
-
+//获取该工号人的审批不通过工单数量
     @GetMapping("getNumFailedtickets")
     public long getNumFailedtickets(Integer workerNum) {
         return this.workOrderService.getNumFailedtickets(workerNum);
     }
+//   即将过期工单数量
+    @GetMapping("getAboutTicket")
+    public long getAboutTicket(Integer workerNum){
+        Date now = new Date();
+        Date ddl = new Date();
+        Calendar c = new GregorianCalendar();
+        c.add(c.DATE,15);
+        ddl = c.getTime();
 
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(s.format(now));
+
+        return this.workOrderService.getAboutTicket(workerNum,now);
+    }
 }

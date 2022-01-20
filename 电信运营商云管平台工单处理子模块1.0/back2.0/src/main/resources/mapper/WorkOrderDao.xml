@@ -16,6 +16,13 @@
     </resultMap>
 
 
+<!--    统计即将过期工单数量-->
+    <select id="getAboutTicket" resultType="java.lang.Long" >
+        select count (1)
+        from work_order
+        where worker_num = #{workerNum} and expiration_time  #{ddl}
+    </select>
+
 <!--    统计待审批工单数量-->
     <select id="getNumPendticket" resultType="java.lang.Long">
         select count(1)

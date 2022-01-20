@@ -181,4 +181,11 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public long getNumFailedtickets(Integer workerNum){
         return this.workOrderDao.getNumFailedtickets(workerNum);
     }
+//    统计即将过期工单
+    @Override
+    public long getAboutTicket(Integer workerNum,Date ddl){
+        System.out.println(workerNum);
+        System.out.println(ddl);
+        return this.workOrderDao.getAboutTicket(workerNum,ddl);
+    }
 }

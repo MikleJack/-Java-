@@ -159,5 +159,7 @@ public interface WorkOrderDao {
 
     long getNumFailedtickets(Integer workerNum);
 
+//    统计即将过期工单数量
+    long getAboutTicket(Integer workerNum,Date ddl);
 }
 
