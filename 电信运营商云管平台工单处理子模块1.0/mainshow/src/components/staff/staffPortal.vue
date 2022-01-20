@@ -249,8 +249,10 @@ export default {
 
       workerInform:{},
       due_order:'5',
-      back_order:'12',
-      untreated_order:'3',
+      //审批不通过工单
+      back_order:'',
+      //待审批工单
+      untreated_order:'',
 
       //分页相关
       currentPage:1,
@@ -393,6 +395,13 @@ export default {
       ]
     };
     orderOption && orderCharts.setOption(orderOption);
+
+    this.$axios.get(this.$store.state.url + "/staffHome/getNumFailedtickets?workerNum=" + sessionStorage.getItem("work_num")).then((res)=>{
+      this.back_order = res.data;
+    })
+    this.$axios.get(this.$store.state.url + "/staffHome/getNumPendticket?workerNum=" + sessionStorage.getItem("work_num")).then((res) =>{
+      this.untreated_order = res.data;
+    })
   },
 }
 </script>

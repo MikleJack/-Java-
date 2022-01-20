@@ -10,7 +10,7 @@
       <el-table class="budTable" frame=above
                 :data="tableData_bud"
                 border
-                style="width: 100%"
+                style="width: 100%;overflow: hidden"
                 :cell-style="{textAlign:'center'}">
         <el-table-column prop="depName" label="部门名称" width="100" align="center">
         </el-table-column>
@@ -21,9 +21,9 @@
                              style="margin-left: 8%" size="mini"></el-input-number>
           </template>
         </el-table-column>
-        <el-table-column prop="rigth" label="操作" width="180" align="center">
+        <el-table-column prop="rigth" label="操作" width="179" align="center">
           <template slot-scope="scope">
-            <el-button style="margin-right: 32%;color: white;background-color: #52b69a " @click="budget_confirm(scope.row.depNum,scope.row.depBudget)">确 定</el-button>
+            <el-button style="margin-left: 6%;color: white;background-color: #52b69a " @click="budget_confirm(scope.row.depNum,scope.row.depBudget)">确 定</el-button>
           </template>
         </el-table-column>
       </el-table>
