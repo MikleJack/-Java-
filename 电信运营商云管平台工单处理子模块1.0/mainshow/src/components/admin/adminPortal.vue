@@ -70,9 +70,7 @@
       <div class="size-icon">
         <i class="el-icon-message-solid" ></i>
       </div>
-      <div class="message_title">
-        通知中心
-      </div>
+      <div class="message_title">通知中心</div>
       <div class="round-i1" v-for="(item,i) in informationTable">
         <i class="round"></i>
         <div class="message">

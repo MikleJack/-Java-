@@ -28,7 +28,7 @@
 
       <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelay">取 消</el-button>
-                <el-button type="primary" @click="requireToDelay">确 定</el-button>
+                <el-button type="primary" @click="requireToDelay" style="color: white;background-color: #52b69a;border-color: #52b69a ">确 定</el-button>
       </span>
     </el-dialog>
   </div>
