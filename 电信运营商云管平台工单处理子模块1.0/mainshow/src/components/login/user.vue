@@ -163,7 +163,7 @@ export default {
       this.$axios.get(this.$store.state.url+'/verifycode/getStringOfVertifyCode').then((res)=>{
         if(true){
           this.$axios.get(this.$store.state.url+"/login/user?work_num=" + this.ruleForm.work_num + "&password=" + this.ruleForm.password).then((res) => {
-            if (res.data>=0) {
+            if (res.data>0) {
               //   $message消息提示框
               this.$message({
                 message: '登录成功',
