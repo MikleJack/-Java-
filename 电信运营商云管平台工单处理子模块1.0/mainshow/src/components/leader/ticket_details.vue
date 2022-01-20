@@ -515,7 +515,7 @@ export default {
 
     autoGetAllDetail(workOrderNum, workerNum) {
       setTimeout(()=>{
-        this.$axios.get(this.$store.state.url+"/usedBudget/getStaffUsage?workerNum" + workerNum ).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/usedBudget/getStaffUsage?workerNum=" + workerNum ).then((res)=>{
           this.staffUsage = parseFloat(res.data).toFixed(2);
         })
       },500)
