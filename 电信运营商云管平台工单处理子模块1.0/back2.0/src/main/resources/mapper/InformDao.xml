@@ -146,8 +146,20 @@
         select
             inform_num, sender_num, details, work_order_num, recipient, send_time, read_state
         from inform
-        where sender_num = #{workNum} or recipient = #{workNum}
-            limit #{pageable.offset}, #{pageable.pageSize}
+        where recipient = #{workNum}
+        order by send_time desc
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--管理员统计总行数-->
+    <select id="adminCount" resultType="java.lang.Long">
+        select count(1)
+        from inform
+        <where>
+            <if test="recipient != null">
+                and recipient = #{recipient}
+            </if>
+        </where>
     </select>
 
 
