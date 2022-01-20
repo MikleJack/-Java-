@@ -30,7 +30,6 @@
     </div>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.dialogVisible_budget = false">取 消</el-button>
-
       </span>
   </el-dialog>
 </template>

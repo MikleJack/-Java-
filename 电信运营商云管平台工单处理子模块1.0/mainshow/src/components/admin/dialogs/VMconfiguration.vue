@@ -18,7 +18,7 @@
             <el-input v-model="$store.state.formInline.diskPrice" placeholder="输入每G的虚拟机存储价格"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit_storagePrice">确定</el-button>
+            <el-button type="primary" style="color: white;background-color: #52b69a;border-color: #52b69a " @click="onSubmit_storagePrice">确定</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -38,7 +38,7 @@
             <el-input v-model="$store.state.formInline.storage" placeholder="输入总存储数"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit_allvirtual">确定</el-button>
+            <el-button type="primary" style="color: white;background-color: #52b69a;border-color: #52b69a " @click="onSubmit_allvirtual">确定</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
