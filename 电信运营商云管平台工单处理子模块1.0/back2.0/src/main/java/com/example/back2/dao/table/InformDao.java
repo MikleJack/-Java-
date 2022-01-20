@@ -40,6 +40,7 @@ public interface InformDao {
      */
     long count(Inform inform);
     long count(Integer workNum);
+    long adminCount(Integer workNum);
 
     /**
      * 新增数据

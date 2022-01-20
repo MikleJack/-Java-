@@ -9,53 +9,45 @@
           fixed
           prop="workOrderNum"
           label="工单编号"
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderName"
           label="工单标题"
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderType"
           label="工单类型"
-          width="200"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workOrderState"
           label="工单状态"
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="expirationTime"
           label="资源到期时间"
           sortable
-          width="180"
           align="center">
         </el-table-column>
         <el-table-column
           prop="workerNum"
           label="申请人工号"
-          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           prop="name"
           label="申请人姓名"
-          width="150"
           align="center">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="80"
           align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click=handleClick_detail(scope.row.workOrderNum)>查看详情</el-button>
+            <el-button type="text" @click=handleClick_detail(scope.row.workOrderNum,scope.row.workerNum)>查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -120,10 +112,10 @@ export default {
       }
 
     },
-    handleClick_detail(workOrderNum){
+    handleClick_detail(workOrderNum,workerNum){
       // this.dialogTableVisible = true;
       this.$store.state.pendtickets_dialogTableVisible = true;
-      this.$refs.ticket_details.autoGetAllDetail(workOrderNum);
+      this.$refs.ticket_details.autoGetAllDetail(workOrderNum, workerNum);
     }
   },
 

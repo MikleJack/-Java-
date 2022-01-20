@@ -1,13 +1,16 @@
 package com.example.back2.controller;
 
 import com.example.back2.entity.table.UsedBudget;
+import com.example.back2.entity.view.HistoryUsage;
 import com.example.back2.service.table.UsedBudgetService;
+import com.example.back2.service.view.HistoryUsageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (UsedBudget)表控制层
@@ -23,6 +26,9 @@ public class UsedBudgetController {
      */
     @Resource
     private UsedBudgetService usedBudgetService;
+
+    @Resource
+    private HistoryUsageService historyUsageService;
 
     /**
      * 分页查询
@@ -80,5 +86,15 @@ public class UsedBudgetController {
         return ResponseEntity.ok(this.usedBudgetService.deleteById(id));
     }
 
+    /**
+     * 根据员工编号返回其所有工单
+     *
+     * @param workerNum 员工编号
+     * @return 该员工的所有工单
+     */
+    @GetMapping("getStaffUsage")
+    public Double getStaffUsage(Integer workerNum) {
+        return this.historyUsageService.getStaffUsage(workerNum);
+    }
 }
 
