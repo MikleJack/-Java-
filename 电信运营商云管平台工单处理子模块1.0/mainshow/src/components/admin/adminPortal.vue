@@ -301,7 +301,7 @@ export default {
     handleCurrentChange(val){
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
-      this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + page + '&size=' + this.pageSize ).then((res)=>{
+      this.$axios.get(this.$store.state.url + "/inform/adminQueryInform?page=" + page + '&size=' + this.pageSize ).then((res)=>{
         this.informationTable= res.data.content;
         this.totalSize = res.data.totalPages*this.pageSize;
       })
@@ -311,7 +311,7 @@ export default {
     setInfromState(informNum){
       this.$axios.get(this.$store.state.url + "/inform/changeInformState?informNum=" + informNum);
       setTimeout(()=>{
-        this.$axios.get(this.$store.state.url + "/inform/queryByRecipientNum?workNum=20220000" + '&page=' + (this.currentPage-1) + '&size=' + this.pageSize ).then((res)=>{
+        this.$axios.get(this.$store.state.url + "/inform/adminQueryInform?page=" + (this.currentPage-1) + '&size=' + this.pageSize ).then((res)=>{
           this.informationTable= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
@@ -565,19 +565,8 @@ export default {
   margin-top: 2%;
 }
 .round-i1{
-
-
   height: 10px;
-  /*width: 10px;*/
-  margin-top: 10%;
-  margin-left: 3%;
-}
-.round-i{
-
-
-  height: 10px;
-  /*width: 10px;*/
-  margin-top: 30px;
+  margin-top: 6%;
   margin-left: 3%;
 }
 .round{
