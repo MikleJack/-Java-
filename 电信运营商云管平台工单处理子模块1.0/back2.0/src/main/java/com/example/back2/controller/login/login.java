@@ -86,9 +86,9 @@ public class login {
             }
             if (staff.getState() && staff.getInService())
             {
-                userLogin.put(work_num,true);
                 password = SHA_256.getSHA256(password);
                 if(password.equals(staff.getPassword())){
+                    userLogin.put(work_num,true);
                     if(staff.getDepNum()==4||staff.getDepNum()==3){
                         logger.info("工号为" + work_num + "的普通员工登录");
                         return 1;
