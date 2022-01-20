@@ -356,6 +356,7 @@ export default {
             if(sessionStorage.getItem("level")!=="3"){
               this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
                 workOrderNum:this.workOrderNum,
+                firstWorkerNum: sessionStorage.getItem("work_num"),
                 state:"审批通过"
               }).then((res)=>{
                 this.$store.state.pendtickets_dialogTableVisible = false;
@@ -370,6 +371,7 @@ export default {
             else {
               this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
                 workOrderNum:this.workOrderNum,
+                secondNum: sessionStorage.getItem("work_num"),
                 state:"审批通过",
               }).then((res)=>{
                 this.$store.state.pendtickets_dialogTableVisible = false;
@@ -391,18 +393,38 @@ export default {
       this.flowProcess.operationType="审批不通过";
       this.$axios.post(this.$store.state.url+"/flowProcess/insert",{
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
+        if(res.data===true){
+          if(sessionStorage.getItem("level")!=="3"){
             this.$axios.post(this.$store.state.url+"/pendtickets/oneExamine",{
               workOrderNum:this.workOrderNum,
+              firstWorkerNum: sessionStorage.getItem("work_num"),
               state:"审批不通过"
             }).then((res)=>{
               this.$store.state.pendtickets_dialogTableVisible = false;
-              //   审批不通过提示框
+              //   审批通过提示框
               this.$message({
                 message: '审批不通过',
-                type: 'error',
+                type: 'ture',
                 center: true
               });
             })
+          }
+          else {
+            this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
+              workOrderNum:this.workOrderNum,
+              secondNum: sessionStorage.getItem("work_num"),
+              state:"审批不通过",
+            }).then((res)=>{
+              this.$store.state.pendtickets_dialogTableVisible = false;
+              //   审批通过提示框
+              this.$message({
+                message: '审批不通过',
+                type: 'ture',
+                center: true
+              });
+            })
+          }
+        }
       })
     },
     hangup(){
@@ -412,6 +434,7 @@ export default {
         flowProcess:JSON.stringify(this.flowProcess)}).then((res)=>{
         this.$axios.post(this.$store.state.url+"/pendtickets/towExamine",{
           workOrderNum:this.workOrderNum,
+          secondNum: sessionStorage.getItem("work_num"),
           state:"挂起"
         });
         this.$store.state.pendtickets_dialogTableVisible = false;
