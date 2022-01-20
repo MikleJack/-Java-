@@ -156,6 +156,14 @@
         where com_num = #{comNum}
     </update>
 
+    <update id="setVmPrice">
+        update vm_specifications
+        <set>
+            price = #{price}
+        </set>
+        where com_num = #{comNum}
+    </update>
+
     <!--通过主键删除-->
     <delete id="deleteById">
         delete

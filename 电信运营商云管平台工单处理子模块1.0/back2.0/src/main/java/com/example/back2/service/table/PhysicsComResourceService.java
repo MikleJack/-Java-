@@ -70,4 +70,5 @@ public interface PhysicsComResourceService {
 
     boolean insertPhysics(int cpuCore, int ram, int storage, int price);
 
+    int setPhyPrice(Integer comNum,Integer price);
 }

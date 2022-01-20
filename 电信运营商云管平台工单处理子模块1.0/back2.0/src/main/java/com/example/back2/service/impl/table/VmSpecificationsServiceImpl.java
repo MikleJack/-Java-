@@ -97,4 +97,9 @@ public class VmSpecificationsServiceImpl implements VmSpecificationsService {
         this.vmSpecificationsDao.updateDiskPrice(diskPrice);
         return true;
     }
+
+    @Override
+    public int setVmPrice(Integer comNum,double price){
+        return this.vmSpecificationsDao.setVmPrice(comNum,price);
+    }
 }

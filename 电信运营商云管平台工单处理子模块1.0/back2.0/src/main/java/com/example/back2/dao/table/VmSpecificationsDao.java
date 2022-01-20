@@ -87,5 +87,7 @@ public interface VmSpecificationsDao {
     boolean insertVirtual(int cpuCore, int ram, int price,String processorModel,String processorFrequency,String description);
 
     boolean updateDiskPrice(Double diskPrice);
+
+    int setVmPrice(Integer comNum,double price);
 }
 

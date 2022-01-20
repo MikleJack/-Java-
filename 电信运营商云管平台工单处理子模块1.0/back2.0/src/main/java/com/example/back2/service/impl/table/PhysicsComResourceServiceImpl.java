@@ -114,4 +114,8 @@ public class PhysicsComResourceServiceImpl implements PhysicsComResourceService 
     }
 
 
+    @Override
+    public int setPhyPrice(Integer comNum,Integer price){
+        return this.physicsComResourceDao.setPhyPrice(comNum,price);
+    }
 }

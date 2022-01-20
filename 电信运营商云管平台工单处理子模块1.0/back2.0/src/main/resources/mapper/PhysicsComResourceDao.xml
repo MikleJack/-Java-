@@ -109,6 +109,14 @@
         values (#{cpuCore}, #{ram}, #{storage}, true, #{price})
     </insert>
 
+<!--    修改物理机每月定价-->
+    <update id="setPhyPrice">
+        update physics_com_resource
+        <set>
+            price = #{price}
+        </set>
+        where com_num = #{comNum}
+    </update>
 
     <!--通过主键修改数据-->
     <update id="update">

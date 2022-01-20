@@ -135,4 +135,21 @@ public class AdminHome {
         return false;
     }
 
+
+//    改变虚拟机每月定价
+    @PutMapping("setVmPrice")
+    public boolean setVmPrice(Integer comNum,double price){
+        if(this.vmSpecificationsService.setVmPrice(comNum,price) != 0){
+            return true;
+        }
+        return false;
+    }
+//    改变物理机每月定价
+    @PutMapping("setPhyPrice")
+    public boolean setPhyPrice(Integer comNum,Integer price){
+        if (this.physicsComResourceService.setPhyPrice(comNum,price) != 0){
+            return true;
+        }
+        return false;
+    }
 }
