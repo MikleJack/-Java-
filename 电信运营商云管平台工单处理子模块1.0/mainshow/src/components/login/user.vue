@@ -237,7 +237,6 @@ export default {
     },
     setCookie(workNum){
       this.$cookies.set(workNum,parseInt(this.$cookies.get(workNum))+1);
-      console.log(this.$cookies.get(workNum));
       let errors=this.$cookies.get(workNum);
       if(errors==="3"){
         this.$cookies.set(workNum+"ban","1m","5s");

@@ -45,13 +45,9 @@ export default {
       this.$axios.post(this.$store.state.url+"/adminHome/confirmPassword?password="+this.confirm_password).then((res)=>{
         this.$store.state.password_confirm = res.data === true;
 
-        // alert(this.$store.state.password_confirm);
-        // alert(this.$store.state.which_page_confirm);
-
 
         if (this.$store.state.which_page_confirm === 1){
           if(this.$store.state.password_confirm === true){
-            // alert("调用修改部门预算接口");
             this.$axios.put(this.$store.state.url+"/adminHome/setDepBudget?DepNum=" + this.$store.state.DepNum + "&DepBudget=" +
               this.$store.state.DepBudget).then((res)=>{
                 this.$message({

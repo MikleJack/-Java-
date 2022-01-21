@@ -31,7 +31,6 @@ export default {
         type: 'error',
         position: 'bottom-right'
       })
-      console.log(error)
     },
     //测试上传文件(注意web的上下文)
     handleBeforeUpload(file){
@@ -52,7 +51,6 @@ export default {
     //文件上传成功
     success(event, file, fileList){
       this.$store.state.FileName=file.name;
-      console.log(this.$store.state.FileName)
     }
   }
 }

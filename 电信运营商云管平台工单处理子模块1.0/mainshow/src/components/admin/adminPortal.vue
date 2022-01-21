@@ -333,7 +333,6 @@ export default {
     },
     //折叠面板
     handleChange_collapse(val) {
-      console.log(val);
     },
 
     resCustomColor(total_Phyutilization) {

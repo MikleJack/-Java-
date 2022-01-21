@@ -207,12 +207,10 @@ export default {
         this.tableData_vir = res.data.content;
         this.currentPage = 1;
         this.VMtotal = res.data.totalPages * res.data.size;
-        // console.log(res.data)
         this.$store.state.formInline.diskPrice = this.tableData_vir[0].diskPrice;
       });
       this.$axios.get(this.$store.state.url+"/adminHome/getVm").then((res)=>{
         if(res.data){
-          console.log(res.data)
           this.$store.state.formInline.cpuCore=res.data.cpuCore;
           this.$store.state.formInline.storage=res.data.storage;
           this.$store.state.formInline.ram =res.data.ram;
@@ -223,7 +221,6 @@ export default {
 
     //折叠面板
     handleChange_collapse(val) {
-      console.log(val);
     },
 
     //头部关闭关闭的函数
@@ -256,7 +253,6 @@ export default {
     },
     //
     handleChange_vir(phyValue) {
-      console.log(value);
     },
     //增加虚拟机函数
     add_virtual(){

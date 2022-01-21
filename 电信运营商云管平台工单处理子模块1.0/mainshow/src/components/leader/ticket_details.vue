@@ -521,7 +521,6 @@ export default {
       },500)
       this.$axios.get(this.$store.state.url+"/pendtickets/queryWorkOrderDetailTop?workOrderNum="
         +workOrderNum).then((res)=>{
-          // console.log(res.data);
           //个人信息
           this.workNum = res.data.workerNum;
           this.name = res.data.name;

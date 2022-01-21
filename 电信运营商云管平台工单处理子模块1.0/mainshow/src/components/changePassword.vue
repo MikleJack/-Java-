@@ -119,7 +119,6 @@ export default {
   methods: {
     //tab切换
     handleClick(tab, event) {
-      console.log(tab, event);
     },
     //保存新密码
     submitForm(ruleForm) {

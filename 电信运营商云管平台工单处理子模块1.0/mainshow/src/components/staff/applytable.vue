@@ -424,7 +424,6 @@ export default {
     // 点击selection多选框
     handleSelectionChange_physics(data) {
       this.multipleSelection_physics = data;
-      // console.log(data)
       this.length_physics = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
     },
     handleSelectionChange_virtual(data) {
