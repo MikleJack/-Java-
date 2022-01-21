@@ -204,7 +204,8 @@ const router = new Router({
       ]
     }
   ],
-  mode: "history"
+  // mode: 'history', // 去掉#，需要路由模式改为history
+  // base: '/dist/', // 这个配置也很重要，否则会出现页面空白情况
 })
 
 

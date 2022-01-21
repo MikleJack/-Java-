@@ -103,7 +103,7 @@ export default {
 
       //分页相关
       currentPage:1,
-      pageSize:9,
+      pageSize:8,
       totalSize:0,
       ifPagination:false,
 
