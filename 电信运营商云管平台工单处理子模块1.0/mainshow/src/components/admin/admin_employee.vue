@@ -60,7 +60,7 @@
         <el-table-column
           fixed="right"
           label="操作"
-          
+
 
           >
 <!--          对账户的各种操作-->
@@ -252,7 +252,6 @@ export default {
     },
     //查询函数
     onSubmit() {
-      console.log('submit!');
     },
     //增加账户函数
     add_AccountNumber() {

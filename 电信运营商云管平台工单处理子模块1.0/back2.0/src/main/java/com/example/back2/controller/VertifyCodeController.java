@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+//import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 @RestController
 @RequestMapping("verifycode")
@@ -41,7 +41,7 @@ public class VertifyCodeController {
             //设置长宽
             VerifyCode verifyCode = iVerifyCodeGen.generate(80, 28);
             String code = verifyCode.getCode();
-            LOGGER.info(code);
+//            LOGGER.info(code);
             //将VerifyCode绑定session
             request.getSession().setAttribute("VerifyCode", code);
             //设置响应头
@@ -55,7 +55,7 @@ public class VertifyCodeController {
             response.getOutputStream().write(verifyCode.getImgBytes());
             response.getOutputStream().flush();
         } catch (IOException e) {
-            LOGGER.info("验证发生错误");
+//            LOGGER.info("验证发生错误");
         }
     }
 

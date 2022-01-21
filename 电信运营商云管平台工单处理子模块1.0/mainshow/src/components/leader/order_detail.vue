@@ -261,8 +261,6 @@ export default {
       //通过工单编号查找流转过程
       this.$axios.get(this.$store.state.url+'/flowProcess/selectByWorkOrderNum?workOrderNum='
         +workOrderNum).then((res)=>{
-          console.log(workOrderNum);
-          console.log(res.data);
         this.informData = res.data;
       });
 

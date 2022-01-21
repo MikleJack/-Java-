@@ -28,7 +28,7 @@
 
       <span slot="footer" class="dialog-footer">
                 <el-button @click="cancelDelay">取 消</el-button>
-                <el-button type="primary" @click="requireToDelay">确 定</el-button>
+                <el-button type="primary" @click="requireToDelay" style="color: white;background-color: #52b69a;border-color: #52b69a ">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -57,11 +57,9 @@ export default {
         delayReason: this.delayReason
       }).then((res)=>{
         if(res.data.message == null){
-          alert("发起延期成功，创建的延期工单号为" + res.data);
           this.$store.state.staffAllOrder_DelayDialogVisible = false;
           this.refresh();
         }else{
-          alert("延期失败");
         }
       })
     },

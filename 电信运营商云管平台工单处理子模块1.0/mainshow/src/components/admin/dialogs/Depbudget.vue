@@ -66,11 +66,9 @@ export default {
     },
 
     handleChange_bud(budValue) {
-      console.log(value);
     },
     //对预算dialog的确认
     budget_confirm(DepNum,DepBudget){
-      // alert(DepNum + "    " + DepBudget);
       this.$store.state.DepNum = DepNum;
       this.$store.state.DepBudget = DepBudget;
       this.$store.state.which_page_confirm = 1;

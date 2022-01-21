@@ -168,7 +168,6 @@ export default {
     },
     //折叠面板
     handleChange_collapse(val) {
-      console.log(val);
     },
     //头部关闭关闭的函数
     handleClose(done) {
@@ -190,8 +189,6 @@ export default {
     //修改物理机价格
     changeprice(row){
 
-      // alert(row.comNum + "     " + row.price);
-
 
       this.$store.state.comNum = row.comNum;
       this.$store.state.comprice = row.price;
@@ -202,7 +199,6 @@ export default {
     },
 
     handleChange_phy(phyValue) {
-      console.log(value);
     },
     //重置新增物理机填写的值
     reset_physics(){

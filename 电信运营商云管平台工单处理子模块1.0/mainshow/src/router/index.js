@@ -218,7 +218,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
     else{
-      alert(type);
       if(type==="admin")
         next({path:"/2022AdminBrccq"})
       else

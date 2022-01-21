@@ -261,7 +261,7 @@ export default {
   data() {
     return {
       virtual_price_temp: 0,//暂存虚拟机总价
-      storage: 40,
+      storage: 0,
       os:"",
       storage_price: 0.5,
       current_time: '',//当前时间
@@ -424,7 +424,6 @@ export default {
     // 点击selection多选框
     handleSelectionChange_physics(data) {
       this.multipleSelection_physics = data;
-      // console.log(data)
       this.length_physics = this.$refs.multipleTable_physics.selection;//获取当前选中数据的行数
     },
     handleSelectionChange_virtual(data) {
@@ -622,7 +621,7 @@ export default {
     },
     //工单预算/部门剩余预算进度条
     percentage(){
-      this.surplus_budget=this.total_budget-this.used_budget;
+      this.surplus_budget=(this.total_budget-this.used_budget).toFixed(2);
       this.order_budget=this.total_price;
       let temp_per=parseFloat(this.order_budget/this.surplus_budget).toFixed(4)
       return (100*temp_per).toFixed(2);

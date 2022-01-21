@@ -196,6 +196,12 @@ export default {
                 type: 'warning',
                 center: true
               });
+            }else if (res.data===-2){
+              this.$message({
+                message: '账户已被锁定!',
+                type: 'warning',
+                center: true
+              });
             }
             else {
               this.$message({
@@ -231,25 +237,16 @@ export default {
     },
     setCookie(workNum){
       this.$cookies.set(workNum,parseInt(this.$cookies.get(workNum))+1);
-      console.log(this.$cookies.get(workNum));
       let errors=this.$cookies.get(workNum);
-      if(errors==="5"){
+      if(errors==="3"){
         this.$cookies.set(workNum+"ban","1m","5s");
         this.$message({
-          message:'输错密码五次，请五秒后再尝试登录！',
+          message:'输错密码三次，请五秒后再尝试登录！',
           type:'warning',
           center:true
         })
       }
-      else if(errors==="10"){
-        this.$cookies.set(workNum+"ban","2m","10s");
-        this.$message({
-          message:'输错密码十次，请十秒后再尝试登录！',
-          type:'warning',
-          center:true
-        })
-      }
-      else if(errors==="15"){
+      else if(errors==="5"){
         this.$axios.get(this.$store.state.url+"/account/lockAccount?work_num="+workNum).then((res)=>{
           this.$message({
             message:'账户已被锁定，请联系管理员进行解锁！',
@@ -258,6 +255,16 @@ export default {
           })
         })
       }
+      // else if(errors==="15"){
+      //
+      //
+      //   this.$cookies.set(workNum+"ban","2m","10s");
+      //   this.$message({
+      //     message:'输错密码十次，请十秒后再尝试登录！',
+      //     type:'warning',
+      //     center:true
+      //   })
+      // }
     }
   }
 }

@@ -46,7 +46,7 @@ export default new Vuex.Store({
     },
 
 
-    url:"https://localhost:8084",
+    url:"https://116.62.218.244/:8084",
     FileName:''
   },
   mutations: {
