@@ -55,6 +55,8 @@ public class StaffAllTickets {
 
     @Resource
     private InformService informService;
+    @Resource
+    private WorkOrderDelayService workOrderDelayService;
 
 //----------------首页表单显示-顶部-------------------------------------------------------
     /**
@@ -137,6 +139,7 @@ public class StaffAllTickets {
             WorkOrderDelay workOrderDelay = new WorkOrderDelay();
             workOrderDelay.setOldOrder(workOrderNum);
             workOrderDelay.setWorkOrderNum(newWorkOrderNum);
+            this.workOrderDelayService.insert(workOrderDelay);
 
             this.informService.staffApplyInsertInform(newWorkOrderNum,
                     this.workOrderService.queryById(workOrderNum).getWorkerNum(),"发起了延期工单");
