@@ -135,7 +135,7 @@ export default {
 
     //验证码
     getVertifyCode() {
-      document.getElementById("verifyCode").src = this.timestamp("https://localhost:8084/verifycode/getVertifyCodebyId");
+      document.getElementById("verifyCode").src = this.timestamp(this.$store.state.url+"/verifycode/getVertifyCodebyId");
     },
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面

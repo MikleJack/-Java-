@@ -98,7 +98,7 @@ export default {
       this.currentPage=parseInt(val);
       let page = this.currentPage-1;
       if(sessionStorage.getItem("level")==="3"){
-        this.$axios.get("https://localhost:8084/pendtickets/selectTow?page="+page+"&size="+this.pageSize).then((res)=>{
+        this.$axios.get(this.$store.state.url+"/pendtickets/selectTow?page="+page+"&size="+this.pageSize).then((res)=>{
           this.tableData= res.data.content;
           this.totalSize = res.data.totalPages*this.pageSize;
         })
