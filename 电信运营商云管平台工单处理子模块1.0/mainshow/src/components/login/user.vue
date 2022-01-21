@@ -10,7 +10,7 @@
     <div class="warp">
       <!-- 管理员与用户切换按钮-->
       <div class="warp-form">
-        <img src="../../assets/white.png" height="64" width="64" style="margin-left: 40%">
+        <img src="../../assets/LOGO5.0.png" height="64" width="64" style="margin-left: 40%">
         <h2>用户登录</h2>
         <!--el-form  rules属性用来设置表单验证规则    status-icon属性为输入框添加了表示校验结果的反馈图标-->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"  >
@@ -135,7 +135,7 @@ export default {
 
     //验证码
     getVertifyCode() {
-      document.getElementById("verifyCode").src = this.timestamp("https://localhost:8084/verifycode/getVertifyCodebyId");
+      document.getElementById("verifyCode").src = this.timestamp("https://116.62.218.244:8084/verifycode/getVertifyCodebyId");
     },
 
     //登录按钮触发事件  向后端传输当前输入框中的账号密码，后台比对返回布尔类型，登录成功将进入 /main 界面
